@@ -17,7 +17,7 @@ def build_registry() -> PatternRegistry:
             for key, translation in data.items():
                 if match := translation_regex.match(key):
                     name = match[1]
-                    registry.name_to_translation[name] = translation
+                    registry.name_to_translation[name] = translation.replace(": %s", "") # because the new built in decoding interferes with this
     
     for filename in glob.glob("data/*.java"):
         with open(filename, "r", encoding="utf-8") as file:
