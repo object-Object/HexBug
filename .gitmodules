@@ -1,6 +1,3 @@
-[submodule "hexdecode"]
-	path = hexdecode
-	url = https://github.com/gchpaco/hexdecode
 [submodule "hex-interpreter"]
-	path = hex-interpreter
+	path = hex_interpreter
 	url = https://github.com/Robotgiggle/hex-interpreter
