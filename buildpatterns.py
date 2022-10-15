@@ -29,6 +29,6 @@ def build_registry() -> PatternRegistry:
                 else:
                     registry.pattern_to_name[pattern] = name
                 translation = registry.name_to_translation.get(name, name) # because Hexal sometimes doesn't have translations
-                registry.translation_to_pattern[translation] = (Direction[direction], pattern)
+                registry.translation_to_pattern[translation] = (Direction[direction], pattern, bool(is_great))
 
     return registry

@@ -20,8 +20,8 @@ class PatternRegistry:
     """segments: name"""
     name_to_translation: dict[str, str] = field(default_factory=dict)
     """name: translation"""
-    translation_to_pattern: dict[str, tuple[Direction, str]] = field(default_factory=dict)
-    """translation: (direction, pattern)"""
+    translation_to_pattern: dict[str, tuple[Direction, str, bool]] = field(default_factory=dict)
+    """translation: (direction, pattern, is_great)"""
 
 class Iota:
     def __init__(self, datum):

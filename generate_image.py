@@ -2,7 +2,7 @@ from io import BytesIO
 import math
 import matplotlib.pyplot as plt
 from hexast import Direction, Coord, Angle
-from hex_interpreter.hex_draw import plot_intersect
+from hex_interpreter.hex_draw import plot_intersect, plot_monochrome
 
 def get_points(direction: Direction, pattern: str) -> list[Coord]:
     compass = direction
@@ -17,7 +17,7 @@ def get_points(direction: Direction, pattern: str) -> list[Coord]:
 
     return points
 
-def generate_image(direction: Direction, pattern: str, line_scale: float, arrow_scale: float) -> BytesIO:
+def generate_image(direction: Direction, pattern: str, is_great: bool, line_scale: float, arrow_scale: float) -> BytesIO:
     points = get_points(direction, pattern)
     x_vals: list[float] = []
     y_vals: list[float] = []
@@ -46,14 +46,17 @@ def generate_image(direction: Direction, pattern: str, line_scale: float, arrow_
         "arrow_scale": arrow_scale,
     }
 
-    plt.plot(
-        x_vals[1]/2.15,
-        y_vals[1]/2.15,
-        color=settings["intersect_colors"][0],
-        marker=(3, 0, (direction.angle_from(Direction.EAST).deg - 90)),
-        ms=2.6*arrow_scale*scale
-    )
-    plot_intersect(x_vals, y_vals, scale, len(x_vals)-1, settings)
+    if is_great:
+        plot_monochrome(x_vals, y_vals, scale, len(x_vals)-1, "#a81ee3")
+    else:
+        plt.plot(
+            x_vals[1]/2.15,
+            y_vals[1]/2.15,
+            color=settings["intersect_colors"][0],
+            marker=(3, 0, (direction.angle_from(Direction.EAST).deg - 90)),
+            ms=2.6*arrow_scale*scale
+        )
+        plot_intersect(x_vals, y_vals, scale, len(x_vals)-1, settings)
 
     buf = BytesIO()
     fig.savefig(buf, format="png")
