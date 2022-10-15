@@ -58,6 +58,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
     @app_commands.describe(
         direction="The starting direction of the pattern",
         pattern='The angle signature of the pattern (eg. aqaawde) — type "-" to leave blank',
+        hide_stroke_order="Whether or not to hide the stroke order (like with great spells)",
         line_scale="The scale of the lines and dots in the image",
         arrow_scale="The scale of the arrows in the image",
     )
@@ -66,6 +67,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
         interaction: discord.Interaction,
         direction: Direction,
         pattern: str,
+        hide_stroke_order: bool = False,
         line_scale: app_commands.Range[float, 0.1] = default_line_scale,
         arrow_scale: app_commands.Range[float, 0.1] = default_arrow_scale,
     ) -> None:
@@ -82,7 +84,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
 
         await interaction.response.send_message(
             f"**{pattern_iota.localize(self.registry)}**",
-            file=discord.File(generate_image(direction, pattern, False, line_scale, arrow_scale), filename="pattern.png")
+            file=discord.File(generate_image(direction, pattern, hide_stroke_order, line_scale, arrow_scale), filename="pattern.png")
         )
 
     @app_commands.command()
