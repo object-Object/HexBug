@@ -56,7 +56,7 @@ def generate_image(direction: Direction, pattern: str, line_scale: float, arrow_
     plot_intersect(x_vals, y_vals, scale, len(x_vals)-1, settings)
 
     buf = BytesIO()
-    fig.savefig(buf, format="jpg")
+    fig.savefig(buf, format="png")
     buf.seek(0)
     plt.close(fig)
     return buf

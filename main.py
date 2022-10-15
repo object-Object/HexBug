@@ -82,7 +82,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
 
         await interaction.response.send_message(
             f"**{pattern_iota.localize(self.registry)}**",
-            file=discord.File(generate_image(direction, pattern, line_scale, arrow_scale), filename="pattern.jpg")
+            file=discord.File(generate_image(direction, pattern, line_scale, arrow_scale), filename="pattern.png")
         )
 
     @app_commands.command()
@@ -106,7 +106,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
         direction, pattern = value
         await interaction.response.send_message(
             f"**{translation}**",
-            file=discord.File(generate_image(direction, pattern, line_scale, arrow_scale), filename="pattern.jpg")
+            file=discord.File(generate_image(direction, pattern, line_scale, arrow_scale), filename="pattern.png")
         )
     
     @name.autocomplete("translation")
