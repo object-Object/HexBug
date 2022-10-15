@@ -10,8 +10,9 @@ from buildpatterns import build_registry
 from dotenv import load_dotenv
 from generate_image import generate_image
 
-default_line_scale = 6
-default_arrow_scale = 2
+DEFAULT_LINE_SCALE = 6
+DEFAULT_ARROW_SCALE = 2
+SCALE_RANGE = app_commands.Range[float, 0.1, 1000.]
 
 class MessageCommandsCog(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
@@ -67,11 +68,11 @@ class PatternCog(commands.GroupCog, name="pattern"):
         self,
         interaction: discord.Interaction,
         direction: Direction,
-        pattern: str,
+        pattern: app_commands.Range[str, 1, 256],
         show_to_everyone: bool = False,
         hide_stroke_order: bool = False,
-        line_scale: app_commands.Range[float, 0.1] = default_line_scale,
-        arrow_scale: app_commands.Range[float, 0.1] = default_arrow_scale,
+        line_scale: SCALE_RANGE = DEFAULT_LINE_SCALE,
+        arrow_scale: SCALE_RANGE = DEFAULT_ARROW_SCALE,
     ) -> None:
         """Display the stroke order of a pattern from its direction and angle signature"""
         if pattern in ["-", '"-"']:
@@ -103,8 +104,8 @@ class PatternCog(commands.GroupCog, name="pattern"):
         interaction: discord.Interaction,
         translation: str,
         show_to_everyone: bool = False,
-        line_scale: app_commands.Range[float, 0.1] = default_line_scale,
-        arrow_scale: app_commands.Range[float, 0.1] = default_arrow_scale,
+        line_scale: SCALE_RANGE = DEFAULT_LINE_SCALE,
+        arrow_scale: SCALE_RANGE = DEFAULT_ARROW_SCALE,
     ) -> None:
         """Display the stroke order of a pattern from its name (no number literals or Bookkeepers)"""
         if (value := self.registry.translation_to_pattern.get(translation)) is None:
