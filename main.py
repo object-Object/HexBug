@@ -58,6 +58,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
     @app_commands.describe(
         direction="The starting direction of the pattern",
         pattern='The angle signature of the pattern (eg. aqaawde) — type "-" to leave blank',
+        show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
         hide_stroke_order="Whether or not to hide the stroke order (like with great spells)",
         line_scale="The scale of the lines and dots in the image",
         arrow_scale="The scale of the arrows in the image",
@@ -67,6 +68,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
         interaction: discord.Interaction,
         direction: Direction,
         pattern: str,
+        show_to_everyone: bool = False,
         hide_stroke_order: bool = False,
         line_scale: app_commands.Range[float, 0.1] = default_line_scale,
         arrow_scale: app_commands.Range[float, 0.1] = default_arrow_scale,
@@ -84,12 +86,14 @@ class PatternCog(commands.GroupCog, name="pattern"):
 
         await interaction.response.send_message(
             f"**{pattern_iota.localize(self.registry)}**",
-            file=discord.File(generate_image(direction, pattern, hide_stroke_order, line_scale, arrow_scale), filename="pattern.png")
+            file=discord.File(generate_image(direction, pattern, hide_stroke_order, line_scale, arrow_scale), filename="pattern.png"),
+            ephemeral=not show_to_everyone,
         )
 
     @app_commands.command()
     @app_commands.describe(
         translation="The name of the pattern",
+        show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
         line_scale="The scale of the lines and dots in the image",
         arrow_scale="The scale of the arrows in the image",
     )
@@ -98,6 +102,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
         self,
         interaction: discord.Interaction,
         translation: str,
+        show_to_everyone: bool = False,
         line_scale: app_commands.Range[float, 0.1] = default_line_scale,
         arrow_scale: app_commands.Range[float, 0.1] = default_arrow_scale,
     ) -> None:
@@ -108,7 +113,8 @@ class PatternCog(commands.GroupCog, name="pattern"):
         direction, pattern, is_great = value
         await interaction.response.send_message(
             f"**{translation}**",
-            file=discord.File(generate_image(direction, pattern, is_great, line_scale, arrow_scale), filename="pattern.png")
+            file=discord.File(generate_image(direction, pattern, is_great, line_scale, arrow_scale), filename="pattern.png"),
+            ephemeral=not show_to_everyone,
         )
     
     @name.autocomplete("translation")
@@ -123,7 +129,7 @@ class DecodeCog(commands.Cog):
     @app_commands.command()
     @app_commands.describe(
         data="The result of calling Reveal on your pattern list",
-        show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)"
+        show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
     )
     async def decode(self, interaction: discord.Interaction, data: str, show_to_everyone: bool = False):
         """Decode a pattern list using hexdecode"""
@@ -136,7 +142,7 @@ class DecodeCog(commands.Cog):
                 level = iota.postadjust(level)
         
         if not output:
-            return await interaction.response.send_message("❌ Invalid data.", ephemeral=True)
+            return await interaction.response.send_message("❌ Invalid input.", ephemeral=True)
 
         await interaction.response.send_message(f"```\n{output}```", ephemeral=not show_to_everyone)
 

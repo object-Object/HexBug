@@ -3,7 +3,7 @@
 from __future__ import annotations
 from lark.lark import Lark
 from lark.visitors import Transformer
-from lark.exceptions import UnexpectedInput
+from lark.exceptions import LarkError
 import hexast
 
 parser = Lark('''
@@ -55,8 +55,8 @@ class ToAST(Transformer):
 def parse(text):
     try:
         tree = parser.parse(text)
-    except UnexpectedInput:
+        result = ToAST().transform(tree)
+    except LarkError:
         return
-    result = ToAST().transform(tree)
     for child in result:
         yield child
