@@ -33,6 +33,7 @@ from typing import Generator, Iterable, Tuple
 import uuid
 from sty import fg
 from dataclasses import dataclass, field
+from itertools import pairwise
 
 localize_regex = re.compile(r"((?:number|mask))(: .+)")
 
@@ -400,6 +401,27 @@ def _parse_bookkeeper(starting_direction, pattern):
             continue
         return None
     return mask
+
+def generate_bookkeeper(mask: str):
+    if mask[0] == "v":
+        starting_direction = Direction.SOUTH_EAST
+        pattern = "a"
+    else:
+        starting_direction = Direction.EAST
+        pattern = ""
+    
+    for previous, current in pairwise(mask):
+        match previous, current:
+            case "-", "-":
+                pattern += "w"
+            case "-", "v":
+                pattern += "ea"
+            case "v", "-":
+                pattern += "e"
+            case "v", "v":
+                pattern += "da"
+    
+    return starting_direction, pattern
 
 def _get_segments(direction: Direction, pattern: str) -> frozenset[Segment]:
     cursor = Coord.origin()

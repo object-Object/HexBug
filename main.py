@@ -5,7 +5,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 import revealparser
-from hexast import PatternRegistry, Direction, _parse_unknown_pattern, UnknownPattern, massage_raw_pattern_list
+from hexast import PatternRegistry, Direction, _parse_unknown_pattern, UnknownPattern, generate_bookkeeper, massage_raw_pattern_list
 from buildpatterns import build_registry
 from dotenv import load_dotenv
 from generate_image import generate_image, Palette
@@ -51,11 +51,14 @@ class PatternCog(commands.GroupCog, name="pattern"):
     def __init__(self, bot: commands.Bot, registry: PatternRegistry) -> None:
         self.bot = bot
         self.registry = registry
-        self.autocomplete = build_autocomplete([
-            (app_commands.Choice(name=translation, value=translation), [name])
-            for name, translation in registry.name_to_translation.items()
-            if translation not in ["Bookkeeper's Gambit", "Numerical Reflection"]
-        ])
+
+        initial_choices: list[tuple[app_commands.Choice[str], list[str]]] = []
+        for name, translation in registry.name_to_translation.items():
+            if translation == "Numerical Reflection": continue
+            if translation == "Bookkeeper's Gambit": translation += ": …"
+            initial_choices.append((app_commands.Choice(name=translation, value=translation), [name]))
+        
+        self.autocomplete = build_autocomplete(initial_choices)
 
         super().__init__()
     
@@ -118,11 +121,19 @@ class PatternCog(commands.GroupCog, name="pattern"):
         line_scale: SCALE_RANGE = DEFAULT_LINE_SCALE,
         arrow_scale: SCALE_RANGE = DEFAULT_ARROW_SCALE,
     ) -> None:
-        """Display the stroke order of a pattern from its name (no number literals or Bookkeepers)"""
-        if (value := self.registry.translation_to_pattern.get(translation)) is None:
+        """Display the stroke order of a pattern from its name (no number literals, for now)"""
+        if translation.startswith("Bookkeeper's Gambit:"):
+            mask = parse_mask(translation)
+            if not mask:
+                return await interaction.response.send_message("❌ Invalid Bookkeeper's Gambit, must not be empty and only contain the characters `v-`.", ephemeral=True)
+
+            direction, pattern = generate_bookkeeper(mask)
+            is_great = False
+        elif (value := self.registry.translation_to_pattern.get(translation)) is None:
             return await interaction.response.send_message("❌ Unknown pattern.", ephemeral=True)
-        
-        direction, pattern, is_great = value
+        else:
+            direction, pattern, is_great = value
+
         await interaction.response.send_message(
             f"**{translation}**",
             file=discord.File(
@@ -134,7 +145,10 @@ class PatternCog(commands.GroupCog, name="pattern"):
     
     @name.autocomplete("translation")
     async def name_autocomplete(self, interaction: discord.Interaction, current: str) -> list[app_commands.Choice]:
-        return self.autocomplete.get(current, [])[:25]
+        if current.startswith("Bookkeeper's Gambit:"):
+            if parse_mask(current) is not None: # intentionally "allow" blank mask for autocomplete, more intuitive imo
+                return [app_commands.Choice(name=current, value=current)]
+        return self.autocomplete.get(current.lower(), [])[:25]
 
 class DecodeCog(commands.Cog):
     def __init__(self, bot: commands.Bot, registry: PatternRegistry) -> None:
@@ -160,6 +174,12 @@ class DecodeCog(commands.Cog):
             return await interaction.response.send_message("❌ Invalid input.", ephemeral=True)
 
         await interaction.response.send_message(f"```\n{output}```", ephemeral=not show_to_everyone)
+
+def parse_mask(translation: str) -> str | None:
+    mask = translation.removeprefix("Bookkeeper's Gambit:").lstrip().lower()
+    if not all(c in "v-" for c in mask):
+        return None
+    return mask
 
 def build_autocomplete(initial_choices: list[tuple[app_commands.Choice, list[str]]]) -> dict[str, list[app_commands.Choice]]:
     autocomplete: defaultdict[str, set[app_commands.Choice]] = defaultdict(set)
