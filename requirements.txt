@@ -1,4 +1,4 @@
-matplotlib==3.6.0
+-r hex_interpreter/requirements.txt
 python-dotenv==0.21.0
 numpy==1.23.1
 sty==1.0.4

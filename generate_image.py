@@ -3,6 +3,15 @@ import math
 import matplotlib.pyplot as plt
 from hexast import Direction, Coord, Angle
 from hex_interpreter.hex_draw import plot_intersect, plot_monochrome
+import numpy as np
+from matplotlib import colormaps  # type: ignore
+from enum import Enum
+
+class Palette(Enum):
+    Classic = ["#ff6bff","#a81ee3","#6490ed","#b189c7"]
+    Turbo = [colormaps["turbo"](x) for x in np.linspace(0.06, 1, 8)]
+    Dark2 = [colormaps["Dark2"](x) for x in np.linspace(0, 1, 8)]
+    Tab10 = [colormaps["tab10"](x) for x in np.linspace(0, 1, 10)]
 
 def get_points(direction: Direction, pattern: str) -> list[Coord]:
     compass = direction
@@ -17,7 +26,14 @@ def get_points(direction: Direction, pattern: str) -> list[Coord]:
 
     return points
 
-def generate_image(direction: Direction, pattern: str, is_great: bool, line_scale: float, arrow_scale: float) -> BytesIO:
+def generate_image(
+    direction: Direction,
+    pattern: str,
+    is_great: bool,
+    palette: Palette,
+    line_scale: float,
+    arrow_scale: float,
+) -> BytesIO:
     points = get_points(direction, pattern)
     x_vals: list[float] = []
     y_vals: list[float] = []
@@ -37,26 +53,16 @@ def generate_image(direction: Direction, pattern: str, is_great: bool, line_scal
     ax.axis("off")
 
     settings = {
-        "intersect_colors": [
-            "#ff6bff",
-            "#a81ee3",
-            "#6490ed",
-            "#b189c7",
-        ],
+        "intersect_colors": palette.value,
         "arrow_scale": arrow_scale,
     }
+    start_angle = direction.angle_from(Direction.EAST).deg - 90
+    pattern_info = (x_vals, y_vals, scale, start_angle)
 
     if is_great:
-        plot_monochrome(x_vals, y_vals, scale, len(x_vals)-1, "#a81ee3")
+        plot_monochrome(pattern_info, "#a81ee3")
     else:
-        plt.plot(
-            x_vals[1]/2.15,
-            y_vals[1]/2.15,
-            color=settings["intersect_colors"][0],
-            marker=(3, 0, (direction.angle_from(Direction.EAST).deg - 90)),
-            ms=2.6*arrow_scale*scale
-        )
-        plot_intersect(x_vals, y_vals, scale, len(x_vals)-1, settings)
+        plot_intersect(pattern_info, settings)
 
     buf = BytesIO()
     fig.savefig(buf, format="png")

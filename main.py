@@ -8,7 +8,7 @@ import revealparser
 from hexast import PatternRegistry, Direction, _parse_unknown_pattern, UnknownPattern, massage_raw_pattern_list
 from buildpatterns import build_registry
 from dotenv import load_dotenv
-from generate_image import generate_image
+from generate_image import generate_image, Palette
 
 DEFAULT_LINE_SCALE = 6
 DEFAULT_ARROW_SCALE = 2
@@ -17,10 +17,6 @@ SCALE_RANGE = app_commands.Range[float, 0.1, 1000.]
 class MessageCommandsCog(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
-
-    @commands.Cog.listener()
-    async def on_ready(self):
-        print(f"Logged in as {self.bot.user}")
 
     @commands.command()
     @commands.guild_only()
@@ -69,6 +65,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
         pattern='The angle signature of the pattern (eg. aqaawde) — type "-" to leave blank',
         show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
         hide_stroke_order="Whether or not to hide the stroke order (like with great spells)",
+        palette="The color palette to use for the lines (has no effect if hide_stroke_order is True)",
         line_scale="The scale of the lines and dots in the image",
         arrow_scale="The scale of the arrows in the image",
     )
@@ -79,6 +76,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
         pattern: app_commands.Range[str, 1, 256],
         show_to_everyone: bool = False,
         hide_stroke_order: bool = False,
+        palette: Palette = Palette.Classic,
         line_scale: SCALE_RANGE = DEFAULT_LINE_SCALE,
         arrow_scale: SCALE_RANGE = DEFAULT_ARROW_SCALE,
     ) -> None:
@@ -95,7 +93,10 @@ class PatternCog(commands.GroupCog, name="pattern"):
 
         await interaction.response.send_message(
             f"**{pattern_iota.localize(self.registry)}**",
-            file=discord.File(generate_image(direction, pattern, hide_stroke_order, line_scale, arrow_scale), filename="pattern.png"),
+            file=discord.File(
+                generate_image(direction, pattern, hide_stroke_order, palette, line_scale, arrow_scale),
+                filename="pattern.png",
+            ),
             ephemeral=not show_to_everyone,
         )
 
@@ -103,6 +104,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
     @app_commands.describe(
         translation="The name of the pattern",
         show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
+        palette="The color palette to use for the lines (has no effect for great spells)",
         line_scale="The scale of the lines and dots in the image",
         arrow_scale="The scale of the arrows in the image",
     )
@@ -112,6 +114,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
         interaction: discord.Interaction,
         translation: str,
         show_to_everyone: bool = False,
+        palette: Palette = Palette.Classic,
         line_scale: SCALE_RANGE = DEFAULT_LINE_SCALE,
         arrow_scale: SCALE_RANGE = DEFAULT_ARROW_SCALE,
     ) -> None:
@@ -122,7 +125,10 @@ class PatternCog(commands.GroupCog, name="pattern"):
         direction, pattern, is_great = value
         await interaction.response.send_message(
             f"**{translation}**",
-            file=discord.File(generate_image(direction, pattern, is_great, line_scale, arrow_scale), filename="pattern.png"),
+            file=discord.File(
+                generate_image(direction, pattern, is_great, palette, line_scale, arrow_scale),
+                filename="pattern.png",
+            ),
             ephemeral=not show_to_everyone,
         )
     
