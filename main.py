@@ -17,7 +17,7 @@ SCALE_RANGE = app_commands.Range[float, 0.1, 1000.]
 class MessageCommandsCog(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
-    
+
     @commands.Cog.listener()
     async def on_ready(self):
         print(f"Logged in as {self.bot.user}")
@@ -42,6 +42,14 @@ class MessageCommandsCog(commands.Cog):
         async with ctx.channel.typing():
             await self.bot.tree.sync()
         await ctx.reply("✅ Synced slash commands to all guilds (may take up to an hour to update everywhere).")
+
+class EventsCog(commands.Cog):
+    def __init__(self, bot: commands.Bot) -> None:
+        self.bot = bot
+    
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print(f"Logged in as {self.bot.user}")
 
 class PatternCog(commands.GroupCog, name="pattern"):
     def __init__(self, bot: commands.Bot, registry: PatternRegistry) -> None:
@@ -172,6 +180,7 @@ async def main():
 
     async with bot:
         await bot.add_cog(MessageCommandsCog(bot))
+        await bot.add_cog(EventsCog(bot))
         await bot.add_cog(PatternCog(bot, registry))
         await bot.add_cog(DecodeCog(bot, registry))
         await bot.start(token)
