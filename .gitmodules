@@ -1,3 +1,9 @@
 [submodule "hex-interpreter"]
 	path = hex_interpreter
 	url = https://github.com/Robotgiggle/hex-interpreter
+[submodule "HexMod"]
+	path = HexMod
+	url = https://github.com/gamma-delta/HexMod
+[submodule "Hexal"]
+	path = Hexal
+	url = https://github.com/Talia-12/Hexal

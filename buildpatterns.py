@@ -32,10 +32,23 @@ from hexast import Direction, get_rotated_pattern_segments, PatternRegistry
 registry_regex = re.compile(r"PatternRegistry\s*\.\s*mapPattern\s*\(\s*HexPattern\s*\.\s*fromAngles\s*\(\s*\"([aqwed]+)\"\s*,\s*HexDir\s*\.\s*(\w+)\s*\)\s*,\s*modLoc\s*\(\s*\"([\w/]+)\"\s*\).+?(true)?\);", re.M | re.S)
 translation_regex = re.compile(r"hexcasting.spell.[a-z]+:(.+)")
 
+lang_files = [
+    "HexMod/Common/src/main/resources/assets/hexcasting/lang/en_us.json",
+    "Hexal/Common/src/main/resources/assets/hexal/lang/en_us.json",
+]
+
+pattern_files = [
+    "HexMod/Common/src/main/java/at/petrak/hexcasting/common/casting/RegisterPatterns.java",
+    "HexMod/Common/src/main/java/at/petrak/hexcasting/interop/pehkui/PehkuiInterop.java",
+    "HexMod/Fabric/src/main/java/at/petrak/hexcasting/fabric/interop/gravity/GravityApiInterop.java",
+    "Hexal/Common/src/main/java/ram/talia/hexal/common/casting/RegisterPatterns.java",
+]
+
 def build_registry() -> PatternRegistry:
     registry = PatternRegistry()
 
-    for filename in glob.glob("data/*.json"):
+    # read the translations
+    for filename in lang_files:
         with open(filename, "r", encoding="utf-8") as file:
             data: dict[str, str] = json.load(file)
             for key, translation in data.items():
@@ -43,7 +56,8 @@ def build_registry() -> PatternRegistry:
                     name = match[1]
                     registry.name_to_translation[name] = translation.replace(": %s", "") # because the new built in decoding interferes with this
     
-    for filename in glob.glob("data/*.java"):
+    # read the patterns
+    for filename in pattern_files:
         with open(filename, "r", encoding="utf-8") as file:
             for match in registry_regex.finditer(file.read()):
                 (pattern, direction, name, is_great) = match.groups()
