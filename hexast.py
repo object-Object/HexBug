@@ -34,10 +34,15 @@ import uuid
 from sty import fg
 from dataclasses import dataclass, field
 from itertools import pairwise
-
 from HexMod.doc.collate_data import FormatTree
 
 localize_regex = re.compile(r"((?:number|mask))(: .+)")
+
+ModName = Literal["Hex Casting", "Hexal"]
+BASE_URLS: dict[ModName, str] = {
+    "Hex Casting": "https://gamma-delta.github.io/HexMod/",
+    "Hexal": "https://talia-12.github.io/Hexal/",
+}
 
 @dataclass
 class Registry:
@@ -47,8 +52,10 @@ class Registry:
     name_to_translation: dict[str, str] = field(default_factory=dict)
     translation_to_pattern: dict[str, tuple[Direction, str, bool, str]] = field(default_factory=dict)
     """translation: (direction, pattern, is_great, name)"""
-    page_title_to_url: dict[str, str] = field(default_factory=dict)
-    name_to_url: dict[str, str] = field(default_factory=dict)
+    page_title_to_url: dict[str, tuple[ModName, str, list[str]]] = field(default_factory=dict)
+    """page_title: (mod, url, name)"""
+    name_to_url: dict[str, tuple[ModName, str]] = field(default_factory=dict)
+    """name: (mod, url)"""
     name_to_args: dict[str, str] = field(default_factory=dict)
 
 class Iota:

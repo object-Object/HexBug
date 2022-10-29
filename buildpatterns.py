@@ -25,13 +25,11 @@ https://github.com/gchpaco/hexdecode
 """
 
 import re
-from hexast import (BookEntry, Direction, get_rotated_pattern_segments, Registry, Book, BookPage_patchouli_text,
+from typing import Literal
+from hexast import (BookEntry, Direction, ModName, get_rotated_pattern_segments, Registry, Book, BookPage_patchouli_text,
                     BookPage_patchouli_spotlight, BookPage_hexcasting_pattern, BookPage_hexcasting_manual_pattern, isbookpage)
 from HexMod.doc.collate_data import parse_book as hex_parse_book
 from Hexal.doc.collate_data import parse_book as hexal_parse_book
-
-HEX_BASE_URL = "https://gamma-delta.github.io/HexMod/"
-HEXAL_BASE_URL = "https://talia-12.github.io/Hexal/"
 
 translation_regex = re.compile(r"hexcasting.spell.[a-z]+:(.+)")
 header_regex = re.compile(r"\s*\(.+\)")
@@ -40,7 +38,7 @@ def _build_pattern_urls(
     registry: Registry,
     entry: BookEntry,
     page: BookPage_hexcasting_pattern | BookPage_hexcasting_manual_pattern,
-    base_url: str
+    mod: ModName,
 ):
     if "anchor" not in page:
         return None
@@ -49,7 +47,7 @@ def _build_pattern_urls(
     oup = f"__{oup}__" if (oup := page.get("output")) else ""
     args = f"**{f'{inp} → {oup}'.strip()}**" if inp or oup else None
 
-    url = f"{base_url}#{entry['id']}@{page['anchor']}"
+    url = f"#{entry['id']}@{page['anchor']}"
     names: set[str] = set()
     names.add(page["op_id"].split(":", 1)[1])
 
@@ -58,33 +56,33 @@ def _build_pattern_urls(
             names.add(name)
 
     for name in names:
-        registry.name_to_url[name] = url
+        registry.name_to_url[name] = (mod, url)
         if args:
             registry.name_to_args[name] = args
 
-    return url
+    return (mod, url, list(names))
 
-def _build_urls(registry: Registry, book: Book, base_url: str):
+def _build_urls(registry: Registry, book: Book, mod: ModName):
     for category in book["categories"]:
-        registry.page_title_to_url[category["name"]] = f"{base_url}#{category['id']}"
+        registry.page_title_to_url[category["name"]] = (mod, f"#{category['id']}", [])
 
         for entry in category["entries"]:
-            registry.page_title_to_url[entry["name"]] = f"{base_url}#{entry['id']}"
+            registry.page_title_to_url[entry["name"]] = (mod, f"#{entry['id']}", [])
 
             for page in entry["pages"]:
                 if isbookpage(page, BookPage_patchouli_text) and "title" in page and "anchor" in page:
-                    registry.page_title_to_url[page["title"]] = f"{base_url}#{entry['id']}@{page['anchor']}"
+                    registry.page_title_to_url[page["title"]] = (mod, f"#{entry['id']}@{page['anchor']}", [])
 
                 elif isbookpage(page, BookPage_patchouli_spotlight) and "anchor" in page:
-                    registry.page_title_to_url[page["item_name"]] = f"{base_url}#{entry['id']}@{page['anchor']}"
+                    registry.page_title_to_url[page["item_name"]] = (mod, f"#{entry['id']}@{page['anchor']}", [])
 
                 elif (isbookpage(page, BookPage_hexcasting_pattern)
-                and (url := _build_pattern_urls(registry, entry, page, base_url))):
-                    registry.page_title_to_url[page["name"]] = url
+                and (value := _build_pattern_urls(registry, entry, page, mod))):
+                    registry.page_title_to_url[page["name"]] = value
 
                 elif (isbookpage(page, BookPage_hexcasting_manual_pattern)
-                and (url := _build_pattern_urls(registry, entry, page, base_url))):
-                    registry.page_title_to_url[header_regex.sub("", page["header"])] = url
+                and (value := _build_pattern_urls(registry, entry, page, mod))):
+                    registry.page_title_to_url[header_regex.sub("", page["header"])] = value
 
 def build_registry() -> Registry:
     registry = Registry()
@@ -109,7 +107,7 @@ def build_registry() -> Registry:
         registry.translation_to_pattern[translation] = (Direction[direction], pattern, bool(is_great), name)
     
     # books
-    _build_urls(registry, hex_book, HEX_BASE_URL)
-    _build_urls(registry, hexal_book, HEXAL_BASE_URL)
+    _build_urls(registry, hex_book, "Hex Casting")
+    _build_urls(registry, hexal_book, "Hexal")
 
     return registry

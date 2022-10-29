@@ -1,14 +1,15 @@
 import asyncio
 from collections import defaultdict
 from io import BytesIO
+import logging
 import os
 from typing import Literal, assert_never
 import discord
 from discord import app_commands
 from discord.ext import commands
 import revealparser
-from hexast import Registry, Direction, _parse_unknown_pattern, UnknownPattern, generate_bookkeeper, massage_raw_pattern_list
-from buildpatterns import build_registry, HEX_BASE_URL, HEXAL_BASE_URL
+from hexast import Registry, Direction, _parse_unknown_pattern, UnknownPattern, generate_bookkeeper, massage_raw_pattern_list, ModName, BASE_URLS
+from buildpatterns import build_registry
 from dotenv import load_dotenv
 from generate_image import generate_image, Palette
 
@@ -97,10 +98,11 @@ class PatternCog(commands.GroupCog, name="pattern"):
         pattern_iota, name = _parse_unknown_pattern(UnknownPattern(direction, pattern), self.registry)
         translation = pattern_iota.localize(self.registry)
 
-        await _send_pattern(
+        mod, url = self.registry.name_to_url.get(name, (None, ""))
+        await send_pattern(
             interaction,
             translation,
-            self.registry.name_to_url.get(name),
+            mod and build_book_url(mod, url, False, False),
             self.registry.name_to_args.get(name),
             generate_image(direction, pattern, hide_stroke_order, palette, line_scale, arrow_scale),
             not show_to_everyone,
@@ -138,10 +140,11 @@ class PatternCog(commands.GroupCog, name="pattern"):
         else:
             direction, pattern, is_great, name = value
 
-        await _send_pattern(
+        mod, url = self.registry.name_to_url.get(name, (None, ""))
+        await send_pattern(
             interaction,
             translation,
-            self.registry.name_to_url.get(name),
+            mod and build_book_url(mod, url, False, False),
             self.registry.name_to_args.get(name),
             generate_image(direction, pattern, is_great, palette, line_scale, arrow_scale),
             not show_to_everyone,
@@ -183,33 +186,32 @@ class BookCog(commands.GroupCog, name="book"):
     def __init__(self, bot: commands.Bot, registry: Registry) -> None:
         self.bot = bot
         self.registry = registry
-        self.autocomplete = build_autocomplete([(app_commands.Choice(name=title, value=title), []) for title in registry.page_title_to_url])
+        self.autocomplete = build_autocomplete(
+            [(app_commands.Choice(name=title, value=title), names) for title, (_, _, names) in registry.page_title_to_url.items()]
+        )
     
     @app_commands.command()
     @app_commands.describe(
         mod="The mod to link the home page for",
         show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
+        show_spoilers="Whether the link should have spoilers unblurred or not",
     )
-    async def home(self, interaction: discord.Interaction, mod: Literal["Hex Casting", "Hexal"], show_to_everyone: bool = False) -> None:
-        match mod:
-            case "Hex Casting":
-                await interaction.response.send_message(f"<{HEX_BASE_URL}>", ephemeral=not show_to_everyone)
-            case "Hexal":
-                await interaction.response.send_message(f"<{HEXAL_BASE_URL}>", ephemeral=not show_to_everyone)
-            case _:
-                assert_never(mod)
+    async def home(self, interaction: discord.Interaction, mod: ModName, show_to_everyone: bool = False, show_spoilers: bool = False) -> None:
+        await interaction.response.send_message(build_book_url(mod, "", show_spoilers, True), ephemeral=not show_to_everyone)
     
     @app_commands.command()
     @app_commands.describe(
         page_title="The title of the page to link",
         show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
+        show_spoilers="Whether the link should have spoilers unblurred or not",
     )
-    async def page(self, interaction: discord.Interaction, page_title: str, show_to_everyone: bool = False) -> None:
+    async def page(self, interaction: discord.Interaction, page_title: str, show_to_everyone: bool = False, show_spoilers: bool = False) -> None:
         """Get a link to the web book"""
-        if not (url := self.registry.page_title_to_url.get(page_title)):
+        if not (value := self.registry.page_title_to_url.get(page_title)):
             return await interaction.response.send_message("❌ Unknown page.", ephemeral=True)
 
-        await interaction.response.send_message(f"<{url}>", ephemeral=not show_to_everyone)
+        mod, url, _ = value
+        await interaction.response.send_message(build_book_url(mod, url, show_spoilers, True), ephemeral=not show_to_everyone)
     
     @page.autocomplete("page_title")
     async def page_autocomplete(self, interaction: discord.Interaction, current: str) -> list[app_commands.Choice]:
@@ -233,7 +235,7 @@ def build_autocomplete(initial_choices: list[tuple[app_commands.Choice, list[str
     
     return {key: sorted(list(value), key=lambda c: c.name) for key, value in autocomplete.items()}
 
-async def _send_pattern(
+async def send_pattern(
     interaction: discord.Interaction,
     translation: str,
     url: str | None,
@@ -247,6 +249,14 @@ async def _send_pattern(
         ephemeral=ephemeral,
     )
 
+def build_book_url(mod: ModName, url: str, show_spoilers: bool, escape: bool):
+    final_url = f"{BASE_URLS[mod]}{'?nospoiler' if show_spoilers else ''}{url}"
+    if escape:
+        final_url = f"<{final_url}>"
+    if show_spoilers:
+        final_url = f"||{final_url}||"
+    return final_url
+
 async def main():
     load_dotenv(".env")
     token = os.environ.get("TOKEN")
@@ -257,7 +267,8 @@ async def main():
 
     intents = discord.Intents.default()
     bot = commands.Bot(command_prefix=commands.when_mentioned, intents=intents)
-
+    
+    discord.utils.setup_logging(level=logging.INFO) # WHY ISN'T THIS ENABLED BY DEFAULT
     async with bot:
         await bot.add_cog(MessageCommandsCog(bot))
         await bot.add_cog(EventsCog(bot))
