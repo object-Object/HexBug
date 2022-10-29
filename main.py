@@ -8,7 +8,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 import revealparser
-from hexast import Registry, Direction, _parse_unknown_pattern, UnknownPattern, generate_bookkeeper, massage_raw_pattern_list, ModName, BASE_URLS
+from hexast import BASE_SOURCE_URLS, Registry, Direction, _parse_unknown_pattern, UnknownPattern, generate_bookkeeper, massage_raw_pattern_list, ModName, BASE_BOOK_URLS
 from buildpatterns import build_registry
 from dotenv import load_dotenv
 from generate_image import generate_image, Palette
@@ -98,12 +98,11 @@ class PatternCog(commands.GroupCog, name="pattern"):
         pattern_iota, name = _parse_unknown_pattern(UnknownPattern(direction, pattern), self.registry)
         translation = pattern_iota.localize(self.registry)
 
-        mod, url = self.registry.name_to_url.get(name, (None, ""))
         await send_pattern(
+            self.registry,
             interaction,
+            name,
             translation,
-            mod and build_book_url(mod, url, False, False),
-            self.registry.name_to_args.get(name),
             generate_image(direction, pattern, hide_stroke_order, palette, line_scale, arrow_scale),
             not show_to_everyone,
         )
@@ -140,12 +139,11 @@ class PatternCog(commands.GroupCog, name="pattern"):
         else:
             direction, pattern, is_great, name = value
 
-        mod, url = self.registry.name_to_url.get(name, (None, ""))
         await send_pattern(
+            self.registry,
             interaction,
+            name,
             translation,
-            mod and build_book_url(mod, url, False, False),
-            self.registry.name_to_args.get(name),
             generate_image(direction, pattern, is_great, palette, line_scale, arrow_scale),
             not show_to_everyone,
         )
@@ -217,6 +215,49 @@ class BookCog(commands.GroupCog, name="book"):
     async def page_autocomplete(self, interaction: discord.Interaction, current: str) -> list[app_commands.Choice]:
         return self.autocomplete.get(current.lower(), [])[:25]
 
+class SourceCog(commands.GroupCog, name="source"):
+    def __init__(self, bot: commands.Bot, registry: Registry) -> None:
+        self.bot = bot
+        self.registry = registry
+
+        initial_choices = [
+            (app_commands.Choice(name=translation, value=translation), [name])
+            for name, translation in registry.name_to_translation.items()
+        ]
+        self.autocomplete = build_autocomplete(initial_choices)
+    
+    @app_commands.command()
+    @app_commands.describe(
+        mod="The mod to link the repository for",
+        show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
+    )
+    async def repo(self, interaction: discord.Interaction, mod: ModName, show_to_everyone: bool = False) -> None:
+        await interaction.response.send_message(build_source_url(mod, ""), ephemeral=not show_to_everyone)
+    
+    @app_commands.command()
+    @app_commands.describe(
+        translation="The name of the pattern to link",
+        show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
+    )
+    @app_commands.rename(translation="name")
+    async def pattern(self, interaction: discord.Interaction, translation: str, show_to_everyone: bool = False) -> None:
+        """Get a link to the web book"""
+        if not (value := self.registry.translation_to_path.get(translation)):
+            return await interaction.response.send_message("❌ Unknown pattern.", ephemeral=True)
+
+        mod, path, name = value
+        filename: str = path.split("/")[-1]
+        source_url = build_source_url(mod, path)
+
+        await interaction.response.send_message(
+            embed=discord.Embed(title=filename, url=source_url).set_author(name=f"{translation} ({name})"),
+            ephemeral=not show_to_everyone,
+        )
+    
+    @pattern.autocomplete("translation")
+    async def pattern_autocomplete(self, interaction: discord.Interaction, current: str) -> list[app_commands.Choice]:
+        return self.autocomplete.get(current.lower(), [])[:25]
+
 def parse_mask(translation: str) -> str | None:
     mask = translation.removeprefix("Bookkeeper's Gambit:").lstrip().lower()
     if not all(c in "v-" for c in mask):
@@ -236,26 +277,38 @@ def build_autocomplete(initial_choices: list[tuple[app_commands.Choice, list[str
     return {key: sorted(list(value), key=lambda c: c.name) for key, value in autocomplete.items()}
 
 async def send_pattern(
+    registry: Registry,
     interaction: discord.Interaction,
+    name: str,
     translation: str,
-    url: str | None,
-    args: str | None,
     image: BytesIO,
     ephemeral: bool,
 ):
+    mod, book_url = registry.name_to_url.get(name, (None, None))
+    book_url = mod and book_url and build_book_url(mod, book_url, False, False)
+
+    embed = discord.Embed(
+        title=translation,
+        url=book_url,
+        description=registry.name_to_args.get(name),
+    ).set_image(url="attachment://pattern.png")
+
     await interaction.response.send_message(
-        embed=discord.Embed(title=translation, url=url, description=args).set_image(url="attachment://pattern.png"),
+        embed=embed,
         file=discord.File(image, filename="pattern.png"),
         ephemeral=ephemeral,
     )
 
-def build_book_url(mod: ModName, url: str, show_spoilers: bool, escape: bool):
-    final_url = f"{BASE_URLS[mod]}{'?nospoiler' if show_spoilers else ''}{url}"
+def build_book_url(mod: ModName, url: str, show_spoilers: bool, escape: bool) -> str:
+    book_url = f"{BASE_BOOK_URLS[mod]}{'?nospoiler' if show_spoilers else ''}{url}"
     if escape:
-        final_url = f"<{final_url}>"
+        book_url = f"<{book_url}>"
     if show_spoilers:
-        final_url = f"||{final_url}||"
-    return final_url
+        book_url = f"||{book_url}||"
+    return book_url
+
+def build_source_url(mod: ModName, path: str):
+    return f"{BASE_SOURCE_URLS[mod]}{'blob/main/' if path else ''}{path}"
 
 async def main():
     load_dotenv(".env")
@@ -274,6 +327,7 @@ async def main():
         await bot.add_cog(EventsCog(bot))
         await bot.add_cog(PatternCog(bot, registry))
         await bot.add_cog(DecodeCog(bot, registry))
+        await bot.add_cog(SourceCog(bot, registry))
         await bot.add_cog(BookCog(bot, registry))
         await bot.start(token)
 

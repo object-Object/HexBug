@@ -25,14 +25,30 @@ https://github.com/gchpaco/hexdecode
 """
 
 import re
-from typing import Literal
+from pathlib import Path
 from hexast import (BookEntry, Direction, ModName, get_rotated_pattern_segments, Registry, Book, BookPage_patchouli_text,
                     BookPage_patchouli_spotlight, BookPage_hexcasting_pattern, BookPage_hexcasting_manual_pattern, isbookpage)
 from HexMod.doc.collate_data import parse_book as hex_parse_book
 from Hexal.doc.collate_data import parse_book as hexal_parse_book
 
+# thanks Alwinfy for (unknowingly) making my registry regex about 5x simpler
+registry_regex = re.compile(r'HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)[^;]+?(Operator|Op\w+|Widget)([^;]*true\);)?', re.M)
 translation_regex = re.compile(r"hexcasting.spell.[a-z]+:(.+)")
 header_regex = re.compile(r"\s*\(.+\)")
+
+pattern_files: list[tuple[ModName, str]] = [
+    ("Hex Casting", "HexMod/Common/src/main/java/at/petrak/hexcasting/common/casting/RegisterPatterns.java"),
+    ("Hex Casting", "HexMod/Common/src/main/java/at/petrak/hexcasting/interop/pehkui/PehkuiInterop.java"),
+    ("Hex Casting", "HexMod/Fabric/src/main/java/at/petrak/hexcasting/fabric/interop/gravity/GravityApiInterop.java"),
+    ("Hexal", "Hexal/Common/src/main/java/ram/talia/hexal/common/casting/RegisterPatterns.java"),
+]
+
+operator_directories: list[tuple[ModName, str]] = [
+    ("Hex Casting", "HexMod/Common/src/main/java/at/petrak/hexcasting/common/casting/operators"),
+    ("Hex Casting", "HexMod/Common/src/main/java/at/petrak/hexcasting/interop/pehkui"),
+    ("Hex Casting", "HexMod/Fabric/src/main/java/at/petrak/hexcasting/fabric/interop/gravity"),
+    ("Hexal", "Hexal/Common/src/main/java/ram/talia/hexal/common/casting/actions"),
+]
 
 def _build_pattern_urls(
     registry: Registry,
@@ -95,16 +111,42 @@ def build_registry() -> Registry:
             name = match[1]
             registry.name_to_translation[name] = translation.replace(": %s", "") # because the new built in decoding interferes with this
     
-    # patterns
-    for pattern_id, (pattern, direction, is_great) in dict(hex_book["pattern_reg"], **hexal_book["pattern_reg"]).items():
-        name = pattern_id.split(":", 1)[1]
-        if is_great:
-            for segments in get_rotated_pattern_segments(Direction[direction], pattern):
-                registry.great_spells[segments] = name
-        else:
-            registry.pattern_to_name[pattern] = name
-        translation = registry.name_to_translation.get(name, name) # because Hexal sometimes doesn't have translations
-        registry.translation_to_pattern[translation] = (Direction[direction], pattern, bool(is_great), name)
+    # get classname_to_path
+    classname_to_path: dict[str, str] = {
+        "Operator": "Common/src/main/java/at/petrak/hexcasting/api/spell/Operator.kt",
+        "Widget": "Common/src/main/java/at/petrak/hexcasting/api/spell/Widget.kt",
+    }
+    for mod, directory in operator_directories:
+        for path in Path(directory).rglob("Op*.kt"):
+            path = path.relative_to(path.parts[0])
+            key = path.stem
+            if duplicate := classname_to_path.get(key): # this *should* never happen
+                raise Exception(f"Duplicate classname: {key} ({path} and {duplicate})")
+            classname_to_path[key] = path.as_posix()
+
+    # patterns - can't use the Book data here because we also need the class name :pensivewobble:
+    registry.translation_to_path["Bookkeeper's Gambit"] = (
+        "Hex Casting",
+        "Common/src/main/java/at/petrak/hexcasting/common/casting/RegisterPatterns.java",
+        "mask",
+    )
+    registry.translation_to_path["Numerical Reflection"] = (
+        "Hex Casting",
+        "Common/src/main/java/at/petrak/hexcasting/common/casting/RegisterPatterns.java",
+        "number",
+    )
+    for mod, filename in pattern_files:
+        with open(filename, "r", encoding="utf-8") as file:
+            for match in registry_regex.finditer(file.read()):
+                (pattern, direction, name, classname, is_great) = match.groups()
+                if is_great:
+                    for segments in get_rotated_pattern_segments(Direction[direction], pattern):
+                        registry.great_spells[segments] = name
+                else:
+                    registry.pattern_to_name[pattern] = name
+                translation = registry.name_to_translation.get(name, name) # because Hexal sometimes doesn't have translations
+                registry.translation_to_pattern[translation] = (Direction[direction], pattern, bool(is_great), name)
+                registry.translation_to_path[translation] = (mod, classname_to_path[classname], name)
     
     # books
     _build_urls(registry, hex_book, "Hex Casting")

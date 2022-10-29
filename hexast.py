@@ -39,11 +39,16 @@ from HexMod.doc.collate_data import FormatTree
 localize_regex = re.compile(r"((?:number|mask))(: .+)")
 
 ModName = Literal["Hex Casting", "Hexal"]
-BASE_URLS: dict[ModName, str] = {
+BASE_BOOK_URLS: dict[ModName, str] = {
     "Hex Casting": "https://gamma-delta.github.io/HexMod/",
     "Hexal": "https://talia-12.github.io/Hexal/",
 }
+BASE_SOURCE_URLS: dict[ModName, str] = {
+    "Hex Casting": "https://github.com/gamma-delta/HexMod/",
+    "Hexal": "https://github.com/Talia-12/Hexal/",
+}
 
+# at some point, I should probably rewrite this thing into a proper data structure instead of 8+ separate dicts
 @dataclass
 class Registry:
     pattern_to_name: dict[str, str] = field(default_factory=dict)
@@ -53,10 +58,12 @@ class Registry:
     translation_to_pattern: dict[str, tuple[Direction, str, bool, str]] = field(default_factory=dict)
     """translation: (direction, pattern, is_great, name)"""
     page_title_to_url: dict[str, tuple[ModName, str, list[str]]] = field(default_factory=dict)
-    """page_title: (mod, url, name)"""
+    """page_title: (mod, url, names)"""
     name_to_url: dict[str, tuple[ModName, str]] = field(default_factory=dict)
     """name: (mod, url)"""
     name_to_args: dict[str, str] = field(default_factory=dict)
+    translation_to_path: dict[str, tuple[ModName, str, str]] = field(default_factory=dict)
+    """translation: (mod, path, name)"""
 
 class Iota:
     def __init__(self, datum):
