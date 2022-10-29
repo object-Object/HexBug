@@ -1,3 +1,9 @@
 {
-    "python.analysis.typeCheckingMode": "basic" // strict doesn't play nice with a lot of things we're using
+    "python.analysis.typeCheckingMode": "basic", // strict doesn't play nice with a lot of things we're using
+    "todo-tree.filtering.excludeGlobs": [
+        "**/venv*/**",
+        "**/Hexal/**",
+        "**/HexMod/**",
+        "**/hex_interpreter/**",
+    ],
 }

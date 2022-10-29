@@ -1,12 +1,14 @@
 import asyncio
 from collections import defaultdict
+from io import BytesIO
 import os
+from typing import Literal, assert_never
 import discord
 from discord import app_commands
 from discord.ext import commands
 import revealparser
-from hexast import PatternRegistry, Direction, _parse_unknown_pattern, UnknownPattern, generate_bookkeeper, massage_raw_pattern_list
-from buildpatterns import build_registry
+from hexast import Registry, Direction, _parse_unknown_pattern, UnknownPattern, generate_bookkeeper, massage_raw_pattern_list
+from buildpatterns import build_registry, HEX_BASE_URL, HEXAL_BASE_URL
 from dotenv import load_dotenv
 from generate_image import generate_image, Palette
 
@@ -48,7 +50,7 @@ class EventsCog(commands.Cog):
         print(f"Logged in as {self.bot.user}")
 
 class PatternCog(commands.GroupCog, name="pattern"):
-    def __init__(self, bot: commands.Bot, registry: PatternRegistry) -> None:
+    def __init__(self, bot: commands.Bot, registry: Registry) -> None:
         self.bot = bot
         self.registry = registry
 
@@ -92,15 +94,16 @@ class PatternCog(commands.GroupCog, name="pattern"):
                 ephemeral=True,
             )
         
-        pattern_iota = _parse_unknown_pattern(UnknownPattern(direction, pattern), self.registry)
+        pattern_iota, name = _parse_unknown_pattern(UnknownPattern(direction, pattern), self.registry)
+        translation = pattern_iota.localize(self.registry)
 
-        await interaction.response.send_message(
-            f"**{pattern_iota.localize(self.registry)}**",
-            file=discord.File(
-                generate_image(direction, pattern, hide_stroke_order, palette, line_scale, arrow_scale),
-                filename="pattern.png",
-            ),
-            ephemeral=not show_to_everyone,
+        await _send_pattern(
+            interaction,
+            translation,
+            self.registry.name_to_url.get(name),
+            self.registry.name_to_args.get(name),
+            generate_image(direction, pattern, hide_stroke_order, palette, line_scale, arrow_scale),
+            not show_to_everyone,
         )
 
     @app_commands.command()
@@ -129,18 +132,19 @@ class PatternCog(commands.GroupCog, name="pattern"):
 
             direction, pattern = generate_bookkeeper(mask)
             is_great = False
+            name = "mask"
         elif (value := self.registry.translation_to_pattern.get(translation)) is None:
             return await interaction.response.send_message("❌ Unknown pattern.", ephemeral=True)
         else:
-            direction, pattern, is_great = value
+            direction, pattern, is_great, name = value
 
-        await interaction.response.send_message(
-            f"**{translation}**",
-            file=discord.File(
-                generate_image(direction, pattern, is_great, palette, line_scale, arrow_scale),
-                filename="pattern.png",
-            ),
-            ephemeral=not show_to_everyone,
+        await _send_pattern(
+            interaction,
+            translation,
+            self.registry.name_to_url.get(name),
+            self.registry.name_to_args.get(name),
+            generate_image(direction, pattern, is_great, palette, line_scale, arrow_scale),
+            not show_to_everyone,
         )
     
     @name.autocomplete("translation")
@@ -151,7 +155,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
         return self.autocomplete.get(current.lower(), [])[:25]
 
 class DecodeCog(commands.Cog):
-    def __init__(self, bot: commands.Bot, registry: PatternRegistry) -> None:
+    def __init__(self, bot: commands.Bot, registry: Registry) -> None:
         self.bot = bot
         self.registry = registry
     
@@ -175,6 +179,42 @@ class DecodeCog(commands.Cog):
 
         await interaction.response.send_message(f"```\n{output}```", ephemeral=not show_to_everyone)
 
+class BookCog(commands.GroupCog, name="book"):
+    def __init__(self, bot: commands.Bot, registry: Registry) -> None:
+        self.bot = bot
+        self.registry = registry
+        self.autocomplete = build_autocomplete([(app_commands.Choice(name=title, value=title), []) for title in registry.page_title_to_url])
+    
+    @app_commands.command()
+    @app_commands.describe(
+        mod="The mod to link the home page for",
+        show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
+    )
+    async def home(self, interaction: discord.Interaction, mod: Literal["Hex Casting", "Hexal"], show_to_everyone: bool = False) -> None:
+        match mod:
+            case "Hex Casting":
+                await interaction.response.send_message(f"<{HEX_BASE_URL}>", ephemeral=not show_to_everyone)
+            case "Hexal":
+                await interaction.response.send_message(f"<{HEXAL_BASE_URL}>", ephemeral=not show_to_everyone)
+            case _:
+                assert_never(mod)
+    
+    @app_commands.command()
+    @app_commands.describe(
+        page_title="The title of the page to link",
+        show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
+    )
+    async def page(self, interaction: discord.Interaction, page_title: str, show_to_everyone: bool = False) -> None:
+        """Get a link to the web book"""
+        if not (url := self.registry.page_title_to_url.get(page_title)):
+            return await interaction.response.send_message("❌ Unknown page.", ephemeral=True)
+
+        await interaction.response.send_message(f"<{url}>", ephemeral=not show_to_everyone)
+    
+    @page.autocomplete("page_title")
+    async def page_autocomplete(self, interaction: discord.Interaction, current: str) -> list[app_commands.Choice]:
+        return self.autocomplete.get(current.lower(), [])[:25]
+
 def parse_mask(translation: str) -> str | None:
     mask = translation.removeprefix("Bookkeeper's Gambit:").lstrip().lower()
     if not all(c in "v-" for c in mask):
@@ -193,6 +233,20 @@ def build_autocomplete(initial_choices: list[tuple[app_commands.Choice, list[str
     
     return {key: sorted(list(value), key=lambda c: c.name) for key, value in autocomplete.items()}
 
+async def _send_pattern(
+    interaction: discord.Interaction,
+    translation: str,
+    url: str | None,
+    args: str | None,
+    image: BytesIO,
+    ephemeral: bool,
+):
+    await interaction.response.send_message(
+        embed=discord.Embed(title=translation, url=url, description=args).set_image(url="attachment://pattern.png"),
+        file=discord.File(image, filename="pattern.png"),
+        ephemeral=ephemeral,
+    )
+
 async def main():
     load_dotenv(".env")
     token = os.environ.get("TOKEN")
@@ -209,6 +263,7 @@ async def main():
         await bot.add_cog(EventsCog(bot))
         await bot.add_cog(PatternCog(bot, registry))
         await bot.add_cog(DecodeCog(bot, registry))
+        await bot.add_cog(BookCog(bot, registry))
         await bot.start(token)
 
 if __name__ == "__main__":

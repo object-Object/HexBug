@@ -29,24 +29,27 @@ from enum import Enum
 import math
 import re
 import struct
-from typing import Generator, Iterable, Tuple
+from typing import Generator, Generic, Iterable, Literal, Mapping, Tuple, Type, TypeGuard, TypeVar, TypedDict, NotRequired, LiteralString, get_args
 import uuid
 from sty import fg
 from dataclasses import dataclass, field
 from itertools import pairwise
 
+from HexMod.doc.collate_data import FormatTree
+
 localize_regex = re.compile(r"((?:number|mask))(: .+)")
 
 @dataclass
-class PatternRegistry:
+class Registry:
     pattern_to_name: dict[str, str] = field(default_factory=dict)
-    """pattern: name"""
     great_spells: dict[frozenset[Segment], str] = field(default_factory=dict)
     """segments: name"""
     name_to_translation: dict[str, str] = field(default_factory=dict)
-    """name: translation"""
-    translation_to_pattern: dict[str, tuple[Direction, str, bool]] = field(default_factory=dict)
-    """translation: (direction, pattern, is_great)"""
+    translation_to_pattern: dict[str, tuple[Direction, str, bool, str]] = field(default_factory=dict)
+    """translation: (direction, pattern, is_great, name)"""
+    page_title_to_url: dict[str, str] = field(default_factory=dict)
+    name_to_url: dict[str, str] = field(default_factory=dict)
+    name_to_args: dict[str, str] = field(default_factory=dict)
 
 class Iota:
     def __init__(self, datum):
@@ -55,13 +58,13 @@ class Iota:
         return ""
     def presentation_name(self):
         return str(self._datum)
-    def localize(self, registry: PatternRegistry):
+    def localize(self, registry: Registry):
         presentation_name = self.presentation_name()
         value = ""
         if match := localize_regex.match(presentation_name):
             (presentation_name, value) = match.groups()
         return registry.name_to_translation.get(presentation_name, presentation_name) + value
-    def print(self, level: int, highlight: bool, registry: PatternRegistry) -> str:
+    def print(self, level: int, highlight: bool, registry: Registry) -> str:
         indent = "  " * level
         datum_name = self.localize(registry)
         return indent + self.color() + datum_name + fg.rs if highlight else indent + datum_name
@@ -370,7 +373,143 @@ class Segment:
 
     def rotated(self, angle: Angle | str | int) -> Segment:
         return Segment(self.root.rotated(angle), self.direction.rotated(angle))
-    
+
+T = TypeVar("T", bound=LiteralString)
+class BookPage(TypedDict, Generic[T]):
+    type: T
+
+class BookPage_patchouli_text(BookPage[Literal["patchouli:text"]]):
+    """title"""
+    text: FormatTree
+    anchor: NotRequired[str]
+    title: NotRequired[str]
+
+class BookPage_patchouli_spotlight(BookPage[Literal["patchouli:spotlight"]]):
+    """item_name"""
+    item: str
+    item_name: str
+    link_recipe: bool
+    text: FormatTree
+    anchor: NotRequired[str]
+
+class BookPage_hexcasting_pattern(BookPage[Literal["hexcasting:pattern"]]):
+    """name"""
+    name: str
+    op: list
+    op_id: str
+    text: FormatTree
+    anchor: NotRequired[str]
+    hex_size: NotRequired[int]
+    input: NotRequired[str]
+    output: NotRequired[str]
+
+class BookPage_hexcasting_manual_pattern(BookPage[Literal["hexcasting:manual_pattern"]]):
+    """header"""
+    anchor: str
+    header: str
+    input: str
+    op: list
+    op_id: str
+    output: str
+    patterns: list
+    text: FormatTree
+
+# no anchor (ie. I can ignore them)
+
+class BookPage_patchouli_crafting(BookPage[Literal["patchouli:crafting"]]):
+    """actually has an anchor but not worth listing"""
+    item_name: list
+    recipe: str
+    anchor: NotRequired[str]
+    recipe2: NotRequired[str]
+    text: NotRequired[FormatTree]
+
+class BookPage_hexcasting_manual_pattern_nosig(BookPage[Literal["hexcasting:manual_pattern_nosig"]]):
+    header: str
+    op: list
+    text: FormatTree
+    patterns: NotRequired[list | dict]
+
+class BookPage_patchouli_link(BookPage[Literal["patchouli:link"]]):
+    link_text: str
+    text: FormatTree
+    url: str
+
+class BookPage_hexcasting_crafting_multi(BookPage[Literal["hexcasting:crafting_multi"]]):
+    heading: str
+    item_name: list
+    recipes: list
+    text: FormatTree
+
+class BookPage_hexcasting_brainsweep(BookPage[Literal["hexcasting:brainsweep"]]):
+    output_name: str
+    recipe: str
+    text: FormatTree
+
+class BookPage_patchouli_image(BookPage[Literal["patchouli:image"]]):
+    border: bool
+    images: list
+    title: str
+
+class BookPage_patchouli_empty(BookPage[Literal["patchouli:empty"]]):
+    pass
+
+class BookPage_hexal_everbook_entry(BookPage[Literal["hexal:everbook_entry"]]):
+    pass
+
+class BookEntry(TypedDict):
+    category: str
+    icon: str
+    id: str
+    name: str
+    pages: list[BookPage]
+    advancement: NotRequired[str]
+    entry_color: NotRequired[str]
+    extra_recipe_mappings: NotRequired[dict]
+    flag: NotRequired[str]
+    priority: NotRequired[bool]
+    read_by_default: NotRequired[bool]
+    sort_num: NotRequired[int]
+    sortnum: NotRequired[int | float]
+
+class BookCategory(TypedDict):
+    description: FormatTree
+    entries: list[BookEntry]
+    icon: str
+    id: str
+    name: str
+    sortnum: int
+    entry_color: NotRequired[str]
+    flag: NotRequired[str]
+    parent: NotRequired[str]
+
+class Book(TypedDict):
+    name: str
+    landing_text: FormatTree
+    version: int
+    show_progress: bool
+    creative_tab: str
+    model: str
+    book_texture: str
+    filler_texture: str
+    i18n: dict[str, str]
+    macros: dict[str, str]
+    resource_dir: str
+    modid: str
+    pattern_reg: dict[str, tuple[str, str, bool]]
+    """pattern_id: (pattern, direction, is_great)"""
+    categories: list[BookCategory]
+    blacklist: set[str]
+    spoilers: set[str]
+
+U = TypeVar("U", bound=BookPage)
+def isbookpage(page: Mapping, book_type: Type[U]) -> TypeGuard[U]:
+    try:
+        # this feels really really really gross. but it works
+        return page["type"] == get_args(get_args(book_type.__orig_bases__[0])[0])[0]  # type: ignore
+    except IndexError:
+        return False
+
 def _get_pattern_directions(starting_direction, pattern):
     directions = [starting_direction]
     for c in pattern:
@@ -463,22 +602,22 @@ def _handle_named_pattern(name: str):
         case _:
             return Pattern(name)
 
-def _parse_unknown_pattern(pattern: UnknownPattern, registry: PatternRegistry) -> Pattern:
+def _parse_unknown_pattern(pattern: UnknownPattern, registry: Registry) -> tuple[Pattern, str]:
     if (
         (name := registry.pattern_to_name.get(pattern._datum)) or
         (segments := _get_pattern_segments(pattern._initial_direction, pattern._datum)) and
         (name := registry.great_spells.get(segments))
     ):
-        return _handle_named_pattern(name)
+        return _handle_named_pattern(name), name
     elif bk := _parse_bookkeeper(pattern._initial_direction,
                                     pattern._datum):
-        return Bookkeeper(bk)
+        return Bookkeeper(bk), "mask"
     elif pattern._datum.startswith(("aqaa", "dedd")):
-        return _parse_number(pattern._datum)
+        return _parse_number(pattern._datum), "number"
     else:
-        return pattern
+        return pattern, ""
 
-def massage_raw_pattern_list(pattern, registry: PatternRegistry) -> Generator[Iota, None, None]:
+def massage_raw_pattern_list(pattern, registry: Registry) -> Generator[Iota, None, None]:
     match pattern:
         case [*subpatterns]:
             yield ListOpener("[")
@@ -486,6 +625,6 @@ def massage_raw_pattern_list(pattern, registry: PatternRegistry) -> Generator[Io
                 yield from massage_raw_pattern_list(subpattern, registry)
             yield ListCloser("]")
         case UnknownPattern():
-            yield _parse_unknown_pattern(pattern, registry)
+            yield _parse_unknown_pattern(pattern, registry)[0]
         case other:
             yield other
