@@ -8,7 +8,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 import revealparser
-from hexast import BASE_SOURCE_URLS, Registry, Direction, _parse_unknown_pattern, UnknownPattern, generate_bookkeeper, massage_raw_pattern_list, ModName, BASE_BOOK_URLS
+from hexast import Registry, Direction, _parse_unknown_pattern, UnknownPattern, generate_bookkeeper, massage_raw_pattern_list, ModName, MOD_INFO
 from buildpatterns import build_registry
 from dotenv import load_dotenv
 from generate_image import generate_image, Palette
@@ -292,6 +292,9 @@ async def send_pattern(
         url=book_url,
         description=registry.name_to_args.get(name),
     ).set_image(url="attachment://pattern.png")
+    if mod:
+        mod_info = MOD_INFO[mod]
+        embed.set_author(name=mod, icon_url=mod_info.icon_url, url=mod_info.mod_url)
 
     await interaction.response.send_message(
         embed=embed,
@@ -300,7 +303,7 @@ async def send_pattern(
     )
 
 def build_book_url(mod: ModName, url: str, show_spoilers: bool, escape: bool) -> str:
-    book_url = f"{BASE_BOOK_URLS[mod]}{'?nospoiler' if show_spoilers else ''}{url}"
+    book_url = f"{MOD_INFO[mod].book_url}{'?nospoiler' if show_spoilers else ''}{url}"
     if escape:
         book_url = f"<{book_url}>"
     if show_spoilers:
@@ -308,7 +311,7 @@ def build_book_url(mod: ModName, url: str, show_spoilers: bool, escape: bool) ->
     return book_url
 
 def build_source_url(mod: ModName, path: str):
-    return f"{BASE_SOURCE_URLS[mod]}{'blob/main/' if path else ''}{path}"
+    return f"{MOD_INFO[mod].source_url}{'blob/main/' if path else ''}{path}"
 
 async def main():
     load_dotenv(".env")
