@@ -33,6 +33,8 @@ from Hexal.doc.collate_data import parse_book as hexal_parse_book
 
 # thanks Alwinfy for (unknowingly) making my registry regex about 5x simpler
 registry_regex = re.compile(r'HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)[^;]+?(Operator|Op\w+|Widget)([^;]*true\);)?', re.M)
+# thanks Talia for changing the registry format
+hexal_registry_regex = re.compile(r'HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)[^val]+?(Operator|Op\w+|Widget)(?:[^val]*[^\(](true)\))?', re.M)
 translation_regex = re.compile(r"hexcasting.spell.[a-z]+:(.+)")
 header_regex = re.compile(r"\s*\(.+\)")
 
@@ -40,7 +42,7 @@ pattern_files: list[tuple[ModName, str]] = [
     ("Hex Casting", "HexMod/Common/src/main/java/at/petrak/hexcasting/common/casting/RegisterPatterns.java"),
     ("Hex Casting", "HexMod/Common/src/main/java/at/petrak/hexcasting/interop/pehkui/PehkuiInterop.java"),
     ("Hex Casting", "HexMod/Fabric/src/main/java/at/petrak/hexcasting/fabric/interop/gravity/GravityApiInterop.java"),
-    ("Hexal", "Hexal/Common/src/main/java/ram/talia/hexal/common/casting/RegisterPatterns.java"),
+    ("Hexal", "Hexal/Common/src/main/java/ram/talia/hexal/common/casting/Patterns.kt"),
 ]
 
 operator_directories: list[tuple[ModName, str]] = [
@@ -136,8 +138,9 @@ def build_registry() -> Registry:
         "number",
     )
     for mod, filename in pattern_files:
+        current_regex = hexal_registry_regex if mod == "Hexal" else registry_regex
         with open(filename, "r", encoding="utf-8") as file:
-            for match in registry_regex.finditer(file.read()):
+            for match in current_regex.finditer(file.read()):
                 (pattern, direction, name, classname, is_great) = match.groups()
                 if is_great:
                     for segments in get_rotated_pattern_segments(Direction[direction], pattern):
