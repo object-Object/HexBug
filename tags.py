@@ -1,12 +1,10 @@
-from dataclasses import dataclass
 from enum import Enum
-from typing import NamedTuple, TypedDict
+from typing import TypedDict
 import discord
-from discord.interactions import MISSING
 
-class Tag(NamedTuple):
-    content: str | None = None
-    embed: discord.Embed = MISSING
+class Tag(TypedDict, total=False):
+    content: str
+    embed: discord.Embed
 
 class Tags(Enum):
     crashlog = Tag(

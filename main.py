@@ -272,7 +272,7 @@ class TagCog(commands.Cog):
     async def tag(self, interaction: discord.Interaction, tag: Tags):
         """Show a premade info message"""
         value: Tag = tag.value
-        await interaction.response.send_message(**value._asdict())
+        await interaction.response.send_message(**value)
 
 def parse_mask(translation: str) -> str | None:
     mask = translation.removeprefix("Bookkeeper's Gambit:").lstrip().lower()
