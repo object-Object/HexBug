@@ -1,5 +1,6 @@
 import asyncio
 from collections import defaultdict
+from dataclasses import asdict
 from io import BytesIO
 import logging
 import os
@@ -12,6 +13,7 @@ from hexast import Registry, Direction, _parse_unknown_pattern, UnknownPattern, 
 from buildpatterns import build_registry
 from dotenv import load_dotenv
 from generate_image import generate_image, Palette
+from tags import Tag, Tags
 
 DEFAULT_LINE_SCALE = 6
 DEFAULT_ARROW_SCALE = 2
@@ -258,6 +260,20 @@ class SourceCog(commands.GroupCog, name="source"):
     async def pattern_autocomplete(self, interaction: discord.Interaction, current: str) -> list[app_commands.Choice]:
         return self.autocomplete.get(current.lower(), [])[:25]
 
+class TagCog(commands.Cog):
+    def __init__(self, bot: commands.Bot) -> None:
+        self.bot = bot
+    
+    @app_commands.command()
+    @app_commands.describe(
+        tag="The name of the tag to show",
+    )
+    @app_commands.rename(tag="name")
+    async def tag(self, interaction: discord.Interaction, tag: Tags):
+        """Show a premade info message"""
+        value: Tag = tag.value
+        await interaction.response.send_message(**value._asdict())
+
 def parse_mask(translation: str) -> str | None:
     mask = translation.removeprefix("Bookkeeper's Gambit:").lstrip().lower()
     if not all(c in "v-" for c in mask):
@@ -328,6 +344,7 @@ async def main():
     async with bot:
         await bot.add_cog(MessageCommandsCog(bot))
         await bot.add_cog(EventsCog(bot))
+        await bot.add_cog(TagCog(bot))
         await bot.add_cog(PatternCog(bot, registry))
         await bot.add_cog(DecodeCog(bot, registry))
         await bot.add_cog(SourceCog(bot, registry))
