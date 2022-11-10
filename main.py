@@ -98,13 +98,15 @@ class PatternCog(commands.GroupCog, name="pattern"):
             )
         
         pattern_iota, name = _parse_unknown_pattern(UnknownPattern(direction, pattern), self.registry)
-        translation = pattern_iota.localize(self.registry)
+        translation = "Unknown" if isinstance(pattern_iota, UnknownPattern) else pattern_iota.localize(self.registry)
 
         await send_pattern(
             self.registry,
             interaction,
             name,
             translation,
+            direction,
+            pattern,
             generate_image(direction, pattern, hide_stroke_order, palette, line_scale, arrow_scale),
             not show_to_everyone,
         )
@@ -146,6 +148,8 @@ class PatternCog(commands.GroupCog, name="pattern"):
             interaction,
             name,
             translation,
+            direction,
+            pattern,
             generate_image(direction, pattern, is_great, palette, line_scale, arrow_scale),
             not show_to_everyone,
         )
@@ -297,6 +301,8 @@ async def send_pattern(
     interaction: discord.Interaction,
     name: str,
     translation: str,
+    direction: Direction,
+    pattern: str,
     image: BytesIO,
     ephemeral: bool,
 ):
@@ -307,7 +313,7 @@ async def send_pattern(
         title=translation,
         url=book_url,
         description=registry.name_to_args.get(name),
-    ).set_image(url="attachment://pattern.png")
+    ).set_image(url="attachment://pattern.png").set_footer(text=f"{direction.name} {pattern}")
     if mod:
         mod_info = MOD_INFO[mod]
         embed.set_author(name=mod, icon_url=mod_info.icon_url, url=mod_info.mod_url)
