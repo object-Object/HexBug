@@ -1,10 +1,17 @@
 from enum import Enum
 from typing import TypedDict
+
 import discord
+from discord import app_commands
+from discord.ext import commands
+
+from utils.commands import HexBugBot
+
 
 class Tag(TypedDict, total=False):
     content: str
     embed: discord.Embed
+
 
 class Tags(Enum):
     crashlog = Tag(
@@ -34,3 +41,22 @@ PluralKit info: https://pluralkit.me/
 More info on plurality: https://morethanone.info/""",
         ),
     )
+
+
+class TagCog(commands.Cog):
+    def __init__(self, bot: HexBugBot) -> None:
+        self.bot = bot
+
+    @app_commands.command()
+    @app_commands.describe(
+        tag="The name of the tag to show",
+    )
+    @app_commands.rename(tag="name")
+    async def tag(self, interaction: discord.Interaction, tag: Tags):
+        """Show a premade info message"""
+        value: Tag = tag.value
+        await interaction.response.send_message(**value)
+
+
+async def setup(bot: HexBugBot) -> None:
+    await bot.add_cog(TagCog(bot))

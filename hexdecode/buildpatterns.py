@@ -26,15 +26,33 @@ https://github.com/gchpaco/hexdecode
 
 import re
 from pathlib import Path
-from hexast import (BookEntry, Direction, ModName, get_rotated_pattern_segments, Registry, Book, BookPage_patchouli_text,
-                    BookPage_patchouli_spotlight, BookPage_hexcasting_pattern, BookPage_hexcasting_manual_pattern, isbookpage)
-from HexMod.doc.collate_data import parse_book as hex_parse_book
+
 from Hexal.doc.collate_data import parse_book as hexal_parse_book
+from hexdecode.hexast import (
+    Book,
+    BookEntry,
+    BookPage_hexcasting_manual_pattern,
+    BookPage_hexcasting_pattern,
+    BookPage_patchouli_spotlight,
+    BookPage_patchouli_text,
+    Direction,
+    ModName,
+    Registry,
+    get_rotated_pattern_segments,
+    isbookpage,
+)
+from HexMod.doc.collate_data import parse_book as hex_parse_book
 
 # thanks Alwinfy for (unknowingly) making my registry regex about 5x simpler
-registry_regex = re.compile(r'HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)[^;]+?(Operator|Op\w+|Widget)([^;]*true\);)?', re.M)
+registry_regex = re.compile(
+    r'HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)[^;]+?(Operator|Op\w+|Widget)([^;]*true\);)?',
+    re.M,
+)
 # thanks Talia for changing the registry format
-hexal_registry_regex = re.compile(r'HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)[^val]+?(Operator|Op\w+|Widget)(?:[^val]*[^\(](true)\))?', re.M)
+hexal_registry_regex = re.compile(
+    r'HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)[^val]+?(Operator|Op\w+|Widget)(?:[^val]*[^\(](true)\))?',
+    re.M,
+)
 translation_regex = re.compile(r"hexcasting.spell.[a-z]+:(.+)")
 header_regex = re.compile(r"\s*\(.+\)")
 
@@ -51,6 +69,7 @@ operator_directories: list[tuple[ModName, str]] = [
     ("Hex Casting", "HexMod/Fabric/src/main/java/at/petrak/hexcasting/fabric/interop/gravity"),
     ("Hexal", "Hexal/Common/src/main/java/ram/talia/hexal/common/casting/actions"),
 ]
+
 
 def _build_pattern_urls(
     registry: Registry,
@@ -69,7 +88,7 @@ def _build_pattern_urls(
     names: set[str] = set()
     names.add(page["op_id"].split(":", 1)[1])
 
-    for pattern, _, _ in page["op"]: # pretty sure this only catches the vector reflections right now
+    for pattern, _, _ in page["op"]:  # pretty sure this only catches the vector reflections right now
         if name := registry.pattern_to_name.get(pattern):
             names.add(name)
 
@@ -79,6 +98,7 @@ def _build_pattern_urls(
             registry.name_to_args[name] = args
 
     return (mod, url, list(names))
+
 
 def _build_urls(registry: Registry, book: Book, mod: ModName):
     for category in book["categories"]:
@@ -94,25 +114,31 @@ def _build_urls(registry: Registry, book: Book, mod: ModName):
                 elif isbookpage(page, BookPage_patchouli_spotlight) and "anchor" in page:
                     registry.page_title_to_url[page["item_name"]] = (mod, f"#{entry['id']}@{page['anchor']}", [])
 
-                elif (isbookpage(page, BookPage_hexcasting_pattern)
-                and (value := _build_pattern_urls(registry, entry, page, mod))):
+                elif isbookpage(page, BookPage_hexcasting_pattern) and (
+                    value := _build_pattern_urls(registry, entry, page, mod)
+                ):
                     registry.page_title_to_url[page["name"]] = value
 
-                elif (isbookpage(page, BookPage_hexcasting_manual_pattern)
-                and (value := _build_pattern_urls(registry, entry, page, mod))):
+                elif isbookpage(page, BookPage_hexcasting_manual_pattern) and (
+                    value := _build_pattern_urls(registry, entry, page, mod)
+                ):
                     registry.page_title_to_url[header_regex.sub("", page["header"])] = value
+
 
 def build_registry() -> Registry:
     registry = Registry()
     hex_book: Book = hex_parse_book("HexMod/Common/src/main/resources", "hexcasting", "thehexbook")
-    hexal_book: Book = hexal_parse_book("Hexal/Common/src/main/resources", "Hexal/doc/HexCastingResources", "hexal", "hexalbook")
+    hexal_book: Book = hexal_parse_book(
+        "Hexal/Common/src/main/resources", "Hexal/doc/HexCastingResources", "hexal", "hexalbook"
+    )
 
     # translations
     for key, translation in dict(hex_book["i18n"], **hexal_book["i18n"]).items():
         if match := translation_regex.match(key):
             name = match[1]
-            registry.name_to_translation[name] = translation.replace(": %s", "") # because the new built in decoding interferes with this
-    
+            # because the new built in decoding interferes with this
+            registry.name_to_translation[name] = translation.replace(": %s", "")
+
     # get classname_to_path
     classname_to_path: dict[str, str] = {
         "Operator": "Common/src/main/java/at/petrak/hexcasting/api/spell/Operator.kt",
@@ -122,7 +148,7 @@ def build_registry() -> Registry:
         for path in Path(directory).rglob("Op*.kt"):
             path = path.relative_to(path.parts[0])
             key = path.stem
-            if duplicate := classname_to_path.get(key): # this *should* never happen
+            if duplicate := classname_to_path.get(key):  # this *should* never happen
                 raise Exception(f"Duplicate classname: {key} ({path} and {duplicate})")
             classname_to_path[key] = path.as_posix()
 
@@ -147,10 +173,11 @@ def build_registry() -> Registry:
                         registry.great_spells[segments] = name
                 else:
                     registry.pattern_to_name[pattern] = name
-                translation = registry.name_to_translation.get(name, name) # because Hexal sometimes doesn't have translations
+                # because Hexal sometimes doesn't have translations
+                translation = registry.name_to_translation.get(name, name)
                 registry.translation_to_pattern[translation] = (Direction[direction], pattern, bool(is_great), name)
                 registry.translation_to_path[translation] = (mod, classname_to_path[classname], name)
-    
+
     # books
     _build_urls(registry, hex_book, "Hex Casting")
     _build_urls(registry, hexal_book, "Hexal")

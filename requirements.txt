@@ -1,6 +1,7 @@
 -r hex_interpreter/requirements.txt
-python-dotenv==0.21.0
-numpy==1.23.1
-sty==1.0.4
+black==22.10.0
 discord.py==2.0.1
 lark==1.1.2
+numpy==1.23.1
+python-dotenv==0.21.0
+sty==1.0.4

@@ -1,4 +1,11 @@
 {
+    "[python]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true,
+        },
+    },
+    "python.formatting.provider": "black",
     "python.analysis.typeCheckingMode": "basic", // strict doesn't play nice with a lot of things we're using
     "todo-tree.filtering.excludeGlobs": [
         "**/venv*/**",

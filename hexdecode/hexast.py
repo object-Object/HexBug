@@ -25,20 +25,38 @@ https://github.com/gchpaco/hexdecode
 """
 
 from __future__ import annotations
-from enum import Enum
+
 import math
 import re
 import struct
-from typing import Generator, Generic, Iterable, Literal, Mapping, Tuple, Type, TypeGuard, TypeVar, TypedDict, NotRequired, LiteralString, get_args
 import uuid
-from sty import fg
 from dataclasses import dataclass, field
+from enum import Enum
 from itertools import pairwise
+from typing import (
+    Generator,
+    Generic,
+    Iterable,
+    Literal,
+    LiteralString,
+    Mapping,
+    NotRequired,
+    Tuple,
+    Type,
+    TypedDict,
+    TypeGuard,
+    TypeVar,
+    get_args,
+)
+
+from sty import fg
+
 from HexMod.doc.collate_data import FormatTree
 
 localize_regex = re.compile(r"((?:number|mask))(: .+)")
 
 ModName = Literal["Hex Casting", "Hexal"]
+
 
 @dataclass
 class ModInfo:
@@ -46,6 +64,7 @@ class ModInfo:
     mod_url: str
     source_url: str
     icon_url: str
+
 
 MOD_INFO: dict[ModName, ModInfo] = {
     "Hex Casting": ModInfo(
@@ -79,117 +98,148 @@ class Registry:
     translation_to_path: dict[str, tuple[ModName, str, str]] = field(default_factory=dict)
     """translation: (mod, path, name)"""
 
+
 class Iota:
     def __init__(self, datum):
         self._datum = datum
+
     def color(self) -> str:
         return ""
+
     def presentation_name(self):
         return str(self._datum)
+
     def localize(self, registry: Registry):
         presentation_name = self.presentation_name()
         value = ""
         if match := localize_regex.match(presentation_name):
             (presentation_name, value) = match.groups()
         return registry.name_to_translation.get(presentation_name, presentation_name) + value
+
     def print(self, level: int, highlight: bool, registry: Registry) -> str:
         indent = "  " * level
         datum_name = self.localize(registry)
         return indent + self.color() + datum_name + fg.rs if highlight else indent + datum_name
+
     def preadjust(self, level: int) -> int:
         return level
+
     def postadjust(self, level: int) -> int:
         return level
+
 
 class ListOpener(Iota):
     def presentation_name(self):
         return "["
+
     def postadjust(self, level: int) -> int:
         return level + 1
+
 
 class ListCloser(Iota):
     def presentation_name(self):
         return "]"
+
     def preadjust(self, level: int) -> int:
         return level - 1
+
 
 class Pattern(Iota):
     def color(self):
         return fg.yellow
 
+
 class Unknown(Iota):
     def color(self):
-        return fg(124) # red
+        return fg(124)  # red
+
 
 class UnknownPattern(Unknown, Pattern):
     def __init__(self, initial_direction, turns):
         self._initial_direction = initial_direction
         super().__init__(turns)
+
     def presentation_name(self):
         return f"unknown: {self._initial_direction.name} {self._datum}"
+
 
 class Bookkeeper(Pattern):
     def presentation_name(self):
         return f"mask: {self._datum}"
 
+
 class Number(Pattern):
     def presentation_name(self):
         return f"number: {float(self._datum):g}"
 
+
 class PatternOpener(Pattern):
     def presentation_name(self):
         return "{"
+
     def postadjust(self, level: int) -> int:
         return level + 1
+
 
 class PatternCloser(Pattern):
     def presentation_name(self):
         return "}"
+
     def preadjust(self, level: int) -> int:
         return level - 1
+
 
 class NumberConstant(Iota):
     def str(self):
         return self._datum
+
     def color(self):
         return fg.li_green
+
 
 class Vector(NumberConstant):
     def __init__(self, x, y, z):
         super().__init__(f"({x._datum}, {y._datum}, {z._datum})")
+
     def color(self):
-        return fg(207) # pink
+        return fg(207)  # pink
+
 
 class Entity(Iota):
     def __init__(self, uuid_bits):
         packed = struct.pack("iiii", *uuid_bits)
         super().__init__(uuid.UUID(bytes_le=packed))
+
     def color(self):
         return fg.li_blue
+
 
 class Null(Iota):
     def __init__(self):
         super().__init__("NULL")
+
     def color(self):
         return fg.magenta
 
+
 class Angle(Enum):
-    FORWARD    = (0, "w")
-    w          = (0, "w")
-    RIGHT      = (1, "e")
-    e          = (1, "e")
+    FORWARD = (0, "w")
+    w = (0, "w")
+    RIGHT = (1, "e")
+    e = (1, "e")
     RIGHT_BACK = (2, "d")
-    d          = (2, "d")
-    BACK       = (3, "s")
-    LEFT_BACK  = (4, "a")
-    a          = (4, "a")
-    LEFT       = (5, "q")
-    q          = (5, "q")
+    d = (2, "d")
+    BACK = (3, "s")
+    LEFT_BACK = (4, "a")
+    a = (4, "a")
+    LEFT = (5, "q")
+    q = (5, "q")
 
     @classmethod
     def from_number(cls, num):
-        return {0: cls.FORWARD, 1: cls.RIGHT, 2: cls.RIGHT_BACK,
-           3: cls.BACK, 4: cls.LEFT_BACK, 5: cls.LEFT}[num % len(Angle)]
+        return {0: cls.FORWARD, 1: cls.RIGHT, 2: cls.RIGHT_BACK, 3: cls.BACK, 4: cls.LEFT_BACK, 5: cls.LEFT}[
+            num % len(Angle)
+        ]
 
     @classmethod
     def get_offset(cls, angle: Angle | str | int) -> int:
@@ -223,11 +273,11 @@ class Coord:
     def __init__(self, q: int, r: int) -> None:
         self._q = q
         self._r = r
-    
+
     @property
     def q(self):
         return self._q
-    
+
     @property
     def r(self):
         return self._r
@@ -236,45 +286,42 @@ class Coord:
     def s(self):
         # Hex has this as q - r, but the rotation formulas from the above link don't seem to work with that
         return -self.q - self.r
-    
+
     def __hash__(self) -> int:
         return hash((self.q, self.r))
-    
+
     def __eq__(self, other: object) -> bool:
         if isinstance(other, Coord):
             return (self.q, self.r) == (other.q, other.r)
         return NotImplemented
-    
+
     def __repr__(self) -> str:
         return f"({self.q}, {self.r})"
-    
+
     def __add__(self, other: Direction | Coord) -> Coord:
         return self.shifted(other)
-    
+
     def __sub__(self, other: Coord) -> Coord:
         return self.delta(other)
-    
+
     def pixel(self, size: int) -> Tuple[float, float]:
-        return (
-            size * (math.sqrt(3) * self.q + math.sqrt(3)/2 * self.r), # x
-            size * (3/2 * self.r) # y
-        )
-    
+        return (size * (math.sqrt(3) * self.q + math.sqrt(3) / 2 * self.r), size * (3 / 2 * self.r))  # x  # y
+
     def shifted(self, other: Direction | Coord) -> Coord:
         if isinstance(other, Direction):
             other = other.as_delta()
         return Coord(self.q + other.q, self.r + other.r)
-    
+
     def rotated(self, angle: Angle | str | int) -> Coord:
         offset = Angle.get_offset(angle)
         rotated = self
         for _ in range(abs(offset)):
             rotated = Coord(-rotated.r, -rotated.s)
         return rotated
-    
+
     def delta(self, other: Coord) -> Coord:
         return Coord(self.q - other.q, self.r - other.r)
-    
+
     def immediate_delta(self, other: Coord) -> Direction | None:
         match other.delta(self):
             case Coord(q=1, r=0):
@@ -292,12 +339,13 @@ class Coord:
             case _:
                 return None
 
-class Direction(Enum): # numbers increase clockwise
+
+class Direction(Enum):  # numbers increase clockwise
     NORTH_EAST = 0
-    EAST       = 1
+    EAST = 1
     SOUTH_EAST = 2
     SOUTH_WEST = 3
-    WEST       = 4
+    WEST = 4
     NORTH_WEST = 5
 
     @property
@@ -309,10 +357,10 @@ class Direction(Enum): # numbers increase clockwise
 
     def rotated(self, angle: Angle | str | int) -> Direction:
         return Direction((self.value + Angle.get_offset(angle)) % len(Direction))
-    
+
     def __mul__(self, angle: Angle) -> Direction:
         return self.rotated(angle)
-    
+
     def as_delta(self) -> Coord:
         match self:
             case Direction.NORTH_EAST:
@@ -327,6 +375,7 @@ class Direction(Enum): # numbers increase clockwise
                 return Coord(-1, 0)
             case Direction.NORTH_WEST:
                 return Coord(0, -1)
+
 
 def _parse_number(pattern):
     negate = pattern.startswith("dedd")
@@ -347,6 +396,7 @@ def _parse_number(pattern):
         accumulator = -accumulator
     return Number(accumulator)
 
+
 class Segment:
     def __init__(self, root: Coord, direction: Direction):
         # because otherwise there's two ways to represent any given line
@@ -356,18 +406,18 @@ class Segment:
         else:
             self._root = root + direction
             self._direction = direction.rotated(Angle.BACK)
-    
+
     def __hash__(self) -> int:
         return hash((self.root, self.direction))
-    
+
     def __eq__(self, other: object) -> bool:
         if isinstance(other, Segment):
             return (self.root, self.direction) == (other.root, other.direction)
         return NotImplemented
-    
+
     def __repr__(self) -> str:
         return f"{self.root}@{self.direction}"
-    
+
     @property
     def root(self):
         return self._root
@@ -375,15 +425,15 @@ class Segment:
     @property
     def direction(self):
         return self._direction
-    
+
     @property
     def end(self):
         return self.root + self.direction
-    
+
     @property
     def min_q(self):
         return min(self.root.q, self.end.q)
-    
+
     @property
     def max_q(self):
         return max(self.root.q, self.end.q)
@@ -391,37 +441,46 @@ class Segment:
     @property
     def min_r(self):
         return min(self.root.r, self.end.r)
-    
+
     @property
     def max_r(self):
         return max(self.root.r, self.end.r)
-    
+
     def shifted(self, other: Direction | Coord) -> Segment:
         return Segment(self.root.shifted(other), self.direction)
 
     def rotated(self, angle: Angle | str | int) -> Segment:
         return Segment(self.root.rotated(angle), self.direction.rotated(angle))
 
+
 T = TypeVar("T", bound=LiteralString)
+
+
 class BookPage(TypedDict, Generic[T]):
     type: T
 
+
 class BookPage_patchouli_text(BookPage[Literal["patchouli:text"]]):
     """title"""
+
     text: FormatTree
     anchor: NotRequired[str]
     title: NotRequired[str]
 
+
 class BookPage_patchouli_spotlight(BookPage[Literal["patchouli:spotlight"]]):
     """item_name"""
+
     item: str
     item_name: str
     link_recipe: bool
     text: FormatTree
     anchor: NotRequired[str]
 
+
 class BookPage_hexcasting_pattern(BookPage[Literal["hexcasting:pattern"]]):
     """name"""
+
     name: str
     op: list
     op_id: str
@@ -431,8 +490,10 @@ class BookPage_hexcasting_pattern(BookPage[Literal["hexcasting:pattern"]]):
     input: NotRequired[str]
     output: NotRequired[str]
 
+
 class BookPage_hexcasting_manual_pattern(BookPage[Literal["hexcasting:manual_pattern"]]):
     """header"""
+
     anchor: str
     header: str
     input: str
@@ -442,15 +503,19 @@ class BookPage_hexcasting_manual_pattern(BookPage[Literal["hexcasting:manual_pat
     patterns: list
     text: FormatTree
 
+
 # no anchor (ie. I can ignore them)
+
 
 class BookPage_patchouli_crafting(BookPage[Literal["patchouli:crafting"]]):
     """actually has an anchor but not worth listing"""
+
     item_name: list
     recipe: str
     anchor: NotRequired[str]
     recipe2: NotRequired[str]
     text: NotRequired[FormatTree]
+
 
 class BookPage_hexcasting_manual_pattern_nosig(BookPage[Literal["hexcasting:manual_pattern_nosig"]]):
     header: str
@@ -458,10 +523,12 @@ class BookPage_hexcasting_manual_pattern_nosig(BookPage[Literal["hexcasting:manu
     text: FormatTree
     patterns: NotRequired[list | dict]
 
+
 class BookPage_patchouli_link(BookPage[Literal["patchouli:link"]]):
     link_text: str
     text: FormatTree
     url: str
+
 
 class BookPage_hexcasting_crafting_multi(BookPage[Literal["hexcasting:crafting_multi"]]):
     heading: str
@@ -469,21 +536,26 @@ class BookPage_hexcasting_crafting_multi(BookPage[Literal["hexcasting:crafting_m
     recipes: list
     text: FormatTree
 
+
 class BookPage_hexcasting_brainsweep(BookPage[Literal["hexcasting:brainsweep"]]):
     output_name: str
     recipe: str
     text: FormatTree
+
 
 class BookPage_patchouli_image(BookPage[Literal["patchouli:image"]]):
     border: bool
     images: list
     title: str
 
+
 class BookPage_patchouli_empty(BookPage[Literal["patchouli:empty"]]):
     pass
 
+
 class BookPage_hexal_everbook_entry(BookPage[Literal["hexal:everbook_entry"]]):
     pass
+
 
 class BookEntry(TypedDict):
     category: str
@@ -500,6 +572,7 @@ class BookEntry(TypedDict):
     sort_num: NotRequired[int]
     sortnum: NotRequired[int | float]
 
+
 class BookCategory(TypedDict):
     description: FormatTree
     entries: list[BookEntry]
@@ -510,6 +583,7 @@ class BookCategory(TypedDict):
     entry_color: NotRequired[str]
     flag: NotRequired[str]
     parent: NotRequired[str]
+
 
 class Book(TypedDict):
     name: str
@@ -530,7 +604,10 @@ class Book(TypedDict):
     blacklist: set[str]
     spoilers: set[str]
 
+
 U = TypeVar("U", bound=BookPage)
+
+
 def isbookpage(page: Mapping, book_type: Type[U]) -> TypeGuard[U]:
     try:
         # this feels really really really gross. but it works
@@ -538,11 +615,13 @@ def isbookpage(page: Mapping, book_type: Type[U]) -> TypeGuard[U]:
     except IndexError:
         return False
 
+
 def _get_pattern_directions(starting_direction, pattern):
     directions = [starting_direction]
     for c in pattern:
         directions.append(directions[-1].rotated(c))
     return directions
+
 
 def _parse_bookkeeper(starting_direction, pattern):
     if not pattern:
@@ -569,6 +648,7 @@ def _parse_bookkeeper(starting_direction, pattern):
         return None
     return mask
 
+
 def generate_bookkeeper(mask: str):
     if mask[0] == "v":
         starting_direction = Direction.SOUTH_EAST
@@ -576,7 +656,7 @@ def generate_bookkeeper(mask: str):
     else:
         starting_direction = Direction.EAST
         pattern = ""
-    
+
     for previous, current in pairwise(mask):
         match previous, current:
             case "-", "-":
@@ -587,8 +667,9 @@ def generate_bookkeeper(mask: str):
                 pattern += "e"
             case "v", "v":
                 pattern += "da"
-    
+
     return starting_direction, pattern
+
 
 def _get_segments(direction: Direction, pattern: str) -> frozenset[Segment]:
     cursor = Coord.origin()
@@ -603,6 +684,7 @@ def _get_segments(direction: Direction, pattern: str) -> frozenset[Segment]:
 
     return frozenset(segments)
 
+
 def _align_segments_to_origin(segments: Iterable[Segment]) -> frozenset[Segment]:
     min_q = min(segment.min_q for segment in segments)
     min_r = min(segment.min_r for segment in segments)
@@ -612,14 +694,17 @@ def _align_segments_to_origin(segments: Iterable[Segment]) -> frozenset[Segment]
 
     return frozenset([segment.shifted(delta) for segment in segments])
 
+
 def _get_pattern_segments(direction: Direction, pattern: str, align=True) -> frozenset[Segment]:
     segments = _get_segments(direction, pattern)
     return _align_segments_to_origin(segments) if align else segments
+
 
 def get_rotated_pattern_segments(direction: Direction, pattern: str) -> Generator[frozenset[Segment], None, None]:
     segments = _get_pattern_segments(direction, pattern, False)
     for n in range(6):
         yield _align_segments_to_origin([segment.rotated(n) for segment in segments])
+
 
 def _handle_named_pattern(name: str):
     match name:
@@ -630,20 +715,21 @@ def _handle_named_pattern(name: str):
         case _:
             return Pattern(name)
 
+
 def _parse_unknown_pattern(pattern: UnknownPattern, registry: Registry) -> tuple[Pattern, str]:
     if (
-        (name := registry.pattern_to_name.get(pattern._datum)) or
-        (segments := _get_pattern_segments(pattern._initial_direction, pattern._datum)) and
-        (name := registry.great_spells.get(segments))
+        (name := registry.pattern_to_name.get(pattern._datum))
+        or (segments := _get_pattern_segments(pattern._initial_direction, pattern._datum))
+        and (name := registry.great_spells.get(segments))
     ):
         return _handle_named_pattern(name), name
-    elif bk := _parse_bookkeeper(pattern._initial_direction,
-                                    pattern._datum):
+    elif bk := _parse_bookkeeper(pattern._initial_direction, pattern._datum):
         return Bookkeeper(bk), "mask"
     elif pattern._datum.startswith(("aqaa", "dedd")):
         return _parse_number(pattern._datum), "number"
     else:
         return pattern, ""
+
 
 def massage_raw_pattern_list(pattern, registry: Registry) -> Generator[Iota, None, None]:
     match pattern:

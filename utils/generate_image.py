@@ -1,17 +1,21 @@
-from io import BytesIO
 import math
+from enum import Enum
+from io import BytesIO
+
 import matplotlib.pyplot as plt
-from hexast import Direction, Coord, Angle
-from hex_interpreter.hex_draw import plot_intersect, plot_monochrome
 import numpy as np
 from matplotlib import colormaps  # type: ignore
-from enum import Enum
+
+from hex_interpreter.hex_draw import plot_intersect, plot_monochrome
+from hexdecode.hexast import Angle, Coord, Direction
+
 
 class Palette(Enum):
-    Classic = ["#ff6bff","#a81ee3","#6490ed","#b189c7"]
+    Classic = ["#ff6bff", "#a81ee3", "#6490ed", "#b189c7"]
     Turbo = [colormaps["turbo"](x) for x in np.linspace(0.06, 1, 8)]
     Dark2 = [colormaps["Dark2"](x) for x in np.linspace(0, 1, 8)]
     Tab10 = [colormaps["tab10"](x) for x in np.linspace(0, 1, 10)]
+
 
 def get_points(direction: Direction, pattern: str) -> list[Coord]:
     compass = direction
@@ -25,6 +29,7 @@ def get_points(direction: Direction, pattern: str) -> list[Coord]:
         points.append(cursor)
 
     return points
+
 
 def generate_image(
     direction: Direction,
@@ -45,10 +50,10 @@ def generate_image(
     width = max(x_vals) - min(x_vals)
     height = max(y_vals) - min(y_vals)
     max_width = max(width, height, 1.25)
-    scale = line_scale/math.log(max_width, 1.5) + 1.1
+    scale = line_scale / math.log(max_width, 1.5) + 1.1
 
-    fig = plt.figure(figsize=(4,4))
-    ax = fig.add_axes([0,0,1,1])
+    fig = plt.figure(figsize=(4, 4))
+    ax = fig.add_axes([0, 0, 1, 1])
     ax.set_aspect("equal")
     ax.axis("off")
 
