@@ -27,26 +27,24 @@ async def send_pattern(
     interaction: discord.Interaction,
     name: str,
     translation: str,
-    direction: Direction,
-    pattern: str,
+    direction: Direction | None,
+    pattern: str | None,
     image: BytesIO,
     ephemeral: bool,
 ):
     mod, book_url = registry.name_to_url.get(name, (None, None))
     book_url = mod and book_url and build_book_url(mod, book_url, False, False)
 
-    embed = (
-        discord.Embed(
-            title=translation,
-            url=book_url,
-            description=registry.name_to_args.get(name),
-        )
-        .set_image(url="attachment://pattern.png")
-        .set_footer(text=f"{direction.name} {pattern}")
-    )
+    embed = discord.Embed(
+        title=translation,
+        url=book_url,
+        description=registry.name_to_args.get(name),
+    ).set_image(url="attachment://pattern.png")
     if mod:
         mod_info = MOD_INFO[mod]
         embed.set_author(name=mod, icon_url=mod_info.icon_url, url=mod_info.mod_url)
+    if direction is not None and pattern is not None:
+        embed.set_footer(text=f"{direction.name} {pattern}")
 
     await interaction.response.send_message(
         embed=embed,
@@ -112,8 +110,8 @@ class PatternCog(commands.GroupCog, name="pattern"):
             interaction,
             name,
             translation,
-            direction,
-            pattern,
+            None if hide_stroke_order else direction,
+            None if hide_stroke_order else pattern,
             generate_image(direction, pattern, hide_stroke_order, palette, line_scale, arrow_scale),
             not show_to_everyone,
         )
@@ -158,8 +156,8 @@ class PatternCog(commands.GroupCog, name="pattern"):
             interaction,
             name,
             translation,
-            direction,
-            pattern,
+            None if is_great else direction,
+            None if is_great else pattern,
             generate_image(direction, pattern, is_great, palette, line_scale, arrow_scale),
             not show_to_everyone,
         )
