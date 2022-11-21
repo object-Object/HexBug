@@ -2,7 +2,8 @@ from collections import defaultdict
 from typing import Any, Callable, Mapping
 
 from Hexal.doc.collate_data import parse_book as hexal_parse_book
-from HexMod.doc.collate_data import parse_book
+from HexMod.doc.collate_data import parse_book as hex_parse_book
+from MoreIotas.doc.collate_data import parse_book as moreiotas_parse_book
 
 if __name__ != "__main__":
     raise Exception("please don't try to actually use this code in production lmao")
@@ -34,7 +35,7 @@ def print_class(name: str, keys: BookKeys, not_required: BookNotRequired, total=
     print(f"\nclass {name}({parent}{', total=False' if not total else ''}):")
     for item in sorted(keys.items(), key=lambda i: (i[0] in not_required, i[0])):
         key, values = item
-        value = " | ".join(values)
+        value = " | ".join(sorted(values))
         if total:
             if key in not_required:
                 print(f"    {key}: NotRequired[{value}]")
@@ -49,9 +50,10 @@ def print_class(name: str, keys: BookKeys, not_required: BookNotRequired, total=
         print("    pass")
 
 
-hex_book: dict = parse_book("HexMod/Common/src/main/resources", "hexcasting", "thehexbook")
-hexal_book: dict = hexal_parse_book(
-    "Hexal/Common/src/main/resources", "Hexal/doc/HexCastingResources", "hexal", "hexalbook"
+hex_book = hex_parse_book("HexMod/Common/src/main/resources", "hexcasting", "thehexbook")
+hexal_book = hexal_parse_book("Hexal/Common/src/main/resources", "Hexal/doc/HexCastingResources", "hexal", "hexalbook")
+moreiotas_book = moreiotas_parse_book(
+    "MoreIotas/Common/src/main/resources", "MoreIotas/doc/HexCastingResources", "moreiotas", "moreiotasbook"
 )
 
 book_keys: BookKeys = defaultdict(set)
@@ -66,7 +68,8 @@ page_types: defaultdict[str, tuple[BookKeys, BookNotRequired]] = defaultdict(lam
 def update_book(update: Callable[[Mapping[str, Any], BookKeys, BookNotRequired], None]) -> None:
     update(hex_book, book_keys, book_not_required)
     update(hexal_book, book_keys, book_not_required)
-    for category in hex_book["categories"] + hexal_book["categories"]:
+    update(moreiotas_book, book_keys, book_not_required)
+    for category in hex_book["categories"] + hexal_book["categories"] + moreiotas_book["categories"]:
         update(category, category_keys, category_not_required)
         for entry in category["entries"]:
             update(entry, entry_keys, entry_not_required)

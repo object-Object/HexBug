@@ -17,7 +17,7 @@ class BookPage_patchouli_text(BookPage[Literal["patchouli:text"]]):
 class BookPage_hexcasting_manual_pattern_nosig(BookPage[Literal["hexcasting:manual_pattern_nosig"]]):
     header: str
     op: list
-    patterns: list | dict
+    patterns: dict | list
     text: FormatTree
 
 
@@ -77,7 +77,7 @@ class BookPage_hexcasting_manual_pattern(BookPage[Literal["hexcasting:manual_pat
     anchor: str
     header: str
     op: list
-    patterns: list | dict
+    patterns: dict | list
     text: FormatTree
     input: NotRequired[str]
     op_id: NotRequired[str]

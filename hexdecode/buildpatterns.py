@@ -1,9 +1,11 @@
+import logging
 import re
 from pathlib import Path
 
 from Hexal.doc.collate_data import parse_book as hexal_parse_book
 from hexdecode.hexast import MOD_INFO, Direction, ModName, Registry, get_rotated_pattern_segments
 from HexMod.doc.collate_data import parse_book as hex_parse_book
+from MoreIotas.doc.collate_data import parse_book as moreiotas_parse_book
 from utils.book_types import (
     Book,
     BookEntry,
@@ -20,8 +22,8 @@ registry_regex = re.compile(
     re.M,
 )
 # thanks Talia for changing the registry format
-hexal_registry_regex = re.compile(
-    r'HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)[^val]+?(Operator|Op\w+|Widget)(?:[^val]*[^\(](true)\))?',
+talia_registry_regex = re.compile(
+    r'HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)[^val]+?(makeConstantOp|Op\w+)(?:[^val]*[^\(](true)\))?',
     re.M,
 )
 translation_regex = re.compile(r"hexcasting.spell.[a-z]+:(.+)")
@@ -32,6 +34,7 @@ pattern_files: list[tuple[ModName, str]] = [
     ("Hex Casting", "HexMod/Common/src/main/java/at/petrak/hexcasting/interop/pehkui/PehkuiInterop.java"),
     ("Hex Casting", "HexMod/Fabric/src/main/java/at/petrak/hexcasting/fabric/interop/gravity/GravityApiInterop.java"),
     ("Hexal", "Hexal/Common/src/main/java/ram/talia/hexal/common/casting/Patterns.kt"),
+    ("MoreIotas", "MoreIotas/Common/src/main/java/ram/talia/moreiotas/common/casting/Patterns.kt"),
 ]
 
 operator_directories: list[tuple[ModName, str]] = [
@@ -39,13 +42,16 @@ operator_directories: list[tuple[ModName, str]] = [
     ("Hex Casting", "HexMod/Common/src/main/java/at/petrak/hexcasting/interop/pehkui"),
     ("Hex Casting", "HexMod/Fabric/src/main/java/at/petrak/hexcasting/fabric/interop/gravity"),
     ("Hexal", "Hexal/Common/src/main/java/ram/talia/hexal/common/casting/actions"),
+    ("MoreIotas", "MoreIotas/Common/src/main/java/ram/talia/moreiotas/common/casting/actions"),
 ]
 
+# https://github.com/gamma-delta/HexMod/blob/main/Common/src/main/java/at/petrak/hexcasting/api/spell/casting/SpecialPatterns.java
+# https://github.com/gamma-delta/HexMod/blob/main/Common/src/main/java/at/petrak/hexcasting/api/utils/PatternNameHelper.java
 # (mod, pattern, direction, name, classname, is_great)
-special_patterns: list[tuple[ModName, str, Direction, str, str, bool]] = [
-    ("Hex Casting", "qqq", Direction.WEST, "open_paren", "INTROSPECTION", False),
-    ("Hex Casting", "eee", Direction.EAST, "close_paren", "RETROSPECTION", False),
-    ("Hex Casting", "qqqaw", Direction.EAST, "escape", "CONSIDERATION", False),
+special_patterns: list[tuple[str, Direction, str, str, bool]] = [
+    ("qqq", Direction.WEST, "open_paren", "INTROSPECTION", False),
+    ("eee", Direction.EAST, "close_paren", "RETROSPECTION", False),
+    ("qqqaw", Direction.EAST, "escape", "CONSIDERATION", False),
 ]
 
 
@@ -105,8 +111,7 @@ def _build_urls(registry: Registry, book: Book, mod: ModName):
 
 def _add_to_registry(
     registry: Registry,
-    classname_to_path: dict[str, str],
-    mod: ModName,
+    classname_to_path: dict[str, tuple[ModName, str]],
     pattern: str,
     direction: Direction,
     name: str,
@@ -121,10 +126,20 @@ def _add_to_registry(
     # because Hexal sometimes doesn't have translations
     translation = registry.name_to_translation.get(name, name)
     registry.translation_to_pattern[translation] = (direction, pattern, is_great, name)
-    registry.translation_to_path[translation] = (mod, classname_to_path[classname], name)
+    registry.translation_to_path[translation] = (*classname_to_path[classname], name)
+
+
+def merge_dicts(*dicts: dict[str, str]) -> dict[str, str]:
+    output: dict[str, str] = {}
+    for d in dicts:
+        for key, value in d.items():
+            if key not in output:
+                output[key] = value
+    return output
 
 
 def build_registry() -> Registry:
+    logging.log(logging.INFO, "building registry")
     registry = Registry(
         translation_to_path={
             "Numerical Reflection": (
@@ -143,38 +158,49 @@ def build_registry() -> Registry:
     hexal_book: Book = hexal_parse_book(
         "Hexal/Common/src/main/resources", "Hexal/doc/HexCastingResources", "hexal", "hexalbook"
     )
+    moreiotas_book: Book = moreiotas_parse_book(
+        "MoreIotas/Common/src/main/resources", "MoreIotas/doc/HexCastingResources", "moreiotas", "moreiotasbook"
+    )
 
     # translations
-    for key, translation in dict(hex_book["i18n"], **hexal_book["i18n"]).items():
+    for key, translation in merge_dicts(hex_book["i18n"], hexal_book["i18n"], moreiotas_book["i18n"]).items():
         if match := translation_regex.match(key):
             name = match[1]
             # because the new built in decoding interferes with this
             registry.name_to_translation[name] = translation.replace(": %s", "")
 
     # get classname_to_path
-    classname_to_path: dict[str, str] = {
-        "makeConstantOp": f"Common/src/main/java/at/petrak/hexcasting/api/spell/Action.kt",
-        "CONSIDERATION": f"Common/src/main/java/at/petrak/hexcasting/api/spell/casting/CastingHarness.kt",
-        "INTROSPECTION": f"Common/src/main/java/at/petrak/hexcasting/api/spell/casting/CastingHarness.kt",
-        "RETROSPECTION": f"Common/src/main/java/at/petrak/hexcasting/api/spell/casting/CastingHarness.kt",
+    classname_to_path: dict[str, tuple[ModName, str]] = {
+        "makeConstantOp": ("Hex Casting", f"Common/src/main/java/at/petrak/hexcasting/api/spell/Action.kt"),
+        "CONSIDERATION": (
+            "Hex Casting",
+            f"Common/src/main/java/at/petrak/hexcasting/api/spell/casting/CastingHarness.kt",
+        ),
+        "INTROSPECTION": (
+            "Hex Casting",
+            f"Common/src/main/java/at/petrak/hexcasting/api/spell/casting/CastingHarness.kt",
+        ),
+        "RETROSPECTION": (
+            "Hex Casting",
+            f"Common/src/main/java/at/petrak/hexcasting/api/spell/casting/CastingHarness.kt",
+        ),
     }
     for mod, directory in operator_directories:
-        mod_info = MOD_INFO[mod]
         for path in Path(directory).rglob("Op*.kt"):
             final_path = path.relative_to(path.parts[0])
             key = final_path.stem
             if duplicate := classname_to_path.get(key):  # this *should* never happen
                 raise Exception(f"Duplicate classname: {key} ({final_path} and {duplicate})")
-            classname_to_path[key] = final_path.as_posix()
+            classname_to_path[key] = (mod, final_path.as_posix())
 
     # patterns - can't use the Book data here because we also need the class name :pensivewobble:
     for mod, filename in pattern_files:
-        current_regex = hexal_registry_regex if mod == "Hexal" else registry_regex
+        current_regex = talia_registry_regex if MOD_INFO[mod].uses_talia_registry else registry_regex
         with open(filename, "r", encoding="utf-8") as file:
             for match in current_regex.finditer(file.read()):
                 (pattern, direction, name, classname, is_great) = match.groups()
                 _add_to_registry(
-                    registry, classname_to_path, mod, pattern, Direction[direction], name, classname, bool(is_great)
+                    registry, classname_to_path, pattern, Direction[direction], name, classname, bool(is_great)
                 )
 
     for info in special_patterns:
@@ -183,5 +209,6 @@ def build_registry() -> Registry:
     # books
     _build_urls(registry, hex_book, "Hex Casting")
     _build_urls(registry, hexal_book, "Hexal")
+    _build_urls(registry, moreiotas_book, "MoreIotas")
 
     return registry
