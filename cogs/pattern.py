@@ -7,7 +7,7 @@ from discord.ext import commands
 from hexdecode.hexast import MOD_INFO, Direction, Registry, UnknownPattern, _parse_unknown_pattern, generate_bookkeeper
 from utils.commands import HexBugBot, build_autocomplete
 from utils.generate_image import Palette, generate_image
-from utils.links import build_book_url
+from utils.urls import build_book_url
 
 DEFAULT_LINE_SCALE = 6
 DEFAULT_ARROW_SCALE = 2
@@ -102,7 +102,9 @@ class PatternCog(commands.GroupCog, name="pattern"):
             )
 
         pattern_iota, name = _parse_unknown_pattern(UnknownPattern(direction, pattern), self.registry)
-        translation = "Unknown" if isinstance(pattern_iota, UnknownPattern) else pattern_iota.localize(self.registry)
+        translation = (
+            "Unknown" if isinstance(pattern_iota, UnknownPattern) else pattern_iota.localize_pattern_name(self.registry)
+        )
 
         await send_pattern(
             self.registry,

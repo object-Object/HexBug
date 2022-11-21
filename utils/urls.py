@@ -10,5 +10,6 @@ def build_book_url(mod: ModName, url: str, show_spoilers: bool, escape: bool) ->
     return book_url
 
 
-def build_source_url(mod: ModName, path: str):
-    return f"{MOD_INFO[mod].source_url}{'blob/main/' if path else ''}{path}"
+def build_source_url(mod: ModName, path: str) -> str:
+    mod_info = MOD_INFO[mod]
+    return f"{mod_info.source_url}{f'blob/main/' if path else ''}{path}"

@@ -4,7 +4,7 @@ from discord.ext import commands
 
 from hexdecode.hexast import ModName
 from utils.commands import HexBugBot, build_autocomplete
-from utils.links import build_source_url
+from utils.urls import build_source_url
 
 
 class SourceCog(commands.GroupCog, name="source"):

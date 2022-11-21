@@ -1,3 +1,5 @@
+from io import BytesIO
+
 import discord
 from discord import app_commands
 from discord.ext import commands
@@ -19,6 +21,8 @@ class DecodeCog(commands.Cog):
     )
     async def decode(self, interaction: discord.Interaction, data: str, show_to_everyone: bool = False):
         """Decode a pattern list using hexdecode"""
+        await interaction.response.defer(ephemeral=not show_to_everyone, thinking=True)
+
         output = ""
         level = 0
         for pattern in revealparser.parse(data):
@@ -28,9 +32,17 @@ class DecodeCog(commands.Cog):
                 level = iota.postadjust(level)
 
         if not output:
-            return await interaction.response.send_message("❌ Invalid input.", ephemeral=True)
+            return await interaction.followup.send("❌ Invalid input.", ephemeral=True)
 
-        await interaction.response.send_message(f"```\n{output}```", ephemeral=not show_to_everyone)
+        result = f"```\n{output}```"
+        if len(result) > 2000:
+            return await interaction.followup.send(
+                "⚠️ Result is too long to display. See attached file.",
+                ephemeral=True,
+                file=discord.File(BytesIO(output.encode("utf-8")), filename="decoded.txt"),
+            )
+
+        await interaction.followup.send(f"```\n{output}```", ephemeral=not show_to_everyone)
 
 
 async def setup(bot: HexBugBot) -> None:

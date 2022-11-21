@@ -1,57 +1,16 @@
-"""
-MIT License
-
-Copyright (c) 2022 Graham Hughes, object-Object
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-https://github.com/gchpaco/hexdecode
-"""
-
 from __future__ import annotations
 
 import math
 import re
 import struct
 import uuid
+from collections import defaultdict
 from dataclasses import dataclass, field
 from enum import Enum
 from itertools import pairwise
-from typing import (
-    Generator,
-    Generic,
-    Iterable,
-    Literal,
-    LiteralString,
-    Mapping,
-    NotRequired,
-    Tuple,
-    Type,
-    TypedDict,
-    TypeGuard,
-    TypeVar,
-    get_args,
-)
+from typing import Generator, Iterable, Literal, Tuple
 
 from sty import fg
-
-from HexMod.doc.collate_data import FormatTree
 
 localize_regex = re.compile(r"((?:number|mask))(: .+)")
 
@@ -90,9 +49,11 @@ class Registry:
     name_to_translation: dict[str, str] = field(default_factory=dict)
     translation_to_pattern: dict[str, tuple[Direction, str, bool, str]] = field(default_factory=dict)
     """translation: (direction, pattern, is_great, name)"""
-    page_title_to_url: dict[str, tuple[ModName, str, list[str]]] = field(default_factory=dict)
-    """page_title: (mod, url, names)"""
-    name_to_url: dict[str, tuple[ModName, str]] = field(default_factory=dict)
+    page_title_to_url: defaultdict[ModName, dict[str, tuple[str, list[str]]]] = field(
+        default_factory=lambda: defaultdict(dict)
+    )
+    """mod: page_title: (url, names)"""
+    name_to_url: dict[str, tuple[ModName, str | None]] = field(default_factory=dict)
     """name: (mod, url)"""
     name_to_args: dict[str, str] = field(default_factory=dict)
     translation_to_path: dict[str, tuple[ModName, str, str]] = field(default_factory=dict)
@@ -109,8 +70,8 @@ class Iota:
     def presentation_name(self):
         return str(self._datum)
 
-    def localize(self, registry: Registry):
-        presentation_name = self.presentation_name()
+    def localize(self, registry: Registry, name: str | None = None):
+        presentation_name = name if name is not None else self.presentation_name()
         value = ""
         if match := localize_regex.match(presentation_name):
             (presentation_name, value) = match.groups()
@@ -145,6 +106,12 @@ class ListCloser(Iota):
 
 
 class Pattern(Iota):
+    def pattern_name(self) -> str:
+        return str(self._datum)
+
+    def localize_pattern_name(self, registry: Registry) -> str:
+        return self.localize(registry, self.pattern_name())
+
     def color(self):
         return fg.yellow
 
@@ -451,169 +418,6 @@ class Segment:
 
     def rotated(self, angle: Angle | str | int) -> Segment:
         return Segment(self.root.rotated(angle), self.direction.rotated(angle))
-
-
-T = TypeVar("T", bound=LiteralString)
-
-
-class BookPage(TypedDict, Generic[T]):
-    type: T
-
-
-class BookPage_patchouli_text(BookPage[Literal["patchouli:text"]]):
-    """title"""
-
-    text: FormatTree
-    anchor: NotRequired[str]
-    title: NotRequired[str]
-
-
-class BookPage_patchouli_spotlight(BookPage[Literal["patchouli:spotlight"]]):
-    """item_name"""
-
-    item: str
-    item_name: str
-    link_recipe: bool
-    text: FormatTree
-    anchor: NotRequired[str]
-
-
-class BookPage_hexcasting_pattern(BookPage[Literal["hexcasting:pattern"]]):
-    """name"""
-
-    name: str
-    op: list
-    op_id: str
-    text: FormatTree
-    anchor: NotRequired[str]
-    hex_size: NotRequired[int]
-    input: NotRequired[str]
-    output: NotRequired[str]
-
-
-class BookPage_hexcasting_manual_pattern(BookPage[Literal["hexcasting:manual_pattern"]]):
-    """header"""
-
-    anchor: str
-    header: str
-    input: str
-    op: list
-    op_id: str
-    output: str
-    patterns: list
-    text: FormatTree
-
-
-# no anchor (ie. I can ignore them)
-
-
-class BookPage_patchouli_crafting(BookPage[Literal["patchouli:crafting"]]):
-    """actually has an anchor but not worth listing"""
-
-    item_name: list
-    recipe: str
-    anchor: NotRequired[str]
-    recipe2: NotRequired[str]
-    text: NotRequired[FormatTree]
-
-
-class BookPage_hexcasting_manual_pattern_nosig(BookPage[Literal["hexcasting:manual_pattern_nosig"]]):
-    header: str
-    op: list
-    text: FormatTree
-    patterns: NotRequired[list | dict]
-
-
-class BookPage_patchouli_link(BookPage[Literal["patchouli:link"]]):
-    link_text: str
-    text: FormatTree
-    url: str
-
-
-class BookPage_hexcasting_crafting_multi(BookPage[Literal["hexcasting:crafting_multi"]]):
-    heading: str
-    item_name: list
-    recipes: list
-    text: FormatTree
-
-
-class BookPage_hexcasting_brainsweep(BookPage[Literal["hexcasting:brainsweep"]]):
-    output_name: str
-    recipe: str
-    text: FormatTree
-
-
-class BookPage_patchouli_image(BookPage[Literal["patchouli:image"]]):
-    border: bool
-    images: list
-    title: str
-
-
-class BookPage_patchouli_empty(BookPage[Literal["patchouli:empty"]]):
-    pass
-
-
-class BookPage_hexal_everbook_entry(BookPage[Literal["hexal:everbook_entry"]]):
-    pass
-
-
-class BookEntry(TypedDict):
-    category: str
-    icon: str
-    id: str
-    name: str
-    pages: list[BookPage]
-    advancement: NotRequired[str]
-    entry_color: NotRequired[str]
-    extra_recipe_mappings: NotRequired[dict]
-    flag: NotRequired[str]
-    priority: NotRequired[bool]
-    read_by_default: NotRequired[bool]
-    sort_num: NotRequired[int]
-    sortnum: NotRequired[int | float]
-
-
-class BookCategory(TypedDict):
-    description: FormatTree
-    entries: list[BookEntry]
-    icon: str
-    id: str
-    name: str
-    sortnum: int
-    entry_color: NotRequired[str]
-    flag: NotRequired[str]
-    parent: NotRequired[str]
-
-
-class Book(TypedDict):
-    name: str
-    landing_text: FormatTree
-    version: int
-    show_progress: bool
-    creative_tab: str
-    model: str
-    book_texture: str
-    filler_texture: str
-    i18n: dict[str, str]
-    macros: dict[str, str]
-    resource_dir: str
-    modid: str
-    pattern_reg: dict[str, tuple[str, str, bool]]
-    """pattern_id: (pattern, direction, is_great)"""
-    categories: list[BookCategory]
-    blacklist: set[str]
-    spoilers: set[str]
-
-
-U = TypeVar("U", bound=BookPage)
-
-
-def isbookpage(page: Mapping, book_type: Type[U]) -> TypeGuard[U]:
-    try:
-        # this feels really really really gross. but it works
-        return page["type"] == get_args(get_args(book_type.__orig_bases__[0])[0])[0]  # type: ignore
-    except IndexError:
-        return False
 
 
 def _get_pattern_directions(starting_direction, pattern):
