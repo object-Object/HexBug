@@ -1,4 +1,4 @@
-from hexdecode.hexast import MOD_INFO, ModName
+from utils.mods import MOD_INFO, ModName
 
 
 def build_book_url(mod: ModName, url: str, show_spoilers: bool, escape: bool) -> str:

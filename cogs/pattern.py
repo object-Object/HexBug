@@ -4,9 +4,10 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-from hexdecode.hexast import MOD_INFO, Direction, Registry, UnknownPattern, _parse_unknown_pattern, generate_bookkeeper
+from hexdecode.hexast import Direction, Registry, UnknownPattern, _parse_unknown_pattern, generate_bookkeeper
 from utils.commands import HexBugBot, build_autocomplete
 from utils.generate_image import Palette, generate_image
+from utils.mods import MOD_INFO
 from utils.urls import build_book_url
 
 DEFAULT_LINE_SCALE = 6

@@ -3,7 +3,7 @@ import re
 from pathlib import Path
 
 from Hexal.doc.collate_data import parse_book as hexal_parse_book
-from hexdecode.hexast import MOD_INFO, Direction, ModName, Registry, get_rotated_pattern_segments
+from hexdecode.hexast import Direction, ModName, Registry, get_rotated_pattern_segments
 from HexMod.doc.collate_data import parse_book as hex_parse_book
 from MoreIotas.doc.collate_data import parse_book as moreiotas_parse_book
 from utils.book_types import (
@@ -15,6 +15,7 @@ from utils.book_types import (
     BookPage_patchouli_text,
 )
 from utils.book_utils import isbookpage
+from utils.mods import MOD_INFO
 
 # thanks Alwinfy for (unknowingly) making my registry regex about 5x simpler
 registry_regex = re.compile(
