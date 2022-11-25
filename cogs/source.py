@@ -13,8 +13,8 @@ class SourceCog(commands.GroupCog, name="source"):
         self.registry = bot.registry
 
         initial_choices = [
-            (app_commands.Choice(name=translation, value=translation), [name])
-            for name, translation in self.registry.name_to_translation.items()
+            (app_commands.Choice(name=translation, value=translation), [name, path.split("/")[-1]])
+            for translation, (mod, path, name) in self.registry.translation_to_path.items()
         ]
         self.autocomplete = build_autocomplete(initial_choices)
 

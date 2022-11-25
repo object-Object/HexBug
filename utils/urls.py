@@ -12,4 +12,4 @@ def build_book_url(mod: ModName, url: str, show_spoilers: bool, escape: bool) ->
 
 def build_source_url(mod: ModName, path: str) -> str:
     mod_info = MOD_INFO[mod]
-    return f"{mod_info.source_url}{f'blob/main/' if path else ''}{path}"
+    return f"{mod_info.source_url}{f'blob/{mod_info.commit}/' if path else ''}{path}"
