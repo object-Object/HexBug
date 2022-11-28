@@ -35,9 +35,9 @@ MOD_INFO: dict[ModName, ModInfo] = {
     ),
     "MoreIotas": ModInfo(
         book_url="https://talia-12.github.io/MoreIotas/",
-        mod_url="https://github.com/Talia-12/MoreIotas/",
+        mod_url="https://modrinth.com/mod/moreiotas",
         source_url="https://github.com/Talia-12/MoreIotas/",
-        icon_url=None,
+        icon_url="https://cdn.modrinth.com/data/Jmt7p37B/e4640394d665e134c80900c94d6d49ddb9047edd.png",
         uses_talia_registry=True,
         commit=get_current_commit("MoreIotas"),
     ),
