@@ -106,14 +106,14 @@ class PatternCog(commands.GroupCog, name="pattern"):
         )
 
         await send_pattern(
-            self.registry,
-            interaction,
-            name,
-            translation,
-            None if hide_stroke_order else direction,
-            None if hide_stroke_order else pattern,
-            generate_image(direction, pattern, hide_stroke_order, palette, line_scale, arrow_scale),
-            not show_to_everyone,
+            registry=self.registry,
+            interaction=interaction,
+            name=name,
+            translation=translation,
+            direction=None if hide_stroke_order else direction,
+            pattern=None if hide_stroke_order else pattern,
+            image=generate_image(direction, pattern, hide_stroke_order, palette, line_scale, arrow_scale),
+            ephemeral=not show_to_everyone,
         )
 
     @app_commands.command()
@@ -152,14 +152,14 @@ class PatternCog(commands.GroupCog, name="pattern"):
             direction, pattern, is_great, name = value
 
         await send_pattern(
-            self.registry,
-            interaction,
-            name,
-            translation,
-            None if is_great else direction,
-            None if is_great else pattern,
-            generate_image(direction, pattern, is_great, palette, line_scale, arrow_scale),
-            not show_to_everyone,
+            registry=self.registry,
+            interaction=interaction,
+            name=name,
+            translation=translation,
+            direction=None if is_great else direction,
+            pattern=None if is_great else pattern,
+            image=generate_image(direction, pattern, is_great, palette, line_scale, arrow_scale),
+            ephemeral=not show_to_everyone,
         )
 
     @name.autocomplete("translation")
