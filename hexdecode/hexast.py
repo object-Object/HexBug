@@ -108,11 +108,17 @@ class UnknownPattern(Unknown, Pattern):
 
 
 class Bookkeeper(Pattern):
+    def pattern_name(self) -> str:
+        return self.presentation_name()
+
     def presentation_name(self):
         return f"mask: {self._datum}"
 
 
 class Number(Pattern):
+    def pattern_name(self) -> str:
+        return self.presentation_name()
+
     def presentation_name(self):
         return f"number: {float(self._datum):g}"
 
