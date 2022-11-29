@@ -2,6 +2,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
+from utils.buttons import buildShowOrDeleteButton
 from utils.commands import HexBugBot, build_autocomplete
 from utils.mods import ModName
 from utils.urls import build_book_url
@@ -31,8 +32,11 @@ class BookCog(commands.GroupCog, name="book"):
         show_to_everyone: bool = False,
         show_spoilers: bool = False,
     ) -> None:
+        content = build_book_url(mod, "", show_spoilers, True)
         await interaction.response.send_message(
-            build_book_url(mod, "", show_spoilers, True), ephemeral=not show_to_everyone
+            content,
+            ephemeral=not show_to_everyone,
+            view=buildShowOrDeleteButton(show_to_everyone, interaction, content=content),
         )
 
     @app_commands.command()
@@ -55,8 +59,11 @@ class BookCog(commands.GroupCog, name="book"):
             return await interaction.response.send_message("❌ Unknown page.", ephemeral=True)
 
         url, _ = value
+        content = build_book_url(mod, url, show_spoilers, True)
         await interaction.response.send_message(
-            build_book_url(mod, url, show_spoilers, True), ephemeral=not show_to_everyone
+            content,
+            ephemeral=not show_to_everyone,
+            view=buildShowOrDeleteButton(show_to_everyone, interaction, content=content),
         )
 
     @page.autocomplete("page_title")

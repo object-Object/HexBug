@@ -2,6 +2,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
+from utils.buttons import buildShowOrDeleteButton
 from utils.commands import HexBugBot, build_autocomplete
 from utils.mods import ModName
 from utils.urls import build_source_url
@@ -24,7 +25,12 @@ class SourceCog(commands.GroupCog, name="source"):
         show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
     )
     async def repo(self, interaction: discord.Interaction, mod: ModName, show_to_everyone: bool = False) -> None:
-        await interaction.response.send_message(build_source_url(mod, ""), ephemeral=not show_to_everyone)
+        content = build_source_url(mod, "")
+        await interaction.response.send_message(
+            content,
+            ephemeral=not show_to_everyone,
+            view=buildShowOrDeleteButton(show_to_everyone, interaction, content=content),
+        )
 
     @app_commands.command()
     @app_commands.describe(
@@ -40,10 +46,12 @@ class SourceCog(commands.GroupCog, name="source"):
         mod, path, name = value
         filename: str = path.split("/")[-1]
         source_url = build_source_url(mod, path)
+        embed = discord.Embed(title=filename, url=source_url).set_author(name=f"{translation} ({name})")
 
         await interaction.response.send_message(
-            embed=discord.Embed(title=filename, url=source_url).set_author(name=f"{translation} ({name})"),
+            embed=embed,
             ephemeral=not show_to_everyone,
+            view=buildShowOrDeleteButton(show_to_everyone, interaction, embed=embed),
         )
 
     @pattern.autocomplete("translation")

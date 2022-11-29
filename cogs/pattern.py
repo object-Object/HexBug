@@ -3,8 +3,10 @@ from io import BytesIO
 import discord
 from discord import app_commands
 from discord.ext import commands
+from discord.utils import MISSING
 
 from hexdecode.hexast import Direction, Registry, UnknownPattern, _parse_unknown_pattern, generate_bookkeeper
+from utils.buttons import buildShowOrDeleteButton
 from utils.commands import HexBugBot, build_autocomplete
 from utils.generate_image import Palette, generate_image
 from utils.mods import MOD_INFO
@@ -30,7 +32,7 @@ async def send_pattern(
     direction: Direction | None,
     pattern: str | None,
     image: BytesIO,
-    ephemeral: bool,
+    show_to_everyone: bool,
 ):
     mod, book_url = registry.name_to_url.get(name, (None, None))
     book_url = mod and book_url and build_book_url(mod, book_url, False, False)
@@ -46,10 +48,13 @@ async def send_pattern(
     if direction is not None and pattern is not None:
         embed.set_footer(text=f"{direction.name} {pattern}")
 
+    file = discord.File(image, filename="pattern.png")
+
     await interaction.response.send_message(
         embed=embed,
-        file=discord.File(image, filename="pattern.png"),
-        ephemeral=ephemeral,
+        file=file,
+        view=buildShowOrDeleteButton(show_to_everyone, interaction, embed=embed, file=file),
+        ephemeral=not show_to_everyone,
     )
 
 
@@ -113,7 +118,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
             direction=None if hide_stroke_order else direction,
             pattern=None if hide_stroke_order else pattern,
             image=generate_image(direction, pattern, hide_stroke_order, palette, line_scale, arrow_scale),
-            ephemeral=not show_to_everyone,
+            show_to_everyone=show_to_everyone,
         )
 
     @app_commands.command()
@@ -159,7 +164,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
             direction=None if is_great else direction,
             pattern=None if is_great else pattern,
             image=generate_image(direction, pattern, is_great, palette, line_scale, arrow_scale),
-            ephemeral=not show_to_everyone,
+            show_to_everyone=show_to_everyone,
         )
 
     @name.autocomplete("translation")

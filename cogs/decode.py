@@ -6,6 +6,7 @@ from discord.ext import commands
 
 from hexdecode import revealparser
 from hexdecode.hexast import massage_raw_pattern_list
+from utils.buttons import buildShowOrDeleteButton
 from utils.commands import HexBugBot
 
 
@@ -34,15 +35,19 @@ class DecodeCog(commands.Cog):
         if not output:
             return await interaction.followup.send("❌ Invalid input.", ephemeral=True)
 
-        result = f"```\n{output}```"
-        if len(result) > 2000:
+        content = f"```\n{output}```"
+        if len(content) > 2000:
             return await interaction.followup.send(
                 "⚠️ Result is too long to display. See attached file.",
                 ephemeral=True,
                 file=discord.File(BytesIO(output.encode("utf-8")), filename="decoded.txt"),
             )
 
-        await interaction.followup.send(f"```\n{output}```", ephemeral=not show_to_everyone)
+        await interaction.followup.send(
+            content,
+            ephemeral=not show_to_everyone,
+            view=buildShowOrDeleteButton(show_to_everyone, interaction, content=content),
+        )
 
 
 async def setup(bot: HexBugBot) -> None:

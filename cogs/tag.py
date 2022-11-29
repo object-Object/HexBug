@@ -5,6 +5,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
+from utils.buttons import DeleteButton
 from utils.commands import HexBugBot
 
 
@@ -55,7 +56,7 @@ class TagCog(commands.Cog):
     async def tag(self, interaction: discord.Interaction, tag: Tags):
         """Show a premade info message"""
         value: Tag = tag.value
-        await interaction.response.send_message(**value)
+        await interaction.response.send_message(**value, view=DeleteButton(interaction))
 
 
 async def setup(bot: HexBugBot) -> None:
