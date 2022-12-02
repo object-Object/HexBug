@@ -1,6 +1,7 @@
 import logging
 import re
 from pathlib import Path
+from typing import TypeVar
 
 from Hexal.doc.collate_data import parse_book as hexal_parse_book
 from hexdecode.hexast import Direction, ModName, Registry, get_rotated_pattern_segments
@@ -54,6 +55,11 @@ special_patterns: list[tuple[str, Direction, str, str, bool]] = [
     ("eee", Direction.EAST, "close_paren", "RETROSPECTION", False),
     ("qqqaw", Direction.EAST, "escape", "CONSIDERATION", False),
 ]
+
+
+class DuplicatePatternException(Exception):
+    def __init__(self, name1: str, name2: str, pattern: str, is_great: bool) -> None:
+        super().__init__(f"Duplicate {'great spell' if is_great else 'pattern'} ({name1}, {name2}): {pattern}")
 
 
 def _build_pattern_urls(
@@ -110,6 +116,14 @@ def _build_urls(registry: Registry, book: Book, mod: ModName):
                     registry.page_title_to_url[mod][header_regex.sub("", page["header"])] = value
 
 
+T = TypeVar("T")
+
+
+def _check_duplicate(lookup: dict[T, str], key: T, name: str, pattern: str, is_great: bool):
+    if (existing_name := lookup.get(key)) and existing_name != name:
+        raise DuplicatePatternException(name, existing_name, pattern, is_great)
+
+
 def _add_to_registry(
     registry: Registry,
     classname_to_path: dict[str, tuple[ModName, str]],
@@ -121,8 +135,22 @@ def _add_to_registry(
 ) -> None:
     if is_great:
         for segments in get_rotated_pattern_segments(direction, pattern):
+            _check_duplicate(
+                lookup=registry.great_spells,
+                key=segments,
+                name=name,
+                pattern=pattern,
+                is_great=is_great,
+            )
             registry.great_spells[segments] = name
     else:
+        _check_duplicate(
+            lookup=registry.pattern_to_name,
+            key=pattern,
+            name=name,
+            pattern=pattern,
+            is_great=is_great,
+        )
         registry.pattern_to_name[pattern] = name
     # because Hexal sometimes doesn't have translations
     translation = registry.name_to_translation.get(name, name)
