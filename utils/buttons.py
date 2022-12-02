@@ -24,7 +24,7 @@ class _BaseButton(discord.ui.View):
         self.interaction = interaction
 
     async def on_timeout(self) -> None:
-        await self.disable_buttons()
+        await self.delete_buttons()
 
     async def delete_message(self) -> None:
         await self.interaction.delete_original_response()
@@ -35,6 +35,9 @@ class _BaseButton(discord.ui.View):
             if isinstance(item, discord.ui.Button):
                 item.disabled = True
         await self.interaction.edit_original_response(view=self)
+
+    async def delete_buttons(self) -> None:
+        await self.interaction.edit_original_response(view=None)
 
 
 class ShowToEveryoneButton(_BaseButton):

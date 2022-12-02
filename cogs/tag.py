@@ -43,6 +43,21 @@ More info on plurality: https://morethanone.info/""",
         ),
     )
 
+    forum = Tag(
+        embed=discord.Embed(
+            title="petrak@'s mods forum",
+            url="https://forum.petra-k.at/index.php",
+            description="""[Join the forum](https://forum.petra-k.at/ucp.php?mode=register) to post/browse cool hexes, ask for help, or chat about petrak@'s mods.
+
+**Quick links**
+[General Chat](https://forum.petra-k.at/viewforum.php?f=7)
+[Akashic Records](https://forum.petra-k.at/viewforum.php?f=2)
+[Hexcasting Help](https://forum.petra-k.at/viewforum.php?f=5)
+[Miner's Lung](https://forum.petra-k.at/viewforum.php?f=9)
+[Bliss Mods](https://forum.petra-k.at/viewforum.php?f=10)""",
+        )
+    )
+
 
 class TagCog(commands.Cog):
     def __init__(self, bot: HexBugBot) -> None:
