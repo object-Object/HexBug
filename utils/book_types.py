@@ -67,6 +67,7 @@ class BookPage_hexcasting_pattern(BookPage[Literal["hexcasting:pattern"]]):
     op: list
     op_id: str
     text: FormatTree
+    _comment: NotRequired[str]
     anchor: NotRequired[str]
     hex_size: NotRequired[int]
     input: NotRequired[str]
