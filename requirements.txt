@@ -5,3 +5,4 @@ lark==1.1.2
 numpy==1.23.1
 python-dotenv==0.21.0
 sty==1.0.4
+pillow==9.2.0

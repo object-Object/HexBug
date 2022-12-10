@@ -1,20 +1,11 @@
 import math
-from enum import Enum
 from io import BytesIO
 
 import matplotlib.pyplot as plt
-import numpy as np
-from matplotlib import colormaps  # type: ignore
+from PIL import Image
 
-from hex_interpreter.hex_draw import plot_intersect, plot_monochrome
+from hex_interpreter.hex_draw import Palette, Theme, plot_intersect, plot_monochrome
 from hexdecode.hexast import Angle, Coord, Direction
-
-
-class Palette(Enum):
-    Classic = ["#ff6bff", "#a81ee3", "#6490ed", "#b189c7"]
-    Turbo = [colormaps["turbo"](x) for x in np.linspace(0.06, 1, 8)]
-    Dark2 = [colormaps["Dark2"](x) for x in np.linspace(0, 1, 8)]
-    Tab10 = [colormaps["tab10"](x) for x in np.linspace(0, 1, 10)]
 
 
 def get_points(direction: Direction, pattern: str) -> list[Coord]:
@@ -36,6 +27,7 @@ def generate_image(
     pattern: str,
     is_great: bool,
     palette: Palette,
+    theme: Theme,
     line_scale: float,
     arrow_scale: float,
 ) -> BytesIO:
@@ -51,26 +43,47 @@ def generate_image(
     height = max(y_vals) - min(y_vals)
     max_width = max(width, height, 1.25)
     scale = line_scale / math.log(max_width, 1.5) + 1.1
+    start_angle = direction.angle_from(Direction.EAST).deg - 90
 
     fig = plt.figure(figsize=(4, 4))
     ax = fig.add_axes([0, 0, 1, 1])
     ax.set_aspect("equal")
     ax.axis("off")
 
-    settings = {
-        "intersect_colors": palette.value,
-        "arrow_scale": arrow_scale,
-    }
-    start_angle = direction.angle_from(Direction.EAST).deg - 90
-    pattern_info = (x_vals, y_vals, scale, start_angle)
-
     if is_great:
-        plot_monochrome(pattern_info, "#a81ee3")
+        plot_monochrome(
+            x_vals=x_vals,
+            y_vals=y_vals,
+            scale=scale,
+            monochrome_color="#a81ee3",
+            theme=theme,
+        )
     else:
-        plot_intersect(pattern_info, settings)
+        plot_intersect(
+            x_vals=x_vals,
+            y_vals=y_vals,
+            scale=scale,
+            arrow_scale=arrow_scale,
+            start_angle=start_angle,
+            palette=palette,
+            theme=theme,
+        )
+
+    x0, x1, y0, y1 = plt.axis()
+    plt.axis((x0 - 0.1, x1 + 0.1, y0 - 0.1, y1 + 0.1))
 
     buf = BytesIO()
-    fig.savefig(buf, format="png")
-    buf.seek(0)
+    fig.savefig(buf, format="png", transparent=True)
     plt.close(fig)
+
+    buf.seek(0)
+    im = Image.open(buf)
+    im2 = im.crop(im.getbbox())
+
+    buf.seek(0)
+    buf.truncate()
+    im2.save(buf, format="png")
+    im2.close()
+
+    buf.seek(0)
     return buf

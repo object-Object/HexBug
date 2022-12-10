@@ -3,7 +3,7 @@ import json
 from typing import TypedDict
 
 from hexdecode.buildpatterns import build_registry
-from utils.generate_image import Palette, generate_image
+from utils.generate_image import Palette, Theme, generate_image
 from utils.mods import ModName
 from utils.urls import build_book_url
 
@@ -28,9 +28,18 @@ for name, translation in registry.name_to_translation.items():
         direction, pattern, is_great, _ = values
 
         if filename is not None:
-            image = generate_image(direction, pattern, is_great, Palette.Classic, 10, 2)
-            with open(f"out/patterns/{filename}", "wb") as f:
-                f.write(image.getbuffer())
+            for theme in Theme:
+                image = generate_image(
+                    direction=direction,
+                    pattern=pattern,
+                    is_great=is_great,
+                    palette=Palette.Classic,
+                    theme=theme,
+                    line_scale=10,
+                    arrow_scale=2,
+                )
+                with open(f"out/patterns/{theme.name.lower()}/{filename}", "wb") as f:
+                    f.write(image.getbuffer())
 
     mod, url = registry.name_to_url.get(name, (None, None))
     if mod is None:  # invalid pattern

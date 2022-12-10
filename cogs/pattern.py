@@ -8,7 +8,7 @@ from discord.utils import MISSING
 from hexdecode.hexast import Direction, Registry, UnknownPattern, _parse_unknown_pattern, generate_bookkeeper
 from utils.buttons import buildShowOrDeleteButton
 from utils.commands import HexBugBot, build_autocomplete
-from utils.generate_image import Palette, generate_image
+from utils.generate_image import Palette, Theme, generate_image
 from utils.mods import MOD_INFO
 from utils.urls import build_book_url
 
@@ -82,6 +82,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
         show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
         hide_stroke_order="Whether or not to hide the stroke order (like with great spells)",
         palette="The color palette to use for the lines (has no effect if hide_stroke_order is True)",
+        theme="Whether the pattern should be rendered for light or dark theme",
         line_scale="The scale of the lines and dots in the image",
         arrow_scale="The scale of the arrows in the image",
     )
@@ -93,6 +94,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
         show_to_everyone: bool = False,
         hide_stroke_order: bool = False,
         palette: Palette = Palette.Classic,
+        theme: Theme = Theme.Dark,
         line_scale: SCALE_RANGE = DEFAULT_LINE_SCALE,
         arrow_scale: SCALE_RANGE = DEFAULT_ARROW_SCALE,
     ) -> None:
@@ -110,6 +112,16 @@ class PatternCog(commands.GroupCog, name="pattern"):
             "Unknown" if isinstance(pattern_iota, UnknownPattern) else pattern_iota.localize_pattern_name(self.registry)
         )
 
+        image = generate_image(
+            direction=direction,
+            pattern=pattern,
+            is_great=hide_stroke_order,
+            palette=palette,
+            theme=theme,
+            line_scale=line_scale,
+            arrow_scale=arrow_scale,
+        )
+
         await send_pattern(
             registry=self.registry,
             interaction=interaction,
@@ -117,7 +129,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
             translation=translation,
             direction=None if hide_stroke_order else direction,
             pattern=None if hide_stroke_order else pattern,
-            image=generate_image(direction, pattern, hide_stroke_order, palette, line_scale, arrow_scale),
+            image=image,
             show_to_everyone=show_to_everyone,
         )
 
@@ -126,6 +138,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
         translation="The name of the pattern",
         show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
         palette="The color palette to use for the lines (has no effect for great spells)",
+        theme="Whether the pattern should be rendered for light or dark theme",
         line_scale="The scale of the lines and dots in the image",
         arrow_scale="The scale of the arrows in the image",
     )
@@ -136,6 +149,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
         translation: str,
         show_to_everyone: bool = False,
         palette: Palette = Palette.Classic,
+        theme: Theme = Theme.Dark,
         line_scale: SCALE_RANGE = DEFAULT_LINE_SCALE,
         arrow_scale: SCALE_RANGE = DEFAULT_ARROW_SCALE,
     ) -> None:
@@ -156,6 +170,16 @@ class PatternCog(commands.GroupCog, name="pattern"):
         else:
             direction, pattern, is_great, name = value
 
+        image = generate_image(
+            direction=direction,
+            pattern=pattern,
+            is_great=is_great,
+            palette=palette,
+            theme=theme,
+            line_scale=line_scale,
+            arrow_scale=arrow_scale,
+        )
+
         await send_pattern(
             registry=self.registry,
             interaction=interaction,
@@ -163,7 +187,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
             translation=translation,
             direction=None if is_great else direction,
             pattern=None if is_great else pattern,
-            image=generate_image(direction, pattern, is_great, palette, line_scale, arrow_scale),
+            image=image,
             show_to_everyone=show_to_everyone,
         )
 
