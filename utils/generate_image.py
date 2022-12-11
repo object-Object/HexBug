@@ -30,7 +30,7 @@ def generate_image(
     theme: Theme,
     line_scale: float,
     arrow_scale: float,
-) -> BytesIO:
+) -> tuple[BytesIO, tuple[int, int]]:
     points = get_points(direction, pattern)
     x_vals: list[float] = []
     y_vals: list[float] = []
@@ -79,6 +79,7 @@ def generate_image(
     buf.seek(0)
     im = Image.open(buf)
     im2 = im.crop(im.getbbox())
+    size = im2.size
 
     buf.seek(0)
     buf.truncate()
@@ -86,4 +87,4 @@ def generate_image(
     im2.close()
 
     buf.seek(0)
-    return buf
+    return buf, size

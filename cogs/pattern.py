@@ -112,7 +112,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
             "Unknown" if isinstance(pattern_iota, UnknownPattern) else pattern_iota.localize_pattern_name(self.registry)
         )
 
-        image = generate_image(
+        image, _ = generate_image(
             direction=direction,
             pattern=pattern,
             is_great=hide_stroke_order,
@@ -170,7 +170,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
         else:
             direction, pattern, is_great, name = value
 
-        image = generate_image(
+        image, _ = generate_image(
             direction=direction,
             pattern=pattern,
             is_great=is_great,
