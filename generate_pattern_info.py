@@ -44,8 +44,8 @@ for name, translation in registry.name_to_translation.items():
                     line_scale=10,
                     arrow_scale=2,
                 )
-                # with open(f"out/patterns/{theme.name.lower()}/{filename}", "wb") as f:
-                #     f.write(image.getbuffer())
+                with open(f"out/patterns/{theme.name.lower()}/{filename}", "wb") as f:
+                    f.write(image.getbuffer())
 
     mod, url = registry.name_to_url.get(name, (None, None))
     if mod is None:  # invalid pattern
