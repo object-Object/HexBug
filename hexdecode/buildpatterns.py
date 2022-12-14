@@ -53,7 +53,7 @@ operator_directories: list[tuple[ModName, str]] = [
 special_patterns: list[tuple[str, Direction, str, str, bool]] = [
     ("qqq", Direction.WEST, "open_paren", "INTROSPECTION", False),
     ("eee", Direction.EAST, "close_paren", "RETROSPECTION", False),
-    ("qqqaw", Direction.EAST, "escape", "CONSIDERATION", False),
+    ("qqqaw", Direction.WEST, "escape", "CONSIDERATION", False),
 ]
 
 
