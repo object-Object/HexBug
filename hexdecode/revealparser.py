@@ -5,6 +5,7 @@ from lark.lark import Lark
 from lark.visitors import Transformer
 
 from hexdecode import hexast
+from hexdecode.hex_math import Direction
 
 parser = Lark(
     """
@@ -50,7 +51,7 @@ class ToAST(Transformer):
         return hexast.UnknownPattern(initial_direction, turns)
 
     def DIRECTION(self, string):
-        return hexast.Direction[string]
+        return Direction[string]
 
     def UNKNOWN(self, strings):
         return hexast.Unknown("".join(strings))

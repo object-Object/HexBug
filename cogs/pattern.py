@@ -5,11 +5,12 @@ from discord import app_commands
 from discord.ext import commands
 from discord.utils import MISSING
 
-from hexdecode.hexast import Direction, Registry, UnknownPattern, _parse_unknown_pattern, generate_bookkeeper
+from hexdecode.hex_math import Direction
+from hexdecode.hexast import Registry, UnknownPattern, _parse_unknown_pattern, generate_bookkeeper
 from utils.buttons import buildShowOrDeleteButton
 from utils.commands import HexBugBot, build_autocomplete
 from utils.generate_image import Palette, Theme, generate_image
-from utils.mods import MOD_INFO
+from utils.mods import Mod
 from utils.urls import build_book_url
 
 DEFAULT_LINE_SCALE = 6
@@ -43,8 +44,7 @@ async def send_pattern(
         description=registry.name_to_args.get(name),
     ).set_image(url="attachment://pattern.png")
     if mod:
-        mod_info = MOD_INFO[mod]
-        embed.set_author(name=mod, icon_url=mod_info.icon_url, url=mod_info.mod_url)
+        embed.set_author(name=mod.value.name, icon_url=mod.value.icon_url, url=mod.value.mod_url)
     if direction is not None and pattern is not None:
         embed.set_footer(text=f"{direction.name} {pattern}")
 

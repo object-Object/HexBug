@@ -4,7 +4,7 @@ from typing import TypedDict
 
 from hexdecode.buildpatterns import build_registry
 from utils.generate_image import Palette, Theme, generate_image
-from utils.mods import ModName
+from utils.mods import Mod
 from utils.urls import build_book_url
 
 
@@ -16,7 +16,7 @@ class ImageInfo(TypedDict):
 
 class PatternInfo(TypedDict):
     name: str
-    modName: ModName
+    modName: str
     image: ImageInfo | None
     direction: str | None
     pattern: str | None
@@ -56,7 +56,7 @@ for name, translation in registry.name_to_translation.items():
 
     info: PatternInfo = {
         "name": name,
-        "modName": mod,
+        "modName": mod.value.name,
         "image": {
             "filename": filename,
             "height": height,

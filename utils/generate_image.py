@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from PIL import Image
 
 from hex_interpreter.hex_draw import Palette, Theme, plot_intersect, plot_monochrome
-from hexdecode.hexast import Angle, Coord, Direction
+from hexdecode.hex_math import Angle, Coord, Direction
 
 
 def get_points(direction: Direction, pattern: str) -> list[Coord]:

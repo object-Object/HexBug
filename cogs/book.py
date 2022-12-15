@@ -4,7 +4,7 @@ from discord.ext import commands
 
 from utils.buttons import buildShowOrDeleteButton
 from utils.commands import HexBugBot, build_autocomplete
-from utils.mods import ModName
+from utils.mods import Mod, ModTransformerHint
 from utils.urls import build_book_url
 
 
@@ -28,7 +28,7 @@ class BookCog(commands.GroupCog, name="book"):
     async def home(
         self,
         interaction: discord.Interaction,
-        mod: ModName,
+        mod: ModTransformerHint,
         show_to_everyone: bool = False,
         show_spoilers: bool = False,
     ) -> None:
@@ -49,7 +49,7 @@ class BookCog(commands.GroupCog, name="book"):
     async def page(
         self,
         interaction: discord.Interaction,
-        mod: ModName,
+        mod: ModTransformerHint,
         page_title: str,
         show_to_everyone: bool = False,
         show_spoilers: bool = False,
