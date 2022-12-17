@@ -143,7 +143,7 @@ async def build_registry(session: ClientSession) -> Registry:
             # mod_info.__late_init__(docs["repositoryRoot"], ...)
             raise NotImplementedError
         else:
-            mod_info.__late_init__(docs["repositoryRoot"])
+            mod_info.__late_init__(docs["repositoryRoot"], docs["commitHash"])
 
             # translations
             _parse_i18n(name_to_translation, lang)

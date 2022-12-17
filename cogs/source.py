@@ -46,7 +46,7 @@ class SourceCog(commands.GroupCog, name="source"):
         mod_info = info.mod.value
 
         filename: str = info.path.split("/")[-1]
-        source_url = mod_info.build_source_url(info.path)
+        source_url = info.class_mod.value.build_source_url(info.path)
         title = filename if filename.split(".")[0] == info.classname else f"{filename} ({info.classname})"
         embed = (
             discord.Embed(title=title, url=source_url)

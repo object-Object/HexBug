@@ -206,7 +206,7 @@ class APIMod(Enum):
         mod_url="https://modrinth.com/mod/hexbound/",
         icon_url="https://cdn.modrinth.com/data/PHgo4bVw/daa508e0b61340a46e04f669af1cf5e557193bc4.png",
         api_base_url="https://hexbound.cypher.coffee/",
-        version="0.1.0-beta.1+1.19.2",
+        version="0.1.0-beta.2+1.19.2",
     )
 
     @property

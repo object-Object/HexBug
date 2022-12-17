@@ -1,18 +1,11 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Generic, Literal, LiteralString, TypedDict, TypeVar
 
 from aiohttp import ClientSession
 
 T = TypeVar("T", bound=LiteralString)
-
-
-class APIDocs(TypedDict):
-    availableLangFiles: list[str]
-    defaultLangFile: str
-    patternPath: str
-    repositoryRoot: str
 
 
 class APIVersion(TypedDict):
@@ -27,7 +20,15 @@ class APIVersions(TypedDict):
     latestPublished: str
     """ISO 8601"""
     versions: list[APIVersion]
-    """Sorted by ascending release date"""
+    """Sorted by descending release date"""
+
+
+class APIDocs(TypedDict):
+    availableLangFiles: list[str]
+    defaultLangFile: str
+    patternPath: str
+    repositoryRoot: str
+    commitHash: str
 
 
 class _BaseAPIPatternSource(TypedDict, Generic[T]):
