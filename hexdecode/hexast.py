@@ -10,30 +10,11 @@ from typing import Generator, Iterable
 
 from sty import fg
 
-from hexdecode.hex_math import Angle, Coord, Direction, Segment
+from hexdecode.hex_math import Angle, Coord, Direction, Segment, _get_pattern_segments
+from hexdecode.registry import Registry
 from utils.mods import Mod
 
 localize_regex = re.compile(r"((?:number|mask))(: .+)")
-
-
-# at some point, I should probably rewrite this thing into a proper data structure instead of 8+ separate dicts
-@dataclass
-class Registry:
-    pattern_to_name: dict[str, str] = field(default_factory=dict)
-    great_spells: dict[frozenset[Segment], str] = field(default_factory=dict)
-    """segments: name"""
-    name_to_translation: dict[str, str] = field(default_factory=dict)
-    translation_to_pattern: dict[str, tuple[Direction, str, bool, str]] = field(default_factory=dict)
-    """translation: (direction, pattern, is_great, name)"""
-    page_title_to_url: defaultdict[Mod, dict[str, tuple[str, list[str]]]] = field(
-        default_factory=lambda: defaultdict(dict)
-    )
-    """mod: page_title: (url, names)"""
-    name_to_url: dict[str, tuple[Mod, str | None]] = field(default_factory=dict)
-    """name: (mod, url)"""
-    name_to_args: dict[str, str] = field(default_factory=dict)
-    translation_to_path: dict[str, tuple[Mod, str, str, str]] = field(default_factory=dict)
-    """translation: (mod, path, name, classname)"""
 
 
 class Iota:
@@ -51,7 +32,7 @@ class Iota:
         value = ""
         if match := localize_regex.match(presentation_name):
             (presentation_name, value) = match.groups()
-        return registry.name_to_translation.get(presentation_name, presentation_name) + value
+        return registry.get_translation_from_name(presentation_name, presentation_name) + value
 
     def print(self, level: int, highlight: bool, registry: Registry) -> str:
         indent = "  " * level
@@ -246,41 +227,6 @@ def generate_bookkeeper(mask: str):
     return starting_direction, pattern
 
 
-def _get_segments(direction: Direction, pattern: str) -> frozenset[Segment]:
-    cursor = Coord.origin()
-    compass = direction
-
-    segments = [Segment(cursor, compass)]
-
-    for c in pattern:
-        cursor += compass
-        compass = compass.rotated(Angle[c])
-        segments.append(Segment(cursor, compass))
-
-    return frozenset(segments)
-
-
-def _align_segments_to_origin(segments: Iterable[Segment]) -> frozenset[Segment]:
-    min_q = min(segment.min_q for segment in segments)
-    min_r = min(segment.min_r for segment in segments)
-
-    top_left = Coord(min_q, min_r)
-    delta = Coord.origin() - top_left
-
-    return frozenset([segment.shifted(delta) for segment in segments])
-
-
-def _get_pattern_segments(direction: Direction, pattern: str, align=True) -> frozenset[Segment]:
-    segments = _get_segments(direction, pattern)
-    return _align_segments_to_origin(segments) if align else segments
-
-
-def get_rotated_pattern_segments(direction: Direction, pattern: str) -> Generator[frozenset[Segment], None, None]:
-    segments = _get_pattern_segments(direction, pattern, False)
-    for n in range(6):
-        yield _align_segments_to_origin([segment.rotated(n) for segment in segments])
-
-
 def _handle_named_pattern(name: str):
     match name:
         case "open_paren":
@@ -293,11 +239,11 @@ def _handle_named_pattern(name: str):
 
 def _parse_unknown_pattern(pattern: UnknownPattern, registry: Registry) -> tuple[Pattern, str]:
     if (
-        (name := registry.pattern_to_name.get(pattern._datum))
+        (info := registry.from_pattern.get(pattern._datum))
         or (segments := _get_pattern_segments(pattern._initial_direction, pattern._datum))
-        and (name := registry.great_spells.get(segments))
+        and (info := registry.from_segments.get(segments))
     ):
-        return _handle_named_pattern(name), name
+        return _handle_named_pattern(info.name), info.name
     elif bk := _parse_bookkeeper(pattern._initial_direction, pattern._datum):
         return Bookkeeper(bk), "mask"
     elif pattern._datum.startswith(("aqaa", "dedd")):

@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 
 import discord
+from aiohttp import ClientSession
 from discord.ext import commands
 from dotenv import load_dotenv
 
@@ -19,7 +20,8 @@ async def main():
 
     discord.utils.setup_logging(level=logging.INFO)  # WHY ISN'T THIS ENABLED BY DEFAULT
 
-    registry = build_registry()
+    async with ClientSession() as session:
+        registry = await build_registry(session)
     intents = discord.Intents.default()
     bot = HexBugBot(registry=registry, command_prefix=commands.when_mentioned, intents=intents)
 

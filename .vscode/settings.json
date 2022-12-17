@@ -1,9 +1,6 @@
 {
     "[python]": {
-        "editor.formatOnSave": true,
-        "editor.codeActionsOnSave": {
-            "source.organizeImports": true,
-        },
+        "editor.formatOnSave": true
     },
     "python.formatting.provider": "black",
     "python.analysis.typeCheckingMode": "basic", // strict doesn't play nice with a lot of things we're using

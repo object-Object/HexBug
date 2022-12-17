@@ -4,8 +4,7 @@ from discord.ext import commands
 
 from utils.buttons import buildShowOrDeleteButton
 from utils.commands import HexBugBot, build_autocomplete
-from utils.mods import Mod, ModTransformerHint
-from utils.urls import build_book_url
+from utils.mods import WithBookModTransformerHint
 
 
 class BookCog(commands.GroupCog, name="book"):
@@ -13,7 +12,7 @@ class BookCog(commands.GroupCog, name="book"):
         self.bot = bot
         self.registry = bot.registry
         self.autocompletes = {
-            mod: build_autocomplete(
+            mod.name: build_autocomplete(
                 [(app_commands.Choice(name=title, value=title), names) for title, (_, names) in pages.items()]
             )
             for mod, pages in self.registry.page_title_to_url.items()
@@ -28,11 +27,11 @@ class BookCog(commands.GroupCog, name="book"):
     async def home(
         self,
         interaction: discord.Interaction,
-        mod: ModTransformerHint,
+        mod: WithBookModTransformerHint,
         show_to_everyone: bool = False,
         show_spoilers: bool = False,
     ) -> None:
-        content = build_book_url(mod, "", show_spoilers, True)
+        content = mod.value.build_book_url("", show_spoilers, True)
         await interaction.response.send_message(
             content,
             ephemeral=not show_to_everyone,
@@ -49,7 +48,7 @@ class BookCog(commands.GroupCog, name="book"):
     async def page(
         self,
         interaction: discord.Interaction,
-        mod: ModTransformerHint,
+        mod: WithBookModTransformerHint,
         page_title: str,
         show_to_everyone: bool = False,
         show_spoilers: bool = False,
@@ -59,7 +58,7 @@ class BookCog(commands.GroupCog, name="book"):
             return await interaction.response.send_message("❌ Unknown page.", ephemeral=True)
 
         url, _ = value
-        content = build_book_url(mod, url, show_spoilers, True)
+        content = mod.value.build_book_url(url, show_spoilers, True)
         await interaction.response.send_message(
             content,
             ephemeral=not show_to_everyone,
@@ -68,7 +67,7 @@ class BookCog(commands.GroupCog, name="book"):
 
     @page.autocomplete("page_title")
     async def page_autocomplete(self, interaction: discord.Interaction, current: str) -> list[app_commands.Choice]:
-        mod = interaction.namespace.mod
+        mod = interaction.namespace.mod  # mod.name, not mod.value.name
         if mod is None or mod not in self.autocompletes.keys():
             return []
         return self.autocompletes[mod].get(current.lower(), [])[:25]

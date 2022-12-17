@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import math
 from enum import Enum
+from typing import Iterable, Generator
 
 
 class Angle(Enum):
@@ -213,3 +214,38 @@ class Segment:
 
     def rotated(self, angle: Angle | str | int) -> Segment:
         return Segment(self.root.rotated(angle), self.direction.rotated(angle))
+
+
+def _get_segments(direction: Direction, pattern: str) -> frozenset[Segment]:
+    cursor = Coord.origin()
+    compass = direction
+
+    segments = [Segment(cursor, compass)]
+
+    for c in pattern:
+        cursor += compass
+        compass = compass.rotated(Angle[c])
+        segments.append(Segment(cursor, compass))
+
+    return frozenset(segments)
+
+
+def _align_segments_to_origin(segments: Iterable[Segment]) -> frozenset[Segment]:
+    min_q = min(segment.min_q for segment in segments)
+    min_r = min(segment.min_r for segment in segments)
+
+    top_left = Coord(min_q, min_r)
+    delta = Coord.origin() - top_left
+
+    return frozenset([segment.shifted(delta) for segment in segments])
+
+
+def _get_pattern_segments(direction: Direction, pattern: str, align=True) -> frozenset[Segment]:
+    segments = _get_segments(direction, pattern)
+    return _align_segments_to_origin(segments) if align else segments
+
+
+def get_rotated_pattern_segments(direction: Direction, pattern: str) -> Generator[frozenset[Segment], None, None]:
+    segments = _get_pattern_segments(direction, pattern, False)
+    for n in range(6):
+        yield _align_segments_to_origin([segment.rotated(n) for segment in segments])

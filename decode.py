@@ -1,10 +1,20 @@
+import asyncio
 import fileinput
+
+from aiohttp import ClientSession
 
 from hexdecode import revealparser
 from hexdecode.buildpatterns import build_registry
 from hexdecode.hexast import massage_raw_pattern_list
 
-registry = build_registry()
+
+# don't use this in production
+async def _build_registry():
+    async with ClientSession() as session:
+        return await build_registry(session)
+
+
+registry = asyncio.get_event_loop().run_until_complete(_build_registry())
 
 for line in fileinput.input(files=[], encoding="utf-8"):
     level = 0

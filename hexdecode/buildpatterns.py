@@ -1,10 +1,15 @@
+import asyncio
 import logging
 import re
 from pathlib import Path
 from typing import TypeVar
 
+from aiohttp import ClientSession
+
 from hexdecode.hex_math import Direction
-from hexdecode.hexast import Registry, get_rotated_pattern_segments
+from hexdecode.hexast import Registry
+from hexdecode.registry import NormalPatternInfo, Registry
+from utils.api import APILocalPatternSource, APIPattern
 from utils.book_types import (
     Book,
     BookEntry,
@@ -13,23 +18,18 @@ from utils.book_types import (
     BookPage_patchouli_spotlight,
     BookPage_patchouli_text,
 )
-from utils.book_utils import isbookpage
-from utils.mods import APIMod, Mod, RegistryMod
+from utils.extra_patterns import build_extra_patterns
+from utils.mods import APIMod, APIWithBookModInfo, Mod, RegistryMod
+from utils.type_guards import is_typeddict_subtype
 
 translation_regex = re.compile(r"hexcasting.spell.[a-z]+:(.+)")
 header_regex = re.compile(r"\s*\(.+\)")
-
-
-class DuplicatePatternException(Exception):
-    def __init__(self, name1: str, name2: str, pattern: str, is_great: bool) -> None:
-        super().__init__(f"Duplicate {'great spell' if is_great else 'pattern'} ({name1}, {name2}): {pattern}")
 
 
 def _build_pattern_urls(
     registry: Registry,
     entry: BookEntry,
     page: BookPage_hexcasting_pattern | BookPage_hexcasting_manual_pattern,
-    mod: Mod,
 ):
     inp = f"__{inp}__" if (inp := page.get("input")) else ""
     oup = f"__{oup}__" if (oup := page.get("output")) else ""
@@ -41,13 +41,12 @@ def _build_pattern_urls(
         names.add(page["op_id"].split(":", 1)[1])
 
     for pattern, _, _ in page["op"]:  # pretty sure this only catches the vector reflections right now
-        if name := registry.pattern_to_name.get(pattern):
-            names.add(name)
+        if info := registry.from_pattern.get(pattern):
+            names.add(info.name)
 
     for name in names:
-        registry.name_to_url[name] = (mod, url)
-        if args:
-            registry.name_to_args[name] = args
+        if info := registry.from_name.get(name):
+            info.__late_init__(url, args)
 
     if url is None:
         return None
@@ -62,63 +61,35 @@ def _build_urls(registry: Registry, book: Book, mod: Mod):
             registry.page_title_to_url[mod][entry["name"]] = (f"#{entry['id']}", [])
 
             for page in entry["pages"]:
-                if isbookpage(page, BookPage_patchouli_text) and "title" in page and "anchor" in page:
+                if is_typeddict_subtype(page, BookPage_patchouli_text) and "title" in page and "anchor" in page:
                     registry.page_title_to_url[mod][page["title"]] = (f"#{entry['id']}@{page['anchor']}", [])
 
-                elif isbookpage(page, BookPage_patchouli_spotlight) and "anchor" in page:
+                elif is_typeddict_subtype(page, BookPage_patchouli_spotlight) and "anchor" in page:
                     registry.page_title_to_url[mod][page["item_name"]] = (f"#{entry['id']}@{page['anchor']}", [])
 
-                elif isbookpage(page, BookPage_hexcasting_pattern) and (
-                    value := _build_pattern_urls(registry, entry, page, mod)
+                elif is_typeddict_subtype(page, BookPage_hexcasting_pattern) and (
+                    value := _build_pattern_urls(registry, entry, page)
                 ):
                     registry.page_title_to_url[mod][page["name"]] = value
 
-                elif isbookpage(page, BookPage_hexcasting_manual_pattern) and (
-                    value := _build_pattern_urls(registry, entry, page, mod)
+                elif is_typeddict_subtype(page, BookPage_hexcasting_manual_pattern) and (
+                    value := _build_pattern_urls(registry, entry, page)
                 ):
                     registry.page_title_to_url[mod][header_regex.sub("", page["header"])] = value
 
 
-T = TypeVar("T")
+def _parse_i18n(name_to_translation: dict[str, str], i18n: dict[str, str]):
+    for key, translation in i18n.items():
+        if match := translation_regex.match(key):
+            name = match[1]
+            # because the new built in decoding interferes with this
+            name_to_translation[name] = translation.replace(": %s", "")
 
 
-def _check_duplicate(lookup: dict[T, str], key: T, name: str, pattern: str, is_great: bool):
-    if (existing_name := lookup.get(key)) and existing_name != name:
-        raise DuplicatePatternException(name, existing_name, pattern, is_great)
-
-
-def _add_to_registry(
-    registry: Registry,
-    classname_to_path: dict[str, tuple[Mod, str]],
-    direction: Direction,
-    pattern: str,
-    name: str,
-    classname: str,
-    is_great: bool,
-) -> None:
-    if is_great:
-        for segments in get_rotated_pattern_segments(direction, pattern):
-            _check_duplicate(
-                lookup=registry.great_spells,
-                key=segments,
-                name=name,
-                pattern=pattern,
-                is_great=is_great,
-            )
-            registry.great_spells[segments] = name
-    else:
-        _check_duplicate(
-            lookup=registry.pattern_to_name,
-            key=pattern,
-            name=name,
-            pattern=pattern,
-            is_great=is_great,
-        )
-        registry.pattern_to_name[pattern] = name
-    # because Hexal sometimes doesn't have translations
-    translation = registry.name_to_translation.get(name, name)
-    registry.translation_to_pattern[translation] = (direction, pattern, is_great, name)
-    registry.translation_to_path[translation] = (*classname_to_path[classname], name, classname)
+def _insert_classname(classname_to_path: dict[str, tuple[Mod, str]], classname: str, mod: Mod, path: str):
+    if (duplicate := classname_to_path.get(classname)) and duplicate[1] != path:  # this *should* never happen
+        raise Exception(f"Duplicate classname: {classname} ({path} and {duplicate[1]})")
+    classname_to_path[classname] = (mod, path)
 
 
 def merge_dicts(*dicts: dict[str, str]) -> dict[str, str]:
@@ -130,54 +101,118 @@ def merge_dicts(*dicts: dict[str, str]) -> dict[str, str]:
     return output
 
 
-def build_registry() -> Registry:
+async def build_registry(session: ClientSession) -> Registry:
     logging.log(logging.INFO, "building registry")
 
     registry = Registry()
+    name_to_translation: dict[str, str] = {}
     classname_to_path: dict[str, tuple[Mod, str]] = {}
+    api_mod_patterns: dict[APIMod, list[APIPattern]] = {}
+
+    # prerequisites for other processing: translations, classnames
 
     for mod in RegistryMod:
-        registry.translation_to_path.update(
-            {translation: (mod, *vals) for translation, vals in mod.value.extra_translation_paths.items()}
-        )
-        classname_to_path.update(
-            {classname: (mod, path) for classname, path in mod.value.extra_classname_paths.items()}
-        )
+        mod_info = mod.value
 
-    # translations
-    for key, translation in merge_dicts(*(mod.value.book["i18n"] for mod in RegistryMod)).items():
-        if match := translation_regex.match(key):
-            name = match[1]
-            # because the new built in decoding interferes with this
-            registry.name_to_translation[name] = translation.replace(": %s", "")
+        # translations
+        _parse_i18n(name_to_translation, mod_info.book["i18n"])
+
+        # classnames
+        for directory in mod_info.operator_directories:
+            for file_path in Path(directory).rglob("Op*.kt"):
+                file_path = file_path.relative_to(file_path.parts[0])
+                _insert_classname(classname_to_path, file_path.stem, mod, file_path.as_posix())
+
+        for info in build_extra_patterns(name_to_translation):
+            _insert_classname(classname_to_path, info.classname, info.class_mod, info.path)
+
+        for classname, path in mod_info.extra_classname_paths.items():
+            _insert_classname(classname_to_path, classname, mod, path)
+
+    for mod in APIMod:
+        mod_info = mod.value
+
+        docs = await mod_info.api.get_docs(session)
+        lang, patterns = await asyncio.gather(
+            mod_info.api.get_lang(session, docs),
+            mod_info.api.get_patterns(session, docs),
+        )
+        api_mod_patterns[mod] = patterns
+
+        if isinstance(mod_info, APIWithBookModInfo):
+            # mod_info.__late_init__(docs["repositoryRoot"], ...)
+            raise NotImplementedError
+        else:
+            mod_info.__late_init__(docs["repositoryRoot"])
+
+            # translations
+            _parse_i18n(name_to_translation, lang)
+
+            # classnames
+            for pattern in patterns:
+                source = pattern["source"]
+                if is_typeddict_subtype(source, APILocalPatternSource):
+                    _insert_classname(classname_to_path, pattern["className"].split(".")[-1], mod, source["path"])
+
+    # patterns and books
 
     for mod in RegistryMod:
-        for directory in mod.value.operator_directories:
-            for path in Path(directory).rglob("Op*.kt"):
-                final_path = path.relative_to(path.parts[0])
-                key = final_path.stem
-                if duplicate := classname_to_path.get(key):  # this *should* never happen
-                    raise Exception(f"Duplicate classname: {key} ({final_path} and {duplicate})")
-                classname_to_path[key] = (mod, final_path.as_posix())
+        mod_info = mod.value
 
         # patterns - can't use the Book data here because we also need the class name :pensivewobble:
-        for filename in mod.value.pattern_files:
+        for filename in mod_info.pattern_files:
             with open(filename, "r", encoding="utf-8") as file:
-                for match in mod.value.registry_regex.finditer(file.read()):
+                for match in mod_info.registry_regex.finditer(file.read()):
                     (pattern, direction, name, classname, is_great) = match.groups()
-                    _add_to_registry(
-                        registry=registry,
-                        classname_to_path=classname_to_path,
-                        direction=Direction[direction],
-                        pattern=pattern,
-                        name=name,
-                        classname=classname,
-                        is_great=bool(is_great),
+                    class_mod, path = classname_to_path[classname]
+                    registry.add_pattern(
+                        NormalPatternInfo(
+                            name=name,
+                            translation=name_to_translation.get(name),
+                            mod=mod,
+                            path=path,
+                            classname=classname,
+                            class_mod=class_mod,
+                            is_great=bool(is_great),
+                            direction=Direction[direction],
+                            pattern=pattern,
+                        )
                     )
 
-        for pattern_info in mod.value.special_patterns:
-            _add_to_registry(registry, classname_to_path, **pattern_info.add_to_registry_kwargs)
+        for info in build_extra_patterns(name_to_translation):
+            registry.add_pattern(info)
 
-        _build_urls(registry, mod.value.book, mod)
+        _build_urls(registry, mod_info.book, mod)
+
+    for mod in APIMod:
+        mod_info = mod.value
+
+        if isinstance(mod_info, APIWithBookModInfo):
+            raise NotImplementedError
+        else:
+            for pattern in api_mod_patterns[mod]:
+                source = pattern["source"]
+                name = pattern["id"].split(":")[-1]
+                classname = pattern["className"].split(".")[-1]
+
+                if is_typeddict_subtype(source, APILocalPatternSource):
+                    class_mod = mod
+                    path = pattern["source"]["path"]
+                else:
+                    class_mod, path = classname_to_path[classname]
+
+                registry.add_pattern(
+                    NormalPatternInfo(
+                        name=name,
+                        translation=name_to_translation.get(name),
+                        mod=mod,
+                        path=path,
+                        classname=classname,
+                        class_mod=class_mod,
+                        is_great=pattern["isPerWorld"],
+                        direction=Direction[pattern["defaultStartDir"]],
+                        pattern=pattern["angleSignature"],
+                    )
+                )
 
     return registry

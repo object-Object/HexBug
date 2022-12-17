@@ -7,11 +7,11 @@ from discord.utils import MISSING
 
 from hexdecode.hex_math import Direction
 from hexdecode.hexast import Registry, UnknownPattern, _parse_unknown_pattern, generate_bookkeeper
+from hexdecode.registry import SpecialHandlerPatternInfo
 from utils.buttons import buildShowOrDeleteButton
 from utils.commands import HexBugBot, build_autocomplete
 from utils.generate_image import Palette, Theme, generate_image
-from utils.mods import Mod
-from utils.urls import build_book_url
+from utils.mods import Mod, APIWithoutBookModInfo
 
 DEFAULT_LINE_SCALE = 6
 DEFAULT_ARROW_SCALE = 2
@@ -35,16 +35,20 @@ async def send_pattern(
     image: BytesIO,
     show_to_everyone: bool,
 ):
-    mod, book_url = registry.name_to_url.get(name, (None, None))
-    book_url = mod and book_url and build_book_url(mod, book_url, False, False)
+    info = registry.from_name.get(name)
+    mod_info = info and info.mod.value
+
+    book_url = None
+    if info and mod_info and not isinstance(mod_info, APIWithoutBookModInfo) and info.book_url is not None:
+        book_url = mod_info.build_book_url(info.book_url, False, False)
 
     embed = discord.Embed(
         title=translation,
         url=book_url,
-        description=registry.name_to_args.get(name),
+        description=info and info.args,
     ).set_image(url="attachment://pattern.png")
-    if mod:
-        embed.set_author(name=mod.value.name, icon_url=mod.value.icon_url, url=mod.value.mod_url)
+    if mod_info:
+        embed.set_author(name=mod_info.name, icon_url=mod_info.icon_url, url=mod_info.mod_url)
     if direction is not None and pattern is not None:
         embed.set_footer(text=f"{direction.name} {pattern}")
 
@@ -64,12 +68,13 @@ class PatternCog(commands.GroupCog, name="pattern"):
         self.registry = bot.registry
 
         initial_choices: list[tuple[app_commands.Choice[str], list[str]]] = []
-        for name, translation in self.registry.name_to_translation.items():
-            if translation == "Numerical Reflection":
+        for info in self.registry.patterns:
+            display_name = info.display_name
+            if info.name == "number":
                 continue
-            if translation == "Bookkeeper's Gambit":
-                translation += ": …"
-            initial_choices.append((app_commands.Choice(name=translation, value=translation), [name]))
+            if info.name == "mask":
+                display_name += ": …"
+            initial_choices.append((app_commands.Choice(name=display_name, value=display_name), [info.name]))
 
         self.autocomplete = build_autocomplete(initial_choices)
 
@@ -154,6 +159,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
         arrow_scale: SCALE_RANGE = DEFAULT_ARROW_SCALE,
     ) -> None:
         """Display the stroke order of a pattern from its name (no number literals, for now)"""
+        info = self.registry.from_display_name.get(translation)
         if translation.startswith("Bookkeeper's Gambit:"):
             mask = parse_mask(translation)
             if not mask:
@@ -165,10 +171,10 @@ class PatternCog(commands.GroupCog, name="pattern"):
             direction, pattern = generate_bookkeeper(mask)
             is_great = False
             name = "mask"
-        elif (value := self.registry.translation_to_pattern.get(translation)) is None:
+        elif info is None or isinstance(info, SpecialHandlerPatternInfo):
             return await interaction.response.send_message("❌ Unknown pattern.", ephemeral=True)
         else:
-            direction, pattern, is_great, name = value
+            direction, pattern, is_great, name = info.direction, info.pattern, info.is_great, info.name
 
         image, _ = generate_image(
             direction=direction,

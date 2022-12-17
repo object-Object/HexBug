@@ -1,4 +1,4 @@
--r hex_interpreter/requirements.txt
+matplotlib==3.6.0
 black==22.10.0
 discord.py==2.0.1
 lark==1.1.2
