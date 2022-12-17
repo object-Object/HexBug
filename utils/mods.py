@@ -45,8 +45,8 @@ class _BaseModInfo(ABC):
 
 @dataclass(kw_only=True)
 class _BaseRegistryModInfo(_BaseModInfo, ABC):
-    source_url: str = field()
-    book_url: str | None = field()
+    source_url: str
+    book_url: str | None
     directory: str
     book: Book
     registry_regex: re.Pattern[str]
