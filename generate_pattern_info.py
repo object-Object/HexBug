@@ -32,7 +32,8 @@ async def _build_registry():
         return await build_registry(session)
 
 
-registry = asyncio.get_event_loop().run_until_complete(_build_registry())
+# also don't use this in production
+registry = asyncio.run(_build_registry())
 
 output: dict[str, ExtensionPatternInfo] = {}  # translation: PatternJSON
 for info in registry.patterns:

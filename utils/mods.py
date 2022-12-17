@@ -14,7 +14,7 @@ from HexMod.doc.collate_data import parse_book as hex_parse_book
 from MoreIotas.doc.collate_data import parse_book as moreiotas_parse_book
 from utils.api import API
 from utils.book_types import Book
-from utils.git import get_current_commit
+from utils.git import get_current_commit, get_commit_message, get_tags
 from utils.urls import wrap_url
 
 
@@ -31,6 +31,7 @@ class _BaseModInfo(ABC):
     source_url: str = field(init=False)
     book_url: str | None = field(init=False)
     commit: str = field(init=False)
+    version: str = field(init=False)
     mod_url: str | None
     icon_url: str | None
 
@@ -43,33 +44,57 @@ class _BaseModInfo(ABC):
 
 
 @dataclass(kw_only=True)
-class RegistryModInfo(_BaseModInfo):
+class _BaseRegistryModInfo(_BaseModInfo, ABC):
     source_url: str = field()
     book_url: str | None = field()
-    directory: InitVar[str]
+    directory: str
     book: Book
     registry_regex: re.Pattern[str]
     pattern_files: list[str]
     operator_directories: list[str]
     extra_classname_paths: dict[str, str] = field(default_factory=dict)
 
-    def __post_init__(self, directory: str):
-        self.commit = get_current_commit(directory)
-        self.pattern_files = [f"{directory}/{s}" for s in self.pattern_files]
-        self.operator_directories = [f"{directory}/{s}" for s in self.operator_directories]
+    def __post_init__(self):
+        self.commit = get_current_commit(self.directory)
+        self.version = self._get_version()
+        self.pattern_files = [f"{self.directory}/{s}" for s in self.pattern_files]
+        self.operator_directories = [f"{self.directory}/{s}" for s in self.operator_directories]
 
     def build_book_url(self, url: str, show_spoilers: bool, escape: bool) -> str:
         book_url = f"{self.book_url}{'?nospoiler' if show_spoilers else ''}{url}"
         return wrap_url(book_url, show_spoilers, escape)
 
+    @abstractmethod
+    def _get_version(self) -> str:
+        raise NotImplementedError
+
 
 @dataclass(kw_only=True)
-class HexalRegistryModInfo(RegistryModInfo):
+class HexCastingRegistryModInfo(_BaseRegistryModInfo):
+    version_regex = re.compile(r"\[Release\].*?([\d\.]+)")
+
+    # thanks Alwinfy for (unknowingly) making my registry regex about 5x simpler
+    registry_regex: re.Pattern[str] = re.compile(
+        r'HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)[^;]+?(makeConstantOp|Op\w+)([^;]*true\);)?',
+        re.M,
+    )
+
+    def _get_version(self) -> str:
+        version = self.version_regex.match(get_commit_message(self.directory, self.commit))
+        assert version is not None
+        return version.group(1)
+
+
+@dataclass(kw_only=True)
+class HexalRegistryModInfo(_BaseRegistryModInfo):
     # thanks Talia for changing the registry format
     registry_regex: re.Pattern[str] = re.compile(
         r'HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)[^val]+?(makeConstantOp|Op\w+)(?:[^val]*[^\(](true)\))?',
         re.M,
     )
+
+    def _get_version(self) -> str:
+        return get_tags(self.directory, self.commit)[-1]
 
 
 @dataclass(kw_only=True)
@@ -135,11 +160,12 @@ class APIWithoutBookModInfo(_BaseAPIModInfo):
         raise NotImplementedError
 
 
+RegistryModInfo = HexCastingRegistryModInfo | HexalRegistryModInfo
 APIModInfo = APIWithBookModInfo | APIWithoutBookModInfo
 
 
 class RegistryMod(Enum):
-    HexCasting = RegistryModInfo(
+    HexCasting = HexCastingRegistryModInfo(
         name="Hex Casting",
         directory="HexMod",
         book=hex_parse_book("HexMod/Common/src/main/resources", "hexcasting", "thehexbook"),
@@ -147,11 +173,6 @@ class RegistryMod(Enum):
         mod_url="https://www.curseforge.com/minecraft/mc-mods/hexcasting/",
         source_url="https://github.com/gamma-delta/HexMod/",
         icon_url="https://media.forgecdn.net/avatars/thumbnails/535/944/64/64/637857298951404372.png",
-        # thanks Alwinfy for (unknowingly) making my registry regex about 5x simpler
-        registry_regex=re.compile(
-            r'HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)[^;]+?(makeConstantOp|Op\w+)([^;]*true\);)?',
-            re.M,
-        ),
         pattern_files=[
             "Common/src/main/java/at/petrak/hexcasting/common/casting/RegisterPatterns.java",
             "Common/src/main/java/at/petrak/hexcasting/interop/pehkui/PehkuiInterop.java",
