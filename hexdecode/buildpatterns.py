@@ -12,6 +12,7 @@ from hexdecode.registry import NormalPatternInfo, Registry
 from utils.api import APILocalPatternSource, APIPattern
 from utils.book_types import (
     Book,
+    BookCategory,
     BookEntry,
     BookPage_hexcasting_manual_pattern,
     BookPage_hexcasting_pattern,
@@ -53,8 +54,8 @@ def _build_pattern_urls(
     return (url, list(names))
 
 
-def _build_urls(registry: Registry, book: Book, mod: Mod):
-    for category in book["categories"]:
+def _build_urls(registry: Registry, categories: list[BookCategory], mod: Mod):
+    for category in categories:
         registry.page_title_to_url[mod][category["name"]] = (f"#{category['id']}", [])
 
         for entry in category["entries"]:
@@ -107,7 +108,7 @@ async def build_registry(session: ClientSession) -> Registry:
     registry = Registry()
     name_to_translation: dict[str, str] = {}
     classname_to_path: dict[str, tuple[Mod, str]] = {}
-    api_mod_patterns: dict[APIMod, list[APIPattern]] = {}
+    api_mod_data: dict[APIMod, tuple[list[APIPattern], list[BookCategory]]] = {}
 
     # prerequisites for other processing: translations, classnames
 
@@ -133,26 +134,27 @@ async def build_registry(session: ClientSession) -> Registry:
         mod_info = mod.value
 
         docs = await mod_info.api.get_docs(session)
-        lang, patterns = await asyncio.gather(
+        lang, patterns, categories = await asyncio.gather(
             mod_info.api.get_lang(session, docs),
             mod_info.api.get_patterns(session, docs),
+            mod_info.api.get_book(session, docs),
         )
-        api_mod_patterns[mod] = patterns
+        api_mod_data[mod] = (patterns, categories)
 
+        # translations
+        _parse_i18n(name_to_translation, lang)
+
+        # classnames
+        for pattern in patterns:
+            source = pattern["source"]
+            if is_typeddict_subtype(source, APILocalPatternSource):
+                _insert_classname(classname_to_path, pattern["className"].split(".")[-1], mod, source["path"])
+
+        # late init
         if isinstance(mod_info, APIWithBookModInfo):
-            # mod_info.__late_init__(docs["repositoryRoot"], ...)
-            raise NotImplementedError
+            mod_info.__late_init__(docs["repositoryRoot"], mod_info.api.get_book_url(docs), docs["commitHash"])
         else:
             mod_info.__late_init__(docs["repositoryRoot"], docs["commitHash"])
-
-            # translations
-            _parse_i18n(name_to_translation, lang)
-
-            # classnames
-            for pattern in patterns:
-                source = pattern["source"]
-                if is_typeddict_subtype(source, APILocalPatternSource):
-                    _insert_classname(classname_to_path, pattern["className"].split(".")[-1], mod, source["path"])
 
     # patterns and books
 
@@ -182,37 +184,40 @@ async def build_registry(session: ClientSession) -> Registry:
         for info in build_extra_patterns(name_to_translation):
             registry.add_pattern(info)
 
-        _build_urls(registry, mod_info.book, mod)
+        # docs
+        _build_urls(registry, mod_info.book["categories"], mod)
 
     for mod in APIMod:
         mod_info = mod.value
+        patterns, categories = api_mod_data[mod]
+
+        # patterns
+        for pattern in patterns:
+            source = pattern["source"]
+            name = pattern["id"].split(":")[-1]
+            classname = pattern["className"].split(".")[-1]
+
+            if is_typeddict_subtype(source, APILocalPatternSource):
+                class_mod = mod
+                path = pattern["source"]["path"]
+            else:
+                class_mod, path = classname_to_path[classname]
+
+            registry.add_pattern(
+                NormalPatternInfo(
+                    name=name,
+                    translation=name_to_translation.get(name),
+                    mod=mod,
+                    path=path,
+                    classname=classname,
+                    class_mod=class_mod,
+                    is_great=pattern["isPerWorld"],
+                    direction=Direction[pattern["defaultStartDir"]],
+                    pattern=pattern["angleSignature"],
+                )
+            )
 
         if isinstance(mod_info, APIWithBookModInfo):
-            raise NotImplementedError
-        else:
-            for pattern in api_mod_patterns[mod]:
-                source = pattern["source"]
-                name = pattern["id"].split(":")[-1]
-                classname = pattern["className"].split(".")[-1]
-
-                if is_typeddict_subtype(source, APILocalPatternSource):
-                    class_mod = mod
-                    path = pattern["source"]["path"]
-                else:
-                    class_mod, path = classname_to_path[classname]
-
-                registry.add_pattern(
-                    NormalPatternInfo(
-                        name=name,
-                        translation=name_to_translation.get(name),
-                        mod=mod,
-                        path=path,
-                        classname=classname,
-                        class_mod=class_mod,
-                        is_great=pattern["isPerWorld"],
-                        direction=Direction[pattern["defaultStartDir"]],
-                        pattern=pattern["angleSignature"],
-                    )
-                )
+            _build_urls(registry, categories, mod)
 
     return registry

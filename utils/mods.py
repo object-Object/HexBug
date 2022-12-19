@@ -38,9 +38,9 @@ class _BaseModInfo(ABC):
     def build_source_url(self, path: str) -> str:
         return f"{self.source_url}blob/{self.commit}/{path}"
 
-    @abstractmethod
     def build_book_url(self, url: str, show_spoilers: bool, escape: bool) -> str:
-        raise NotImplementedError
+        book_url = f"{self.book_url}{'?nospoiler' if show_spoilers else ''}{url}"
+        return wrap_url(book_url, show_spoilers, escape)
 
 
 @dataclass(kw_only=True)
@@ -59,10 +59,6 @@ class _BaseRegistryModInfo(_BaseModInfo, ABC):
         self.version = self._get_version()
         self.pattern_files = [f"{self.directory}/{s}" for s in self.pattern_files]
         self.operator_directories = [f"{self.directory}/{s}" for s in self.operator_directories]
-
-    def build_book_url(self, url: str, show_spoilers: bool, escape: bool) -> str:
-        book_url = f"{self.book_url}{'?nospoiler' if show_spoilers else ''}{url}"
-        return wrap_url(book_url, show_spoilers, escape)
 
     @abstractmethod
     def _get_version(self) -> str:
@@ -144,9 +140,6 @@ class APIWithBookModInfo(_BaseAPIModInfo):
             raise NotInitializedError(self)
         return self._book_url
 
-    def build_book_url(self, url: str, show_spoilers: bool, escape: bool) -> str:
-        return wrap_url(self.book_url + url, show_spoilers, escape)
-
 
 class APIWithoutBookModInfo(_BaseAPIModInfo):
     def __late_init__(self, source_url: str, commit: str):
@@ -222,7 +215,7 @@ class RegistryMod(Enum):
 
 class APIMod(Enum):
     # https://hexbound.cypher.coffee/versions.json
-    Hexbound = APIWithoutBookModInfo(
+    Hexbound = APIWithBookModInfo(
         name="Hexbound",
         mod_url="https://modrinth.com/mod/hexbound/",
         icon_url="https://cdn.modrinth.com/data/PHgo4bVw/daa508e0b61340a46e04f669af1cf5e557193bc4.png",
@@ -258,15 +251,13 @@ class ModTransformer(app_commands.Transformer):
 
 
 class WithBookModTransformer(app_commands.Transformer):
-    _choices = [
-        app_commands.Choice(name=mod.value.name, value=mod.name)
-        for mod in chain(RegistryMod, APIMod)
-        if mod.value.book_url is not None
-    ]
-
     @property
     def choices(self) -> list[app_commands.Choice[str]]:
-        return self._choices
+        return [
+            app_commands.Choice(name=mod.value.name, value=mod.name)
+            for mod in chain(RegistryMod, APIMod)
+            if mod.value.book_url is not None
+        ]
 
     async def transform(self, interaction: discord.Interaction, value: str) -> Mod:
         return get_mod(value)

@@ -5,6 +5,8 @@ from typing import Generic, Literal, LiteralString, TypedDict, TypeVar
 
 from aiohttp import ClientSession
 
+from utils.book_types import BookCategory
+
 T = TypeVar("T", bound=LiteralString)
 
 
@@ -23,10 +25,16 @@ class APIVersions(TypedDict):
     """Sorted by descending release date"""
 
 
+class APIDocsBook(TypedDict):
+    webPath: str
+    dumpPath: str
+
+
 class APIDocs(TypedDict):
     availableLangFiles: list[str]
     defaultLangFile: str
     patternPath: str
+    book: APIDocsBook
     repositoryRoot: str
     commitHash: str
 
@@ -73,3 +81,9 @@ class API:
 
     async def get_patterns(self, session: ClientSession, docs: APIDocs) -> list[APIPattern]:
         return await self._get_endpoint(session, docs["patternPath"])
+
+    async def get_book(self, session: ClientSession, docs: APIDocs) -> list[BookCategory]:
+        return await self._get_endpoint(session, docs["book"]["dumpPath"])
+
+    def get_book_url(self, docs: APIDocs) -> str:
+        return self.root_url + docs["book"]["webPath"]
