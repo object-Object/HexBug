@@ -58,8 +58,7 @@ for info in registry.patterns:
             with open(f"out/patterns/{theme.name.lower()}/{filename}", "wb") as f:
                 f.write(image.getbuffer())
 
-    if info.args is not None:
-        args = info.args.replace("**", "").replace("__", "")
+    args = info.args and info.args.replace("**", "").replace("__", "")
 
     data: ExtensionPatternInfo = {
         "name": info.name,
@@ -73,7 +72,7 @@ for info in registry.patterns:
         else None,
         "direction": direction,
         "pattern": info.pattern,
-        "args": info.args,
+        "args": args,
         "url": info.mod.value.build_book_url(info.book_url, False, False) if info.book_url is not None else None,
     }
 
