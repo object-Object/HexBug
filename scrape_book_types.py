@@ -1,9 +1,9 @@
+import asyncio
+from aiohttp import ClientSession
 from collections import defaultdict
 from typing import Any, Callable, Mapping
 
-from Hexal.doc.collate_data import parse_book as hexal_parse_book
-from HexMod.doc.collate_data import parse_book as hex_parse_book
-from MoreIotas.doc.collate_data import parse_book as moreiotas_parse_book
+from utils.mods import RegistryMod, APIMod
 
 if __name__ != "__main__":
     raise Exception("please don't try to actually use this code in production lmao")
@@ -50,11 +50,24 @@ def print_class(name: str, keys: BookKeys, not_required: BookNotRequired, total=
         print("    pass")
 
 
-hex_book = hex_parse_book("HexMod/Common/src/main/resources", "hexcasting", "thehexbook")
-hexal_book = hexal_parse_book("Hexal/Common/src/main/resources", "Hexal/doc/HexCastingResources", "hexal", "hexalbook")
-moreiotas_book = moreiotas_parse_book(
-    "MoreIotas/Common/src/main/resources", "MoreIotas/doc/HexCastingResources", "moreiotas", "moreiotasbook"
-)
+# don't use this in production
+async def _get_categories() -> list:
+    categories = []
+
+    for mod in RegistryMod:
+        categories.extend(mod.value.book["categories"])
+
+    async with ClientSession() as session:
+        for mod in APIMod:
+            api = mod.value.api
+            docs = await api.get_docs(session)
+            categories.extend(await api.get_book(session, docs))
+
+    return categories
+
+
+# also don't use this in production
+categories = asyncio.run(_get_categories())
 
 book_keys: BookKeys = defaultdict(set)
 book_not_required: BookNotRequired = set()
@@ -66,10 +79,9 @@ page_types: defaultdict[str, tuple[BookKeys, BookNotRequired]] = defaultdict(lam
 
 
 def update_book(update: Callable[[Mapping[str, Any], BookKeys, BookNotRequired], None]) -> None:
-    update(hex_book, book_keys, book_not_required)
-    update(hexal_book, book_keys, book_not_required)
-    update(moreiotas_book, book_keys, book_not_required)
-    for category in hex_book["categories"] + hexal_book["categories"] + moreiotas_book["categories"]:
+    for mod in RegistryMod:
+        update(mod.value.book, book_keys, book_not_required)
+    for category in categories:
         update(category, category_keys, category_not_required)
         for entry in category["entries"]:
             update(entry, entry_keys, entry_not_required)
