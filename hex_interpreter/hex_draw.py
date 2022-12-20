@@ -48,8 +48,8 @@ def plot_intersect(
 
     # plot start-direction triangle
     plt.plot(
-        x_vals[1] / 2.15,
-        y_vals[1] / 2.15,
+        (x_vals[1] + x_vals[0]) / 2,
+        (y_vals[1] + y_vals[0]) / 2,
         color=colors[0],
         marker=(3, 0, start_angle),
         ms=2.9 * arrow_scale * scale,
