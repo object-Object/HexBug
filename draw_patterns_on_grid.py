@@ -1,25 +1,32 @@
 from __future__ import annotations
 
+import asyncio
 import math
-from dataclasses import dataclass, InitVar
+import re
+from dataclasses import InitVar, dataclass
 from typing import Callable
 
 import matplotlib.pyplot as plt
+from aiohttp import ClientSession
 
-from hex_interpreter.hex_draw import plot_intersect, Palette, Theme
+from hex_interpreter.hex_draw import Palette, Theme, plot_intersect
+from hexdecode.buildpatterns import build_registry
 from hexdecode.hexast import Angle, Coord, Direction
+from hexdecode.registry import SpecialHandlerPatternInfo
+
+
+def get_offset_col(coord: Coord) -> int:
+    return coord.q + coord.r // 2
 
 
 @dataclass
 class GridPattern:
     start_direction: Direction
     point_list: InitVar[list[Coord]]
-    min_q: int
+    min_q_coord: Coord
     max_q: int
     min_r: int
     max_r: int
-    min_s: int
-    max_s: int
 
     @classmethod
     def from_pattern(cls, direction: Direction, pattern: str) -> GridPattern:
@@ -27,19 +34,24 @@ class GridPattern:
         cursor = compass.as_delta()
 
         points = [Coord.origin(), cursor]
-        min_q, max_q = min(0, cursor.q), max(0, cursor.q)
+        if cursor.q < 0:
+            min_q_coord = cursor
+        else:
+            min_q_coord = Coord.origin()
+        max_q = max(0, cursor.q)
         min_r, max_r = min(0, cursor.r), max(0, cursor.r)
-        min_s, max_s = min(0, cursor.s), max(0, cursor.s)
 
         for c in pattern:
             compass = compass.rotated(Angle[c])
             cursor += compass
             points.append(cursor)
-            min_q, max_q = min(min_q, cursor.q), max(max_q, cursor.q)
-            min_r, max_r = min(min_r, cursor.r), max(max_r, cursor.r)
-            min_s, max_s = min(min_s, cursor.s), max(max_s, cursor.s)
 
-        return cls(direction, points, min_q, max_q, min_r, max_r, min_s, max_s)
+            if cursor.q < min_q_coord.q:
+                min_q_coord = cursor
+            max_q = max(max_q, cursor.q)
+            min_r, max_r = min(min_r, cursor.r), max(max_r, cursor.r)
+
+        return cls(direction, points, min_q_coord, max_q, min_r, max_r)
 
     def __post_init__(self, point_list: list[Coord]):
         self.set_points(point_list)
@@ -52,6 +64,10 @@ class GridPattern:
     def set_points(self, new: list[Coord]):
         self._points = new
         self._point_set = set(new)
+
+    @property
+    def min_q(self) -> int:
+        return self.min_q_coord.q
 
     @property
     def height(self) -> int:
@@ -70,13 +86,10 @@ class GridPattern:
         return self.start_direction.angle_from(Direction.EAST).deg - 90
 
     def shift(self, delta_q: int, delta_r: int) -> None:
-        delta_s = -delta_q - delta_r
-        self.min_q += delta_q
+        self.min_q_coord += Coord(delta_q, delta_r)
         self.max_q += delta_q
         self.min_r += delta_r
         self.max_r += delta_r
-        self.min_s += delta_s
-        self.max_s += delta_s
         self.set_points([p.shifted(Coord(delta_q, delta_r)) for p in self.points])
 
     def shift_q(self, delta_q: int) -> None:
@@ -114,15 +127,34 @@ def none_minmax(fn: Callable[[int, int], int], a: int, b: int | None) -> int:
     return fn(a, b) if b is not None else a
 
 
-pattern_input: list[tuple[Direction, str]] = [
-    (Direction.NORTH_EAST, "qaq"),
-    (Direction.EAST, "aa"),
-    (Direction.NORTH_EAST, "qaq"),
-    (Direction.NORTH_EAST, "wa"),
-    (Direction.EAST, "weaqa"),
-]
+# don't use this in production
+async def _build_registry():
+    async with ClientSession() as session:
+        return await build_registry(session)
 
-patterns: list[GridPattern] = [GridPattern.from_pattern(*p) for p in pattern_input]
+
+# also don't use this in production
+registry = asyncio.run(_build_registry())
+
+comment_re = re.compile(r"(/\*(?:.|\n)*?\*/|^#.*|//.*)")
+patterns: list[GridPattern] = []
+
+filename = "../../Scripts/Hex Casting/Uncapped Counter's Queue II.hexpattern"
+with open(filename, "r") as f:
+    text = (
+        comment_re.sub("", f.read().strip())
+        .replace("Consideration: ", "Consideration\n")
+        .replace("{", "Introspection")
+        .replace("}", "Retrospection")
+    )
+    for line in text.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        info = registry.from_display_name.get(line) or registry.from_name[line]
+        assert not isinstance(info, SpecialHandlerPatternInfo)
+        patterns.append(GridPattern.from_pattern(info.direction, info.pattern))
+
 
 for i, pattern in enumerate(patterns):
     delta_r = -pattern.r_midpoint
@@ -133,37 +165,46 @@ for i, pattern in enumerate(patterns):
         pattern.shift(other.max_q - pattern.min_q + 1, delta_r)
         pattern.shift_q(pattern.get_max_possible_shift(other))
     else:
-        pattern.shift_r(delta_r)
+        pattern.shift(0 - pattern.min_q, delta_r)
 
-pattern_pixels: list[tuple[list[float], list[float], float]] = []
-max_width = max(20, max(p.width for p in patterns))
+
+max_width = max(30, max(p.width for p in patterns))
 
 delta_q = 0
 delta_r = 0
-current_width = 0
+
 current_height = 0
 
-min_q, max_q = None, None
-min_r, max_r = None, None
-min_s, max_s = None, None
+for i, pattern in enumerate(patterns):
+    if pattern.max_q + delta_q + delta_r / 2 > max_width:
+        delta_r += current_height + 1
+        delta_q = -pattern.min_q - delta_r / 2
+
+        # line the left side up with the origin's column as best as possible
+        # this is kind of awful but i really can't think of a better way to do it
+        min_col_left, min_col_right = min(
+            (
+                get_offset_col(p + Coord(math.floor(delta_q - 1), delta_r)),
+                get_offset_col(p + Coord(math.floor(delta_q + 1), delta_r)),
+            )
+            for p in pattern.points
+        )
+        if min_col_left == 0:
+            delta_q -= 1
+        elif min_col_right == 0:
+            delta_q += 1
+
+        current_height = 0
+
+    current_height = max(pattern.height, current_height)
+    pattern.shift(math.floor(delta_q), delta_r)
+
+
+pattern_pixels: list[tuple[list[float], list[float], float]] = []
 min_x, max_x = math.inf, -math.inf
 min_y, max_y = math.inf, -math.inf
 
 for pattern in patterns:
-    if current_width + pattern.width > max_width:
-        delta_q -= current_width
-        delta_r += current_height + 1
-        current_width = 0
-        current_height = 0
-
-    current_width += pattern.width
-    current_height = max(pattern.height, current_height)
-    pattern.shift(delta_q, delta_r)
-
-    min_q, max_q = none_minmax(min, pattern.min_q, min_q), none_minmax(max, pattern.max_q, max_q)
-    min_r, max_r = none_minmax(min, pattern.min_r, min_r), none_minmax(max, pattern.max_r, max_r)
-    min_s, max_s = none_minmax(min, pattern.min_s, min_s), none_minmax(max, pattern.max_s, max_s)
-
     data = pattern.get_pixels()
 
     x_vals, y_vals, _ = data
@@ -172,15 +213,13 @@ for pattern in patterns:
 
     pattern_pixels.append(data)
 
-assert min_q is not None and max_q is not None
-assert min_r is not None and max_r is not None
-assert min_s is not None and max_s is not None
 
 palette = Palette.Classic
 theme = Theme.Light
 line_scale = 8
 arrow_scale = 2
 fig_size = 8
+draw_background_points = False
 
 width = max_x - min_x
 height = max_y - min_y
@@ -197,16 +236,6 @@ fig = plt.figure(figsize=(fig_width, fig_height))
 ax = fig.add_axes([0, 0, 1, 1])
 ax.set_aspect("equal")
 ax.axis("off")
-
-background_point_styles = {"color": theme.value, "marker": "o", "ms": scale / 1.5}
-for r in range(min_r, max_r + 1):
-    for q in range(min_q, max_q + 1):
-        x, y = Coord(q, r).pixel(1)
-        plt.plot(x, -y, **background_point_styles)
-    for s in range(min_s, max_s + 1):
-        q = -s - r
-        x, y = Coord(q, r).pixel(1)
-        plt.plot(x, -y, **background_point_styles)
 
 for x_vals, y_vals, start_angle in pattern_pixels:
     plot_intersect(
