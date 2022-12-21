@@ -21,6 +21,7 @@ def get_offset_col(coord: Coord) -> int:
 
 @dataclass
 class GridPattern:
+    indent: int
     start_direction: Direction
     point_list: InitVar[list[Coord]]
     min_q_coord: Coord
@@ -29,7 +30,7 @@ class GridPattern:
     max_r: int
 
     @classmethod
-    def from_pattern(cls, direction: Direction, pattern: str) -> GridPattern:
+    def from_pattern(cls, indent: int, direction: Direction, pattern: str) -> GridPattern:
         compass = direction
         cursor = compass.as_delta()
 
@@ -51,7 +52,7 @@ class GridPattern:
             max_q = max(max_q, cursor.q)
             min_r, max_r = min(min_r, cursor.r), max(max_r, cursor.r)
 
-        return cls(direction, points, min_q_coord, max_q, min_r, max_r)
+        return cls(indent, direction, points, min_q_coord, max_q, min_r, max_r)
 
     def __post_init__(self, point_list: list[Coord]):
         self.set_points(point_list)
@@ -83,7 +84,7 @@ class GridPattern:
 
     @property
     def start_angle(self) -> float:
-        return self.start_direction.angle_from(Direction.EAST).deg - 90
+        return self.start_direction.as_pyplot_angle()
 
     def shift(self, delta_q: int, delta_r: int) -> None:
         self.min_q_coord += Coord(delta_q, delta_r)
@@ -111,16 +112,16 @@ class GridPattern:
         assert delta_q != 0
         return delta_q + 1
 
-    def get_pixels(self) -> tuple[list[float], list[float], float]:
+    def get_pixels(self) -> tuple[list[float], list[float]]:
         x_vals: list[float] = []
         y_vals: list[float] = []
 
         for point in self.points:
-            (x, y) = point.pixel(1)
+            (x, y) = point.pixel()
             x_vals.append(x)
-            y_vals.append(-y)
+            y_vals.append(y)
 
-        return x_vals, y_vals, self.start_angle
+        return x_vals, y_vals
 
 
 def none_minmax(fn: Callable[[int, int], int], a: int, b: int | None) -> int:
@@ -138,6 +139,7 @@ registry = asyncio.run(_build_registry())
 
 comment_re = re.compile(r"(/\*(?:.|\n)*?\*/|^#.*|//.*)")
 patterns: list[GridPattern] = []
+indent = 0
 
 filename = "../../Scripts/Hex Casting/Uncapped Counter's Queue II.hexpattern"
 with open(filename, "r") as f:
@@ -153,7 +155,11 @@ with open(filename, "r") as f:
             continue
         info = registry.from_display_name.get(line) or registry.from_name[line]
         assert not isinstance(info, SpecialHandlerPatternInfo)
-        patterns.append(GridPattern.from_pattern(info.direction, info.pattern))
+        if info.name == "close_paren":
+            indent -= 1
+        patterns.append(GridPattern.from_pattern(indent, info.direction, info.pattern))
+        if info.name == "open_paren":
+            indent += 1
 
 
 for i, pattern in enumerate(patterns):
@@ -168,15 +174,26 @@ for i, pattern in enumerate(patterns):
         pattern.shift(0 - pattern.min_q, delta_r)
 
 
-max_width = max(30, max(p.width for p in patterns))
+# max_dot_width = max(30, max(p.width for p in patterns))
+max_dot_width = None
+max_pattern_width = 10
 
 delta_q = 0
 delta_r = 0
 
 current_height = 0
+current_num_patterns = 0
+
+min_x, max_x = math.inf, -math.inf
+min_y, max_y = math.inf, -math.inf
 
 for i, pattern in enumerate(patterns):
-    if pattern.max_q + delta_q + delta_r / 2 > max_width:
+    if (
+        max_dot_width is not None
+        and pattern.max_q + delta_q + delta_r / 2 > max_dot_width
+        or max_pattern_width is not None
+        and current_num_patterns == max_pattern_width
+    ):
         delta_r += current_height + 1
         delta_q = -pattern.min_q - delta_r / 2
 
@@ -195,23 +212,16 @@ for i, pattern in enumerate(patterns):
             delta_q += 1
 
         current_height = 0
+        current_num_patterns = 0
 
     current_height = max(pattern.height, current_height)
+    current_num_patterns += 1
     pattern.shift(math.floor(delta_q), delta_r)
 
-
-pattern_pixels: list[tuple[list[float], list[float], float]] = []
-min_x, max_x = math.inf, -math.inf
-min_y, max_y = math.inf, -math.inf
-
-for pattern in patterns:
-    data = pattern.get_pixels()
-
-    x_vals, y_vals, _ = data
+    # this is kinda gross. but idk if there's a better way
+    x_vals, y_vals = pattern.get_pixels()
     min_x, max_x = min(min_x, *x_vals), max(max_x, *x_vals)
     min_y, max_y = min(min_y, *y_vals), max(max_y, *y_vals)
-
-    pattern_pixels.append(data)
 
 
 palette = Palette.Classic
@@ -219,7 +229,6 @@ theme = Theme.Light
 line_scale = 8
 arrow_scale = 2
 fig_size = 8
-draw_background_points = False
 
 width = max_x - min_x
 height = max_y - min_y
@@ -237,15 +246,14 @@ ax = fig.add_axes([0, 0, 1, 1])
 ax.set_aspect("equal")
 ax.axis("off")
 
-for x_vals, y_vals, start_angle in pattern_pixels:
+for pattern in patterns:
     plot_intersect(
-        x_vals=x_vals,
-        y_vals=y_vals,
+        points=pattern.points,
         scale=scale,
         arrow_scale=arrow_scale,
-        start_angle=start_angle,
         palette=palette,
         theme=theme,
+        start_color_index=pattern.indent,
     )
 
 x0, x1, y0, y1 = plt.axis()

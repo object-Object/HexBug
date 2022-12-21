@@ -87,8 +87,8 @@ class Coord:
     def __sub__(self, other: Coord) -> Coord:
         return self.delta(other)
 
-    def pixel(self, size: int) -> tuple[float, float]:
-        return (size * (math.sqrt(3) * self.q + math.sqrt(3) / 2 * self.r), size * (3 / 2 * self.r))  # x  # y
+    def pixel(self, size=1) -> tuple[float, float]:
+        return (size * (math.sqrt(3) * self.q + math.sqrt(3) / 2 * self.r), -size * (3 / 2 * self.r))
 
     def shifted(self, other: Direction | Coord) -> Coord:
         if isinstance(other, Direction):
@@ -158,6 +158,9 @@ class Direction(Enum):  # numbers increase clockwise
                 return Coord(-1, 0)
             case Direction.NORTH_WEST:
                 return Coord(0, -1)
+
+    def as_pyplot_angle(self) -> float:
+        return self.angle_from(Direction.EAST).deg - 90
 
 
 class Segment:

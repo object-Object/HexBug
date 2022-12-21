@@ -1,8 +1,11 @@
 from enum import Enum, StrEnum
+from itertools import pairwise
 
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib import colormaps  # type: ignore
+
+from hexdecode.hex_math import Coord, Direction
 
 
 class Theme(StrEnum):
@@ -18,98 +21,85 @@ class Palette(Enum):
 
 
 def plot_monochrome(
-    x_vals: list[float],
-    y_vals: list[float],
+    points: list[Coord],
     scale: float,
     monochrome_color: str,
     theme: Theme,
 ):
     point_style = theme.value + "o"
-    for i in range(len(x_vals) - 1):
-        plt.plot(x_vals[i : i + 2], y_vals[i : i + 2], color=monochrome_color, lw=scale)
-        plt.plot(x_vals[i], y_vals[i], point_style, ms=2 * scale)
-    plt.plot(x_vals[-1], y_vals[-1], point_style, ms=2 * scale)
+
+    for point, next_point in pairwise(points):
+        x, y = point.pixel()
+        next_x, next_y = next_point.pixel()
+
+        plt.plot((x, next_x), (y, next_y), color=monochrome_color, lw=scale)
+        plt.plot(x, y, point_style, ms=2 * scale)
+
+    # last dot
+    plt.plot(*points[-1].pixel(), point_style, ms=2 * scale)
+
+
+def _plot_fancy_point(x: float, y: float, fmt: str, scale: float, color):
+    plt.plot(x, y, fmt, ms=3.5 * scale)
+    plt.plot(x, y, color=color, marker="o", ms=2 * scale)
+
+
+def _plot_arrow(x: float, y: float, angle: float, scale: float, color):
+    plt.plot(x, y, color=color, marker=(3, 0, angle), ms=scale)
 
 
 def plot_intersect(
-    x_vals: list[float],
-    y_vals: list[float],
+    points: list[Coord],
     scale: float,
     arrow_scale: float,
-    start_angle: float,
     palette: Palette,
     theme: Theme,
-):
-    line_count = len(x_vals) - 1
-    used_points = []
+    start_color_index=0,
+) -> None:
+    visited_points_and_colors: dict[Coord, int] = {}
+
     colors = palette.value
-    color_index = 0
-    point_style = theme.value + "o"
+    start_color_index %= len(colors)
+    color_index = start_color_index
 
-    # plot start-direction triangle
-    plt.plot(
-        (x_vals[1] + x_vals[0]) / 2,
-        (y_vals[1] + y_vals[0]) / 2,
-        color=colors[0],
-        marker=(3, 0, start_angle),
-        ms=2.9 * arrow_scale * scale,
-    )
+    point_fmt = theme.value + "o"
+    arrow_scale *= scale
 
-    for i in range(line_count + 1):
-        point = [x_vals[i], y_vals[i], color_index]
-        repeats = False
+    for i, (point, next_point) in enumerate(pairwise(points)):
+        x, y = point.pixel()
+        next_x, next_y = next_point.pixel()
+        arrow_x, arrow_y = (x + next_x) / 2, (y + next_y) / 2
 
-        # check if we've already been to this point, with this line color
-        # doing this with if(j==point) doesn't work because of floating-point jank
-        for j in used_points:
-            same_color = color_index == j[2] or (3 - color_index % 3 == j[2] and color_index > 3)
-            if abs(point[0] - j[0]) < 0.1 and abs(point[1] - j[1]) < 0.1 and same_color:
-                repeats = True
-                used_points[used_points.index(j)][2] += 1
+        direction = point.immediate_delta(next_point)
+        assert direction is not None
+        arrow_angle = direction.as_pyplot_angle()
 
-        # if the condition is true, cycle the line color to the next option
-        # then draw a half-line backwards to mark the beginning of the new segment
-        if repeats:
-            color_index += 1
-            color_index %= len(colors)
-            back_half = ((x_vals[i - 1] + point[0]) / 2, (y_vals[i - 1] + point[1]) / 2)
-            plt.plot((point[0], back_half[0]), (point[1], back_half[1]), color=colors[color_index], lw=scale)
+        color = colors[color_index]
 
-            # draw a triangle to mark the direction of the new color
-            if abs(y_vals[i] - y_vals[i - 1]) < 0.1:
-                if x_vals[i] > x_vals[i - 1]:
-                    angle = 270
-                else:
-                    angle = 90
-            elif y_vals[i] > y_vals[i - 1]:
-                if x_vals[i] > x_vals[i - 1]:
-                    angle = 330
-                else:
-                    angle = 30
-            else:
-                if x_vals[i] > x_vals[i - 1]:
-                    angle = 210
-                else:
-                    angle = 150
-            plt.plot(
-                back_half[0],
-                back_half[1],
-                marker=(3, 0, angle),
-                color=colors[color_index],
-                ms=2 * arrow_scale * scale,
-            )
+        if visited_points_and_colors.get(next_point) == color_index:
+            # first half
+            plt.plot((x, arrow_x), (y, arrow_y), color=color, lw=scale)
+
+            color_index = (color_index + 1) % len(colors)
+            visited_points_and_colors[next_point] = color_index
+            color = colors[color_index]
+
+            # second half and arrow
+            plt.plot((arrow_x, next_x), (arrow_y, next_y), color=color, lw=scale)
+            _plot_arrow(arrow_x, arrow_y, arrow_angle, 2 * arrow_scale, color)
         else:
-            used_points.append(point)
+            visited_points_and_colors[point] = color_index
+            plt.plot((x, next_x), (y, next_y), color=color, lw=scale)
 
-        # only draw point+line if we're not at the end
-        if i != line_count:
-            plt.plot(x_vals[i : i + 2], y_vals[i : i + 2], color=colors[color_index], lw=scale)
-            plt.plot(point[0], point[1], point_style, ms=2 * scale)
+        if not i:
+            # start arrow
+            _plot_arrow(arrow_x, arrow_y, arrow_angle, 2.9 * arrow_scale, color)
+        else:
+            # normal point
+            plt.plot(x, y, point_fmt, ms=2 * scale)
 
-    # mark the last point
-    plt.plot(x_vals[-1], y_vals[-1], point_style, ms=3.5 * scale)
-    plt.plot(x_vals[-1], y_vals[-1], color=colors[color_index], marker="o", ms=2 * scale)
+    # end point
+    _plot_fancy_point(*points[-1].pixel(), point_fmt, scale, colors[color_index])
 
-    # mark the first point
-    plt.plot(x_vals[0], y_vals[0], point_style, ms=3.5 * scale)
-    plt.plot(x_vals[0], y_vals[0], color=colors[0], marker="o", ms=2 * scale)
+    # start point
+    _plot_fancy_point(*points[0].pixel(), point_fmt, scale, colors[start_color_index])

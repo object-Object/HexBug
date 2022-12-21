@@ -22,52 +22,19 @@ def get_points(direction: Direction, pattern: str) -> list[Coord]:
     return points
 
 
-def generate_image(
-    direction: Direction,
-    pattern: str,
-    is_great: bool,
-    palette: Palette,
-    theme: Theme,
-    line_scale: float,
-    arrow_scale: float,
-) -> tuple[BytesIO, tuple[int, int]]:
-    points = get_points(direction, pattern)
+def get_xy_bounds(points: list[Coord]) -> tuple[float, float, float, float]:
+    """x_min, y_min, x_max, y_max"""
     x_vals: list[float] = []
     y_vals: list[float] = []
     for point in points:
-        (x, y) = point.pixel(1)
+        (x, y) = point.pixel()
         x_vals.append(x)
-        y_vals.append(-y)
+        y_vals.append(y)
+    return min(x_vals), min(y_vals), max(x_vals), max(y_vals)
 
-    width = max(x_vals) - min(x_vals)
-    height = max(y_vals) - min(y_vals)
-    max_width = max(width, height, 1.25)
-    scale = line_scale / math.log(max_width, 1.5) + 1.1
-    start_angle = direction.angle_from(Direction.EAST).deg - 90
 
-    fig = plt.figure(figsize=(4, 4))
-    ax = fig.add_axes([0, 0, 1, 1])
-    ax.set_aspect("equal")
-    ax.axis("off")
-
-    if is_great:
-        plot_monochrome(
-            x_vals=x_vals,
-            y_vals=y_vals,
-            scale=scale,
-            monochrome_color="#a81ee3",
-            theme=theme,
-        )
-    else:
-        plot_intersect(
-            x_vals=x_vals,
-            y_vals=y_vals,
-            scale=scale,
-            arrow_scale=arrow_scale,
-            start_angle=start_angle,
-            palette=palette,
-            theme=theme,
-        )
+def save_close_crop(fig) -> tuple[BytesIO, tuple[int, int]]:
+    """image, (width, height)"""
 
     x0, x1, y0, y1 = plt.axis()
     plt.axis((x0 - 0.1, x1 + 0.1, y0 - 0.1, y1 + 0.1))
@@ -88,3 +55,44 @@ def generate_image(
 
     buf.seek(0)
     return buf, size
+
+
+def generate_image(
+    direction: Direction,
+    pattern: str,
+    is_great: bool,
+    palette: Palette,
+    theme: Theme,
+    line_scale: float,
+    arrow_scale: float,
+) -> tuple[BytesIO, tuple[int, int]]:
+    points = get_points(direction, pattern)
+    x_min, y_min, x_max, y_max = get_xy_bounds(points)
+
+    width = x_max - x_min
+    height = y_max - y_min
+    max_width = max(width, height, 1.25)
+    scale = line_scale / math.log(max_width, 1.5) + 1.1
+
+    fig = plt.figure(figsize=(4, 4))
+    ax = fig.add_axes([0, 0, 1, 1])
+    ax.set_aspect("equal")
+    ax.axis("off")
+
+    if is_great:
+        plot_monochrome(
+            points=points,
+            scale=scale,
+            monochrome_color="#a81ee3",
+            theme=theme,
+        )
+    else:
+        plot_intersect(
+            points=points,
+            scale=scale,
+            arrow_scale=arrow_scale,
+            palette=palette,
+            theme=theme,
+        )
+
+    return save_close_crop(fig)
