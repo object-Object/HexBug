@@ -25,7 +25,7 @@ class GridPattern:
     indent: int
     start_direction: Direction
     point_list: InitVar[list[Coord]]
-    min_q_coord: Coord
+    min_q: int
     max_q: int
     min_r: int
     max_r: int
@@ -36,11 +36,7 @@ class GridPattern:
         cursor = compass.as_delta()
 
         points = [Coord.origin(), cursor]
-        if cursor.q < 0:
-            min_q_coord = cursor
-        else:
-            min_q_coord = Coord.origin()
-        max_q = max(0, cursor.q)
+        min_q, max_q = min(0, cursor.q), max(0, cursor.q)
         min_r, max_r = min(0, cursor.r), max(0, cursor.r)
 
         for c in pattern:
@@ -48,12 +44,10 @@ class GridPattern:
             cursor += compass
             points.append(cursor)
 
-            if cursor.q < min_q_coord.q:
-                min_q_coord = cursor
-            max_q = max(max_q, cursor.q)
+            min_q, max_q = min(min_q, cursor.q), max(max_q, cursor.q)
             min_r, max_r = min(min_r, cursor.r), max(max_r, cursor.r)
 
-        return cls(indent, direction, points, min_q_coord, max_q, min_r, max_r)
+        return cls(indent, direction, points, min_q, max_q, min_r, max_r)
 
     def __post_init__(self, point_list: list[Coord]):
         self.set_points(point_list)
@@ -66,10 +60,6 @@ class GridPattern:
     def set_points(self, new: list[Coord]):
         self._points = new
         self._point_set = set(new)
-
-    @property
-    def min_q(self) -> int:
-        return self.min_q_coord.q
 
     @property
     def height(self) -> int:
@@ -88,7 +78,7 @@ class GridPattern:
         return self.start_direction.as_pyplot_angle()
 
     def shift(self, delta_q: int, delta_r: int) -> None:
-        self.min_q_coord += Coord(delta_q, delta_r)
+        self.min_q += delta_q
         self.max_q += delta_q
         self.min_r += delta_r
         self.max_r += delta_r
