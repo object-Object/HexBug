@@ -23,7 +23,7 @@ def get_points(direction: Direction, pattern: str) -> list[Coord]:
 
 
 def get_xy_bounds(points: list[Coord]) -> tuple[float, float, float, float]:
-    """x_min, y_min, x_max, y_max"""
+    """min_x, min_y, max_x, max_y"""
     x_vals: list[float] = []
     y_vals: list[float] = []
     for point in points:
@@ -67,10 +67,10 @@ def generate_image(
     arrow_scale: float,
 ) -> tuple[BytesIO, tuple[int, int]]:
     points = get_points(direction, pattern)
-    x_min, y_min, x_max, y_max = get_xy_bounds(points)
+    min_x, min_y, max_x, max_y = get_xy_bounds(points)
 
-    width = x_max - x_min
-    height = y_max - y_min
+    width = max_x - min_x
+    height = max_y - min_y
     max_width = max(width, height, 1.25)
     scale = line_scale / math.log(max_width, 1.5) + 1.1
 

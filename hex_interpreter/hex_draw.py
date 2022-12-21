@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib import colormaps  # type: ignore
 
-from hexdecode.hex_math import Coord, Direction
+from hexdecode.hex_math import Coord
 
 
 class Theme(StrEnum):

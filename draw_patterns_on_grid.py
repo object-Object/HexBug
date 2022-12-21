@@ -13,6 +13,7 @@ from hex_interpreter.hex_draw import Palette, Theme, plot_intersect
 from hexdecode.buildpatterns import build_registry
 from hexdecode.hexast import Angle, Coord, Direction
 from hexdecode.registry import SpecialHandlerPatternInfo
+from utils.generate_image import get_xy_bounds
 
 
 def get_offset_col(coord: Coord) -> int:
@@ -112,17 +113,6 @@ class GridPattern:
         assert delta_q != 0
         return delta_q + 1
 
-    def get_pixels(self) -> tuple[list[float], list[float]]:
-        x_vals: list[float] = []
-        y_vals: list[float] = []
-
-        for point in self.points:
-            (x, y) = point.pixel()
-            x_vals.append(x)
-            y_vals.append(y)
-
-        return x_vals, y_vals
-
 
 def none_minmax(fn: Callable[[int, int], int], a: int, b: int | None) -> int:
     return fn(a, b) if b is not None else a
@@ -219,9 +209,9 @@ for i, pattern in enumerate(patterns):
     pattern.shift(math.floor(delta_q), delta_r)
 
     # this is kinda gross. but idk if there's a better way
-    x_vals, y_vals = pattern.get_pixels()
-    min_x, max_x = min(min_x, *x_vals), max(max_x, *x_vals)
-    min_y, max_y = min(min_y, *y_vals), max(max_y, *y_vals)
+    pattern_min_x, pattern_min_y, pattern_max_x, pattern_max_y = get_xy_bounds(pattern.points)
+    min_x, max_x = min(min_x, pattern_min_x), max(max_x, pattern_max_x)
+    min_y, max_y = min(min_y, pattern_min_y), max(max_y, pattern_max_y)
 
 
 palette = Palette.Classic
@@ -253,7 +243,7 @@ for pattern in patterns:
         arrow_scale=arrow_scale,
         palette=palette,
         theme=theme,
-        start_color_index=pattern.indent,
+        # start_color_index=pattern.indent,
     )
 
 x0, x1, y0, y1 = plt.axis()
