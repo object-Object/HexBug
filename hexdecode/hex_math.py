@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import math
+from dataclasses import dataclass, field
 from enum import Enum
-from typing import Iterable, Generator
+from typing import Generator, Iterable, Self
 
 
 class Angle(Enum):
@@ -19,7 +20,7 @@ class Angle(Enum):
     q = (5, "q")
 
     @classmethod
-    def from_number(cls, num):
+    def from_number(cls, num: int):
         return {0: cls.FORWARD, 1: cls.RIGHT, 2: cls.RIGHT_BACK, 3: cls.BACK, 4: cls.LEFT_BACK, 5: cls.LEFT}[
             num % len(Angle)
         ]
@@ -42,28 +43,20 @@ class Angle(Enum):
     def deg(self) -> float:
         return ((len(Angle) - self.ordinal) * 60) % 360
 
-    def __init__(self, ordinal, letter):
+    def __init__(self, ordinal: int, letter: str):
         self.ordinal = ordinal
         self.letter = letter
 
 
 # Uses axial coordinates as per https://www.redblobgames.com/grids/hexagons/ (same system as Hex)
+@dataclass(frozen=True)
 class Coord:
+    q: int
+    r: int
+
     @classmethod
     def origin(cls) -> Coord:
         return Coord(0, 0)
-
-    def __init__(self, q: int, r: int) -> None:
-        self._q = q
-        self._r = r
-
-    @property
-    def q(self):
-        return self._q
-
-    @property
-    def r(self):
-        return self._r
 
     @property
     def s(self):
@@ -163,38 +156,23 @@ class Direction(Enum):  # numbers increase clockwise
         return self.angle_from(Direction.EAST).deg - 90
 
 
+@dataclass(frozen=True)
 class Segment:
-    def __init__(self, root: Coord, direction: Direction):
-        # because otherwise there's two ways to represent any given line
-        if direction.side == "EAST":
-            self._root = root
-            self._direction = direction
-        else:
-            self._root = root + direction
-            self._direction = direction.rotated(Angle.BACK)
+    root: Coord
+    direction: Direction
 
-    def __hash__(self) -> int:
-        return hash((self.root, self.direction))
+    _canonical_tuple: tuple[Coord, Direction] = field(init=False)
+    end: Coord = field(init=False)
 
-    def __eq__(self, other: object) -> bool:
-        if isinstance(other, Segment):
-            return (self.root, self.direction) == (other.root, other.direction)
-        return NotImplemented
+    def __post_init__(self):
+        object.__setattr__(self, "end", self.root + self.direction)
+        is_canonical = self.direction.side == "EAST"
+        canonical_root = self.root if is_canonical else self.end
+        canonical_direction = self.direction if is_canonical else self.direction.rotated(Angle.BACK)
+        object.__setattr__(self, "_canonical_tuple", (canonical_root, canonical_direction))
 
     def __repr__(self) -> str:
         return f"{self.root}@{self.direction}"
-
-    @property
-    def root(self):
-        return self._root
-
-    @property
-    def direction(self):
-        return self._direction
-
-    @property
-    def end(self):
-        return self.root + self.direction
 
     @property
     def min_q(self):
@@ -212,25 +190,40 @@ class Segment:
     def max_r(self):
         return max(self.root.r, self.end.r)
 
-    def shifted(self, other: Direction | Coord) -> Segment:
+    @property
+    def min_s(self):
+        return min(self.root.s, self.end.s)
+
+    @property
+    def max_s(self):
+        return max(self.root.s, self.end.s)
+
+    def shifted(self, other: Direction | Coord) -> Self:
         return Segment(self.root.shifted(other), self.direction)
 
-    def rotated(self, angle: Angle | str | int) -> Segment:
+    def rotated(self, angle: Angle | str | int) -> Self:
         return Segment(self.root.rotated(angle), self.direction.rotated(angle))
 
+    def next_segment(self, angle: Angle | str | int) -> Self:
+        return Segment(self.end, self.direction.rotated(angle))
 
-def _get_segments(direction: Direction, pattern: str) -> frozenset[Segment]:
+    def __hash__(self) -> int:
+        return hash(self._canonical_tuple)
+
+    def __eq__(self, other: Self) -> bool:
+        return self._canonical_tuple == other._canonical_tuple
+
+
+def get_pattern_segments(direction: Direction, pattern: str) -> Generator[Segment, None, None]:
     cursor = Coord.origin()
     compass = direction
 
-    segments = [Segment(cursor, compass)]
+    yield Segment(cursor, compass)
 
     for c in pattern:
         cursor += compass
         compass = compass.rotated(Angle[c])
-        segments.append(Segment(cursor, compass))
-
-    return frozenset(segments)
+        yield Segment(cursor, compass)
 
 
 def _align_segments_to_origin(segments: Iterable[Segment]) -> frozenset[Segment]:
@@ -243,12 +236,14 @@ def _align_segments_to_origin(segments: Iterable[Segment]) -> frozenset[Segment]
     return frozenset([segment.shifted(delta) for segment in segments])
 
 
-def _get_pattern_segments(direction: Direction, pattern: str, align=True) -> frozenset[Segment]:
-    segments = _get_segments(direction, pattern)
+def get_aligned_pattern_segments(direction: Direction, pattern: str, align=True) -> frozenset[Segment]:
+    segments = frozenset(get_pattern_segments(direction, pattern))
     return _align_segments_to_origin(segments) if align else segments
 
 
-def get_rotated_pattern_segments(direction: Direction, pattern: str) -> Generator[frozenset[Segment], None, None]:
-    segments = _get_pattern_segments(direction, pattern, False)
+def get_rotated_aligned_pattern_segments(
+    direction: Direction, pattern: str
+) -> Generator[frozenset[Segment], None, None]:
+    segments = get_aligned_pattern_segments(direction, pattern, False)
     for n in range(6):
         yield _align_segments_to_origin([segment.rotated(n) for segment in segments])

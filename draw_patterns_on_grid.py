@@ -11,7 +11,7 @@ from aiohttp import ClientSession
 
 from hex_interpreter.hex_draw import Palette, Theme, plot_intersect
 from hexdecode.buildpatterns import build_registry
-from hexdecode.hexast import Angle, Coord, Direction
+from hexdecode.hex_math import Angle, Coord, Direction
 from hexdecode.registry import SpecialHandlerPatternInfo
 from utils.generate_image import get_xy_bounds
 
@@ -127,7 +127,9 @@ with open(filename, "r") as f:
         comment_re.sub("", f.read().strip())
         .replace("Consideration: ", "Consideration\n")
         .replace("{", "Introspection")
+        .replace("[", "Introspection")  # slightly better hexdecode compat
         .replace("}", "Retrospection")
+        .replace("]", "Retrospection")
     )
     for line in text.splitlines():
         line = line.strip()

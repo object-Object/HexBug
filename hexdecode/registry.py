@@ -1,9 +1,9 @@
-from dataclasses import dataclass, field
-from hexdecode.hex_math import Segment, Direction
-from hexdecode.hex_math import get_rotated_pattern_segments
-from utils.mods import Mod
 from collections import defaultdict
+from dataclasses import dataclass, field
 from typing import TypeVar
+
+from hexdecode.hex_math import Direction, Segment, get_rotated_aligned_pattern_segments
+from utils.mods import Mod
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -74,7 +74,7 @@ class Registry:
         self.from_display_name[info.display_name] = info
         if not isinstance(info, SpecialHandlerPatternInfo):
             if info.is_great:
-                for segments in get_rotated_pattern_segments(info.direction, info.pattern):
+                for segments in get_rotated_aligned_pattern_segments(info.direction, info.pattern):
                     self._insert_possible_duplicate(self.from_segments, segments, info)
             else:
                 self._insert_possible_duplicate(self.from_pattern, info.pattern, info)

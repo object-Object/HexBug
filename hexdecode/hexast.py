@@ -3,16 +3,13 @@ from __future__ import annotations
 import re
 import struct
 import uuid
-from collections import defaultdict
-from dataclasses import dataclass, field
 from itertools import pairwise
-from typing import Generator, Iterable
+from typing import Generator
 
 from sty import fg
 
-from hexdecode.hex_math import Angle, Coord, Direction, Segment, _get_pattern_segments
+from hexdecode.hex_math import Angle, Direction, get_aligned_pattern_segments
 from hexdecode.registry import Registry
-from utils.mods import Mod
 
 localize_regex = re.compile(r"((?:number|mask))(: .+)")
 
@@ -240,7 +237,7 @@ def _handle_named_pattern(name: str):
 def _parse_unknown_pattern(pattern: UnknownPattern, registry: Registry) -> tuple[Pattern, str]:
     if (
         (info := registry.from_pattern.get(pattern._datum))
-        or (segments := _get_pattern_segments(pattern._initial_direction, pattern._datum))
+        or (segments := get_aligned_pattern_segments(pattern._initial_direction, pattern._datum))
         and (info := registry.from_segments.get(segments))
     ):
         return _handle_named_pattern(info.name), info.name
