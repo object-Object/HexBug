@@ -4,6 +4,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 from discord.utils import MISSING
+from hexnumgen import generate_number_pattern_beam
 
 from hexdecode.hex_math import Direction
 from hexdecode.hexast import Registry, UnknownPattern, _parse_unknown_pattern, generate_bookkeeper
@@ -11,7 +12,7 @@ from hexdecode.registry import SpecialHandlerPatternInfo
 from utils.buttons import buildShowOrDeleteButton
 from utils.commands import HexBugBot, build_autocomplete
 from utils.generate_image import Palette, Theme, generate_image
-from utils.mods import Mod, APIWithoutBookModInfo
+from utils.mods import APIWithoutBookModInfo
 
 DEFAULT_LINE_SCALE = 6
 DEFAULT_ARROW_SCALE = 2
@@ -69,12 +70,9 @@ class PatternCog(commands.GroupCog, name="pattern"):
 
         initial_choices: list[tuple[app_commands.Choice[str], list[str]]] = []
         for info in self.registry.patterns:
-            display_name = info.display_name
-            if info.name == "number":
+            if isinstance(info, SpecialHandlerPatternInfo):
                 continue
-            if info.name == "mask":
-                display_name += ": …"
-            initial_choices.append((app_commands.Choice(name=display_name, value=display_name), [info.name]))
+            initial_choices.append((app_commands.Choice(name=info.display_name, value=info.display_name), [info.name]))
 
         self.autocomplete = build_autocomplete(initial_choices)
 
@@ -158,28 +156,17 @@ class PatternCog(commands.GroupCog, name="pattern"):
         line_scale: SCALE_RANGE = DEFAULT_LINE_SCALE,
         arrow_scale: SCALE_RANGE = DEFAULT_ARROW_SCALE,
     ) -> None:
-        """Display the stroke order of a pattern from its name (no number literals, for now)"""
+        """Display the stroke order of a pattern from its name"""
         info = self.registry.from_display_name.get(translation)
-        if translation.startswith("Bookkeeper's Gambit:"):
-            mask = parse_mask(translation)
-            if not mask:
-                return await interaction.response.send_message(
-                    "❌ Invalid Bookkeeper's Gambit, must not be empty and only contain the characters `v-`.",
-                    ephemeral=True,
-                )
-
-            direction, pattern = generate_bookkeeper(mask)
-            is_great = False
-            name = "mask"
-        elif info is None or isinstance(info, SpecialHandlerPatternInfo):
+        if info is None:
             return await interaction.response.send_message("❌ Unknown pattern.", ephemeral=True)
-        else:
-            direction, pattern, is_great, name = info.direction, info.pattern, info.is_great, info.name
+        elif isinstance(info, SpecialHandlerPatternInfo):
+            return await interaction.response.send_message("❌ Use `/pattern special`.", ephemeral=True)
 
         image, _ = generate_image(
-            direction=direction,
-            pattern=pattern,
-            is_great=is_great,
+            direction=info.direction,
+            pattern=info.pattern,
+            is_great=info.is_great,
             palette=palette,
             theme=theme,
             line_scale=line_scale,
@@ -189,20 +176,121 @@ class PatternCog(commands.GroupCog, name="pattern"):
         await send_pattern(
             registry=self.registry,
             interaction=interaction,
-            name=name,
+            name=info.name,
             translation=translation,
-            direction=None if is_great else direction,
-            pattern=None if is_great else pattern,
+            direction=None if info.is_great else info.direction,
+            pattern=None if info.is_great else info.pattern,
             image=image,
             show_to_everyone=show_to_everyone,
         )
 
     @name.autocomplete("translation")
     async def name_autocomplete(self, interaction: discord.Interaction, current: str) -> list[app_commands.Choice]:
-        if current.startswith("Bookkeeper's Gambit:"):
-            if parse_mask(current) is not None:  # intentionally "allow" blank mask for autocomplete, more intuitive imo
-                return [app_commands.Choice(name=current, value=current)]
         return self.autocomplete.get(current.lower(), [])[:25]
+
+    special = app_commands.Group(name="special", description="Patterns with special handlers")
+
+    @special.command()
+    @app_commands.describe(
+        bookkeeper="The Bookkeeper's Gambit to generate (eg. v-vv--)",
+        show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
+        palette="The color palette to use for the lines (has no effect for great spells)",
+        theme="Whether the pattern should be rendered for light or dark theme",
+        line_scale="The scale of the lines and dots in the image",
+        arrow_scale="The scale of the arrows in the image",
+    )
+    async def bookkeepers_gambit(
+        self,
+        interaction: discord.Interaction,
+        bookkeeper: str,
+        show_to_everyone: bool = False,
+        palette: Palette = Palette.Classic,
+        theme: Theme = Theme.Dark,
+        line_scale: SCALE_RANGE = DEFAULT_LINE_SCALE,
+        arrow_scale: SCALE_RANGE = DEFAULT_ARROW_SCALE,
+    ) -> None:
+        """Generate and display a Bookkeeper's Gambit pattern"""
+        mask = parse_mask(bookkeeper)
+        if not mask:
+            return await interaction.response.send_message(
+                "❌ Invalid Bookkeeper's Gambit, must not be empty and only contain the characters `v-`.",
+                ephemeral=True,
+            )
+
+        info = self.registry.from_name["mask"]
+        direction, pattern = generate_bookkeeper(mask)
+
+        image, _ = generate_image(
+            direction=direction,
+            pattern=pattern,
+            is_great=info.is_great,
+            palette=palette,
+            theme=theme,
+            line_scale=line_scale,
+            arrow_scale=arrow_scale,
+        )
+
+        await send_pattern(
+            registry=self.registry,
+            interaction=interaction,
+            name=info.name,
+            translation=f"{info.display_name}: {mask}",
+            direction=direction,
+            pattern=pattern,
+            image=image,
+            show_to_everyone=show_to_everyone,
+        )
+
+    @special.command()
+    @app_commands.describe(
+        number="The number to generate a literal for",
+        show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
+        palette="The color palette to use for the lines (has no effect for great spells)",
+        theme="Whether the pattern should be rendered for light or dark theme",
+        line_scale="The scale of the lines and dots in the image",
+        arrow_scale="The scale of the arrows in the image",
+    )
+    async def numerical_reflection(
+        self,
+        interaction: discord.Interaction,
+        number: app_commands.Range[int, -1000, 1000],
+        show_to_everyone: bool = False,
+        palette: Palette = Palette.Classic,
+        theme: Theme = Theme.Dark,
+        line_scale: SCALE_RANGE = DEFAULT_LINE_SCALE,
+        arrow_scale: SCALE_RANGE = DEFAULT_ARROW_SCALE,
+    ) -> None:
+        """Generate and display a Numerical Reflection pattern"""
+        gen = generate_number_pattern_beam(number, 6, 5, 6, 25, True)
+        if not gen:
+            return await interaction.response.send_message(
+                "❌ Failed to generate number literal.",
+                ephemeral=True,
+            )
+
+        info = self.registry.from_name["number"]
+        direction = Direction[gen.direction]
+
+        image, _ = generate_image(
+            direction=direction,
+            pattern=gen.pattern,
+            is_great=info.is_great,
+            palette=palette,
+            theme=theme,
+            line_scale=line_scale,
+            arrow_scale=arrow_scale,
+        )
+
+        await send_pattern(
+            registry=self.registry,
+            interaction=interaction,
+            name=info.name,
+            translation=f"{info.display_name}: {number}",
+            direction=direction,
+            pattern=gen.pattern,
+            image=image,
+            show_to_everyone=show_to_everyone,
+        )
 
 
 async def setup(bot: HexBugBot) -> None:
