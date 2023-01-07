@@ -53,8 +53,11 @@ T = TypeVar("T", str, None)
 U = TypeVar("U")
 
 
+@dataclass
 class Registry:
-    def __init__(self) -> None:
+    pregen_numbers: dict[int, tuple[Direction, str]]
+
+    def __post_init__(self) -> None:
         self.patterns: list[PatternInfo] = []
         self.from_name: dict[str, PatternInfo] = {}
         self.from_display_name: dict[str, PatternInfo] = {}

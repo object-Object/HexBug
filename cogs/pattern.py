@@ -3,9 +3,8 @@ from io import BytesIO
 import discord
 from discord import app_commands
 from discord.ext import commands
-from discord.utils import MISSING
-from hexnumgen import generate_number_pattern_beam
 
+from hexdecode.buildpatterns import MAX_PREGEN_NUMBER
 from hexdecode.hex_math import Direction
 from hexdecode.hexast import Registry, UnknownPattern, _parse_unknown_pattern, generate_bookkeeper
 from hexdecode.registry import SpecialHandlerPatternInfo
@@ -253,7 +252,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
     async def numerical_reflection(
         self,
         interaction: discord.Interaction,
-        number: app_commands.Range[int, -1000, 1000],
+        number: app_commands.Range[int, -MAX_PREGEN_NUMBER, MAX_PREGEN_NUMBER],
         show_to_everyone: bool = False,
         palette: Palette = Palette.Classic,
         theme: Theme = Theme.Dark,
@@ -261,19 +260,18 @@ class PatternCog(commands.GroupCog, name="pattern"):
         arrow_scale: SCALE_RANGE = DEFAULT_ARROW_SCALE,
     ) -> None:
         """Generate and display a Numerical Reflection pattern"""
-        gen = generate_number_pattern_beam(number, 6, 5, 6, 25, True)
-        if not gen:
+        if not (gen := self.registry.pregen_numbers.get(number)):
             return await interaction.response.send_message(
                 "❌ Failed to generate number literal.",
                 ephemeral=True,
             )
 
+        direction, pattern = gen
         info = self.registry.from_name["number"]
-        direction = Direction[gen.direction]
 
         image, _ = generate_image(
             direction=direction,
-            pattern=gen.pattern,
+            pattern=pattern,
             is_great=info.is_great,
             palette=palette,
             theme=theme,
@@ -287,7 +285,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
             name=info.name,
             translation=f"{info.display_name}: {number}",
             direction=direction,
-            pattern=gen.pattern,
+            pattern=pattern,
             image=image,
             show_to_everyone=show_to_everyone,
         )

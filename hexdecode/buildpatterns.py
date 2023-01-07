@@ -1,8 +1,8 @@
 import asyncio
+import json
 import logging
 import re
 from pathlib import Path
-from typing import TypeVar
 
 from aiohttp import ClientSession
 
@@ -11,7 +11,6 @@ from hexdecode.hexast import Registry
 from hexdecode.registry import NormalPatternInfo, Registry
 from utils.api import APILocalPatternSource, APIPattern
 from utils.book_types import (
-    Book,
     BookCategory,
     BookEntry,
     BookPage_hexcasting_manual_pattern,
@@ -25,6 +24,9 @@ from utils.type_guards import is_typeddict_subtype
 
 translation_regex = re.compile(r"hexcasting.spell.[a-z]+:(.+)")
 header_regex = re.compile(r"\s*\(.+\)")
+
+MAX_PREGEN_NUMBER = 2000
+PREGEN_NUMBERS_FILE = f"numbers_{MAX_PREGEN_NUMBER}.json"
 
 
 def _build_pattern_urls(
@@ -105,7 +107,10 @@ def merge_dicts(*dicts: dict[str, str]) -> dict[str, str]:
 async def build_registry(session: ClientSession) -> Registry:
     logging.log(logging.INFO, "building registry")
 
-    registry = Registry()
+    with open(PREGEN_NUMBERS_FILE, "r", encoding="utf-8") as f:
+        pregen_numbers = {int(n): (Direction[d], p) for n, (d, p) in json.load(f).items()}
+
+    registry = Registry(pregen_numbers)
     name_to_translation: dict[str, str] = {}
     classname_to_path: dict[str, tuple[Mod, str]] = {}
     api_mod_data: dict[APIMod, tuple[list[APIPattern], list[BookCategory]]] = {}
