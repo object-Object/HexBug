@@ -214,6 +214,19 @@ class Segment:
         return self._canonical_tuple == other._canonical_tuple
 
 
+def get_pattern_points(direction: Direction, pattern: str) -> Generator[Coord, None, None]:
+    compass = direction
+    cursor = compass.as_delta()
+
+    yield Coord.origin()
+    yield cursor
+
+    for c in pattern:
+        compass = compass.rotated(Angle[c])
+        cursor += compass
+        yield cursor
+
+
 def get_pattern_segments(direction: Direction, pattern: str) -> Generator[Segment, None, None]:
     cursor = Coord.origin()
     compass = direction

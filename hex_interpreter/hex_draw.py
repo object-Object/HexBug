@@ -40,8 +40,8 @@ def plot_monochrome(
 
 
 def _plot_fancy_point(x: float, y: float, fmt: str, scale: float, color):
-    plt.plot(x, y, fmt, ms=3.5 * scale)
-    plt.plot(x, y, color=color, marker="o", ms=2 * scale)
+    plt.plot(x, y, fmt, ms=4 * scale)
+    plt.plot(x, y, color=color, marker="o", ms=2.5 * scale)
 
 
 def _plot_arrow(x: float, y: float, angle: float, scale: float, color):
@@ -93,7 +93,8 @@ def plot_intersect(
 
         if not i:
             # start arrow
-            _plot_arrow(arrow_x, arrow_y, arrow_angle, 2.9 * arrow_scale, color)
+            _plot_arrow(arrow_x, arrow_y, arrow_angle, 3.5 * arrow_scale, theme.value)
+            _plot_arrow(arrow_x, arrow_y, arrow_angle, 2 * arrow_scale, color)
         else:
             # normal point
             plt.plot(x, y, point_fmt, ms=2 * scale)

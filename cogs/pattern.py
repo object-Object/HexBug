@@ -5,9 +5,10 @@ from discord import app_commands
 from discord.ext import commands
 
 from hexdecode.buildpatterns import MAX_PREGEN_NUMBER
-from hexdecode.hex_math import Direction
+from hexdecode.hex_math import Angle, Direction
 from hexdecode.hexast import Registry, UnknownPattern, _parse_unknown_pattern, generate_bookkeeper
 from hexdecode.registry import SpecialHandlerPatternInfo
+from utils.align_horizontal import align_horizontal
 from utils.buttons import buildShowOrDeleteButton
 from utils.commands import HexBugBot, build_autocomplete
 from utils.generate_image import Palette, Theme, generate_image
@@ -244,16 +245,19 @@ class PatternCog(commands.GroupCog, name="pattern"):
     @app_commands.describe(
         number="The number to generate a literal for",
         show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
+        should_align_horizontal="Whether the result should be rotated to minimize height, or use the standard start orientation",
         palette="The color palette to use for the lines (has no effect for great spells)",
         theme="Whether the pattern should be rendered for light or dark theme",
         line_scale="The scale of the lines and dots in the image",
         arrow_scale="The scale of the arrows in the image",
     )
+    @app_commands.rename(should_align_horizontal="align_horizontal")
     async def numerical_reflection(
         self,
         interaction: discord.Interaction,
         number: app_commands.Range[int, -MAX_PREGEN_NUMBER, MAX_PREGEN_NUMBER],
         show_to_everyone: bool = False,
+        should_align_horizontal: bool = False,
         palette: Palette = Palette.Classic,
         theme: Theme = Theme.Dark,
         line_scale: SCALE_RANGE = DEFAULT_LINE_SCALE,
@@ -266,7 +270,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
                 ephemeral=True,
             )
 
-        direction, pattern = gen
+        direction, pattern = align_horizontal(*gen) if should_align_horizontal else gen
         info = self.registry.from_name["number"]
 
         image, _ = generate_image(
