@@ -5,25 +5,18 @@ from discord import app_commands
 from discord.ext import commands
 
 from hexdecode.buildpatterns import MAX_PREGEN_NUMBER
-from hexdecode.hex_math import Angle, Direction
+from hexdecode.hex_math import Direction
 from hexdecode.hexast import Registry, UnknownPattern, _parse_unknown_pattern, generate_bookkeeper
 from hexdecode.registry import SpecialHandlerPatternInfo
-from utils.align_horizontal import align_horizontal
 from utils.buttons import buildShowOrDeleteButton
 from utils.commands import HexBugBot, build_autocomplete
-from utils.generate_image import Palette, Theme, generate_image
+from utils.generate_image import Palette, Theme, draw_single_pattern
 from utils.mods import APIWithoutBookModInfo
+from utils.patterns import align_horizontal, parse_mask
 
 DEFAULT_LINE_SCALE = 6
 DEFAULT_ARROW_SCALE = 2
 SCALE_RANGE = app_commands.Range[float, 0.1, 1000.0]
-
-
-def parse_mask(translation: str) -> str | None:
-    mask = translation.removeprefix("Bookkeeper's Gambit:").lstrip().lower()
-    if not all(c in "v-" for c in mask):
-        return None
-    return mask
 
 
 async def send_pattern(
@@ -115,7 +108,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
             "Unknown" if isinstance(pattern_iota, UnknownPattern) else pattern_iota.localize_pattern_name(self.registry)
         )
 
-        image, _ = generate_image(
+        image, _ = draw_single_pattern(
             direction=direction,
             pattern=pattern,
             is_great=hide_stroke_order,
@@ -163,7 +156,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
         elif isinstance(info, SpecialHandlerPatternInfo):
             return await interaction.response.send_message("❌ Use `/pattern special`.", ephemeral=True)
 
-        image, _ = generate_image(
+        image, _ = draw_single_pattern(
             direction=info.direction,
             pattern=info.pattern,
             is_great=info.is_great,
@@ -220,7 +213,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
         info = self.registry.from_name["mask"]
         direction, pattern = generate_bookkeeper(mask)
 
-        image, _ = generate_image(
+        image, _ = draw_single_pattern(
             direction=direction,
             pattern=pattern,
             is_great=info.is_great,
@@ -270,10 +263,10 @@ class PatternCog(commands.GroupCog, name="pattern"):
                 ephemeral=True,
             )
 
-        direction, pattern = align_horizontal(*gen) if should_align_horizontal else gen
+        direction, pattern = align_horizontal(*gen, True) if should_align_horizontal else gen
         info = self.registry.from_name["number"]
 
-        image, _ = generate_image(
+        image, _ = draw_single_pattern(
             direction=direction,
             pattern=pattern,
             is_great=info.is_great,

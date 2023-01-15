@@ -5,9 +5,9 @@ from typing import TypedDict
 
 from aiohttp import ClientSession
 
-from hexdecode.registry import SpecialHandlerPatternInfo
 from hexdecode.buildpatterns import build_registry
-from utils.generate_image import Palette, Theme, generate_image
+from hexdecode.registry import SpecialHandlerPatternInfo
+from utils.generate_image import Palette, Theme, draw_single_pattern
 
 
 class ImageInfo(TypedDict):
@@ -46,7 +46,7 @@ for info in registry.patterns:
         filename = info.name.replace("/", "_") + ".png"
         direction = info.direction.name
         for theme in Theme:
-            image, (width, height) = generate_image(
+            image, (width, height) = draw_single_pattern(
                 direction=info.direction,
                 pattern=info.pattern,
                 is_great=info.is_great,

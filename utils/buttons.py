@@ -1,3 +1,5 @@
+from typing import Sequence
+
 import discord
 from discord.utils import MISSING
 
@@ -10,11 +12,12 @@ def buildShowOrDeleteButton(
     content: str = "",
     embed: discord.Embed = MISSING,
     file: discord.File = MISSING,
+    files: Sequence[discord.File] = MISSING,
 ) -> discord.ui.View:
     return (
         DeleteButton(interaction=interaction)
         if show_to_everyone
-        else ShowToEveryoneButton(interaction=interaction, content=content, embed=embed, file=file)
+        else ShowToEveryoneButton(interaction=interaction, content=content, embed=embed, file=file, files=files)
     )
 
 
@@ -47,22 +50,29 @@ class ShowToEveryoneButton(_BaseButton):
         content: str = "",
         embed: discord.Embed = MISSING,
         file: discord.File = MISSING,
+        files: Sequence[discord.File] = MISSING,
     ):
         super().__init__(interaction)
         self.content = content
         self.embed = embed
         self.file = file
+        self.files = files
 
     @discord.ui.button(label="Show to everyone", style=discord.ButtonStyle.gray)
     async def button(self, interaction: discord.Interaction, button: discord.ui.Button):
         if self.file is not MISSING:
             self.file.reset()
 
+        if self.files is not MISSING:
+            for f in self.files:
+                f.reset()
+
         assert (command := self.interaction.command)
         await interaction.response.send_message(
             content=f"{interaction.user.mention} used `/{command.qualified_name}`\n{self.content}",
             embed=self.embed,
             file=self.file,
+            files=self.files,
             allowed_mentions=discord.AllowedMentions.none(),
             view=DeleteButton(interaction=interaction),
         )

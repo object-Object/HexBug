@@ -124,6 +124,27 @@ class Direction(Enum):  # numbers increase clockwise
     WEST = 4
     NORTH_WEST = 5
 
+    @classmethod
+    def from_shorthand(cls, shorthand: str) -> Self | None:
+        shorthand = (
+            shorthand.lower()
+            .replace("_", "")
+            .replace("-", "")
+            .replace("north", "n")
+            .replace("south", "s")
+            .replace("west", "w")
+            .replace("east", "e")
+        )
+
+        return {
+            "e": Direction.EAST,
+            "se": Direction.SOUTH_EAST,
+            "sw": Direction.SOUTH_WEST,
+            "w": Direction.WEST,
+            "nw": Direction.NORTH_WEST,
+            "ne": Direction.NORTH_EAST,
+        }.get(shorthand)
+
     @property
     def side(self):
         return "WEST" if self in [Direction.NORTH_WEST, Direction.WEST, Direction.SOUTH_WEST] else "EAST"

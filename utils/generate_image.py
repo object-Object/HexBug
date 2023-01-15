@@ -2,24 +2,11 @@ import math
 from io import BytesIO
 
 import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
 from PIL import Image
 
 from hex_interpreter.hex_draw import Palette, Theme, plot_intersect, plot_monochrome
-from hexdecode.hex_math import Angle, Coord, Direction
-
-
-def get_points(direction: Direction, pattern: str) -> list[Coord]:
-    compass = direction
-    cursor = compass.as_delta()
-
-    points = [Coord.origin(), cursor]
-
-    for c in pattern:
-        compass = compass.rotated(Angle[c])
-        cursor += compass
-        points.append(cursor)
-
-    return points
+from hexdecode.hex_math import Coord, Direction, get_pattern_points
 
 
 def get_xy_bounds(points: list[Coord]) -> tuple[float, float, float, float]:
@@ -37,7 +24,7 @@ def save_close_crop(fig) -> tuple[BytesIO, tuple[int, int]]:
     """image, (width, height)"""
 
     x0, x1, y0, y1 = plt.axis()
-    plt.axis((x0 - 0.1, x1 + 0.1, y0 - 0.1, y1 + 0.1))
+    plt.axis((x0 - 0.4, x1 + 0.4, y0 - 0.4, y1 + 0.4))
 
     buf = BytesIO()
     fig.savefig(buf, format="png", transparent=True)
@@ -57,7 +44,33 @@ def save_close_crop(fig) -> tuple[BytesIO, tuple[int, int]]:
     return buf, size
 
 
-def generate_image(
+def prepare_fig(
+    width: float,
+    height: float,
+    fig_size: float,
+    line_scale: float,
+) -> tuple[Figure, float]:
+    max_width = max(width, height, 1.25)
+    scale = line_scale / math.log(max_width, 1.5) + 1.1
+
+    if width and height:
+        fig_width = width
+        fig_height = (fig_size * height) / width
+        if fig_height > fig_size:
+            fig_width = (fig_size * width) / height
+            fig_height = fig_size
+    else:
+        fig_width, fig_height = fig_size, fig_size
+
+    fig = plt.figure(figsize=(fig_width, fig_height))
+    ax = fig.add_axes([0, 0, 1, 1])
+    ax.set_aspect("equal")
+    ax.axis("off")
+
+    return fig, scale
+
+
+def draw_single_pattern(
     direction: Direction,
     pattern: str,
     is_great: bool,
@@ -66,18 +79,15 @@ def generate_image(
     line_scale: float,
     arrow_scale: float,
 ) -> tuple[BytesIO, tuple[int, int]]:
-    points = get_points(direction, pattern)
+    points = list(get_pattern_points(direction, pattern))
     min_x, min_y, max_x, max_y = get_xy_bounds(points)
 
-    width = max_x - min_x
-    height = max_y - min_y
-    max_width = max(width, height, 1.25)
-    scale = line_scale / math.log(max_width, 1.5) + 1.1
-
-    fig = plt.figure(figsize=(4, 4))
-    ax = fig.add_axes([0, 0, 1, 1])
-    ax.set_aspect("equal")
-    ax.axis("off")
+    fig, scale = prepare_fig(
+        width=max_x - min_x,
+        height=max_y - min_y,
+        fig_size=4,
+        line_scale=line_scale,
+    )
 
     if is_great:
         plot_monochrome(

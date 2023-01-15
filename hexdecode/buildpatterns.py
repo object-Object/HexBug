@@ -7,7 +7,6 @@ from pathlib import Path
 from aiohttp import ClientSession
 
 from hexdecode.hex_math import Direction
-from hexdecode.hexast import Registry
 from hexdecode.registry import NormalPatternInfo, Registry
 from utils.api import APILocalPatternSource, APIPattern
 from utils.book_types import (
