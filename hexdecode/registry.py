@@ -63,6 +63,7 @@ T = TypeVar("T", str, None)
 U = TypeVar("U")
 
 
+hexpattern_re = re.compile(r"HexPattern\((.+)\)")
 raw_pattern_re = re.compile(r"^(\S+)(?:\s+([aqwedAQWED]+))?$")
 special_handler_pattern_re = re.compile(r"^(.+)(?::\s*|\s+)(.+?)$")
 
@@ -154,7 +155,7 @@ class Registry:
         self._insert_shorthand(info)
 
     def from_shorthand(self, shorthand: str) -> tuple[PatternInfo | RawPatternInfo, Fraction | int | str | None] | None:
-        shorthand = shorthand.lower().strip()
+        shorthand = hexpattern_re.sub(lambda m: m.group(1), shorthand).lower().strip()
 
         if pattern := self._from_shorthand.get(shorthand):
             return pattern, None
