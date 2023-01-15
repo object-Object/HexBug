@@ -65,7 +65,7 @@ U = TypeVar("U")
 
 hexpattern_re = re.compile(r"HexPattern\((.+)\)")
 raw_pattern_re = re.compile(r"^(\S+)(?:\s+([aqwedAQWED]+))?$")
-special_handler_pattern_re = re.compile(r"^(.+)(?::\s*|\s+)(.+?)$")
+special_handler_pattern_re = re.compile(r"^(.+)(?<!:)(?::\s*|\s+)(.+?)$")
 
 suffixes: list[tuple[str, list[str]]] = [
     (" reflection", [" ref", " refl"]),
