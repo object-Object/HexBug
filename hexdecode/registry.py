@@ -63,7 +63,6 @@ T = TypeVar("T", str, None)
 U = TypeVar("U")
 
 
-separator_re = re.compile(r",\s*")
 raw_pattern_re = re.compile(r"^(\S+)(?:\s+([aqwedAQWED]+))?$")
 special_handler_pattern_re = re.compile(r"^(.+)(?::\s*|\s+)(.+?)$")
 
@@ -155,7 +154,7 @@ class Registry:
         self._insert_shorthand(info)
 
     def from_shorthand(self, shorthand: str) -> tuple[PatternInfo | RawPatternInfo, Fraction | int | str | None] | None:
-        shorthand = shorthand.lower()
+        shorthand = shorthand.lower().strip()
 
         if pattern := self._from_shorthand.get(shorthand):
             return pattern, None
@@ -190,7 +189,7 @@ class Registry:
         patterns: list[tuple[PatternInfo | RawPatternInfo, Fraction | int | str | None]] = []
         unknown: list[str] = []
 
-        split = separator_re.split(all_shorthand)
+        split = [s.strip() for s in all_shorthand.split(",")]
         for shorthand in split:
             if pattern := self.from_shorthand(shorthand):
                 patterns.append(pattern)

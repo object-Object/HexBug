@@ -109,7 +109,7 @@ class PatternsCog(commands.GroupCog, name="patterns"):
 
     @app_commands.command()
     @app_commands.describe(
-        all_shorthand="The patterns to display (shorthand is allowed)",
+        all_shorthand="The comma-separated list of patterns to display (shorthand is allowed)",
         show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
         max_dot_width="Maximum allowed width (in dots) of each row before wrapping",
         max_pattern_width="Maximum allowed number of patterns in each row before wrapping",
