@@ -8,7 +8,7 @@ from hexdecode.buildpatterns import MAX_PREGEN_NUMBER
 from hexdecode.hex_math import Direction
 from hexdecode.hexast import Registry, UnknownPattern, _parse_unknown_pattern, generate_bookkeeper
 from hexdecode.registry import SpecialHandlerPatternInfo
-from utils.buttons import buildShowOrDeleteButton
+from utils.buttons import build_show_or_delete_button
 from utils.commands import HexBugBot, build_autocomplete
 from utils.generate_image import Palette, Theme, draw_single_pattern
 from utils.mods import APIWithoutBookModInfo
@@ -51,7 +51,7 @@ async def send_pattern(
     await interaction.response.send_message(
         embed=embed,
         file=file,
-        view=buildShowOrDeleteButton(show_to_everyone, interaction, embed=embed, file=file),
+        view=build_show_or_delete_button(show_to_everyone, interaction, embed=embed, file=file),
         ephemeral=not show_to_everyone,
     )
 

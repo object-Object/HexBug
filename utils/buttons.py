@@ -6,7 +6,7 @@ from discord.utils import MISSING
 TIMEOUT = 120
 
 
-def buildShowOrDeleteButton(
+def build_show_or_delete_button(
     show_to_everyone: bool,
     interaction: discord.Interaction,
     content: str = "",
@@ -19,6 +19,12 @@ def buildShowOrDeleteButton(
         if show_to_everyone
         else ShowToEveryoneButton(interaction=interaction, content=content, embed=embed, file=file, files=files)
     )
+
+
+def _get_full_command(interaction: discord.Interaction) -> str:
+    args = " ".join(f"{name}: {value}" for name, value in interaction.namespace)
+    assert (command := interaction.command)
+    return f"/{command.qualified_name} {args}"
 
 
 class _BaseButton(discord.ui.View):
@@ -69,7 +75,7 @@ class ShowToEveryoneButton(_BaseButton):
 
         assert (command := self.interaction.command)
         await interaction.response.send_message(
-            content=f"{interaction.user.mention} used `/{command.qualified_name}`\n{self.content}",
+            content=f"{interaction.user.mention} used `{_get_full_command(self.interaction)}`\n{self.content}",
             embed=self.embed,
             file=self.file,
             files=self.files,

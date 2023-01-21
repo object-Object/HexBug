@@ -2,7 +2,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-from utils.buttons import buildShowOrDeleteButton
+from utils.buttons import build_show_or_delete_button
 from utils.commands import HexBugBot, build_autocomplete
 from utils.mods import WithBookModTransformerHint
 
@@ -35,7 +35,7 @@ class BookCog(commands.GroupCog, name="book"):
         await interaction.response.send_message(
             content,
             ephemeral=not show_to_everyone,
-            view=buildShowOrDeleteButton(show_to_everyone, interaction, content=content),
+            view=build_show_or_delete_button(show_to_everyone, interaction, content=content),
         )
 
     @app_commands.command()
@@ -62,7 +62,7 @@ class BookCog(commands.GroupCog, name="book"):
         await interaction.response.send_message(
             content,
             ephemeral=not show_to_everyone,
-            view=buildShowOrDeleteButton(show_to_everyone, interaction, content=content),
+            view=build_show_or_delete_button(show_to_everyone, interaction, content=content),
         )
 
     @page.autocomplete("page_title")

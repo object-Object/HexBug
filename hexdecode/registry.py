@@ -134,6 +134,12 @@ class Registry:
 
             if info.name == "mask":
                 options.append("book")
+            elif info.name == "open_paren":
+                options.append("{")
+                options.append("intro")
+            elif info.name == "close_paren":
+                options.append("}")
+                options.append("retro")
 
             for option in options:
                 option = option.strip()

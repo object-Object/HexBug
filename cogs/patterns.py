@@ -5,11 +5,11 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-from cogs.pattern import SCALE_RANGE
+from cogs.pattern import DEFAULT_ARROW_SCALE, DEFAULT_LINE_SCALE, SCALE_RANGE
 from hexdecode.hex_math import Direction
 from hexdecode.hexast import generate_bookkeeper
 from hexdecode.registry import RawPatternInfo, SpecialHandlerPatternInfo
-from utils.buttons import buildShowOrDeleteButton
+from utils.buttons import build_show_or_delete_button
 from utils.commands import HexBugBot
 from utils.draw_patterns_on_grid import draw_patterns_on_grid
 from utils.generate_decomposed_number import generate_decomposed_number
@@ -17,13 +17,15 @@ from utils.generate_image import Palette, Theme
 from utils.parse_rational import parse_rational
 from utils.patterns import parse_mask
 
-DEFAULT_LINE_SCALE = 12
-DEFAULT_ARROW_SCALE = 1.8
 WIDTH_RANGE = app_commands.Range[int, 1, 100]
 
 
 def space_sep(n: int) -> str:
     return f"{n:,}".replace(",", " ")
+
+
+def stripped_eq(a: str, b: str) -> bool:
+    return a.replace(",", "").replace(" ", "") == b.replace(",", "").replace(" ", "")
 
 
 class PatternsCog(commands.GroupCog, name="patterns"):
@@ -88,6 +90,8 @@ class PatternsCog(commands.GroupCog, name="patterns"):
             if isinstance(target, int)
             else f"{space_sep(target.numerator)} / {space_sep(target.denominator)}"
         )
+        if not stripped_eq(number, title):
+            title = f"{number} ({title})"
 
         embed = (
             discord.Embed(
@@ -103,7 +107,7 @@ class PatternsCog(commands.GroupCog, name="patterns"):
         await interaction.followup.send(
             embed=embed,
             file=file,
-            view=buildShowOrDeleteButton(show_to_everyone, interaction, embed=embed, file=file),
+            view=build_show_or_delete_button(show_to_everyone, interaction, embed=embed, file=file),
             ephemeral=not show_to_everyone,
         )
 
@@ -210,7 +214,7 @@ class PatternsCog(commands.GroupCog, name="patterns"):
         await interaction.followup.send(
             embed=embed,
             files=files,
-            view=buildShowOrDeleteButton(show_to_everyone, interaction, embed=embed, files=files),
+            view=build_show_or_delete_button(show_to_everyone, interaction, embed=embed, files=files),
             ephemeral=not show_to_everyone,
         )
 

@@ -13,7 +13,7 @@ from hex_interpreter.hex_draw import Palette, Theme, plot_intersect
 from hexdecode.buildpatterns import build_registry
 from hexdecode.hex_math import Angle, Coord, Direction
 from hexdecode.registry import SpecialHandlerPatternInfo
-from utils.generate_image import get_xy_bounds, prepare_fig, save_close_crop
+from utils.generate_image import get_scale, get_xy_bounds, prepare_fig, save_close_crop
 
 
 def _get_offset_col(coord: Coord) -> int:
@@ -58,7 +58,7 @@ class _GridPattern:
     # not using a setter to make it clear that this is a somewhat expensive operation
     def set_points(self, new: list[Coord]):
         self._points = new
-        self._point_set = set(new)
+        self.point_set = set(new)
 
     @property
     def height(self) -> int:
@@ -89,12 +89,12 @@ class _GridPattern:
     def shift_r(self, delta_r: int) -> None:
         self.shift(0, delta_r)
 
-    def get_max_possible_shift(self, other: _GridPattern) -> int:
+    def get_max_possible_shift(self, existing_points: set[Coord]) -> int:
         """initial conditions: self.min_q > other.max_q, self.r_midpoint ~ other.r_midpoint"""
         delta_q = 0
-        point_set = self._point_set
+        point_set = self.point_set
 
-        while point_set.isdisjoint(other._point_set):
+        while point_set.isdisjoint(existing_points):
             delta_q -= 1
             point_set = {p.shifted(Coord(-1, 0)) for p in point_set}
 
@@ -113,6 +113,7 @@ def draw_patterns_on_grid(
     arrow_scale: float,
 ):
     grid_patterns = [_GridPattern.from_pattern(d, p) for d, p in patterns]
+    existing_points = set()
 
     for i, pattern in enumerate(grid_patterns):
         delta_r = -pattern.r_midpoint
@@ -121,9 +122,10 @@ def draw_patterns_on_grid(
 
             # can't combine these because get_max_possible_shift needs the first shift to set up initial conditions
             pattern.shift(other.max_q - pattern.min_q + 1, delta_r)
-            pattern.shift_q(pattern.get_max_possible_shift(other))
+            pattern.shift_q(pattern.get_max_possible_shift(existing_points))
         else:
             pattern.shift(0 - pattern.min_q, delta_r)
+        existing_points.update(pattern.point_set)
 
     delta_q = 0
     delta_r = 0
@@ -131,8 +133,10 @@ def draw_patterns_on_grid(
     current_height = 0
     current_num_patterns = 0
 
+    scales = []
     min_x, max_x = math.inf, -math.inf
     min_y, max_y = math.inf, -math.inf
+
     widest_dot_width = 0
     widest_num_patterns = 0
 
@@ -172,15 +176,24 @@ def draw_patterns_on_grid(
         pattern.shift(math.floor(delta_q), delta_r)
 
         # this is kinda gross. but idk if there's a better way
-        pattern_min_x, pattern_min_y, pattern_max_x, pattern_max_y = get_xy_bounds(pattern.points)
+        (pattern_min_x, pattern_min_y), (pattern_max_x, pattern_max_y) = get_xy_bounds(pattern.points)
+
+        scales.append(
+            get_scale(
+                width=pattern_max_x - pattern_min_x,
+                height=pattern_max_y - pattern_min_y,
+                line_scale=line_scale,
+            )
+        )
+
         min_x, max_x = min(min_x, pattern_min_x), max(max_x, pattern_max_x)
         min_y, max_y = min(min_y, pattern_min_y), max(max_y, pattern_max_y)
 
-    fig, scale = prepare_fig(
+    scale = sum(scales) / len(scales)
+    fig = prepare_fig(
         width=max_x - min_x,
         height=max_y - min_y,
-        fig_size=max(widest_dot_width * 3 / 4, 4),
-        line_scale=line_scale,
+        fig_size=max(4, 2 * widest_num_patterns),
     )
 
     for pattern in grid_patterns:

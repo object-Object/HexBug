@@ -9,15 +9,20 @@ from hex_interpreter.hex_draw import Palette, Theme, plot_intersect, plot_monoch
 from hexdecode.hex_math import Coord, Direction, get_pattern_points
 
 
-def get_xy_bounds(points: list[Coord]) -> tuple[float, float, float, float]:
-    """min_x, min_y, max_x, max_y"""
+def get_xy_bounds(points: list[Coord]) -> tuple[tuple[float, float], tuple[float, float]]:
+    """(min_x, min_y), (max_x, max_y)"""
     x_vals: list[float] = []
     y_vals: list[float] = []
     for point in points:
         (x, y) = point.pixel()
         x_vals.append(x)
         y_vals.append(y)
-    return min(x_vals), min(y_vals), max(x_vals), max(y_vals)
+    return (min(x_vals), min(y_vals)), (max(x_vals), max(y_vals))
+
+
+def get_width_and_height(points: list[Coord]) -> tuple[float, float]:
+    (min_x, min_y), (max_x, max_y) = get_xy_bounds(points)
+    return max_x - min_x, max_y - min_y
 
 
 def save_close_crop(fig) -> tuple[BytesIO, tuple[int, int]]:
@@ -44,15 +49,16 @@ def save_close_crop(fig) -> tuple[BytesIO, tuple[int, int]]:
     return buf, size
 
 
+def get_scale(width: float, height: float, line_scale: float) -> float:
+    max_width = max(width, height, 1.25)
+    return line_scale / math.log(max_width, 1.5) + 1.1
+
+
 def prepare_fig(
     width: float,
     height: float,
     fig_size: float,
-    line_scale: float,
-) -> tuple[Figure, float]:
-    max_width = max(width, height, 1.25)
-    scale = line_scale / math.log(max_width, 1.5) + 1.1
-
+) -> Figure:
     if width and height:
         fig_width = width
         fig_height = (fig_size * height) / width
@@ -67,7 +73,7 @@ def prepare_fig(
     ax.set_aspect("equal")
     ax.axis("off")
 
-    return fig, scale
+    return fig
 
 
 def draw_single_pattern(
@@ -80,14 +86,10 @@ def draw_single_pattern(
     arrow_scale: float,
 ) -> tuple[BytesIO, tuple[int, int]]:
     points = list(get_pattern_points(direction, pattern))
-    min_x, min_y, max_x, max_y = get_xy_bounds(points)
+    width, height = get_width_and_height(points)
 
-    fig, scale = prepare_fig(
-        width=max_x - min_x,
-        height=max_y - min_y,
-        fig_size=4,
-        line_scale=line_scale,
-    )
+    scale = get_scale(width, height, line_scale)
+    fig = prepare_fig(width, height, fig_size=4)
 
     if is_great:
         plot_monochrome(

@@ -2,7 +2,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-from utils.buttons import buildShowOrDeleteButton
+from utils.buttons import build_show_or_delete_button
 from utils.commands import HexBugBot
 from utils.mods import ModTransformerHint
 
@@ -34,7 +34,7 @@ class ModCog(commands.Cog):
         await interaction.response.send_message(
             embed=embed,
             ephemeral=not show_to_everyone,
-            view=buildShowOrDeleteButton(show_to_everyone, interaction, embed=embed),
+            view=build_show_or_delete_button(show_to_everyone, interaction, embed=embed),
         )
 
 
