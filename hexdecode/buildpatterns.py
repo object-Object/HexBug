@@ -84,6 +84,9 @@ def _parse_i18n(name_to_translation: dict[str, str], i18n: dict[str, str]):
     for key, translation in i18n.items():
         if match := translation_regex.match(key):
             name = match[1]
+            # because hexal has OLD VERSIONS of all the hex lang files
+            if name in name_to_translation:
+                continue
             # because the new built in decoding interferes with this
             name_to_translation[name] = translation.replace(": %s", "")
 

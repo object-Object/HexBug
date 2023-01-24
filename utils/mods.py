@@ -14,7 +14,7 @@ from HexMod.doc.collate_data import parse_book as hex_parse_book
 from MoreIotas.doc.collate_data import parse_book as moreiotas_parse_book
 from utils.api import API
 from utils.book_types import Book
-from utils.git import get_current_commit, get_commit_message, get_tags
+from utils.git import get_commit_message, get_current_commit, get_tags
 from utils.urls import wrap_url
 
 
@@ -158,6 +158,7 @@ APIModInfo = APIWithBookModInfo | APIWithoutBookModInfo
 
 
 class RegistryMod(Enum):
+    # HEX NEEDS TO BE FIRST
     HexCasting = HexCastingRegistryModInfo(
         name="Hex Casting",
         directory="HexMod",
