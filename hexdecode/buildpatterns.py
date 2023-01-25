@@ -88,7 +88,8 @@ def _parse_i18n(name_to_translation: dict[str, str], i18n: dict[str, str]):
             if name in name_to_translation:
                 continue
             # because the new built in decoding interferes with this
-            name_to_translation[name] = translation.replace(": %s", "")
+            # and because hex has the wrong names
+            name_to_translation[name] = translation.replace(": %s", "").replace("Dstl.", "Distillation")
 
 
 def _insert_classname(classname_to_path: dict[str, tuple[Mod, str]], classname: str, mod: Mod, path: str):
