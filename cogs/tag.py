@@ -5,7 +5,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-from utils.buttons import DeleteButton
+from utils.buttons import DeleteButton, build_show_or_delete_button
 from utils.commands import HexBugBot
 
 
@@ -56,12 +56,14 @@ More info on plurality: https://morethanone.info/""",
     tools = Tag(
         embed=discord.Embed(
             title="Hex-related tools and programs",
-            description="""[HexBug](https://github.com/object-Object/HexBug): This bot! If you're doing something Hex-related in Python, this has a lot of useful classes and methods that you can (and probably should) use.
-[hexdecode](https://github.com/gchpaco/hexdecode): CLI tool for decoding pattern lists. HexBug's core functionality is based on this. Mostly superseded by HexBug (use `/decode`).
-[hex-interpreter](https://github.com/Robotgiggle/hex-interpreter): CLI tool for parsing and displaying patterns. A modified version of its rendering code is used in HexBug.
-[Hex-Casting-Generator](https://github.com/DaComputerNerd717/Hex-Casting-Generator): Very useful GUI tool for generating and displaying number literals.
-[hexnumgen](https://github.com/object-Object/hexnumgen-rs): Hex-Casting-Generator's number generation functionality, ported to Rust. Contains a CLI tool for generating number literals, and can also be used as a Rust library or a Python package. Used in HexBug.
-[hexpiler](https://github.com/pandaxtc/hexpiler): Proof-of-concept DSL for Hex Casting.""",
+            description="""**[HexBug](https://github.com/object-Object/HexBug):** This bot! If you're doing something Hex-related in Python, this has a lot of useful classes and methods that you can (and probably should) use.
+**[hexdecode](https://github.com/gchpaco/hexdecode):** CLI tool for decoding pattern lists. HexBug's core functionality is based on this. Mostly superseded by HexBug (use `/decode`).
+**[hex-interpreter](https://github.com/Robotgiggle/hex-interpreter):** CLI tool for parsing and displaying patterns. A modified version of its rendering code is used in HexBug.
+**[Hex-Casting-Generator](https://github.com/DaComputerNerd717/Hex-Casting-Generator):** Very useful GUI tool for generating and displaying number literals.
+**[hexnumgen](https://github.com/object-Object/hexnumgen-rs):** Hex-Casting-Generator's number generation functionality, ported to Rust. Contains a CLI tool for generating number literals, and can also be used as a Rust library or a Python package. Used in HexBug.
+**[hexpiler](https://github.com/pandaxtc/hexpiler):** Proof-of-concept DSL for Hex Casting.
+**[vscode-hex-casting](https://github.com/object-Object/vscode-hex-casting):** VSCode language features to make writing hexes easier, including highlighting, autocomplete, hover text, macro support, and more.
+**[Hex Studio](https://master-bw3.github.io/Hex-Studio/):** WIP visual editor and stack simulator for writing hexes in a similar manner to using the actual mod.""",
         )
     )
 
@@ -73,12 +75,17 @@ class TagCog(commands.Cog):
     @app_commands.command()
     @app_commands.describe(
         tag="The name of the tag to show",
+        show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
     )
     @app_commands.rename(tag="name")
-    async def tag(self, interaction: discord.Interaction, tag: Tags):
+    async def tag(self, interaction: discord.Interaction, tag: Tags, show_to_everyone: bool = False):
         """Show a premade info message"""
         value: Tag = tag.value
-        await interaction.response.send_message(**value, view=DeleteButton(interaction))
+        await interaction.response.send_message(
+            **value,
+            ephemeral=not show_to_everyone,
+            view=build_show_or_delete_button(show_to_everyone, interaction, **value),
+        )
 
 
 async def setup(bot: HexBugBot) -> None:
