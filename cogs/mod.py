@@ -23,8 +23,10 @@ class ModCog(commands.Cog):
         mod_info = mod.value
 
         embed = discord.Embed(title=mod_info.name).set_footer(text=f"Version: {mod_info.version}")
-        if mod_info.mod_url:
-            embed.add_field(name="Download", value=mod_info.mod_url, inline=False)
+        if mod_info.curseforge_url:
+            embed.add_field(name="CurseForge", value=mod_info.curseforge_url, inline=False)
+        if mod_info.modrinth_url:
+            embed.add_field(name="Modrinth", value=mod_info.modrinth_url, inline=False)
         if mod_info.book_url:
             embed.add_field(name="Web Book", value=mod_info.book_url, inline=False)
         embed.add_field(name="Source", value=mod_info.source_url, inline=False)

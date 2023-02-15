@@ -32,7 +32,8 @@ class _BaseModInfo(ABC):
     book_url: str | None = field(init=False)
     commit: str = field(init=False)
     version: str = field(init=False)
-    mod_url: str | None
+    curseforge_url: str | None
+    modrinth_url: str | None
     icon_url: str | None
 
     def build_source_url(self, path: str) -> str:
@@ -41,6 +42,10 @@ class _BaseModInfo(ABC):
     def build_book_url(self, url: str, show_spoilers: bool, escape: bool) -> str:
         book_url = f"{self.book_url}{'?nospoiler' if show_spoilers else ''}{url}"
         return wrap_url(book_url, show_spoilers, escape)
+
+    @property
+    def mod_url(self) -> str | None:
+        return self.curseforge_url or self.modrinth_url
 
 
 @dataclass(kw_only=True)
@@ -164,7 +169,8 @@ class RegistryMod(Enum):
         directory="HexMod",
         book=hex_parse_book("HexMod/Common/src/main/resources", "hexcasting", "thehexbook"),
         book_url="https://gamma-delta.github.io/HexMod/",
-        mod_url="https://www.curseforge.com/minecraft/mc-mods/hexcasting/",
+        curseforge_url="https://www.curseforge.com/minecraft/mc-mods/hexcasting/",
+        modrinth_url="https://modrinth.com/mod/hex-casting/",
         source_url="https://github.com/gamma-delta/HexMod/",
         icon_url="https://media.forgecdn.net/avatars/thumbnails/535/944/64/64/637857298951404372.png",
         pattern_files=[
@@ -188,7 +194,8 @@ class RegistryMod(Enum):
         directory="Hexal",
         book=hexal_parse_book("Hexal/Common/src/main/resources", "Hexal/doc/HexCastingResources", "hexal", "hexalbook"),
         book_url="https://talia-12.github.io/Hexal/",
-        mod_url="https://modrinth.com/mod/hexal/",
+        curseforge_url="https://www.curseforge.com/minecraft/mc-mods/hexal/",
+        modrinth_url="https://modrinth.com/mod/hexal/",
         source_url="https://github.com/Talia-12/Hexal/",
         icon_url="https://cdn.modrinth.com/data/aBVJ6Q36/e2bfd87a5e333a972c39d12a1c4e55add7616785.jpeg",
         pattern_files=["Common/src/main/java/ram/talia/hexal/common/casting/Patterns.kt"],
@@ -202,7 +209,8 @@ class RegistryMod(Enum):
             "MoreIotas/Common/src/main/resources", "MoreIotas/doc/HexCastingResources", "moreiotas", "moreiotasbook"
         ),
         book_url="https://talia-12.github.io/MoreIotas/",
-        mod_url="https://modrinth.com/mod/moreiotas/",
+        curseforge_url="https://www.curseforge.com/minecraft/mc-mods/moreiotas/",
+        modrinth_url="https://modrinth.com/mod/moreiotas/",
         source_url="https://github.com/Talia-12/MoreIotas/",
         icon_url="https://cdn.modrinth.com/data/Jmt7p37B/e4640394d665e134c80900c94d6d49ddb9047edd.png",
         pattern_files=["Common/src/main/java/ram/talia/moreiotas/common/casting/Patterns.kt"],
@@ -218,10 +226,11 @@ class APIMod(Enum):
     # https://hexbound.cypher.coffee/versions.json
     Hexbound = APIWithBookModInfo(
         name="Hexbound",
-        mod_url="https://modrinth.com/mod/hexbound/",
+        curseforge_url=None,
+        modrinth_url="https://modrinth.com/mod/hexbound/",
         icon_url="https://cdn.modrinth.com/data/PHgo4bVw/daa508e0b61340a46e04f669af1cf5e557193bc4.png",
         api_base_url="https://hexbound.cypher.coffee/",
-        version="0.1.0-beta.2+1.19.2",
+        version="0.1.0-beta.3+1.19.2",
     )
 
     @property
