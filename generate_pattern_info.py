@@ -52,7 +52,7 @@ for info in registry.patterns:
                 is_great=info.is_great,
                 palette=Palette.Classic,
                 theme=theme,
-                line_scale=10,
+                line_scale=6,
                 arrow_scale=2,
             )
             with open(f"out/patterns/{theme.name.lower()}/{filename}", "wb") as f:
