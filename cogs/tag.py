@@ -21,7 +21,9 @@ class Tags(Enum):
 Do ***NOT*** upload it directly to Discord in a message or file."""
         ).set_image(url="https://cdn.discordapp.com/attachments/326397739074060288/976135876046356560/image0-4-2.gif"),
     )
+
     git_log = Tag(content="https://xkcd.com/1296/")
+
     bug_report = Tag(
         embed=discord.Embed(
             description="""Please do not post your bug reports to Discord. Instead, post them to the issue tracker on the mod's GitHub.
@@ -30,6 +32,7 @@ Hex Casting: https://github.com/gamma-delta/HexMod/issues
 PAUCAL: https://github.com/gamma-delta/PAUCAL/issues""",
         ),
     )
+
     pk = Tag(
         embed=discord.Embed(
             description="""**What are all the `[BOT]` messages doing?**
@@ -39,6 +42,7 @@ PluralKit info: https://pluralkit.me/
 More info on plurality: https://morethanone.info/""",
         ),
     )
+
     forum = Tag(
         embed=discord.Embed(
             title="petrak@'s mods forum",
@@ -53,6 +57,7 @@ More info on plurality: https://morethanone.info/""",
 [Bliss Mods](https://forum.petra-k.at/viewforum.php?f=10)""",
         )
     )
+
     tools = Tag(
         embed=discord.Embed(
             title="Hex-related tools and programs",
@@ -66,6 +71,8 @@ More info on plurality: https://morethanone.info/""",
 **[Hex Studio](https://master-bw3.github.io/Hex-Studio/):** WIP visual editor and stack simulator for writing hexes in a similar manner to using the actual mod.""",
         )
     )
+
+    gemini_skill_issue = Tag(content="https://twitter.com/_Kinomoru/status/1550127535404359684")
 
 
 class TagCog(commands.Cog):
