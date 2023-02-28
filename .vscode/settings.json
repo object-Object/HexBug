@@ -13,4 +13,21 @@
         "**/HexMod/**",
         "**/hex_interpreter/**",
     ],
+    "java.autobuild.enabled": false,
+    "java.project.resourceFilters": [
+        "**/Hexal/**",
+        "**/HexMod/**",
+        "**/MoreIotas/**",
+        "\\.git"
+    ],
+    "java.server.launchMode": "LightWeight",
+    "java.import.exclusions": [
+        "**/Hexal/**",
+        "**/HexMod/**",
+        "**/MoreIotas/**",
+        "**/node_modules/**",
+        "**/.metadata/**",
+        "**/archetype-resources/**",
+        "**/META-INF/maven/**"
+    ],
 }
