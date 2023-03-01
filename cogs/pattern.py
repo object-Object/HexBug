@@ -104,9 +104,13 @@ class PatternCog(commands.GroupCog, name="pattern"):
             )
 
         pattern_iota, name = _parse_unknown_pattern(UnknownPattern(direction, pattern), self.registry)
-        translation = (
-            "Unknown" if isinstance(pattern_iota, UnknownPattern) else pattern_iota.localize_pattern_name(self.registry)
-        )
+
+        if pattern_iota._datum == "dewdeqwwedaqedwadweqewwd":
+            translation = "Amogus"
+        elif isinstance(pattern_iota, UnknownPattern):
+            translation = "Unknown"
+        else:
+            translation = pattern_iota.localize_pattern_name(self.registry)
 
         image, _ = draw_single_pattern(
             direction=direction,
