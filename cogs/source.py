@@ -26,7 +26,7 @@ class SourceCog(commands.GroupCog, name="source"):
     async def repo(
         self, interaction: discord.Interaction, mod: ModTransformerHint, show_to_everyone: bool = False
     ) -> None:
-        content = mod.value.source_url
+        content = mod.value.build_source_tree_url("")
         await interaction.response.send_message(
             content,
             ephemeral=not show_to_everyone,
@@ -46,7 +46,7 @@ class SourceCog(commands.GroupCog, name="source"):
         mod_info = info.mod.value
 
         filename: str = info.path.split("/")[-1]
-        source_url = info.class_mod.value.build_source_url(info.path)
+        source_url = info.class_mod.value.build_source_blob_url(info.path)
         title = filename if filename.split(".")[0] == info.classname else f"{filename} ({info.classname})"
         embed = (
             discord.Embed(title=title, url=source_url)

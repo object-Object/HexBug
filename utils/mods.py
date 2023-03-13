@@ -36,7 +36,10 @@ class _BaseModInfo(ABC):
     modrinth_url: str | None
     icon_url: str | None
 
-    def build_source_url(self, path: str) -> str:
+    def build_source_tree_url(self, path: str) -> str:
+        return f"{self.source_url}tree/{self.commit}/{path}"
+
+    def build_source_blob_url(self, path: str) -> str:
         return f"{self.source_url}blob/{self.commit}/{path}"
 
     def build_book_url(self, url: str, show_spoilers: bool, escape: bool) -> str:
