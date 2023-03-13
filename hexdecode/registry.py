@@ -196,7 +196,7 @@ class Registry:
         patterns: list[tuple[PatternInfo | RawPatternInfo, Fraction | int | str | None]] = []
         unknown: list[str] = []
 
-        split = [s.strip() for s in all_shorthand.split(",")]
+        split = [stripped for s in all_shorthand.split(",") if (stripped := s.strip())]
         for shorthand in split:
             if pattern := self.from_shorthand(shorthand):
                 patterns.append(pattern)
