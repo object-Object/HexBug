@@ -150,16 +150,23 @@ class PatternsCog(commands.GroupCog, name="patterns"):
                 case SpecialHandlerPatternInfo():
                     match info.name:
                         case "mask":
-                            assert isinstance(arg, str)
+                            if not isinstance(arg, str):
+                                unknown.append(info.display_name)
+                                continue
+
                             patterns.append(generate_bookkeeper(arg))
 
                         case "number":
-                            assert isinstance(arg, (Fraction, int))
+                            if not isinstance(arg, (Fraction, int)):
+                                unknown.append(info.display_name)
+                                continue
+
                             if (result := generate_decomposed_number(self.registry, arg)) is None:
                                 unknown.append(f"{info.display_name}: {arg}")
-                            else:
-                                new_patterns, _, _ = result
-                                patterns.extend(new_patterns)
+                                continue
+
+                            new_patterns, _, _ = result
+                            patterns.extend(new_patterns)
 
                         case name:
                             return await interaction.followup.send(
