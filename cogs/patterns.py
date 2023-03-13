@@ -58,7 +58,7 @@ class PatternsCog(commands.GroupCog, name="patterns"):
         line_scale: SCALE_RANGE = DEFAULT_LINE_SCALE,
         arrow_scale: SCALE_RANGE = DEFAULT_ARROW_SCALE,
     ) -> None:
-        """Generate and display a pattern or list of patterns to put any integer on the stack"""
+        """Generate and display a pattern or list of patterns to put almost any number on the stack"""
         await interaction.response.defer(ephemeral=not show_to_everyone, thinking=True)
 
         if (target := parse_rational(number)) is None:
