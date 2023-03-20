@@ -5,6 +5,7 @@
             "source.organizeImports": true,
         },
     },
+    "isort.args": ["-l", "120"],
     "python.formatting.provider": "black",
     "python.analysis.typeCheckingMode": "basic", // strict doesn't play nice with a lot of things we're using
     "todo-tree.filtering.excludeGlobs": [
