@@ -1,3 +1,4 @@
+from collections import defaultdict
 from enum import Enum, StrEnum
 from itertools import pairwise
 
@@ -56,7 +57,7 @@ def plot_intersect(
     theme: Theme,
     start_color_index=0,
 ) -> None:
-    visited_points_and_colors: dict[Coord, int] = {}
+    colors_used_at_point: defaultdict[Coord, set[int]] = defaultdict(set)
 
     colors = palette.value
     start_color_index %= len(colors)
@@ -75,20 +76,25 @@ def plot_intersect(
         arrow_angle = direction.as_pyplot_angle()
 
         color = colors[color_index]
+        colors_used = colors_used_at_point[next_point]
 
-        if visited_points_and_colors.get(next_point) == color_index:
+        if color_index in colors_used:
             # first half
             plt.plot((x, arrow_x), (y, arrow_y), color=color, lw=scale)
 
-            color_index = (color_index + 1) % len(colors)
-            visited_points_and_colors[next_point] = color_index
+            # pick the next colour that hasn't been used yet
+            # technically this does one extra check but python doesn't have do-while
+            while color_index in colors_used:
+                color_index = (color_index + 1) % len(colors)
+
+            colors_used.add(color_index)
             color = colors[color_index]
 
             # second half and arrow
             plt.plot((arrow_x, next_x), (arrow_y, next_y), color=color, lw=scale)
             _plot_arrow(arrow_x, arrow_y, arrow_angle, 2 * arrow_scale, color)
         else:
-            visited_points_and_colors[point] = color_index
+            colors_used.add(color_index)
             plt.plot((x, next_x), (y, next_y), color=color, lw=scale)
 
         if not i:
