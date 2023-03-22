@@ -2,7 +2,7 @@ import re
 from collections import defaultdict
 from dataclasses import dataclass, field
 from fractions import Fraction
-from typing import TypeVar
+from typing import Iterable, TypeVar
 
 from hexdecode.hex_math import Direction, Segment, get_rotated_aligned_pattern_segments
 from utils.mods import Mod
@@ -10,7 +10,7 @@ from utils.parse_rational import parse_rational
 from utils.patterns import parse_mask
 
 
-@dataclass(frozen=True, kw_only=True)
+@dataclass(frozen=True, kw_only=True, repr=False)
 class _BasePatternInfo:
     name: str
     translation: str | None
@@ -28,21 +28,33 @@ class _BasePatternInfo:
         object.__setattr__(self, "book_url", book_url)
         object.__setattr__(self, "args", args)
 
+    def __repr__(self) -> str:
+        return f"{self.mod.name}:{self.name}"
+
     @property
     def display_name(self) -> str:
         return self.name if self.translation is None else self.translation
 
 
-@dataclass(frozen=True, kw_only=True)
+@dataclass(frozen=True, kw_only=True, repr=False)
 class NormalPatternInfo(_BasePatternInfo):
     direction: Direction
     pattern: str
+    rotated_segments: tuple[frozenset[Segment]] = field(init=False)
+    """Tuple of rotated aligned segment sets for this pattern. Empty if is_great is false."""
+
+    def __post_init__(self):
+        rotated_segments: tuple[frozenset[Segment]] = (
+            tuple(get_rotated_aligned_pattern_segments(self.direction, self.pattern)) if self.is_great else ()
+        )
+        object.__setattr__(self, "rotated_segments", rotated_segments)
 
 
-@dataclass(frozen=True, kw_only=True)
+@dataclass(frozen=True, kw_only=True, repr=False)
 class SpecialHandlerPatternInfo(_BasePatternInfo):
     direction: None = None
     pattern: None = None
+    rotated_segments: None = None
 
 
 PatternInfo = NormalPatternInfo | SpecialHandlerPatternInfo
@@ -55,8 +67,15 @@ class RawPatternInfo:
 
 
 class DuplicatePatternException(Exception):
-    def __init__(self, new_info: PatternInfo, old_info: PatternInfo) -> None:
-        super().__init__(f"Duplicate pattern!\n{new_info}\n{old_info}")
+    def __init__(self, info: PatternInfo, duplicates: list[tuple[str, PatternInfo]]) -> None:
+        message = [f"{info}"]
+
+        for attribute, duplicate in duplicates:
+            value = getattr(info, attribute)
+            value_display = value if isinstance(value, (str, int, float, bool)) else type(value)
+            message.append(f'    |   {duplicate}.{attribute} = "{value_display}"')
+
+        super().__init__("\n".join(message))
 
 
 T = TypeVar("T", str, None)
@@ -92,11 +111,6 @@ class Registry:
         self._from_shorthand: dict[str, PatternInfo] = {}
         self.page_title_to_url: defaultdict[Mod, dict[str, tuple[str, list[str]]]] = defaultdict(dict)
         """mod: page_title: (url, names)"""
-
-    def _insert_possible_duplicate(self, lookup: dict[U, PatternInfo], key: U, info: PatternInfo):
-        if (other_info := lookup.get(key)) and other_info.name != info.name:
-            raise DuplicatePatternException(info, other_info)
-        lookup[key] = info
 
     def _insert_shorthand(self, info: PatternInfo):
         self._from_shorthand[info.name.lower()] = info
@@ -146,21 +160,54 @@ class Registry:
                 if option and option not in self._from_shorthand and option not in check_suffixes:
                     self._from_shorthand[option] = info
 
+    def _ensure_not_duplicate(self, info: PatternInfo) -> None:
+        """Ensures that this pattern doesn't yet exist in any of the registry lookups.
+
+        Raises:
+            DuplicatePatternException: If a conflict is found.
+        """
+        duplicates: list[tuple[str, PatternInfo]] = []
+
+        def _add_dup_if_exists(attribute: str, duplicate: PatternInfo | None):
+            if duplicate is not None:
+                duplicates.append((attribute, duplicate))
+
+        _add_dup_if_exists("name", self.from_name.get(info.name))
+        _add_dup_if_exists("display_name", self.from_display_name.get(info.display_name))
+
+        if not isinstance(info, SpecialHandlerPatternInfo):
+            if info.is_great:
+                for i, segments in enumerate(info.rotated_segments):
+                    _add_dup_if_exists(f"segments[{i}]", self.from_segments.get(segments))
+            else:
+                _add_dup_if_exists("pattern", self.from_pattern.get(info.pattern))
+
+        if duplicates:
+            raise DuplicatePatternException(info, duplicates)
+
     def add_pattern(self, info: PatternInfo) -> None:
+        """Insert a pattern into the registry.
+
+        Raises:
+            DuplicatePatternException: If the value of any lookup field already exists in the registry.
+        """
+        self._ensure_not_duplicate(info)
+
         self.patterns.append(info)
         self.from_name[info.name] = info
         self.from_display_name[info.display_name] = info
 
         if not isinstance(info, SpecialHandlerPatternInfo):
             if info.is_great:
-                for segments in get_rotated_aligned_pattern_segments(info.direction, info.pattern):
-                    self._insert_possible_duplicate(self.from_segments, segments, info)
+                for segments in info.rotated_segments:
+                    self.from_segments[segments] = info
             else:
-                self._insert_possible_duplicate(self.from_pattern, info.pattern, info)
+                self.from_pattern[info.pattern] = info
 
         self._insert_shorthand(info)
 
     def from_shorthand(self, shorthand: str) -> tuple[PatternInfo | RawPatternInfo, Fraction | int | str | None] | None:
+        # TODO: why doesn't this return a class?????
         shorthand = hexpattern_re.sub(lambda m: m.group(1), shorthand).lower().strip()
 
         if pattern := self._from_shorthand.get(shorthand):

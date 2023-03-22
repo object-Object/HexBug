@@ -7,7 +7,7 @@ from pathlib import Path
 from aiohttp import ClientSession
 
 from hexdecode.hex_math import Direction
-from hexdecode.registry import NormalPatternInfo, Registry
+from hexdecode.registry import DuplicatePatternException, NormalPatternInfo, Registry
 from utils.api import APILocalPatternSource, APIPattern
 from utils.book_types import (
     BookCategory,
@@ -166,6 +166,14 @@ async def build_registry(session: ClientSession) -> Registry:
 
     # patterns and books
 
+    duplicates: list[DuplicatePatternException] = []
+
+    for info in build_extra_patterns(name_to_translation):
+        try:
+            registry.add_pattern(info)
+        except DuplicatePatternException as e:
+            duplicates.append(e)
+
     for mod in RegistryMod:
         mod_info = mod.value
 
@@ -175,22 +183,22 @@ async def build_registry(session: ClientSession) -> Registry:
                 for match in mod_info.registry_regex.finditer(file.read()):
                     (pattern, direction, name, classname, is_great) = match.groups()
                     class_mod, path = classname_to_path[classname]
-                    registry.add_pattern(
-                        NormalPatternInfo(
-                            name=name,
-                            translation=name_to_translation.get(name),
-                            mod=mod,
-                            path=path,
-                            classname=classname,
-                            class_mod=class_mod,
-                            is_great=bool(is_great),
-                            direction=Direction[direction],
-                            pattern=pattern,
+                    try:
+                        registry.add_pattern(
+                            NormalPatternInfo(
+                                name=name,
+                                translation=name_to_translation.get(name),
+                                mod=mod,
+                                path=path,
+                                classname=classname,
+                                class_mod=class_mod,
+                                is_great=bool(is_great),
+                                direction=Direction[direction],
+                                pattern=pattern,
+                            )
                         )
-                    )
-
-        for info in build_extra_patterns(name_to_translation):
-            registry.add_pattern(info)
+                    except DuplicatePatternException as e:
+                        duplicates.append(e)
 
         # docs
         _build_urls(registry, mod_info.book["categories"], mod)
@@ -211,21 +219,27 @@ async def build_registry(session: ClientSession) -> Registry:
             else:
                 class_mod, path = classname_to_path[classname]
 
-            registry.add_pattern(
-                NormalPatternInfo(
-                    name=name,
-                    translation=name_to_translation.get(name),
-                    mod=mod,
-                    path=path,
-                    classname=classname,
-                    class_mod=class_mod,
-                    is_great=pattern["isPerWorld"],
-                    direction=Direction[pattern["defaultStartDir"]],
-                    pattern=pattern["angleSignature"],
+            try:
+                registry.add_pattern(
+                    NormalPatternInfo(
+                        name=name,
+                        translation=name_to_translation.get(name),
+                        mod=mod,
+                        path=path,
+                        classname=classname,
+                        class_mod=class_mod,
+                        is_great=pattern["isPerWorld"],
+                        direction=Direction[pattern["defaultStartDir"]],
+                        pattern=pattern["angleSignature"],
+                    )
                 )
-            )
+            except DuplicatePatternException as e:
+                duplicates.append(e)
 
         if isinstance(mod_info, APIWithBookModInfo):
             _build_urls(registry, categories, mod)
+
+    if duplicates:
+        raise ExceptionGroup("Duplicate patterns found.", duplicates)
 
     return registry
