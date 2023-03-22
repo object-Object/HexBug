@@ -57,11 +57,13 @@ def plot_intersect(
     theme: Theme,
     start_color_index=0,
 ) -> None:
-    colors_used_at_point: defaultdict[Coord, set[int]] = defaultdict(set)
-
     colors = palette.value
     start_color_index %= len(colors)
     color_index = start_color_index
+
+    # we only add to colors_used after moving, so add the color at the first point
+    colors_used_at_point: defaultdict[Coord, set[int]] = defaultdict(set)
+    colors_used_at_point[points[0]].add(color_index)
 
     point_fmt = theme.value + "o"
     arrow_scale *= scale
