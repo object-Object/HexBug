@@ -108,7 +108,7 @@ class _BaseAPIModInfo(_BaseModInfo, ABC):
     """No trailing slash"""
 
     def __post_init__(self, api_base_url: str):
-        self.api = API(f"{api_base_url}{self.version}/")
+        self.api = API(api_base_url, self.version)
         self._source_url: str | None = None
         self._book_url: str | None = None
         self._commit: str | None = None

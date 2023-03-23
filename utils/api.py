@@ -22,7 +22,7 @@ class APIVersions(TypedDict):
     latestPublished: str
     """ISO 8601"""
     versions: list[APIVersion]
-    """Sorted by descending release date"""
+    """Sorted by descending release date, so latest is first"""
 
 
 class APIDocsBook(TypedDict):
@@ -66,12 +66,21 @@ class APIPattern(TypedDict):
 
 @dataclass
 class API:
-    root_url: str
+    base_url: str
+    version: str
+    versioned_url: str = field(init=False)
 
-    async def _get_endpoint(self, session: ClientSession, endpoint: str):
-        async with session.get(self.root_url + endpoint) as resp:
+    def __post_init__(self):
+        self.versioned_url = f"{self.base_url}{self.version}/"
+
+    async def _get_endpoint(self, session: ClientSession, endpoint: str, with_version: bool = True):
+        root = self.versioned_url if with_version else self.base_url
+        async with session.get(root + endpoint) as resp:
             resp.raise_for_status()
             return await resp.json()
+
+    async def get_versions(self, session: ClientSession) -> APIVersions:
+        return await self._get_endpoint(session, "versions.json", False)
 
     async def get_docs(self, session: ClientSession) -> APIDocs:
         return await self._get_endpoint(session, "docs.json")
@@ -86,4 +95,4 @@ class API:
         return await self._get_endpoint(session, docs["book"]["dumpPath"])
 
     def get_book_url(self, docs: APIDocs) -> str:
-        return self.root_url + docs["book"]["webPath"]
+        return self.versioned_url + docs["book"]["webPath"]

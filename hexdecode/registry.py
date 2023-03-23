@@ -1,8 +1,9 @@
+import logging
 import re
 from collections import defaultdict
 from dataclasses import dataclass, field
 from fractions import Fraction
-from typing import Iterable, TypeVar
+from typing import TypeVar
 
 from hexdecode.hex_math import Direction, Segment, get_rotated_aligned_pattern_segments
 from utils.mods import Mod
@@ -66,16 +67,10 @@ class RawPatternInfo:
     pattern: str
 
 
+@dataclass
 class DuplicatePatternException(Exception):
-    def __init__(self, info: PatternInfo, duplicates: list[tuple[str, PatternInfo]]) -> None:
-        message = [f"{info}"]
-
-        for attribute, duplicate in duplicates:
-            value = getattr(info, attribute)
-            value_display = value if isinstance(value, (str, int, float, bool)) else type(value)
-            message.append(f'    |   {duplicate}.{attribute} = "{value_display}"')
-
-        super().__init__("\n".join(message))
+    info: PatternInfo
+    duplicates: list[tuple[str, PatternInfo]]
 
 
 T = TypeVar("T", str, None)

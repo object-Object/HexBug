@@ -1,5 +1,7 @@
 import asyncio
 import fileinput
+import logging
+import sys
 
 from aiohttp import ClientSession
 
@@ -15,7 +17,9 @@ async def _build_registry():
 
 
 # also don't use this in production
-registry = asyncio.run(_build_registry())
+if (registry := asyncio.run(_build_registry())) is None:
+    logging.critical("Failed to build registry, exiting.")
+    sys.exit(1)
 
 for line in fileinput.input(files=[], encoding="utf-8"):
     level = 0

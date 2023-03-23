@@ -107,7 +107,7 @@ def merge_dicts(*dicts: dict[str, str]) -> dict[str, str]:
     return output
 
 
-async def build_registry(session: ClientSession) -> Registry:
+async def build_registry(session: ClientSession) -> Registry | None:
     logging.log(logging.INFO, "building registry")
 
     with open(PREGEN_NUMBERS_FILE, "r", encoding="utf-8") as f:
@@ -141,7 +141,14 @@ async def build_registry(session: ClientSession) -> Registry:
     for mod in APIMod:
         mod_info = mod.value
 
-        docs = await mod_info.api.get_docs(session)
+        # fetch api data (this is the slow part)
+        versions, docs = await asyncio.gather(
+            mod_info.api.get_versions(session),
+            mod_info.api.get_docs(session),
+        )
+        if (latest_version := versions["versions"][0]["id"]) != mod_info.version:
+            logging.warning(f"Update available: {mod.name}@{latest_version} (from {mod_info.version})")
+
         lang, patterns, categories = await asyncio.gather(
             mod_info.api.get_lang(session, docs),
             mod_info.api.get_patterns(session, docs),
@@ -166,13 +173,13 @@ async def build_registry(session: ClientSession) -> Registry:
 
     # patterns and books
 
-    duplicates: list[DuplicatePatternException] = []
+    duplicate_exceptions: list[DuplicatePatternException] = []
 
     for info in build_extra_patterns(name_to_translation):
         try:
             registry.add_pattern(info)
         except DuplicatePatternException as e:
-            duplicates.append(e)
+            duplicate_exceptions.append(e)
 
     for mod in RegistryMod:
         mod_info = mod.value
@@ -198,7 +205,7 @@ async def build_registry(session: ClientSession) -> Registry:
                             )
                         )
                     except DuplicatePatternException as e:
-                        duplicates.append(e)
+                        duplicate_exceptions.append(e)
 
         # docs
         _build_urls(registry, mod_info.book["categories"], mod)
@@ -234,12 +241,25 @@ async def build_registry(session: ClientSession) -> Registry:
                     )
                 )
             except DuplicatePatternException as e:
-                duplicates.append(e)
+                duplicate_exceptions.append(e)
 
         if isinstance(mod_info, APIWithBookModInfo):
             _build_urls(registry, categories, mod)
 
-    if duplicates:
-        raise ExceptionGroup("Duplicate patterns found.", duplicates)
+    for pattern in registry.patterns:
+        if pattern.book_url is None:
+            logging.warning(f"Undocumented pattern: {pattern}")
+        if pattern.translation is None:
+            logging.warning(f"Untranslated pattern: {pattern}")
+
+    if duplicate_exceptions:
+        for e in duplicate_exceptions:
+            message = [f"Duplicate pattern: {e.info}"]
+            for attribute, duplicate in e.duplicates:
+                value = getattr(e.info, attribute)
+                value_display = value if isinstance(value, (str, int, float, bool)) else type(value)
+                message.append(f'{"":34}{duplicate}.{attribute} = "{value_display}"')
+            logging.error("\n".join(message))
+        return None
 
     return registry

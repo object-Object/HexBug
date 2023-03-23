@@ -1,6 +1,8 @@
 # used for my vscode extension
 import asyncio
 import json
+import logging
+import sys
 from typing import TypedDict
 
 from aiohttp import ClientSession
@@ -33,7 +35,9 @@ async def _build_registry():
 
 
 # also don't use this in production
-registry = asyncio.run(_build_registry())
+if (registry := asyncio.run(_build_registry())) is None:
+    logging.critical("Failed to build registry, exiting.")
+    sys.exit(1)
 
 output: dict[str, ExtensionPatternInfo] = {}  # translation: PatternJSON
 for info in registry.patterns:
