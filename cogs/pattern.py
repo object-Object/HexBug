@@ -280,11 +280,20 @@ class PatternCog(commands.GroupCog, name="pattern"):
             arrow_scale=arrow_scale,
         )
 
+        # nothing to see here, move along
+        translation = f"{info.display_name}: "
+        if number == 69:
+            translation += "69 (nice)"
+        elif number == 1984:
+            translation += "Literally 1984"
+        else:
+            translation += str(number)
+
         await send_pattern(
             registry=self.registry,
             interaction=interaction,
             name=info.name,
-            translation=f"{info.display_name}: {number}",
+            translation=translation,
             direction=direction,
             pattern=pattern,
             image=image,
