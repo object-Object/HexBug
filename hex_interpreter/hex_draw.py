@@ -86,8 +86,11 @@ def plot_intersect(
 
             # pick the next colour that hasn't been used yet
             # technically this does one extra check but python doesn't have do-while
-            while color_index in colors_used:
-                color_index = (color_index + 1) % len(colors)
+            # only do this if there are colours left, otherwise it loops forever and kills the bot
+            # that happened in production oops
+            if len(colors_used) < len(colors):
+                while color_index in colors_used:
+                    color_index = (color_index + 1) % len(colors)
 
             colors_used.add(color_index)
             color = colors[color_index]

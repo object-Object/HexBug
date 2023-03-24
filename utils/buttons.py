@@ -1,6 +1,7 @@
 from typing import Sequence
 
 import discord
+from discord import app_commands
 from discord.utils import MISSING
 
 TIMEOUT = 120
@@ -21,9 +22,8 @@ def build_show_or_delete_button(
     )
 
 
-def _get_full_command(interaction: discord.Interaction) -> str:
+def get_full_command(interaction: discord.Interaction, command: app_commands.Command) -> str:
     args = " ".join(f"{name}: {value}" for name, value in interaction.namespace)
-    assert (command := interaction.command)
     return f"/{command.qualified_name} {args}"
 
 
@@ -73,9 +73,9 @@ class ShowToEveryoneButton(_BaseButton):
             for f in self.files:
                 f.reset()
 
-        assert (command := self.interaction.command)
+        assert isinstance(command := self.interaction.command, app_commands.Command)
         await interaction.response.send_message(
-            content=f"{interaction.user.mention} used `{_get_full_command(self.interaction)}`\n{self.content}",
+            content=f"{interaction.user.mention} used `{get_full_command(self.interaction, command)}`\n{self.content}",
             embed=self.embed,
             file=self.file,
             files=self.files,

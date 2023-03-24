@@ -86,7 +86,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
         self,
         interaction: discord.Interaction,
         direction: Direction,
-        pattern: app_commands.Range[str, 1, 256],
+        pattern: app_commands.Range[str, 1, 128],
         show_to_everyone: bool = False,
         hide_stroke_order: bool = False,
         palette: Palette = Palette.Classic,

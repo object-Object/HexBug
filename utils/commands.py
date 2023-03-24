@@ -1,3 +1,4 @@
+import logging
 from collections import defaultdict
 
 from discord import app_commands

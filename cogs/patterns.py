@@ -126,7 +126,7 @@ class PatternsCog(commands.GroupCog, name="patterns"):
     async def hex(
         self,
         interaction: discord.Interaction,
-        all_shorthand: str,
+        all_shorthand: app_commands.Range[str, 1, 2000],
         show_to_everyone: bool = False,
         max_dot_width: WIDTH_RANGE = 16,
         max_pattern_width: WIDTH_RANGE = 100,
@@ -185,6 +185,18 @@ class PatternsCog(commands.GroupCog, name="patterns"):
         elif not patterns:
             return await interaction.followup.send(
                 "❌ No patterns found.",
+                ephemeral=True,
+            )
+        elif len(patterns) > 64:
+            # this is why we can't have nice things
+            return await interaction.followup.send(
+                "❌ Too many patterns (max of 64).",
+                ephemeral=True,
+            )
+        elif sum(len(pattern) for _, pattern in patterns) > 512:
+            # fine i'm taking away your toys since you can't play nice
+            return await interaction.followup.send(
+                "❌ Too many angles (max of 512).",
                 ephemeral=True,
             )
 
