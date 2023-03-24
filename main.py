@@ -66,7 +66,7 @@ async def main():
         for path in Path("cogs").rglob("*.py"):
             module = ".".join(path.with_name(path.stem).parts)
 
-            logger.info(f"loading {module}")
+            logger.info(f"Loading {module}")
             await bot.load_extension(module)
 
         await bot.start(token)

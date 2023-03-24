@@ -108,7 +108,7 @@ def merge_dicts(*dicts: dict[str, str]) -> dict[str, str]:
 
 
 async def build_registry(session: ClientSession) -> Registry | None:
-    logging.log(logging.INFO, "building registry")
+    logging.info("Building registry")
 
     with open(PREGEN_NUMBERS_FILE, "r", encoding="utf-8") as f:
         pregen_numbers = {int(n): (Direction[d], p) for n, (d, p) in json.load(f).items()}
