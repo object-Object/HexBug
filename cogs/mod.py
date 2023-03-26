@@ -19,7 +19,7 @@ class ModCog(commands.Cog):
     async def mod(
         self, interaction: discord.Interaction, mod: ModTransformerHint, show_to_everyone: bool = False
     ) -> None:
-        """Show information and links for a specific mod"""
+        """Show information and links for mods that are integrated into HexBug"""
         mod_info = mod.value
 
         embed = discord.Embed(title=mod_info.name).set_footer(text=f"Version: {mod_info.version}")
