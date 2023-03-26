@@ -134,10 +134,10 @@ OTHER_INTEROP: list[AddonEntry] = [
         modloaders=[FORGE],
     ),
     AddonEntry(
-        name="Ducky Periphs",
+        name="Ducky Peripherals",
         description="Adds the [Focal Port](https://github.com/SamsTheNerd/ducky-periphs/wiki/Focal-Port), which allows direct data transfer between Hex Casting and ComputerCraft.",
         curseforge_url="https://www.curseforge.com/minecraft/mc-mods/ducky-periphs",
-        modrinth_url="",
+        modrinth_url="https://modrinth.com/mod/ducky-periphs",
         book_url=None,
         source_url="https://github.com/SamsTheNerd/ducky-periphs",
         modloaders=[FABRIC],
