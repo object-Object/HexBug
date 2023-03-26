@@ -92,7 +92,7 @@ HEX_INTEROP: list[AddonEntry] = [
         modrinth_url="https://modrinth.com/mod/gravity-api",
         book_url=None,
         source_url="https://github.com/Fusion-Flux/Gravity-Api",
-        modloaders=[QUILT],
+        modloaders=[FABRIC, QUILT],
     ),
     AddonEntry(
         name="Pehkui",
