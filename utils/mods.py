@@ -14,7 +14,7 @@ from HexMod.doc.collate_data import parse_book as hex_parse_book
 from MoreIotas.doc.collate_data import parse_book as moreiotas_parse_book
 from utils.api import API
 from utils.book_types import Book
-from utils.git import get_commit_message, get_current_commit, get_tags
+from utils.git import get_commit_message, get_commit_tags, get_current_commit, get_latest_tags
 from utils.urls import wrap_url
 
 
@@ -96,9 +96,13 @@ class HexalRegistryModInfo(_BaseRegistryModInfo):
         r'HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)[^val]+?(makeConstantOp|Op\w+)(?:[^val]*[^\(](true)\))?',
         re.M,
     )
+    version_regex: re.Pattern[str] = re.compile(r"^\d+\.\d+\.\d+$")
 
     def _get_version(self) -> str:
-        return get_tags(self.directory, self.commit)[-1]
+        # return first versiony-looking tag we find that isn't a beta/prerelease
+        # prefer tags for the current commit if available, otherwise check most recent tags first
+        tags = get_commit_tags(self.directory, self.commit) + get_latest_tags(self.directory)
+        return next(filter(lambda t: self.version_regex.fullmatch(t), tags))
 
 
 @dataclass(kw_only=True)
