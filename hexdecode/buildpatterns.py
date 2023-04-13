@@ -122,6 +122,7 @@ async def build_registry(session: ClientSession) -> Registry | None:
 
     for mod in RegistryMod:
         mod_info = mod.value
+        logging.info(f"Loading {mod_info.name} {mod_info.version}")
 
         # translations
         _parse_i18n(name_to_translation, mod_info.book["i18n"])
@@ -140,6 +141,7 @@ async def build_registry(session: ClientSession) -> Registry | None:
 
     for mod in APIMod:
         mod_info = mod.value
+        logging.info(f"Loading {mod_info.name} {mod_info.version}")
 
         # fetch api data (this is the slow part)
         versions, docs = await asyncio.gather(
@@ -147,7 +149,7 @@ async def build_registry(session: ClientSession) -> Registry | None:
             mod_info.api.get_docs(session),
         )
         if (latest_version := versions["versions"][0]["id"]) != mod_info.version:
-            logging.warning(f"Update available: {mod.name}@{latest_version} (from {mod_info.version})")
+            logging.warning(f"Update available: {mod_info.name} {latest_version} (from {mod_info.version})")
 
         lang, patterns, categories = await asyncio.gather(
             mod_info.api.get_lang(session, docs),

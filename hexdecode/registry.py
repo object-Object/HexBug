@@ -46,7 +46,7 @@ class NormalPatternInfo(_BasePatternInfo):
 
     def __post_init__(self):
         rotated_segments: tuple[frozenset[Segment]] = (
-            tuple(get_rotated_aligned_pattern_segments(self.direction, self.pattern)) if self.is_great else ()
+            tuple(get_rotated_aligned_pattern_segments(self.direction, self.pattern)) if self.is_great else tuple()
         )
         object.__setattr__(self, "rotated_segments", rotated_segments)
 
