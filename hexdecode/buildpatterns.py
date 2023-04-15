@@ -186,8 +186,26 @@ async def build_registry(session: ClientSession) -> Registry | None:
     for mod in RegistryMod:
         mod_info = mod.value
 
+        # in case a new pattern file was added to the mod (eg. Hexal adding Phase Block)
+        # we don't just use this instead of mod_info.pattern_files because if this triggers, we also need to
+        #   update mod_info.operator_directories
+        docgen_pattern_files = set()
+        for loader, stub in mod_info.pattern_stubs:
+            filename = (Path(mod_info.book["resource_dir"]).parent / "java" / stub).as_posix()
+            if loader:
+                filename = filename.replace("Common", loader)
+            docgen_pattern_files.add(filename)
+
+            # yes this is inefficient because it's a list
+            # no i don't care, there's like at most three entries in each and it only runs once
+            if filename not in mod_info.pattern_files:
+                logging.warning(f"Pattern file in {mod_info.name} docgen but not ModInfo: {filename}")
+
         # patterns - can't use the Book data here because we also need the class name :pensivewobble:
         for filename in mod_info.pattern_files:
+            if filename not in docgen_pattern_files:
+                logging.warning(f"Pattern file in {mod_info.name} ModInfo but not docgen: {filename}")
+
             with open(filename, "r", encoding="utf-8") as file:
                 for match in mod_info.registry_regex.finditer(file.read()):
                     (pattern, direction, name, classname, is_great) = match.groups()

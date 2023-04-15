@@ -5,13 +5,17 @@ from abc import ABC, abstractmethod
 from dataclasses import InitVar, dataclass, field
 from enum import Enum
 from itertools import chain
+from typing import Iterable
 
 import discord
 from discord import app_commands
 
 from Hexal.doc.collate_data import parse_book as hexal_parse_book
+from Hexal.doc.collate_data import pattern_stubs as hexal_stubs
 from HexMod.doc.collate_data import parse_book as hex_parse_book
+from HexMod.doc.collate_data import pattern_stubs as hex_stubs
 from MoreIotas.doc.collate_data import parse_book as moreiotas_parse_book
+from MoreIotas.doc.collate_data import pattern_stubs as moreiotas_stubs
 from utils.api import API
 from utils.book_types import Book
 from utils.git import get_commit_message, get_commit_tags, get_current_commit, get_latest_tags
@@ -61,6 +65,9 @@ class _BaseRegistryModInfo(_BaseModInfo, ABC):
     pattern_files: list[str]
     operator_directories: list[str]
     extra_classname_paths: dict[str, str] = field(default_factory=dict)
+    # iterable instead of list because invariance etc
+    # see https://github.com/microsoft/pylance-release/discussions/3383
+    pattern_stubs: Iterable[tuple[str | None, str]]
 
     def __post_init__(self):
         self.commit = get_current_commit(self.directory)
@@ -194,6 +201,7 @@ class RegistryMod(Enum):
             "makeConstantOp": "Common/src/main/java/at/petrak/hexcasting/api/spell/ConstMediaAction.kt",
             "ConstMediaAction": "Common/src/main/java/at/petrak/hexcasting/api/spell/ConstMediaAction.kt",
         },
+        pattern_stubs=hex_stubs,
     )
 
     Hexal = HexalRegistryModInfo(
@@ -205,8 +213,15 @@ class RegistryMod(Enum):
         modrinth_url="https://modrinth.com/mod/hexal/",
         source_url="https://github.com/Talia-12/Hexal/",
         icon_url="https://cdn.modrinth.com/data/aBVJ6Q36/e2bfd87a5e333a972c39d12a1c4e55add7616785.jpeg",
-        pattern_files=["Common/src/main/java/ram/talia/hexal/common/casting/Patterns.kt"],
-        operator_directories=["Common/src/main/java/ram/talia/hexal/common/casting/actions"],
+        pattern_files=[
+            "Common/src/main/java/ram/talia/hexal/common/casting/Patterns.kt",
+            "Fabric/src/main/java/ram/talia/hexal/fabric/FabricHexalInitializer.kt",
+        ],
+        operator_directories=[
+            "Common/src/main/java/ram/talia/hexal/common/casting/actions",
+            "Fabric/src/main/java/ram/talia/hexal/fabric/interop/phantom",
+        ],
+        pattern_stubs=hexal_stubs,
     )
 
     MoreIotas = HexalRegistryModInfo(
@@ -222,6 +237,7 @@ class RegistryMod(Enum):
         icon_url="https://cdn.modrinth.com/data/Jmt7p37B/e4640394d665e134c80900c94d6d49ddb9047edd.png",
         pattern_files=["Common/src/main/java/ram/talia/moreiotas/common/casting/Patterns.kt"],
         operator_directories=["Common/src/main/java/ram/talia/moreiotas/common/casting/actions"],
+        pattern_stubs=moreiotas_stubs,
     )
 
     @property
