@@ -4,4 +4,5 @@ extend-exclude = """(
       ^/Hexal
     | ^/HexMod
     | ^/MoreIotas
+    | ^/HexTweaks
 )"""

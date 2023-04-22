@@ -9,13 +9,15 @@ from typing import Iterable
 
 import discord
 from discord import app_commands
-
 from Hexal.doc.collate_data import parse_book as hexal_parse_book
 from Hexal.doc.collate_data import pattern_stubs as hexal_stubs
 from HexMod.doc.collate_data import parse_book as hex_parse_book
 from HexMod.doc.collate_data import pattern_stubs as hex_stubs
 from MoreIotas.doc.collate_data import parse_book as moreiotas_parse_book
 from MoreIotas.doc.collate_data import pattern_stubs as moreiotas_stubs
+
+from HexTweaks.doc.collate_data import parse_book as hextweaks_parse_book
+from HexTweaks.doc.collate_data import pattern_stubs as hextweaks_stubs
 from utils.api import API
 from utils.book_types import Book
 from utils.git import get_commit_message, get_commit_tags, get_current_commit, get_latest_tags
@@ -108,6 +110,18 @@ class HexalRegistryModInfo(_BaseRegistryModInfo):
     def _get_version(self) -> str:
         # return first versiony-looking tag we find that isn't a beta/prerelease
         # prefer tags for the current commit if available, otherwise check most recent tags first
+        tags = get_commit_tags(self.directory, self.commit) + get_latest_tags(self.directory)
+        return next(filter(lambda t: self.version_regex.fullmatch(t), tags))
+
+
+@dataclass(kw_only=True)
+class HexTweaksRegistryModInfo(_BaseRegistryModInfo):
+    registry_regex: re.Pattern[str] = re.compile(
+        r'PatternRegistry.mapPattern\([\n ]+HexPattern\.fromAngles\("([qweasd]+)", ?HexDir\.(.+)?\)[,\n ]+?new ResourceLocation\(".+"(.+)?"\),\n.+,(.+)'
+    )
+    version_regex: re.Pattern[str] = re.compile(r"^\d+.\d+.\d+$")
+
+    def _get_version(self) -> str:
         tags = get_commit_tags(self.directory, self.commit) + get_latest_tags(self.directory)
         return next(filter(lambda t: self.version_regex.fullmatch(t), tags))
 
@@ -238,6 +252,25 @@ class RegistryMod(Enum):
         pattern_files=["Common/src/main/java/ram/talia/moreiotas/common/casting/Patterns.kt"],
         operator_directories=["Common/src/main/java/ram/talia/moreiotas/common/casting/actions"],
         pattern_stubs=moreiotas_stubs,
+    )
+
+    HexTweaks = HexTweaksRegistryModInfo(
+        name="HexTweaks",
+        directory="HexTweaks",
+        book=hextweaks_parse_book(
+            "HexTweaks/common/src/main/resources",
+            "common/src/main/java",
+            "HexMod/Common/src/resources",
+            "hextweaks",
+            "thetweakedbook",
+        ),
+        book_url="https://walksanatora.github.io/HexTweaks",
+        modrinth_url="https://modrinth.com/hextweaks",
+        curseforge_url=None,
+        source_url="https://github.com/walksanatora/HexTweaks",
+        icon_url="https://cdn.modrinth.com/data/pim6pG9O/0f36451e826a46c00d337d7ef65e62c87bc40eba.png",
+        pattern_files=["common/src/main/java/net/walksanator/hextweaks/patterns/PatternRegister.java"],
+        pattern_stubs=hextweaks_stubs,
     )
 
     @property
