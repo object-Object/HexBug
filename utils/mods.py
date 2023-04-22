@@ -9,15 +9,15 @@ from typing import Iterable
 
 import discord
 from discord import app_commands
+
 from Hexal.doc.collate_data import parse_book as hexal_parse_book
 from Hexal.doc.collate_data import pattern_stubs as hexal_stubs
 from HexMod.doc.collate_data import parse_book as hex_parse_book
 from HexMod.doc.collate_data import pattern_stubs as hex_stubs
-from MoreIotas.doc.collate_data import parse_book as moreiotas_parse_book
-from MoreIotas.doc.collate_data import pattern_stubs as moreiotas_stubs
-
 from HexTweaks.doc.collate_data import parse_book as hextweaks_parse_book
 from HexTweaks.doc.collate_data import pattern_stubs as hextweaks_stubs
+from MoreIotas.doc.collate_data import parse_book as moreiotas_parse_book
+from MoreIotas.doc.collate_data import pattern_stubs as moreiotas_stubs
 from utils.api import API
 from utils.book_types import Book
 from utils.git import get_commit_message, get_commit_tags, get_current_commit, get_latest_tags
@@ -271,7 +271,7 @@ class RegistryMod(Enum):
         icon_url="https://cdn.modrinth.com/data/pim6pG9O/0f36451e826a46c00d337d7ef65e62c87bc40eba.png",
         pattern_files=["common/src/main/java/net/walksanator/hextweaks/patterns/PatternRegister.java"],
         operator_directories=["common/src/main/java/net/walksanator/hextweaks/patterns"],
-        pattern_stubs=hextweaks_stubs
+        pattern_stubs=hextweaks_stubs,
     )
 
     @property
