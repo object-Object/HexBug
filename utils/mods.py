@@ -270,7 +270,8 @@ class RegistryMod(Enum):
         source_url="https://github.com/walksanatora/HexTweaks",
         icon_url="https://cdn.modrinth.com/data/pim6pG9O/0f36451e826a46c00d337d7ef65e62c87bc40eba.png",
         pattern_files=["common/src/main/java/net/walksanator/hextweaks/patterns/PatternRegister.java"],
-        pattern_stubs=hextweaks_stubs,
+        operator_directories=["common/src/main/java/net/walksanator/hextweaks/patterns"],
+        pattern_stubs=hextweaks_stubs
     )
 
     @property
