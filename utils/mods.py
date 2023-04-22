@@ -265,7 +265,7 @@ class RegistryMod(Enum):
             "thetweakedbook",
         ),
         book_url="https://walksanatora.github.io/HexTweaks",
-        modrinth_url="https://modrinth.com/hextweaks",
+        modrinth_url="https://modrinth.com/mod/hextweaks",
         curseforge_url=None,
         source_url="https://github.com/walksanatora/HexTweaks",
         icon_url="https://cdn.modrinth.com/data/pim6pG9O/0f36451e826a46c00d337d7ef65e62c87bc40eba.png",
