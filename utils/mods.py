@@ -259,8 +259,8 @@ class RegistryMod(Enum):
         directory="HexTweaks",
         book=hextweaks_parse_book(
             "HexTweaks/common/src/main/resources",
-            "common/src/main/java",
-            "HexMod/Common/src/resources",
+            "HexTweaks/common/src/main/java",
+            "HexMod/Common/src/main/resources",
             "hextweaks",
             "thetweakedbook",
         ),
