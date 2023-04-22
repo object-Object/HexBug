@@ -69,6 +69,7 @@ class BookPage_hexcasting_pattern(BookPage[Literal["hexcasting:pattern"]]):
     op_id: str
     text: FormatTree | list
     anchor: NotRequired[str]
+    header: NotRequired[str]
     hex_size: NotRequired[int]
     input: NotRequired[str]
     output: NotRequired[str]
@@ -140,3 +141,4 @@ class Book(TypedDict):
     model: NotRequired[str]
     nameplate_color: NotRequired[str]
     show_progress: NotRequired[bool]
+    src_dir: NotRequired[str]

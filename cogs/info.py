@@ -46,6 +46,10 @@ class AddonEntry:
                 )
                 modloaders = [FORGE, FABRIC, QUILT]
 
+            case RegistryMod.HexTweaks:
+                description = "Adds various (mildly opinionated) quality of life changes, as well as dictionary iotas."
+                modloaders = [FORGE, FABRIC, QUILT]
+
             case APIMod.Hexbound:
                 description = "Adds several utility patterns/spells (eg. item types, Hex Shields), quasi-playerless casting with Figments, pattern editing, and constructs (powerful automatable golems)."
                 modloaders = [QUILT]

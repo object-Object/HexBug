@@ -13,12 +13,14 @@
         "**/Hexal/**",
         "**/HexMod/**",
         "**/hex_interpreter/**",
+        "**/HexTweaks/**"
     ],
     "java.autobuild.enabled": false,
     "java.project.resourceFilters": [
         "**/Hexal/**",
         "**/HexMod/**",
         "**/MoreIotas/**",
+        "**/HexTweaks/**"
         "\\.git"
     ],
     "java.server.launchMode": "LightWeight",
@@ -26,6 +28,7 @@
         "**/Hexal/**",
         "**/HexMod/**",
         "**/MoreIotas/**",
+        "**/HexTweaks/**"
         "**/node_modules/**",
         "**/.metadata/**",
         "**/archetype-resources/**",
