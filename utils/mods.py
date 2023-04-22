@@ -119,7 +119,7 @@ class HexTweaksRegistryModInfo(_BaseRegistryModInfo):
     registry_regex: re.Pattern[str] = re.compile(
         r'PatternRegistry.mapPattern\([\n ]+HexPattern\.fromAngles\("([qweasd]+)", ?HexDir\.(.+)?\)[,\n ]+?new ResourceLocation\(".+"(.+)?"\),\n.+,(.+)'
     )
-    version_regex: re.Pattern[str] = re.compile(r"^\d+.\d+.\d+$")
+    version_regex: re.Pattern[str] = re.compile(r"^v\d+.\d+.\d+$")
 
     def _get_version(self) -> str:
         tags = get_commit_tags(self.directory, self.commit) + get_latest_tags(self.directory)
