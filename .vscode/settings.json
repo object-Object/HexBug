@@ -13,25 +13,26 @@
         "**/Hexal/**",
         "**/HexMod/**",
         "**/hex_interpreter/**",
-        "**/HexTweaks/**"
+        "**/HexTweaks/**",
     ],
     "java.autobuild.enabled": false,
     "java.project.resourceFilters": [
         "**/Hexal/**",
         "**/HexMod/**",
         "**/MoreIotas/**",
-        "**/HexTweaks/**"
-        "\\.git"
+        "**/HexTweaks/**",
+        "\\.git",
     ],
     "java.server.launchMode": "LightWeight",
     "java.import.exclusions": [
         "**/Hexal/**",
         "**/HexMod/**",
         "**/MoreIotas/**",
-        "**/HexTweaks/**"
+        "**/HexTweaks/**",
         "**/node_modules/**",
         "**/.metadata/**",
         "**/archetype-resources/**",
-        "**/META-INF/maven/**"
+        "**/META-INF/maven/**",
     ],
+    "files.eol": "\n",
 }
