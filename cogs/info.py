@@ -47,7 +47,7 @@ class AddonEntry:
                 modloaders = [FORGE, FABRIC, QUILT]
 
             case RegistryMod.HexTweaks:
-                description = "Adds various (mildly opinionated) quality of life changes, and dictionary iotas "
+                description = "Adds various (mildly opinionated) quality of life changes, as well as dictionary iotas."
                 modloaders = [FORGE, FABRIC, QUILT]
 
             case APIMod.Hexbound:
