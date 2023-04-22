@@ -117,7 +117,7 @@ class HexalRegistryModInfo(_BaseRegistryModInfo):
 @dataclass(kw_only=True)
 class HexTweaksRegistryModInfo(_BaseRegistryModInfo):
     registry_regex: re.Pattern[str] = re.compile(
-        r'PatternRegistry.mapPattern\([\n ]+HexPattern\.fromAngles\("([qweasd]+)", ?HexDir\.(.+)?\)[,\n ]+?new ResourceLocation\(".+"(.+)?"\),\n.+,(.+)'
+        r'PatternRegistry.mapPattern\([\n ]+HexPattern\.fromAngles\("([qweasd]+)", ?HexDir\.(.+)?\)[,\n ]+?new ResourceLocation\(".+"(.+)?"\),\n.+new (.+)\(.+, ?(true)?'
     )
     version_regex: re.Pattern[str] = re.compile(r"^v\d+.\d+.\d+$")
 
