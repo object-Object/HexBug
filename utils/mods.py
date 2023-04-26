@@ -23,6 +23,12 @@ from utils.book_types import Book
 from utils.git import get_commit_message, get_commit_tags, get_current_commit, get_latest_tags
 from utils.urls import wrap_url
 
+# modloader emotes
+# this isn't an enum because it looks ugly as an enum, and for no other reason
+FABRIC = "<:_:1089636969618882700>"
+FORGE = "<:_:1089636157505142976>"
+QUILT = "<:_:1089636999142576241>"
+
 
 class NotInitializedError(Exception):
     """Attribute that hasn't been initialized yet."""
@@ -34,6 +40,7 @@ class NotInitializedError(Exception):
 @dataclass(kw_only=True)
 class _BaseModInfo(ABC):
     name: str
+    description: str
     source_url: str = field(init=False)
     book_url: str | None = field(init=False)
     commit: str = field(init=False)
@@ -41,6 +48,7 @@ class _BaseModInfo(ABC):
     curseforge_url: str | None
     modrinth_url: str | None
     icon_url: str | None
+    modloaders: list[str]
 
     def build_source_tree_url(self, path: str) -> str:
         return f"{self.source_url}tree/{self.commit}/{path}"
@@ -64,6 +72,7 @@ class _BaseRegistryModInfo(_BaseModInfo, ABC):
     directory: str
     book: Book
     registry_regex: re.Pattern[str]
+    version_regex: re.Pattern[str]
     pattern_files: list[str]
     operator_directories: list[str]
     extra_classname_paths: dict[str, str] = field(default_factory=dict)
@@ -84,46 +93,44 @@ class _BaseRegistryModInfo(_BaseModInfo, ABC):
 
 @dataclass(kw_only=True)
 class HexCastingRegistryModInfo(_BaseRegistryModInfo):
-    version_regex = re.compile(r"\[Release\].*?([\d\.]+)")
-
     # thanks Alwinfy for (unknowingly) making my registry regex about 5x simpler
     registry_regex: re.Pattern[str] = re.compile(
         r'HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)[^;]+?(makeConstantOp|Op\w+)([^;]*true\);)?',
         re.M,
     )
+    version_regex: re.Pattern[str] = re.compile(r"\[Release\].*?([\d\.]+)")
 
     def _get_version(self) -> str:
+        # get version from the current commit message
         version = self.version_regex.match(get_commit_message(self.directory, self.commit))
         assert version is not None
         return version.group(1)
 
 
 @dataclass(kw_only=True)
-class HexalRegistryModInfo(_BaseRegistryModInfo):
-    # thanks Talia for changing the registry format
-    registry_regex: re.Pattern[str] = re.compile(
-        r'HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)[^val]+?(makeConstantOp|Op\w+)(?:[^val]*[^\(](true)\))?',
-        re.M,
-    )
-    version_regex: re.Pattern[str] = re.compile(r"^\d+\.\d+\.\d+$")
-
+class _BaseTagVersionRegistryModInfo(_BaseRegistryModInfo):
     def _get_version(self) -> str:
-        # return first versiony-looking tag we find that isn't a beta/prerelease
+        # get version from git tags - return first versiony-looking tag we find that isn't a beta/prerelease
         # prefer tags for the current commit if available, otherwise check most recent tags first
         tags = get_commit_tags(self.directory, self.commit) + get_latest_tags(self.directory)
         return next(filter(lambda t: self.version_regex.fullmatch(t), tags))
 
 
 @dataclass(kw_only=True)
-class HexTweaksRegistryModInfo(_BaseRegistryModInfo):
+class HexalRegistryModInfo(_BaseTagVersionRegistryModInfo):
+    registry_regex: re.Pattern[str] = re.compile(
+        r'HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)[^val]+?(makeConstantOp|Op\w+)(?:[^val]*[^\(](true)\))?',
+        re.M,
+    )
+    version_regex: re.Pattern[str] = re.compile(r"^\d+\.\d+\.\d+$")
+
+
+@dataclass(kw_only=True)
+class HexTweaksRegistryModInfo(_BaseTagVersionRegistryModInfo):
     registry_regex: re.Pattern[str] = re.compile(
         r'PatternRegistry.mapPattern\([\n ]+HexPattern\.fromAngles\("([qweasd]+)", ?HexDir\.(.+)?\)[,\n ]+?new ResourceLocation\(".+"(.+)?"\),\n.+new (.+)\(.+, ?(true)?'
     )
     version_regex: re.Pattern[str] = re.compile(r"^v\d+.\d+.\d+$")
-
-    def _get_version(self) -> str:
-        tags = get_commit_tags(self.directory, self.commit) + get_latest_tags(self.directory)
-        return next(filter(lambda t: self.version_regex.fullmatch(t), tags))
 
 
 @dataclass(kw_only=True)
@@ -186,7 +193,7 @@ class APIWithoutBookModInfo(_BaseAPIModInfo):
         raise NotImplementedError
 
 
-RegistryModInfo = HexCastingRegistryModInfo | HexalRegistryModInfo
+RegistryModInfo = HexCastingRegistryModInfo | HexalRegistryModInfo | HexTweaksRegistryModInfo
 APIModInfo = APIWithBookModInfo | APIWithoutBookModInfo
 
 
@@ -194,6 +201,7 @@ class RegistryMod(Enum):
     # HEX NEEDS TO BE FIRST
     HexCasting = HexCastingRegistryModInfo(
         name="Hex Casting",
+        description="A mod for Forge and Fabric adding stack-based programmable spellcasting, inspired by Psi. (Why are you using this bot if you don't know what Hex is?)",
         directory="HexMod",
         book=hex_parse_book("HexMod/Common/src/main/resources", "hexcasting", "thehexbook"),
         book_url="https://gamma-delta.github.io/HexMod/",
@@ -216,10 +224,12 @@ class RegistryMod(Enum):
             "ConstMediaAction": "Common/src/main/java/at/petrak/hexcasting/api/spell/ConstMediaAction.kt",
         },
         pattern_stubs=hex_stubs,
+        modloaders=[FORGE, FABRIC, QUILT],
     )
 
     Hexal = HexalRegistryModInfo(
         name="Hexal",
+        description="Adds many utility patterns/spells (eg. entity health, item smelting), autonomous casting with wisps, and powerful item manipulation/storage.",
         directory="Hexal",
         book=hexal_parse_book("Hexal/Common/src/main/resources", "Hexal/doc/HexCastingResources", "hexal", "hexalbook"),
         book_url="https://talia-12.github.io/Hexal/",
@@ -236,10 +246,12 @@ class RegistryMod(Enum):
             "Fabric/src/main/java/ram/talia/hexal/fabric/interop/phantom",
         ],
         pattern_stubs=hexal_stubs,
+        modloaders=[FORGE, FABRIC, QUILT],
     )
 
     MoreIotas = HexalRegistryModInfo(
         name="MoreIotas",
+        description="Adds matrix and string iotas, allowing things like complex calculations and chat commands.",
         directory="MoreIotas",
         book=moreiotas_parse_book(
             "MoreIotas/Common/src/main/resources", "MoreIotas/doc/HexCastingResources", "moreiotas", "moreiotasbook"
@@ -252,10 +264,12 @@ class RegistryMod(Enum):
         pattern_files=["Common/src/main/java/ram/talia/moreiotas/common/casting/Patterns.kt"],
         operator_directories=["Common/src/main/java/ram/talia/moreiotas/common/casting/actions"],
         pattern_stubs=moreiotas_stubs,
+        modloaders=[FORGE, FABRIC, QUILT],
     )
 
     HexTweaks = HexTweaksRegistryModInfo(
         name="HexTweaks",
+        description="Adds various (mildly opinionated) quality of life changes, as well as dictionary iotas.",
         directory="HexTweaks",
         book=hextweaks_parse_book(
             "HexTweaks/common/src/main/resources",
@@ -272,6 +286,7 @@ class RegistryMod(Enum):
         pattern_files=["common/src/main/java/net/walksanator/hextweaks/patterns/PatternRegister.java"],
         operator_directories=["common/src/main/java/net/walksanator/hextweaks/patterns"],
         pattern_stubs=hextweaks_stubs,
+        modloaders=[FORGE, FABRIC, QUILT],
     )
 
     @property
@@ -283,11 +298,13 @@ class APIMod(Enum):
     # https://hexbound.cypher.coffee/versions.json
     Hexbound = APIWithBookModInfo(
         name="Hexbound",
+        description="Adds several utility patterns/spells (eg. item types, Hex Shields), quasi-playerless casting with Figments, pattern editing, and constructs (powerful automatable golems).",
         curseforge_url=None,
         modrinth_url="https://modrinth.com/mod/hexbound/",
         icon_url="https://cdn.modrinth.com/data/PHgo4bVw/daa508e0b61340a46e04f669af1cf5e557193bc4.png",
         api_base_url="https://hexbound.cypher.coffee/",
         version="0.1.3+1.19.2",
+        modloaders=[QUILT],
     )
 
     @property

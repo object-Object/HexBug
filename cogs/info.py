@@ -11,11 +11,7 @@ from pyparsing import Iterable
 
 from utils.buttons import build_show_or_delete_button
 from utils.commands import HexBugBot
-from utils.mods import APIMod, Mod, RegistryMod
-
-FORGE = "<:_:1089636157505142976>"
-FABRIC = "<:_:1089636969618882700>"
-QUILT = "<:_:1089636999142576241>"
+from utils.mods import FABRIC, FORGE, QUILT, APIMod, Mod, RegistryMod
 
 
 @dataclass(kw_only=True)
@@ -32,37 +28,15 @@ class AddonEntry:
 
     @classmethod
     def from_mod(cls, mod: Mod) -> Self:
-        match mod:
-            case RegistryMod.HexCasting:
-                raise Exception("Tried to make AddonEntry for Hex")
-
-            case RegistryMod.Hexal:
-                description = "Adds many utility patterns/spells (eg. entity health, item smelting), autonomous casting with wisps, and powerful item manipulation/storage."
-                modloaders = [FORGE, FABRIC, QUILT]
-
-            case RegistryMod.MoreIotas:
-                description = (
-                    "Adds matrix and string iotas, allowing things like complex calculations and chat commands."
-                )
-                modloaders = [FORGE, FABRIC, QUILT]
-
-            case RegistryMod.HexTweaks:
-                description = "Adds various (mildly opinionated) quality of life changes, as well as dictionary iotas."
-                modloaders = [FORGE, FABRIC, QUILT]
-
-            case APIMod.Hexbound:
-                description = "Adds several utility patterns/spells (eg. item types, Hex Shields), quasi-playerless casting with Figments, pattern editing, and constructs (powerful automatable golems)."
-                modloaders = [QUILT]
-
         mod_info = mod.value
         return AddonEntry(
             name=mod_info.name,
-            description=description,
+            description=mod_info.description,
             curseforge_url=mod_info.curseforge_url,
             modrinth_url=mod_info.modrinth_url,
             book_url=mod_info.book_url,
             source_url=mod_info.source_url,
-            modloaders=modloaders,
+            modloaders=mod_info.modloaders,
         )
 
     def url_line(self) -> str:
@@ -78,7 +52,7 @@ class AddonEntry:
         return f"**{self.name}**  {' '.join(self.modloaders)}\n{self.url_line()}\n{self.description}"
 
 
-# TODO: make addons less ugly. i don't like any of this, but it works, and it matches the style of everything else here
+# TODO: make the AddonEntry stuff less ugly. i don't like any of this, but it works, and it matches the style of everything else here
 
 # this SHOULD work fine with API mods because cogs aren't loaded until after the registry is built
 # unless something else imports from this file
@@ -145,6 +119,15 @@ OTHER_INTEROP: list[AddonEntry] = [
         book_url=None,
         source_url="https://github.com/SamsTheNerd/ducky-periphs",
         modloaders=[FABRIC],
+    ),
+    AddonEntry(
+        name="Switchy",
+        description="Adds the ability to change your pigment when switching presets.",
+        curseforge_url=None,
+        modrinth_url="https://modrinth.com/mod/switchy",
+        book_url=None,
+        source_url="https://github.com/sisby-folk/switchy",
+        modloaders=[QUILT],
     ),
 ]
 
