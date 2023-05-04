@@ -104,7 +104,7 @@ async def _timeout_generate_number_pattern(target: Fraction, timeout: float) -> 
     )
 
     # kill the child if the parent dies (lol) (lmao)
-    # there are issues with this: https://stackoverflow.com/a/14128476
+    # there are issues with this: https://stackoverflow.com/a/14128476 (also SIGTERM, SIGKILL)
     # also there's a race condition if the bot dies between creating the process and registering this
     # but until these actually cause issues I'm not going to bother fixing them
     atexit.register(proc.kill)
@@ -118,6 +118,9 @@ async def _timeout_generate_number_pattern(target: Fraction, timeout: float) -> 
         # timed out, kill it with fire
         proc.kill()
         return
+    finally:
+        # always unregister the atexit kill function when done, even if we returned out
+        atexit.unregister(proc.kill)
 
     if proc.returncode:
         # something went wrong
