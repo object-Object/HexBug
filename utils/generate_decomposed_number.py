@@ -1,6 +1,14 @@
+import asyncio
+import atexit
+import functools
 import math
+import sys
+from concurrent import futures
 from decimal import Decimal, InvalidOperation
 from fractions import Fraction
+from timeit import default_timer as timer
+
+from hexnumgen import AStarOptions, GeneratedNumber, generate_number_pattern
 
 from hexdecode.buildpatterns import MAX_PREGEN_NUMBER
 from hexdecode.hex_math import Direction
@@ -30,13 +38,14 @@ def _decompose(target: int) -> tuple[int, int, int]:
 def _extend_patterns(
     registry: Registry,
     patterns: list[tuple[Direction, str]],
+    align: bool,
     math_ops: list[str],
     pattern_ops: list[str],
     target: int,
     paren: bool,
 ):
     if target > MAX_PREGEN_NUMBER:
-        new_patterns, new_math_ops, new_pattern_ops = _recursive_generate_decomposed_number(registry, target)
+        new_patterns, new_math_ops, new_pattern_ops = _recursive_generate_decomposed_number(registry, target, align)
 
         patterns.extend(new_patterns)
         pattern_ops.extend(new_pattern_ops)
@@ -51,7 +60,9 @@ def _extend_patterns(
 
 
 def _recursive_generate_decomposed_number(
-    registry: Registry, target: int
+    registry: Registry,
+    target: int,
+    align: bool,
 ) -> tuple[list[tuple[Direction, str]], list[str], list[str]]:
     is_negative = target < 0
     target = abs(target)
@@ -61,15 +72,15 @@ def _recursive_generate_decomposed_number(
     math_ops: list[str] = []
     pattern_ops: list[str] = []
 
-    _extend_patterns(registry, patterns, math_ops, pattern_ops, base, True)
+    _extend_patterns(registry, patterns, align, math_ops, pattern_ops, target=base, paren=True)
     math_ops.append("^")
-    _extend_patterns(registry, patterns, math_ops, pattern_ops, exponent, True)
+    _extend_patterns(registry, patterns, align, math_ops, pattern_ops, target=exponent, paren=True)
     patterns.append(_POWER)
     pattern_ops.append("Power Distillation")
 
     if remainder != 0:
         math_ops.append(" + ")
-        _extend_patterns(registry, patterns, math_ops, pattern_ops, remainder, False)
+        _extend_patterns(registry, patterns, align, math_ops, pattern_ops, target=remainder, paren=False)
         patterns.append(_ADDITIVE)
         pattern_ops.append("Additive Distillation")
 
@@ -83,12 +94,60 @@ def _recursive_generate_decomposed_number(
     return patterns, math_ops, pattern_ops
 
 
-def generate_decomposed_number(
-    registry: Registry, target: Fraction | int, paren: bool = False
+async def _timeout_generate_number_pattern(target: Fraction, timeout: float) -> tuple[Direction, str, float] | None:
+    proc = await asyncio.create_subprocess_exec(
+        sys.executable,
+        "hexnumgen_cli.py",
+        str(target.numerator),
+        str(target.denominator),
+        stdout=asyncio.subprocess.PIPE,
+    )
+
+    # kill the child if the parent dies (lol) (lmao)
+    # there are issues with this: https://stackoverflow.com/a/14128476
+    # also there's a race condition if the bot dies between creating the process and registering this
+    # but until these actually cause issues I'm not going to bother fixing them
+    atexit.register(proc.kill)
+
+    try:
+        # get stdin data and wait up to timeout seconds for it to terminate itself
+        start = timer()
+        data, _ = await asyncio.wait_for(proc.communicate(), timeout)
+        elapsed = timer() - start
+    except asyncio.TimeoutError:
+        # timed out, kill it with fire
+        proc.kill()
+        return
+
+    if proc.returncode:
+        # something went wrong
+        return
+
+    try:
+        # extract the passed data
+        direction, pattern = data.decode().strip().split(" ")
+        return Direction[direction], pattern, elapsed
+    except (ValueError, KeyError):
+        # just in case
+        return None
+
+
+async def generate_decomposed_number(
+    registry: Registry,
+    target: Fraction | int,
+    align: bool,
+    paren: bool = False,
 ) -> tuple[list[tuple[Direction, str]], str, list[str]] | None:
     if isinstance(target, Fraction):
-        numerator = generate_decomposed_number(registry, target.numerator, True)
-        denominator = generate_decomposed_number(registry, target.denominator, True)
+        if (result := await _timeout_generate_number_pattern(target, 1)) is not None:
+            return (
+                [align_horizontal(*result[:2], True) if align else result[:2]],
+                f"{float(target)}\n\nA* finished in {result[2]:.2f} seconds.",
+                [f"Numerical Reflection: {float(target)}"],
+            )
+
+        numerator = await generate_decomposed_number(registry, target.numerator, align, True)
+        denominator = await generate_decomposed_number(registry, target.denominator, align, True)
 
         if numerator is None or denominator is None:
             return None
@@ -98,16 +157,20 @@ def generate_decomposed_number(
 
         return (
             numerator_patterns + denominator_patterns + [_DIVISION],
-            numerator_math_ops + " / " + denominator_math_ops,
+            f"{numerator_math_ops} / {denominator_math_ops}\n\nA* timed out, showing decomposition instead.",
             numerator_pattern_ops + denominator_pattern_ops,
         )
 
     else:
         if result := registry.pregen_numbers.get(target):
-            return [align_horizontal(*result, True)], str(target), [f"Numerical Reflection: {target}"]
+            return (
+                [align_horizontal(*result, True) if align else result],
+                str(target),
+                [f"Numerical Reflection: {target}"],
+            )
 
         try:
-            patterns, math_ops, pattern_ops = _recursive_generate_decomposed_number(registry, target)
+            patterns, math_ops, pattern_ops = _recursive_generate_decomposed_number(registry, target, align)
             if paren:
                 math_ops = ["("] + math_ops + [")"]
             return patterns, "".join(math_ops), pattern_ops

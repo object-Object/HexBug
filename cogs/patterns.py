@@ -15,7 +15,6 @@ from utils.draw_patterns_on_grid import draw_patterns_on_grid
 from utils.generate_decomposed_number import generate_decomposed_number
 from utils.generate_image import Palette, Theme
 from utils.parse_rational import parse_rational
-from utils.patterns import parse_mask
 
 WIDTH_RANGE = app_commands.Range[int, 1, 100]
 
@@ -39,6 +38,7 @@ class PatternsCog(commands.GroupCog, name="patterns"):
     @app_commands.describe(
         number="The number to generate patterns for",
         show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
+        should_align_horizontal="Whether numerical patterns should be rotated to minimize height, or use the standard start orientation",
         max_dot_width="Maximum allowed width (in dots) of each row before wrapping",
         max_pattern_width="Maximum allowed number of patterns in each row before wrapping",
         palette="The color palette to use for the lines (has no effect for great spells)",
@@ -51,6 +51,7 @@ class PatternsCog(commands.GroupCog, name="patterns"):
         interaction: discord.Interaction,
         number: str,
         show_to_everyone: bool = False,
+        should_align_horizontal: bool = False,
         max_dot_width: WIDTH_RANGE = 16,
         max_pattern_width: WIDTH_RANGE = 100,
         palette: Palette = Palette.Classic,
@@ -67,7 +68,7 @@ class PatternsCog(commands.GroupCog, name="patterns"):
                 ephemeral=True,
             )
 
-        if not (result := generate_decomposed_number(self.registry, target)):
+        if not (result := await generate_decomposed_number(self.registry, target, should_align_horizontal)):
             return await interaction.followup.send(
                 "❌ Failed to generate number.",
                 ephemeral=True,
@@ -115,6 +116,7 @@ class PatternsCog(commands.GroupCog, name="patterns"):
     @app_commands.describe(
         all_shorthand="The comma-separated list of patterns to display (shorthand is allowed)",
         show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
+        should_align_horizontal="Whether numerical patterns should be rotated to minimize height, or use the standard start orientation",
         max_dot_width="Maximum allowed width (in dots) of each row before wrapping",
         max_pattern_width="Maximum allowed number of patterns in each row before wrapping",
         palette="The color palette to use for the lines (has no effect for great spells)",
@@ -128,6 +130,7 @@ class PatternsCog(commands.GroupCog, name="patterns"):
         interaction: discord.Interaction,
         all_shorthand: app_commands.Range[str, 1, 2000],
         show_to_everyone: bool = False,
+        should_align_horizontal: bool = False,
         max_dot_width: WIDTH_RANGE = 16,
         max_pattern_width: WIDTH_RANGE = 100,
         palette: Palette = Palette.Classic,
@@ -161,7 +164,9 @@ class PatternsCog(commands.GroupCog, name="patterns"):
                                 unknown.append(info.display_name)
                                 continue
 
-                            if (result := generate_decomposed_number(self.registry, arg)) is None:
+                            if (
+                                result := await generate_decomposed_number(self.registry, arg, should_align_horizontal)
+                            ) is None:
                                 unknown.append(f"{info.display_name}: {arg}")
                                 continue
 

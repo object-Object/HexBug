@@ -254,7 +254,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
         interaction: discord.Interaction,
         number: app_commands.Range[int, -MAX_PREGEN_NUMBER, MAX_PREGEN_NUMBER],
         show_to_everyone: bool = False,
-        should_align_horizontal: bool = True,
+        should_align_horizontal: bool = False,
         palette: Palette = Palette.Classic,
         theme: Theme = Theme.Dark,
         line_scale: SCALE_RANGE = DEFAULT_LINE_SCALE,
