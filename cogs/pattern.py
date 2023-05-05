@@ -97,9 +97,9 @@ class PatternCog(commands.GroupCog, name="pattern"):
         """Display the stroke order of a pattern from its direction and angle signature"""
         if pattern in ["-", '"-"']:
             pattern = ""
-        elif not all(c in "aqwed" for c in pattern):
+        elif not all(c in "aqweds" for c in pattern):
             return await interaction.response.send_message(
-                "❌ Invalid angle signature, must only contain the characters `aqwed`.",
+                "❌ Invalid angle signature, must only contain the characters `aqweds`.",
                 ephemeral=True,
             )
 

@@ -14,6 +14,7 @@ class Angle(Enum):
     RIGHT_BACK = (2, "d")
     d = (2, "d")
     BACK = (3, "s")
+    s = (3, "s")
     LEFT_BACK = (4, "a")
     a = (4, "a")
     LEFT = (5, "q")
