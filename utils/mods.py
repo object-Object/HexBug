@@ -128,7 +128,7 @@ class HexalRegistryModInfo(_BaseTagVersionRegistryModInfo):
 @dataclass(kw_only=True)
 class HexTweaksRegistryModInfo(_BaseTagVersionRegistryModInfo):
     registry_regex: re.Pattern[str] = re.compile(
-        r'PatternRegistry.mapPattern\([\n ]+HexPattern\.fromAngles\("([qweasd]+)", ?HexDir\.(.+)?\)[,\n ]+?new ResourceLocation\(".+"(.+)?"\),\n.+new (.+)\(.+, ?(true)?'
+        r'PatternRegistry.mapPattern\([\n ]+(?:HexPattern\.fromAngles|fromAnglesIllegal)\("([qweasd]+)", ?HexDir\.(.+)?\)[,\n ]+?new ResourceLocation\(".+"(.+)?"\),\n.+new (.+)\(.+, ?(true)?'
     )
     version_regex: re.Pattern[str] = re.compile(r"^v\d+.\d+.\d+$")
 
