@@ -116,7 +116,7 @@ def plot_intersect(
             plt.plot((x, next_x), (y, next_y), color=current_color, lw=scale)
 
         if is_overlap:
-            plt.plot((x, next_x), (y, next_y), color=overlap_color, lw=scale)
+            plt.plot((x, next_x), (y, next_y), dashes=[2, 1], color=overlap_color, lw=1.25 * scale)
 
         next_point_colors_used.add(current_color_index)
 
