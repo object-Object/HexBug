@@ -11,6 +11,9 @@ class BookPage(TypedDict, Generic[T]):
 class BookPage_patchouli_text(BookPage[Literal["patchouli:text"]]):
     text: FormatTree | list
     anchor: NotRequired[str]
+    input: NotRequired[str]
+    op_id: NotRequired[str]
+    output: NotRequired[str]
     title: NotRequired[str]
 
 

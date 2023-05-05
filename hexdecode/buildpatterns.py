@@ -31,7 +31,7 @@ PREGEN_NUMBERS_FILE = f"numbers_{MAX_PREGEN_NUMBER}.json"
 def _build_pattern_urls(
     registry: Registry,
     entry: BookEntry,
-    page: BookPage_hexcasting_pattern | BookPage_hexcasting_manual_pattern,
+    page: BookPage_hexcasting_pattern | BookPage_hexcasting_manual_pattern | BookPage_patchouli_text,
 ):
     inp = f"__{inp}__" if (inp := page.get("input")) else ""
     oup = f"__{oup}__" if (oup := page.get("output")) else ""
@@ -42,7 +42,8 @@ def _build_pattern_urls(
     if "op_id" in page:
         names.add(page["op_id"].split(":", 1)[1])
 
-    for pattern, _, _ in page["op"]:  # pretty sure this only catches the vector reflections right now
+    # use .get with default to handle patchouli:text, which doesn't have op
+    for pattern, _, _ in page.get("op", []):  # pretty sure this only catches the vector reflections right now
         if info := registry.from_pattern.get(pattern):
             names.add(info.name)
 
@@ -65,6 +66,7 @@ def _build_urls(registry: Registry, categories: list[BookCategory], mod: Mod):
             for page in entry["pages"]:
                 if is_typeddict_subtype(page, BookPage_patchouli_text) and "title" in page and "anchor" in page:
                     registry.page_title_to_url[mod][page["title"]] = (f"#{entry['id']}@{page['anchor']}", [])
+                    _build_pattern_urls(registry, entry, page)
 
                 elif is_typeddict_subtype(page, BookPage_patchouli_spotlight) and "anchor" in page:
                     registry.page_title_to_url[mod][page["item_name"]] = (f"#{entry['id']}@{page['anchor']}", [])
