@@ -270,9 +270,9 @@ async def build_registry(session: ClientSession) -> Registry | None:
 
     for pattern in registry.patterns:
         if pattern.book_url is None:
-            logging.warning(f"Undocumented pattern: {pattern}")
+            logging.warning(f"No URL for pattern: {pattern}")
         if pattern.translation is None:
-            logging.warning(f"Untranslated pattern: {pattern}")
+            logging.warning(f"No translation for pattern: {pattern}")
 
     if duplicate_exceptions:
         for e in duplicate_exceptions:
