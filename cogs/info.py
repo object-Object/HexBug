@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
 from itertools import chain
-from os import linesep
 from typing import Self, TypedDict
 
 import discord
@@ -92,7 +91,7 @@ HEX_INTEROP: list[AddonEntry] = [
     ),
     AddonEntry(
         name="Farmer's Delight",
-        description="Adds the ability to use the cutting board to turn amethyst blocks into shards and dust, as well as drastically improving the Pansexual Pigment recipe.",
+        description="Adds the ability to use the cutting board to break down edified wood items, as well as drastically improving the Pansexual Pigment recipe. Also useful for turning amethyst blocks into shards.",
         curseforge_url="https://www.curseforge.com/minecraft/mc-mods/farmers-delight",
         modrinth_url="https://modrinth.com/mod/farmers-delight",
         book_url=None,
@@ -104,7 +103,7 @@ HEX_INTEROP: list[AddonEntry] = [
 OTHER_INTEROP: list[AddonEntry] = [
     AddonEntry(
         name="Ars Scalaes",
-        description="Adds an Archwood Staff (crafted with a source gem, not charged amethyst) and the ability to use source gems and blocks as media.",
+        description="Provides compatibility with Ars Nouveau: adds an Archwood Staff (crafted with a source gem, not charged amethyst) and the ability to use source gems and blocks as media.",
         curseforge_url="https://www.curseforge.com/minecraft/mc-mods/ars-scalaes",
         modrinth_url=None,
         book_url=None,
@@ -144,21 +143,23 @@ class InfoMessage(TypedDict, total=False):
 class InfoMessages(Enum):
     addons = InfoMessage(
         embed=discord.Embed(
-            title="Hex-related mods and addons",
-            description=f"""__**Addons**__
+            title="Addons for Hex",
+            description=_join_entries(ADDONS),
+        ).set_footer(text="See also: addons_interop, addons_other")
+    )
 
-{_join_entries(ADDONS)}
+    addons_interop = InfoMessage(
+        embed=discord.Embed(
+            title="Mods with Hex-provided interop",
+            description=_join_entries(HEX_INTEROP),
+        ).set_footer(text="See also: addons, addons_other")
+    )
 
-
-__**Hex-provided interop**__
-
-{_join_entries(HEX_INTEROP)}
-
-
-__**Other mods that interact with Hex**__
-
-{_join_entries(OTHER_INTEROP)}""",
-        )
+    addons_other = InfoMessage(
+        embed=discord.Embed(
+            title="Other mods that interact with Hex",
+            description=_join_entries(OTHER_INTEROP),
+        ).set_footer(text="See also: addons, addons_interop")
     )
 
     bug_report = InfoMessage(
