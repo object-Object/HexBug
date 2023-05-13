@@ -1,9 +1,10 @@
 import asyncio
-from aiohttp import ClientSession
 from collections import defaultdict
 from typing import Any, Callable, Mapping
 
-from utils.mods import RegistryMod, APIMod
+from aiohttp import ClientSession
+
+from utils.mods import APIMod, RegistryMod
 
 if __name__ != "__main__":
     raise Exception("please don't try to actually use this code in production lmao")
@@ -101,6 +102,7 @@ set_value_where(book_keys, "categories", {"list"}, {f"list[BookCategory]"})
 
 print(
     """from typing import Generic, Literal, LiteralString, NotRequired, TypedDict, TypeVar
+
 from HexMod.doc.collate_data import FormatTree
 
 T = TypeVar("T", bound=LiteralString)

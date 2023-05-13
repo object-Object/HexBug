@@ -1,4 +1,5 @@
 from typing import Generic, Literal, LiteralString, NotRequired, TypedDict, TypeVar
+
 from HexMod.doc.collate_data import FormatTree
 
 T = TypeVar("T", bound=LiteralString)
