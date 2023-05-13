@@ -11,6 +11,7 @@ import discord
 from discord import app_commands
 
 from Hexal.doc import collate_data as hexal_docgen
+from HexKinetics.doc import collate_data as hexkinetics_docgen
 from HexMod.doc import collate_data as hex_docgen
 from HexTweaks.doc import collate_data as hextweaks_docgen
 from MoreIotas.doc import collate_data as moreiotas_docgen
@@ -52,7 +53,9 @@ class _BaseModInfo(ABC):
     def build_source_blob_url(self, path: str) -> str:
         return f"{self.source_url}blob/{self.commit}/{path}"
 
-    def build_book_url(self, url: str, show_spoilers: bool, escape: bool) -> str:
+    def build_book_url(self, url: str, show_spoilers: bool, escape: bool) -> str | None:
+        if self.book_url is None:
+            return None
         book_url = f"{self.book_url}{'?nospoiler' if show_spoilers else ''}{url}"
         return wrap_url(book_url, show_spoilers, escape)
 
@@ -285,6 +288,30 @@ class RegistryMod(Enum):
         operator_directories=["common/src/main/java/net/walksanator/hextweaks/patterns"],
         pattern_stubs=hextweaks_docgen.pattern_stubs,
         modloaders=[FORGE, FABRIC, QUILT],
+    )
+
+    HexKinetics = HexalRegistryModInfo(
+        name="HexKinetics",
+        description="Adds patterns and spells related to vectors and dynamics.",
+        directory="HexKinetics",
+        book=hexkinetics_docgen.parse_book(
+            "HexKinetics/Common/src/main/resources",
+            "HexKinetics/doc/HexCastingResources",
+            "hexkinetics",
+            "hexkineticsbook",
+        ),
+        book_url=None,
+        curseforge_url=None,
+        modrinth_url="https://modrinth.com/mod/hexkinetics/",
+        source_url="https://github.com/Sonunte/HexKinetics/",
+        icon_url="https://cdn.modrinth.com/data/8FVr3ohp/66f16e550e1757a511674b26cb9d9cda8dbbbb24.png",
+        pattern_files=[
+            "Common/src/main/java/net/sonunte/hexkinetics/common/casting/Patterns.kt",
+            "Fabric/src/main/java/net/sonunte/hexkinetics/fabric/FabricYourModInitializer.kt",
+        ],
+        operator_directories=["Common/src/main/java/net/sonunte/hexkinetics/common/casting/actions"],
+        pattern_stubs=hexkinetics_docgen.pattern_stubs,
+        modloaders=[FABRIC, QUILT],
     )
 
     @property

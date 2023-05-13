@@ -5,4 +5,5 @@ extend-exclude = """(
     | ^/HexMod
     | ^/MoreIotas
     | ^/HexTweaks
+    | ^/HexKinetics
 )"""

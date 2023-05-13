@@ -16,6 +16,7 @@
         "**/HexMod/**",
         "**/hex_interpreter/**",
         "**/HexTweaks/**",
+        "**/HexKinetics/**",
     ],
     "java.autobuild.enabled": false,
     "java.project.resourceFilters": [
@@ -23,6 +24,7 @@
         "**/HexMod/**",
         "**/MoreIotas/**",
         "**/HexTweaks/**",
+        "**/HexKinetics/**",
         "\\.git",
     ],
     "java.server.launchMode": "LightWeight",
@@ -31,6 +33,7 @@
         "**/HexMod/**",
         "**/MoreIotas/**",
         "**/HexTweaks/**",
+        "**/HexKinetics/**",
         "**/node_modules/**",
         "**/.metadata/**",
         "**/archetype-resources/**",

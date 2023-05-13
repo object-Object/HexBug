@@ -31,7 +31,7 @@ class BookCog(commands.GroupCog, name="book"):
         show_to_everyone: bool = False,
         show_spoilers: bool = False,
     ) -> None:
-        content = mod.value.build_book_url("", show_spoilers, True)
+        assert (content := mod.value.build_book_url("", show_spoilers, True)) is not None
         await interaction.response.send_message(
             content,
             ephemeral=not show_to_everyone,
@@ -58,7 +58,7 @@ class BookCog(commands.GroupCog, name="book"):
             return await interaction.response.send_message("❌ Unknown page.", ephemeral=True)
 
         url, _ = value
-        content = mod.value.build_book_url(url, show_spoilers, True)
+        assert (content := mod.value.build_book_url(url, show_spoilers, True)) is not None
         await interaction.response.send_message(
             content,
             ephemeral=not show_to_everyone,

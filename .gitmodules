@@ -10,3 +10,6 @@
 [submodule "HexTweaks"]
 	path = HexTweaks
 	url = https://github.com/walksanatora/HexTweaks
+[submodule "HexKinetics"]
+	path = HexKinetics
+	url = https://github.com/Sonunte/HexKinetics
