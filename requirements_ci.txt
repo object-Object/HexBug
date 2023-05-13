@@ -1,0 +1,2 @@
+black==22.10.0
+discord.py==2.0.1
