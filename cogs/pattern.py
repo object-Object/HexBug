@@ -11,7 +11,7 @@ from hexdecode.registry import SpecialHandlerPatternInfo
 from utils.buttons import build_show_or_delete_button
 from utils.commands import HexBugBot, build_autocomplete
 from utils.generate_image import Palette, Theme, draw_single_pattern
-from utils.mods import APIWithoutBookModInfo
+from utils.mods import APIWithoutBookModInfo, ModTransformerHint
 from utils.patterns import align_horizontal, parse_mask
 
 DEFAULT_LINE_SCALE = 6
@@ -184,6 +184,63 @@ class PatternCog(commands.GroupCog, name="pattern"):
     @name.autocomplete("translation")
     async def name_autocomplete(self, interaction: discord.Interaction, current: str) -> list[app_commands.Choice]:
         return self.autocomplete.get(current.lower(), [])[:25]
+
+    @app_commands.command()
+    @app_commands.describe(
+        translation="The name of the pattern",
+        show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
+        palette="The color palette to use for the lines (has no effect for great spells)",
+        theme="Whether the pattern should be rendered for light or dark theme",
+        line_scale="The scale of the lines and dots in the image",
+        arrow_scale="The scale of the arrows in the image",
+    )
+    @app_commands.rename(translation="name")
+    async def from_mod(
+        self,
+        interaction: discord.Interaction,
+        mod: ModTransformerHint,
+        translation: str,
+        show_to_everyone: bool = False,
+        palette: Palette = Palette.Classic,
+        theme: Theme = Theme.Dark,
+        line_scale: SCALE_RANGE = DEFAULT_LINE_SCALE,
+        arrow_scale: SCALE_RANGE = DEFAULT_ARROW_SCALE,
+    ) -> None:
+        """Display the stroke order of a pattern from a particular mod given the pattern's name"""
+        info = self.registry.from_display_name.get(translation)
+        if info is None or info.mod != mod:
+            return await interaction.response.send_message("❌ Unknown pattern.", ephemeral=True)
+        elif isinstance(info, SpecialHandlerPatternInfo):
+            return await interaction.response.send_message("❌ Use `/pattern special`.", ephemeral=True)
+
+        image, _ = draw_single_pattern(
+            direction=info.direction,
+            pattern=info.pattern,
+            is_great=info.is_great,
+            palette=palette,
+            theme=theme,
+            line_scale=line_scale,
+            arrow_scale=arrow_scale,
+        )
+
+        await send_pattern(
+            registry=self.registry,
+            interaction=interaction,
+            name=info.name,
+            translation=translation,
+            direction=None if info.is_great else info.direction,
+            pattern=None if info.is_great else info.pattern,
+            image=image,
+            show_to_everyone=show_to_everyone,
+        )
+
+    @from_mod.autocomplete("translation")
+    async def from_mod_autocomplete(self, interaction: discord.Interaction, current: str) -> list[app_commands.Choice]:
+        return [
+            c
+            for c in self.autocomplete.get(current.lower(), [])
+            if self.registry.from_display_name[c.value].mod.name == interaction.namespace.mod
+        ][:25]
 
     special = app_commands.Group(name="special", description="Patterns with special handlers")
 
