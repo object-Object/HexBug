@@ -37,10 +37,13 @@ class DecodeCog(commands.Cog):
 
         content = f"```\n{output}```"
         if len(content) > 2000:
+            content = "⚠️ Result is too long to display. See attached file."
+            file = discord.File(BytesIO(output.encode("utf-8")), filename="decoded.txt")
             return await interaction.followup.send(
-                "⚠️ Result is too long to display. See attached file.",
-                ephemeral=True,
-                file=discord.File(BytesIO(output.encode("utf-8")), filename="decoded.txt"),
+                content,
+                ephemeral=not show_to_everyone,
+                file=file,
+                view=build_show_or_delete_button(show_to_everyone, interaction, content=content, file=file),
             )
 
         await interaction.followup.send(
