@@ -10,14 +10,10 @@ from typing import Iterable
 import discord
 from discord import app_commands
 
-from Hexal.doc.collate_data import parse_book as hexal_parse_book
-from Hexal.doc.collate_data import pattern_stubs as hexal_stubs
-from HexMod.doc.collate_data import parse_book as hex_parse_book
-from HexMod.doc.collate_data import pattern_stubs as hex_stubs
-from HexTweaks.doc.collate_data import parse_book as hextweaks_parse_book
-from HexTweaks.doc.collate_data import pattern_stubs as hextweaks_stubs
-from MoreIotas.doc.collate_data import parse_book as moreiotas_parse_book
-from MoreIotas.doc.collate_data import pattern_stubs as moreiotas_stubs
+from Hexal.doc import collate_data as hexal_docgen
+from HexMod.doc import collate_data as hex_docgen
+from HexTweaks.doc import collate_data as hextweaks_docgen
+from MoreIotas.doc import collate_data as moreiotas_docgen
 from utils.api import API
 from utils.book_types import Book
 from utils.git import get_commit_message, get_commit_tags, get_current_commit, get_latest_tags
@@ -203,7 +199,7 @@ class RegistryMod(Enum):
         name="Hex Casting",
         description="A mod for Forge and Fabric adding stack-based programmable spellcasting, inspired by Psi. (Why are you using this bot if you don't know what Hex is?)",
         directory="HexMod",
-        book=hex_parse_book("HexMod/Common/src/main/resources", "hexcasting", "thehexbook"),
+        book=hex_docgen.parse_book("HexMod/Common/src/main/resources", "hexcasting", "thehexbook"),
         book_url="https://gamma-delta.github.io/HexMod/",
         curseforge_url="https://www.curseforge.com/minecraft/mc-mods/hexcasting/",
         modrinth_url="https://modrinth.com/mod/hex-casting/",
@@ -223,7 +219,7 @@ class RegistryMod(Enum):
             "makeConstantOp": "Common/src/main/java/at/petrak/hexcasting/api/spell/ConstMediaAction.kt",
             "ConstMediaAction": "Common/src/main/java/at/petrak/hexcasting/api/spell/ConstMediaAction.kt",
         },
-        pattern_stubs=hex_stubs,
+        pattern_stubs=hex_docgen.pattern_stubs,
         modloaders=[FORGE, FABRIC, QUILT],
     )
 
@@ -231,7 +227,9 @@ class RegistryMod(Enum):
         name="Hexal",
         description="Adds many utility patterns/spells (eg. entity health, item smelting), autonomous casting with wisps, and powerful item manipulation/storage.",
         directory="Hexal",
-        book=hexal_parse_book("Hexal/Common/src/main/resources", "Hexal/doc/HexCastingResources", "hexal", "hexalbook"),
+        book=hexal_docgen.parse_book(
+            "Hexal/Common/src/main/resources", "Hexal/doc/HexCastingResources", "hexal", "hexalbook"
+        ),
         book_url="https://talia-12.github.io/Hexal/",
         curseforge_url="https://www.curseforge.com/minecraft/mc-mods/hexal/",
         modrinth_url="https://modrinth.com/mod/hexal/",
@@ -245,7 +243,7 @@ class RegistryMod(Enum):
             "Common/src/main/java/ram/talia/hexal/common/casting/actions",
             "Fabric/src/main/java/ram/talia/hexal/fabric/interop/phantom",
         ],
-        pattern_stubs=hexal_stubs,
+        pattern_stubs=hexal_docgen.pattern_stubs,
         modloaders=[FORGE, FABRIC, QUILT],
     )
 
@@ -253,7 +251,7 @@ class RegistryMod(Enum):
         name="MoreIotas",
         description="Adds matrix and string iotas, allowing things like complex calculations and chat commands.",
         directory="MoreIotas",
-        book=moreiotas_parse_book(
+        book=moreiotas_docgen.parse_book(
             "MoreIotas/Common/src/main/resources", "MoreIotas/doc/HexCastingResources", "moreiotas", "moreiotasbook"
         ),
         book_url="https://talia-12.github.io/MoreIotas/",
@@ -263,7 +261,7 @@ class RegistryMod(Enum):
         icon_url="https://cdn.modrinth.com/data/Jmt7p37B/e4640394d665e134c80900c94d6d49ddb9047edd.png",
         pattern_files=["Common/src/main/java/ram/talia/moreiotas/common/casting/Patterns.kt"],
         operator_directories=["Common/src/main/java/ram/talia/moreiotas/common/casting/actions"],
-        pattern_stubs=moreiotas_stubs,
+        pattern_stubs=moreiotas_docgen.pattern_stubs,
         modloaders=[FORGE, FABRIC, QUILT],
     )
 
@@ -271,7 +269,7 @@ class RegistryMod(Enum):
         name="HexTweaks",
         description="Adds various (mildly opinionated) quality of life changes, as well as dictionary iotas.",
         directory="HexTweaks",
-        book=hextweaks_parse_book(
+        book=hextweaks_docgen.parse_book(
             "HexTweaks/common/src/main/resources",
             "HexTweaks/common/src/main/java",
             "HexMod/Common/src/main/resources",
@@ -285,7 +283,7 @@ class RegistryMod(Enum):
         icon_url="https://cdn.modrinth.com/data/pim6pG9O/0f36451e826a46c00d337d7ef65e62c87bc40eba.png",
         pattern_files=["common/src/main/java/net/walksanator/hextweaks/patterns/PatternRegister.java"],
         operator_directories=["common/src/main/java/net/walksanator/hextweaks/patterns"],
-        pattern_stubs=hextweaks_stubs,
+        pattern_stubs=hextweaks_docgen.pattern_stubs,
         modloaders=[FORGE, FABRIC, QUILT],
     )
 
