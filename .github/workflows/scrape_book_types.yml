@@ -17,6 +17,9 @@ jobs:
           python-version: "3.11"
           cache: "pip"
       
+      - name: Install Python deps
+        run: pip install -r requirements_ci.txt
+      
       - name: Scrape book types
         run: python scrape_book_types.py | tee utils/book_types.py && python -m black utils/book_types.py
 
