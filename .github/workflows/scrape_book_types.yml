@@ -24,4 +24,4 @@ jobs:
         run: python scrape_book_types.py | tee utils/book_types.py && python -m black utils/book_types.py
 
       - name: Ensure the scrape had no effect
-        run: git diff --exit-code -s
+        run: git diff --exit-code
