@@ -22,7 +22,10 @@ jobs:
         run: pip install -r requirements_ci.txt
       
       - name: Scrape book types
-        run: python scrape_book_types.py | tee utils/book_types.py && python -m black utils/book_types.py
+        run: python scrape_book_types.py > utils/book_types.py
+      
+      - name: Format book types
+        run: python -m black utils/book_types.py
 
       - name: Ensure the scrape had no effect
         run: git diff --exit-code
