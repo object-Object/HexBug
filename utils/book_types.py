@@ -98,6 +98,10 @@ class BookPage_hexal_everbook_entry(BookPage[Literal["hexal:everbook_entry"]]):
     pass
 
 
+class BookPage_text(BookPage[Literal["text"]]):
+    text: FormatTree
+
+
 class BookEntry(TypedDict):
     category: str
     icon: str
