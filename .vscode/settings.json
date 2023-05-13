@@ -8,6 +8,8 @@
     "isort.args": ["--profile", "black", "-l", "120"],
     "python.formatting.provider": "black",
     "python.analysis.typeCheckingMode": "basic", // strict doesn't play nice with a lot of things we're using
+    "python.analysis.diagnosticMode": "workspace",
+    "python.languageServer": "Pylance",
     "todo-tree.filtering.excludeGlobs": [
         "**/venv*/**",
         "**/Hexal/**",

@@ -13,6 +13,10 @@ from dotenv import load_dotenv
 from hexdecode.buildpatterns import build_registry
 from utils.commands import HexBugBot
 
+MIN_PYTHON = (3, 11)
+if sys.version_info < MIN_PYTHON:
+    sys.exit(f"Python {MIN_PYTHON[0]}.{MIN_PYTHON[1]} or later is required.")
+
 
 def _setup_logging():
     # use the default discord.py formatter, it looks nice
