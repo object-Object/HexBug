@@ -11,14 +11,15 @@ def get_current_commit(cwd: str) -> str:
     return _run_command(["git", "rev-parse", "--short=10", "HEAD"], cwd)
 
 
-def get_commit_tags(cwd: str, commit: str) -> list[str]:
+def _get_commit_tags(cwd: str, commit: str) -> list[str]:
     """Returns tags for the given commit for the git repo in cwd, sorted by descending tag text."""
-    return sorted(_run_command(["git", "tag", "--contains", commit], cwd).split("\n"), reverse=True)
+    return _run_command(["git", "tag", "--sort=-committerdate", "--points-at", commit], cwd).split("\n")
 
 
-def get_latest_tags(cwd: str) -> list[str]:
+def get_latest_tags(cwd: str, commit: str) -> list[str]:
     """Returns tags for the git repo in cwd, sorted by descending date."""
-    return _run_command(["git", "tag", "--sort=-committerdate"], cwd).split("\n")
+    tags_before = _run_command(["git", "tag", "--sort=-committerdate", "--no-contains", commit], cwd).split("\n")
+    return _get_commit_tags(cwd, commit) + tags_before
 
 
 def get_commit_message(cwd: str, commit: str) -> str:

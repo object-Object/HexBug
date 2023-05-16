@@ -146,13 +146,7 @@ async def build_registry(session: ClientSession) -> Registry | None:
         logging.info(f"Loading {mod_info.name} {mod_info.version}")
 
         # fetch api data (this is the slow part)
-        versions, docs = await asyncio.gather(
-            mod_info.api.get_versions(session),
-            mod_info.api.get_docs(session),
-        )
-        if (latest_version := versions["versions"][0]["id"]) != mod_info.version:
-            logging.warning(f"Update available: {mod_info.name} {latest_version} (from {mod_info.version})")
-
+        docs = await mod_info.api.get_docs(session)
         lang, patterns, categories = await asyncio.gather(
             mod_info.api.get_lang(session, docs),
             mod_info.api.get_patterns(session, docs),

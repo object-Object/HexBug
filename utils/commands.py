@@ -1,7 +1,8 @@
 import logging
 from collections import defaultdict
 
-from discord import app_commands
+from aiohttp import ClientSession
+from discord import Webhook, app_commands
 from discord.ext import commands
 
 from hexdecode.hexast import Registry
@@ -23,6 +24,8 @@ def build_autocomplete(
 
 
 class HexBugBot(commands.Bot):
-    def __init__(self, registry: Registry, **kwargs) -> None:
+    def __init__(self, registry: Registry, session: ClientSession, log_webhook_url: str, **kwargs) -> None:
         super().__init__(**kwargs)
         self.registry = registry
+        self.session = session
+        self.log_webhook = Webhook.from_url(log_webhook_url, session=session)

@@ -18,6 +18,13 @@ if sys.version_info < MIN_PYTHON:
     sys.exit(f"Python {MIN_PYTHON[0]}.{MIN_PYTHON[1]} or later is required.")
 
 
+def _get_env(key: str) -> str:
+    value = os.environ.get(key)
+    if not value:
+        raise Exception(f"{key} not found in .env")
+    return value
+
+
 def _setup_logging():
     # use the default discord.py formatter, it looks nice
     formatter = _ColourFormatter()
@@ -49,9 +56,8 @@ def _setup_logging():
 async def main():
     # load environment variables
     load_dotenv(".env")
-    token = os.environ.get("TOKEN")
-    if not token:
-        raise Exception("TOKEN not found in .env")
+    token = _get_env("TOKEN")
+    log_webhook_url = _get_env("LOG_WEBHOOK_URL")
 
     _setup_logging()
 
@@ -61,19 +67,25 @@ async def main():
             logging.critical("Failed to build registry, exiting.")
             sys.exit(1)
 
-    intents = discord.Intents.default()
-    bot = HexBugBot(registry=registry, command_prefix=commands.when_mentioned, intents=intents)
+        intents = discord.Intents.default()
+        bot = HexBugBot(
+            registry=registry,
+            session=session,
+            log_webhook_url=log_webhook_url,
+            command_prefix=commands.when_mentioned,
+            intents=intents,
+        )
 
-    # load modules and run the bot
-    async with bot:
-        logger = logging.getLogger("bot")
-        for path in Path("cogs").rglob("*.py"):
-            module = ".".join(path.with_name(path.stem).parts)
+        # load modules and run the bot
+        async with bot:
+            logger = logging.getLogger("bot")
+            for path in Path("cogs").rglob("*.py"):
+                module = ".".join(path.with_name(path.stem).parts)
 
-            logger.info(f"Loading {module}")
-            await bot.load_extension(module)
+                logger.info(f"Loading {module}")
+                await bot.load_extension(module)
 
-        await bot.start(token)
+            await bot.start(token)
 
 
 if __name__ == "__main__":

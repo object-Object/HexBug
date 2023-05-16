@@ -12,6 +12,7 @@ A Discord bot for the Hex Casting mod. `buildpatterns.py`, `revealparser.py`, an
 
     ```env
     TOKEN="your-bot-token"
+    LOG_WEBHOOK_URL="https://discord.com/api/webhooks/id/token"
     ```
 
 6. Run the bot: `python main.py`
