@@ -124,9 +124,22 @@ class _BaseTagVersionRegistryModInfo(_BaseRegistryModInfo):
 @dataclass(kw_only=True)
 class HexalRegistryModInfo(_BaseTagVersionRegistryModInfo):
     registry_regex: re.Pattern[str] = re.compile(
-        r'HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)[^val]+?(makeConstantOp|Op\w+)(?:[^val]*[^\(](true)\))?',
-        re.M,
+        r'HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\),[^,]+?(makeConstantOp|Op\w+).*?(\btrue)?\)(?:[^\)]+?\bval\b|(?:(?!\bval\b)(?:.))+$)',
+        re.S,
     )
+    r"""
+    regex explanation because this is cursed
+    flags: S because . needs to match newlines, and no M because we want $ to be the end of the file
+
+    HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*  # direction and angle
+    modLoc\("([^"]+)"\),.+?  # internal name
+    (makeConstantOp|Op\w+)  # classname - make this a non-capturing group with ?: if you don't need it
+    .*?(\btrue)?\)  # lazy wildcard, then optional true for great spells, then closing bracket
+    (?:
+        [^\)]+?\bval\b  # lazy match anything other than a closing bracket, because we only want to find "true" at the very end of this declaration; then find "val" to start the next pattern declaration
+        |(?:(?!\bval\b)(?:.))+$  # didn't match the previous group, so keep going until the end of the document, but fail if we find "val" anywhere
+    )
+    """
     version_regex: re.Pattern[str] = re.compile(r"^(\d+\.\d+\.\d+)$")
 
 
@@ -307,15 +320,12 @@ class RegistryMod(Enum):
             "hexkinetics",
             "hexkineticsbook",
         ),
-        book_url=None,
+        book_url="https://sonunte.github.io/HexKinetics/",
         curseforge_url=None,
         modrinth_slug="hexkinetics",
         source_url="https://github.com/Sonunte/HexKinetics/",
         icon_url="https://cdn.modrinth.com/data/8FVr3ohp/66f16e550e1757a511674b26cb9d9cda8dbbbb24.png",
-        pattern_files=[
-            "Common/src/main/java/net/sonunte/hexkinetics/common/casting/Patterns.kt",
-            "Fabric/src/main/java/net/sonunte/hexkinetics/fabric/FabricYourModInitializer.kt",
-        ],
+        pattern_files=["Common/src/main/java/net/sonunte/hexkinetics/common/casting/Patterns.kt"],
         operator_directories=["Common/src/main/java/net/sonunte/hexkinetics/common/casting/actions"],
         pattern_stubs=hexkinetics_docgen.pattern_stubs,
         modloaders=[FABRIC, QUILT],
