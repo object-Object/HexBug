@@ -8,6 +8,7 @@ from itertools import chain
 from typing import Iterable
 
 import discord
+import jproperties
 from discord import app_commands
 
 from Hexal.doc import collate_data as hexal_docgen
@@ -17,7 +18,7 @@ from HexTweaks.doc import collate_data as hextweaks_docgen
 from MoreIotas.doc import collate_data as moreiotas_docgen
 from utils.api import API
 from utils.book_types import Book
-from utils.git import get_commit_message, get_current_commit, get_latest_tags
+from utils.git import get_current_commit
 from utils.urls import wrap_url
 
 # modloader emotes
@@ -67,63 +68,15 @@ class _BaseModInfo(ABC):
         return self.curseforge_url or self.modrinth_url
 
 
-@dataclass(kw_only=True)
-class _BaseRegistryModInfo(_BaseModInfo, ABC):
-    source_url: str
-    book_url: str | None
-    directory: str
-    book: Book
-    registry_regex: re.Pattern[str]
-    version_regex: re.Pattern[str]
-    pattern_files: list[str]
-    operator_directories: list[str]
-    extra_classname_paths: dict[str, str] = field(default_factory=dict)
-    # iterable instead of list because invariance etc
-    # see https://github.com/microsoft/pylance-release/discussions/3383
-    pattern_stubs: Iterable[tuple[str | None, str]]
+class RegistryRegexType(Enum):
+    """Regexes (regices?) for parsing pattern registry files."""
 
-    def __post_init__(self):
-        super().__post_init__()
-        self.commit = get_current_commit(self.directory)
-        self.version = self._get_version()
-        self.pattern_files = [f"{self.directory}/{s}" for s in self.pattern_files]
-        self.operator_directories = [f"{self.directory}/{s}" for s in self.operator_directories]
-
-    @abstractmethod
-    def _get_version(self) -> str:
-        raise NotImplementedError
-
-
-@dataclass(kw_only=True)
-class HexCastingRegistryModInfo(_BaseRegistryModInfo):
-    # thanks Alwinfy for (unknowingly) making my registry regex about 5x simpler
-    registry_regex: re.Pattern[str] = re.compile(
+    HexCasting = re.compile(
         r'HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)[^;]+?(makeConstantOp|Op\w+)([^;]*true\);)?',
         re.M,
     )
-    version_regex: re.Pattern[str] = re.compile(r"\[Release\].*?([\d\.]+)")
 
-    def _get_version(self) -> str:
-        # get version from the current commit message
-        version = self.version_regex.match(get_commit_message(self.directory, self.commit))
-        assert version is not None
-        return version.group(1)
-
-
-@dataclass(kw_only=True)
-class _BaseTagVersionRegistryModInfo(_BaseRegistryModInfo):
-    def _get_version(self) -> str:
-        # get version from git tags - return first versiony-looking tag we find that isn't a beta/prerelease
-        tags = get_latest_tags(self.directory, self.commit)
-        for tag in tags:
-            if version := self.version_regex.match(tag):
-                return version.group(1)
-        raise Exception("No version found")
-
-
-@dataclass(kw_only=True)
-class HexalRegistryModInfo(_BaseTagVersionRegistryModInfo):
-    registry_regex: re.Pattern[str] = re.compile(
+    Hexal = re.compile(
         r'HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\),[^,]+?(makeConstantOp|Op\w+).*?(\btrue)?\)(?:[^\)]+?\bval\b|(?:(?!\bval\b)(?:.))+$)',
         re.S,
     )
@@ -140,15 +93,45 @@ class HexalRegistryModInfo(_BaseTagVersionRegistryModInfo):
         |(?:(?!\bval\b)(?:.))+$  # didn't match the previous group, so keep going until the end of the document, but fail if we find "val" anywhere
     )
     """
-    version_regex: re.Pattern[str] = re.compile(r"^(\d+\.\d+\.\d+)$")
+
+    HexTweaks = re.compile(
+        r'PatternRegistry.mapPattern\([\n ]+(?:HexPattern\.fromAngles|fromAnglesIllegal)\("([qweasd]+)", ?HexDir\.(.+)?\)[,\n ]+?new ResourceLocation\(".+"(.+)?"\),\n.+new (.+)\(.+, ?(true)?'
+    )
+
+    @property
+    def value(self) -> re.Pattern:
+        return super().value
 
 
 @dataclass(kw_only=True)
-class HexTweaksRegistryModInfo(_BaseTagVersionRegistryModInfo):
-    registry_regex: re.Pattern[str] = re.compile(
-        r'PatternRegistry.mapPattern\([\n ]+(?:HexPattern\.fromAngles|fromAnglesIllegal)\("([qweasd]+)", ?HexDir\.(.+)?\)[,\n ]+?new ResourceLocation\(".+"(.+)?"\),\n.+new (.+)\(.+, ?(true)?'
-    )
-    version_regex: re.Pattern[str] = re.compile(r"^v(\d+.\d+.\d+)$")
+class RegistryModInfo(_BaseModInfo, ABC):
+    source_url: str
+    book_url: str | None
+    directory: str
+    book: Book
+    registry_regex_type: InitVar[RegistryRegexType]
+    version_property_key: InitVar[str] = field(default="modVersion")
+    pattern_files: list[str]
+    operator_directories: list[str]
+    extra_classname_paths: dict[str, str] = field(default_factory=dict)
+    # iterable instead of list because invariance etc
+    # see https://github.com/microsoft/pylance-release/discussions/3383
+    pattern_stubs: Iterable[tuple[str | None, str]]
+
+    def __post_init__(self, registry_regex: RegistryRegexType, version_property_key: str):
+        super().__post_init__()
+        self.commit = get_current_commit(self.directory)
+        self.version = self._load_version(version_property_key)
+        self.pattern_files = [f"{self.directory}/{s}" for s in self.pattern_files]
+        self.operator_directories = [f"{self.directory}/{s}" for s in self.operator_directories]
+        self.registry_regex = registry_regex.value
+
+    def _load_version(self, version_property_key: str) -> str:
+        # get the version from the mod's gradle.properties (why weren't we doing this all along???)
+        p = jproperties.Properties()
+        with open(f"{self.directory}/gradle.properties", "rb") as f:
+            p.load(f, "utf-8")
+        return p[version_property_key][0]
 
 
 @dataclass(kw_only=True)
@@ -212,17 +195,17 @@ class APIWithoutBookModInfo(_BaseAPIModInfo):
         raise NotImplementedError
 
 
-RegistryModInfo = HexCastingRegistryModInfo | HexalRegistryModInfo | HexTweaksRegistryModInfo
 APIModInfo = APIWithBookModInfo | APIWithoutBookModInfo
 
 
 class RegistryMod(Enum):
     # HEX NEEDS TO BE FIRST
-    HexCasting = HexCastingRegistryModInfo(
+    HexCasting = RegistryModInfo(
         name="Hex Casting",
         description="A mod for Forge and Fabric adding stack-based programmable spellcasting, inspired by Psi. (Why are you using this bot if you don't know what Hex is?)",
         directory="HexMod",
         book=hex_docgen.parse_book("HexMod/Common/src/main/resources", "hexcasting", "thehexbook"),
+        registry_regex_type=RegistryRegexType.HexCasting,
         book_url="https://gamma-delta.github.io/HexMod/",
         curseforge_url="https://www.curseforge.com/minecraft/mc-mods/hexcasting/",
         modrinth_slug="hex-casting",
@@ -246,13 +229,14 @@ class RegistryMod(Enum):
         modloaders=[FORGE, FABRIC, QUILT],
     )
 
-    Hexal = HexalRegistryModInfo(
+    Hexal = RegistryModInfo(
         name="Hexal",
         description="Adds many utility patterns/spells (eg. entity health, item smelting), autonomous casting with wisps, and powerful item manipulation/storage.",
         directory="Hexal",
         book=hexal_docgen.parse_book(
             "Hexal/Common/src/main/resources", "Hexal/doc/HexCastingResources", "hexal", "hexalbook"
         ),
+        registry_regex_type=RegistryRegexType.Hexal,
         book_url="https://talia-12.github.io/Hexal/",
         curseforge_url="https://www.curseforge.com/minecraft/mc-mods/hexal/",
         modrinth_slug="hexal",
@@ -270,13 +254,14 @@ class RegistryMod(Enum):
         modloaders=[FORGE, FABRIC, QUILT],
     )
 
-    MoreIotas = HexalRegistryModInfo(
+    MoreIotas = RegistryModInfo(
         name="MoreIotas",
         description="Adds matrix and string iotas, allowing things like complex calculations and chat commands.",
         directory="MoreIotas",
         book=moreiotas_docgen.parse_book(
             "MoreIotas/Common/src/main/resources", "MoreIotas/doc/HexCastingResources", "moreiotas", "moreiotasbook"
         ),
+        registry_regex_type=RegistryRegexType.Hexal,
         book_url="https://talia-12.github.io/MoreIotas/",
         curseforge_url="https://www.curseforge.com/minecraft/mc-mods/moreiotas/",
         modrinth_slug="moreiotas",
@@ -288,7 +273,7 @@ class RegistryMod(Enum):
         modloaders=[FORGE, FABRIC, QUILT],
     )
 
-    HexTweaks = HexTweaksRegistryModInfo(
+    HexTweaks = RegistryModInfo(
         name="HexTweaks",
         description="Adds various (mildly opinionated) quality of life changes, as well as dictionary iotas.",
         directory="HexTweaks",
@@ -299,6 +284,8 @@ class RegistryMod(Enum):
             "hextweaks",
             "thetweakedbook",
         ),
+        registry_regex_type=RegistryRegexType.HexTweaks,
+        version_property_key="mod_version",
         book_url="https://walksanatora.github.io/HexTweaks/",
         modrinth_slug="hextweaks",
         curseforge_url=None,
@@ -310,7 +297,7 @@ class RegistryMod(Enum):
         modloaders=[FORGE, FABRIC, QUILT],
     )
 
-    HexKinetics = HexalRegistryModInfo(
+    HexKinetics = RegistryModInfo(
         name="HexKinetics",
         description="Adds patterns and spells related to vectors and dynamics.",
         directory="HexKinetics",
@@ -320,6 +307,7 @@ class RegistryMod(Enum):
             "hexkinetics",
             "hexkineticsbook",
         ),
+        registry_regex_type=RegistryRegexType.Hexal,
         book_url="https://sonunte.github.io/HexKinetics/",
         curseforge_url=None,
         modrinth_slug="hexkinetics",
