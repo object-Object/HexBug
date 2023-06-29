@@ -23,7 +23,7 @@ Run `python scrape_book_types.py | tee utils/book_types.py && python -m black ut
 
 ## Depending on HexBug
 
-Note: I haven't tested these steps, so YMMV. Open an issue or ping me on Discord if something's broken.
+Note: I haven't tested these steps very thoroughly, so YMMV. Open an issue or ping me on Discord if something's broken.
 
 1. Clone this repo somewhere, including submodules: `git clone --recurse-submodules <url>`
 2. In your project, run `pip install path/to/HexBug[all]`
