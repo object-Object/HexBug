@@ -18,13 +18,13 @@ jobs:
           cache: "pip"
       
       - name: Install Python deps
-        run: pip install .
+        run: pip install -e .
       
       - name: Scrape book types
         run: |
           python scrape_book_types.py > book_types.py.new
           mv book_types.py.new src/HexBug/utils/book_types.py
-          python -m black utils/book_types.py
+          python -m black src/HexBug/utils/book_types.py
 
       - name: Ensure the scrape had no effect
         run: git diff --exit-code
