@@ -1,6 +1,6 @@
-from utils.mods import RegistryMod
-from hexdecode.hex_math import Direction
-from hexdecode.registry import PatternInfo, NormalPatternInfo, SpecialHandlerPatternInfo
+from ..hexdecode.hex_math import Direction
+from ..hexdecode.registry import NormalPatternInfo, PatternInfo, SpecialHandlerPatternInfo
+from .mods import RegistryMod
 
 _extra_patterns: list[PatternInfo] | None = None
 

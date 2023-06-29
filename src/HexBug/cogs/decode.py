@@ -4,10 +4,10 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-from hexdecode import revealparser
-from hexdecode.hexast import massage_raw_pattern_list
-from utils.buttons import build_show_or_delete_button
-from utils.commands import HexBugBot
+from ..hexdecode import revealparser
+from ..hexdecode.hexast import massage_raw_pattern_list
+from ..utils.buttons import build_show_or_delete_button
+from ..utils.commands import HexBugBot
 
 
 class DecodeCog(commands.Cog):

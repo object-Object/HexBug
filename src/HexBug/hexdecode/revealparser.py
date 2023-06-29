@@ -4,8 +4,8 @@ from lark.exceptions import LarkError
 from lark.lark import Lark
 from lark.visitors import Transformer
 
-from hexdecode import hexast
-from hexdecode.hex_math import Direction
+from . import hexast
+from .hex_math import Direction
 
 parser = Lark(
     """

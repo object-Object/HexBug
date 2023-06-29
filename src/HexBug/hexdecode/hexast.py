@@ -8,8 +8,8 @@ from typing import Generator
 
 from sty import fg
 
-from hexdecode.hex_math import Angle, Direction, get_aligned_pattern_segments
-from hexdecode.registry import Registry
+from .hex_math import Angle, Direction, get_aligned_pattern_segments
+from .registry import Registry
 
 localize_regex = re.compile(r"((?:number|mask))(: .+)")
 

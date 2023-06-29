@@ -18,12 +18,12 @@ jobs:
           cache: "pip"
       
       - name: Install Python deps
-        run: pip install -r requirements_ci.txt
+        run: pip install .
       
       - name: Scrape book types
         run: |
-          python scrape_book_types.py > utils/book_types.py.new
-          mv utils/book_types.py.new utils/book_types.py
+          python scrape_book_types.py > book_types.py.new
+          mv book_types.py.new src/HexBug/utils/book_types.py
           python -m black utils/book_types.py
 
       - name: Ensure the scrape had no effect

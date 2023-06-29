@@ -10,16 +10,16 @@ from typing import Iterable
 import discord
 import jproperties
 from discord import app_commands
-
 from Hexal.doc import collate_data as hexal_docgen
 from HexKinetics.doc import collate_data as hexkinetics_docgen
 from HexMod.doc import collate_data as hex_docgen
 from HexTweaks.doc import collate_data as hextweaks_docgen
 from MoreIotas.doc import collate_data as moreiotas_docgen
-from utils.api import API
-from utils.book_types import Book
-from utils.git import get_current_commit
-from utils.urls import wrap_url
+
+from .api import API
+from .book_types import Book
+from .git import get_current_commit
+from .urls import wrap_url
 
 # modloader emotes
 # this isn't an enum because it looks ugly as an enum, and for no other reason
@@ -203,8 +203,8 @@ class RegistryMod(Enum):
     HexCasting = RegistryModInfo(
         name="Hex Casting",
         description="A mod for Forge and Fabric adding stack-based programmable spellcasting, inspired by Psi. (Why are you using this bot if you don't know what Hex is?)",
-        directory="HexMod",
-        book=hex_docgen.parse_book("HexMod/Common/src/main/resources", "hexcasting", "thehexbook"),
+        directory="vendor/HexMod",
+        book=hex_docgen.parse_book("vendor/HexMod/Common/src/main/resources", "hexcasting", "thehexbook"),
         registry_regex_type=RegistryRegexType.HexCasting,
         book_url="https://gamma-delta.github.io/HexMod/",
         curseforge_url="https://www.curseforge.com/minecraft/mc-mods/hexcasting/",
@@ -232,9 +232,12 @@ class RegistryMod(Enum):
     Hexal = RegistryModInfo(
         name="Hexal",
         description="Adds many utility patterns/spells (eg. entity health, item smelting), autonomous casting with wisps, and powerful item manipulation/storage.",
-        directory="Hexal",
+        directory="vendor/Hexal",
         book=hexal_docgen.parse_book(
-            "Hexal/Common/src/main/resources", "Hexal/doc/HexCastingResources", "hexal", "hexalbook"
+            "vendor/Hexal/Common/src/main/resources",
+            "vendor/Hexal/doc/HexCastingResources",
+            "hexal",
+            "hexalbook",
         ),
         registry_regex_type=RegistryRegexType.Hexal,
         book_url="https://talia-12.github.io/Hexal/",
@@ -257,9 +260,12 @@ class RegistryMod(Enum):
     MoreIotas = RegistryModInfo(
         name="MoreIotas",
         description="Adds matrix and string iotas, allowing things like complex calculations and chat commands.",
-        directory="MoreIotas",
+        directory="vendor/MoreIotas",
         book=moreiotas_docgen.parse_book(
-            "MoreIotas/Common/src/main/resources", "MoreIotas/doc/HexCastingResources", "moreiotas", "moreiotasbook"
+            "vendor/MoreIotas/Common/src/main/resources",
+            "vendor/MoreIotas/doc/HexCastingResources",
+            "moreiotas",
+            "moreiotasbook",
         ),
         registry_regex_type=RegistryRegexType.Hexal,
         book_url="https://talia-12.github.io/MoreIotas/",
@@ -276,11 +282,11 @@ class RegistryMod(Enum):
     HexTweaks = RegistryModInfo(
         name="HexTweaks",
         description="Adds various (mildly opinionated) quality of life changes, as well as dictionary iotas.",
-        directory="HexTweaks",
+        directory="vendor/HexTweaks",
         book=hextweaks_docgen.parse_book(
-            "HexTweaks/common/src/main/resources",
-            "HexTweaks/common/src/main/java",
-            "HexMod/Common/src/main/resources",
+            "vendor/HexTweaks/common/src/main/resources",
+            "vendor/HexTweaks/common/src/main/java",
+            "vendor/HexMod/Common/src/main/resources",
             "hextweaks",
             "thetweakedbook",
         ),
@@ -300,10 +306,10 @@ class RegistryMod(Enum):
     HexKinetics = RegistryModInfo(
         name="HexKinetics",
         description="Adds patterns and spells related to vectors and dynamics.",
-        directory="HexKinetics",
+        directory="vendor/HexKinetics",
         book=hexkinetics_docgen.parse_book(
-            "HexKinetics/Common/src/main/resources",
-            "HexKinetics/doc/HexCastingResources",
+            "vendor/HexKinetics/Common/src/main/resources",
+            "vendor/HexKinetics/doc/HexCastingResources",
             "hexkinetics",
             "hexkineticsbook",
         ),

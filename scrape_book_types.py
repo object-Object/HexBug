@@ -4,7 +4,7 @@ from typing import Any, Callable, Mapping
 
 from aiohttp import ClientSession
 
-from utils.mods import APIMod, RegistryMod
+from HexBug.utils.mods import APIMod, RegistryMod
 
 if __name__ != "__main__":
     raise Exception("please don't try to actually use this code in production lmao")

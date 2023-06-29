@@ -3,7 +3,7 @@ import subprocess
 
 def _run_command(args: list[str], cwd: str) -> str:
     result = subprocess.run(args, capture_output=True, text=True, cwd=cwd)
-    assert not result.stderr
+    assert not result.stderr, result.stderr
     return result.stdout.strip()
 
 

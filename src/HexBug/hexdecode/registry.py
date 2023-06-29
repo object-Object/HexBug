@@ -5,10 +5,10 @@ from dataclasses import dataclass, field
 from fractions import Fraction
 from typing import TypeVar
 
-from hexdecode.hex_math import Direction, Segment, get_rotated_aligned_pattern_segments
-from utils.mods import Mod
-from utils.parse_rational import parse_rational
-from utils.patterns import parse_mask
+from ..utils.mods import Mod
+from ..utils.parse_rational import parse_rational
+from ..utils.patterns import parse_mask
+from .hex_math import Direction, Segment, get_rotated_aligned_pattern_segments
 
 
 @dataclass(frozen=True, kw_only=True, repr=False)

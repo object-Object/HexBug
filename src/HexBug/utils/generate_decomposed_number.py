@@ -10,10 +10,10 @@ from timeit import default_timer as timer
 
 from hexnumgen import AStarOptions, GeneratedNumber, generate_number_pattern
 
-from hexdecode.buildpatterns import MAX_PREGEN_NUMBER
-from hexdecode.hex_math import Direction
-from hexdecode.registry import Registry
-from utils.patterns import align_horizontal
+from ..hexdecode.buildpatterns import MAX_PREGEN_NUMBER
+from ..hexdecode.hex_math import Direction
+from ..hexdecode.registry import Registry
+from .patterns import align_horizontal
 
 _ADDITIVE = (Direction.NORTH_EAST, "waaw")
 _MULTIPLICATIVE = (Direction.SOUTH_EAST, "waqaw")

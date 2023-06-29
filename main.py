@@ -10,8 +10,8 @@ from discord.ext import commands
 from discord.utils import _ColourFormatter
 from dotenv import load_dotenv
 
-from hexdecode.buildpatterns import build_registry
-from utils.commands import HexBugBot
+from HexBug.hexdecode.buildpatterns import build_registry
+from HexBug.utils.commands import HexBugBot
 
 MIN_PYTHON = (3, 11)
 if sys.version_info < MIN_PYTHON:
@@ -79,9 +79,11 @@ async def main():
         # load modules and run the bot
         async with bot:
             logger = logging.getLogger("bot")
-            for path in Path("cogs").rglob("*.py"):
-                module = ".".join(path.with_name(path.stem).parts)
+            for path in Path("src/HexBug/cogs").rglob("*.py"):
+                if path.stem == "__init__":
+                    continue
 
+                module = ".".join(path.with_name(path.stem).parts[1:])
                 logger.info(f"Loading {module}")
                 await bot.load_extension(module)
 

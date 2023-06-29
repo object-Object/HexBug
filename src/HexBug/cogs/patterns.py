@@ -5,16 +5,16 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-from cogs.pattern import DEFAULT_ARROW_SCALE, DEFAULT_LINE_SCALE, SCALE_RANGE
-from hexdecode.hex_math import Direction
-from hexdecode.hexast import generate_bookkeeper
-from hexdecode.registry import RawPatternInfo, SpecialHandlerPatternInfo
-from utils.buttons import build_show_or_delete_button
-from utils.commands import HexBugBot
-from utils.draw_patterns_on_grid import draw_patterns_on_grid
-from utils.generate_decomposed_number import generate_decomposed_number
-from utils.generate_image import Palette, Theme
-from utils.parse_rational import parse_rational
+from ..hexdecode.hex_math import Direction
+from ..hexdecode.hexast import generate_bookkeeper
+from ..hexdecode.registry import RawPatternInfo, SpecialHandlerPatternInfo
+from ..utils.buttons import build_show_or_delete_button
+from ..utils.commands import HexBugBot
+from ..utils.draw_patterns_on_grid import draw_patterns_on_grid
+from ..utils.generate_decomposed_number import generate_decomposed_number
+from ..utils.generate_image import Palette, Theme
+from ..utils.parse_rational import parse_rational
+from .pattern import DEFAULT_ARROW_SCALE, DEFAULT_LINE_SCALE, SCALE_RANGE
 
 WIDTH_RANGE = app_commands.Range[int, 1, 100]
 

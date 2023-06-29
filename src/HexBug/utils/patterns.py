@@ -1,4 +1,4 @@
-from hexdecode.hex_math import Angle, Direction, get_pattern_points
+from ..hexdecode.hex_math import Angle, Direction, get_pattern_points
 
 
 def align_horizontal(direction: Direction, pattern: str, is_number: bool) -> tuple[Direction, str]:

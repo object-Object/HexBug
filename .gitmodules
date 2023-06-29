@@ -1,15 +1,15 @@
 [submodule "HexMod"]
-	path = HexMod
+	path = vendor/HexMod
 	url = https://github.com/gamma-delta/HexMod
 [submodule "Hexal"]
-	path = Hexal
+	path = vendor/Hexal
 	url = https://github.com/Talia-12/Hexal
 [submodule "MoreIotas"]
-	path = MoreIotas
+	path = vendor/MoreIotas
 	url = https://github.com/Talia-12/MoreIotas
 [submodule "HexTweaks"]
-	path = HexTweaks
+	path = vendor/HexTweaks
 	url = https://github.com/walksanatora/HexTweaks
 [submodule "HexKinetics"]
-	path = HexKinetics
+	path = vendor/HexKinetics
 	url = https://github.com/Sonunte/HexKinetics

@@ -5,7 +5,7 @@ from aiohttp import ClientSession
 from discord import Webhook, app_commands
 from discord.ext import commands
 
-from hexdecode.hexast import Registry
+from ..hexdecode.hexast import Registry
 
 
 def build_autocomplete(

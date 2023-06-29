@@ -2,9 +2,9 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-from utils.buttons import build_show_or_delete_button
-from utils.commands import HexBugBot
-from utils.mods import ModTransformerHint
+from ..utils.buttons import build_show_or_delete_button
+from ..utils.commands import HexBugBot
+from ..utils.mods import ModTransformerHint
 
 
 class ModCog(commands.Cog):

@@ -6,10 +6,8 @@ from pathlib import Path
 
 from aiohttp import ClientSession
 
-from hexdecode.hex_math import Direction
-from hexdecode.registry import DuplicatePatternException, NormalPatternInfo, Registry
-from utils.api import APILocalPatternSource, APIPattern
-from utils.book_types import (
+from ..utils.api import APILocalPatternSource, APIPattern
+from ..utils.book_types import (
     BookCategory,
     BookEntry,
     BookPage_hexcasting_manual_pattern,
@@ -17,15 +15,17 @@ from utils.book_types import (
     BookPage_patchouli_spotlight,
     BookPage_patchouli_text,
 )
-from utils.extra_patterns import build_extra_patterns
-from utils.mods import APIMod, APIWithBookModInfo, Mod, RegistryMod
-from utils.type_guards import is_typeddict_subtype
+from ..utils.extra_patterns import build_extra_patterns
+from ..utils.mods import APIMod, APIWithBookModInfo, Mod, RegistryMod
+from ..utils.type_guards import is_typeddict_subtype
+from .hex_math import Direction
+from .registry import DuplicatePatternException, NormalPatternInfo, Registry
 
 translation_regex = re.compile(r"hexcasting.spell.[a-z]+:(.+)")
 header_regex = re.compile(r"\s*\(.+\)")
 
 MAX_PREGEN_NUMBER = 2000
-PREGEN_NUMBERS_FILE = f"numbers_{MAX_PREGEN_NUMBER}.json"
+PREGEN_NUMBERS_FILE = f"{Path(__file__).parent.as_posix()}/numbers_{MAX_PREGEN_NUMBER}.json"
 
 
 def _build_pattern_urls(

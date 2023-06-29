@@ -1,6 +1,6 @@
 from discord.ext import commands
 
-from utils.commands import HexBugBot
+from ..utils.commands import HexBugBot
 
 
 class MessageCommandsCog(commands.Cog):

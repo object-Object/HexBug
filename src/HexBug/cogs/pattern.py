@@ -4,15 +4,15 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-from hexdecode.buildpatterns import MAX_PREGEN_NUMBER
-from hexdecode.hex_math import Direction
-from hexdecode.hexast import Registry, UnknownPattern, _parse_unknown_pattern, generate_bookkeeper
-from hexdecode.registry import SpecialHandlerPatternInfo
-from utils.buttons import build_show_or_delete_button
-from utils.commands import HexBugBot, build_autocomplete
-from utils.generate_image import Palette, Theme, draw_single_pattern
-from utils.mods import APIWithoutBookModInfo, ModTransformerHint
-from utils.patterns import align_horizontal, parse_mask
+from ..hexdecode.buildpatterns import MAX_PREGEN_NUMBER
+from ..hexdecode.hex_math import Direction
+from ..hexdecode.hexast import Registry, UnknownPattern, _parse_unknown_pattern, generate_bookkeeper
+from ..hexdecode.registry import SpecialHandlerPatternInfo
+from ..utils.buttons import build_show_or_delete_button
+from ..utils.commands import HexBugBot, build_autocomplete
+from ..utils.generate_image import Palette, Theme, draw_single_pattern
+from ..utils.mods import APIWithoutBookModInfo, ModTransformerHint
+from ..utils.patterns import align_horizontal, parse_mask
 
 DEFAULT_LINE_SCALE = 6
 DEFAULT_ARROW_SCALE = 2

@@ -5,9 +5,9 @@ import sys
 
 from aiohttp import ClientSession
 
-from hexdecode import revealparser
-from hexdecode.buildpatterns import build_registry
-from hexdecode.hexast import massage_raw_pattern_list
+from HexBug.hexdecode import revealparser
+from HexBug.hexdecode.buildpatterns import build_registry
+from HexBug.hexdecode.hexast import massage_raw_pattern_list
 
 
 # don't use this in production

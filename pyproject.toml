@@ -1,3 +1,35 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "HexBug"
+version = "0.1.0" # TODO: auto-update this or something
+dependencies = [
+    "black~=22.10.0",
+    "discord.py~=2.0.1",
+    "jproperties~=2.1.1",
+]
+
+[project.optional-dependencies]
+all = [
+    "matplotlib~=3.6.0",
+    "lark~=1.1.2",
+    "numpy~=1.23.1",
+    "python-dotenv~=0.21.0",
+    "sty~=1.0.4",
+    "pillow~=9.2.0",
+    "semver~=3.0.0",
+    "hexnumgen @ git+https://github.com/object-Object/hexnumgen-rs.git@70d683ee9b",
+]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build]
+include = ["src/HexBug", "vendor/*"]
+sources = ["src", "vendor"]
+
 [tool.black]
 line-length = 120
 extend-exclude = """(

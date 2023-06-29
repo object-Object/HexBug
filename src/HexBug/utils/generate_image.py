@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from PIL import Image
 
-from hex_interpreter.hex_draw import Palette, Theme, plot_intersect, plot_monochrome
-from hexdecode.hex_math import Coord, Direction, get_pattern_points
+from ..hex_interpreter.hex_draw import Palette, Theme, plot_intersect, plot_monochrome
+from ..hexdecode.hex_math import Coord, Direction, get_pattern_points
 
 
 def get_xy_bounds(points: list[Coord]) -> tuple[tuple[float, float], tuple[float, float]]:

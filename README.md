@@ -20,3 +20,14 @@ A Discord bot for the Hex Casting mod. `buildpatterns.py`, `revealparser.py`, an
 ## Scraping web book types
 
 Run `python scrape_book_types.py | tee utils/book_types.py && python -m black utils/book_types.py`.
+
+## Depending on HexBug
+
+Note: I haven't tested these steps, so YMMV. Open an issue or ping me on Discord if something's broken.
+
+1. Clone this repo somewhere, including submodules: `git clone --recurse-submodules <url>`
+2. In your project, run `pip install path/to/HexBug[all]`
+3. Import from `HexBug`, eg. `from HexBug.utils.generate_image import draw_single_pattern`
+
+Alternatively, if you don't need anything which depends on the mod submodules, you *should* be able to install directly from Git:
+`pip install git+https://github.com/object-Object/HexBug.git`

@@ -5,7 +5,7 @@ from typing import Generic, Literal, LiteralString, TypedDict, TypeVar
 
 from aiohttp import ClientSession
 
-from utils.book_types import BookCategory
+from .book_types import BookCategory
 
 T = TypeVar("T", bound=LiteralString)
 

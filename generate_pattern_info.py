@@ -7,9 +7,9 @@ from typing import TypedDict
 
 from aiohttp import ClientSession
 
-from hexdecode.buildpatterns import build_registry
-from hexdecode.registry import SpecialHandlerPatternInfo
-from utils.generate_image import Palette, Theme, draw_single_pattern
+from HexBug.hexdecode.buildpatterns import build_registry
+from HexBug.hexdecode.registry import SpecialHandlerPatternInfo
+from HexBug.utils.generate_image import Palette, Theme, draw_single_pattern
 
 
 class ImageInfo(TypedDict):
