@@ -9,6 +9,7 @@ dependencies = [
     "black~=22.10.0",
     "discord.py~=2.0.1",
     "jproperties~=2.1.1",
+    "typing_extensions~=4.7.1",
 ]
 
 [project.optional-dependencies]

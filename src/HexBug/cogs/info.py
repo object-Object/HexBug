@@ -61,7 +61,7 @@ class CountedMessageProps:
         return footer
 
 
-class MessagePropss(Enum):
+class InfoMessages(Enum):
     addons = MessageProps(
         embed=discord.Embed(
             title="Hex-related addons, mods, and tools",
@@ -145,13 +145,13 @@ class InfoCog(commands.Cog):
         show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
     )
     @app_commands.rename(info="name")
-    async def info(self, interaction: discord.Interaction, info: MessagePropss, show_to_everyone: bool = False):
+    async def info(self, interaction: discord.Interaction, info: InfoMessages, show_to_everyone: bool = False):
         """Show a premade info message"""
         message = info.message(show_to_everyone)
         await interaction.response.send_message(
             **message,
             ephemeral=not show_to_everyone,
-            view=build_show_or_delete_button(show_to_everyone, interaction, builder=lambda: info.message(True)),
+            view=build_show_or_delete_button(show_to_everyone, interaction, builder=lambda show: info.message(show)),
         )
 
 

@@ -18,15 +18,14 @@ class MessageProps(TypedDict, total=False):
 def build_show_or_delete_button(
     show_to_everyone: bool,
     interaction: discord.Interaction,
-    *,
-    builder: Callable[[], MessageProps] | None = None,
+    builder: Callable[[bool], MessageProps] | None = None,
     **kwargs: Unpack[MessageProps],
 ) -> discord.ui.View:
     """If both builder and kwargs are specified, builder will take precedence in case of conflict."""
     if show_to_everyone:
         return DeleteButton(interaction)
     if builder:
-        return ShowToEveryoneButton(interaction, **(kwargs | builder()))
+        return ShowToEveryoneButton(interaction, builder, **kwargs)
     return ShowToEveryoneButton(interaction=interaction, **kwargs)
 
 
@@ -64,32 +63,33 @@ class ShowToEveryoneButton(_BaseButton):
     def __init__(
         self,
         interaction: discord.Interaction,
-        content: str = "",
-        embed: discord.Embed = MISSING,
-        file: discord.File = MISSING,
-        files: Sequence[discord.File] = MISSING,
+        builder: Callable[[bool], MessageProps] | None = None,
+        **kwargs: Unpack[MessageProps],
     ):
         super().__init__(interaction)
-        self.content = content
-        self.embed = embed
-        self.file = file
-        self.files = files
+        self.builder = builder
+        self.kwargs = kwargs
 
     @discord.ui.button(label="Show to everyone", style=discord.ButtonStyle.gray)
     async def button(self, interaction: discord.Interaction, button: discord.ui.Button):
-        if self.file is not MISSING:
-            self.file.reset()
+        props = self.kwargs.copy()
+        if self.builder:
+            props |= self.builder(True)
 
-        if self.files is not MISSING:
-            for f in self.files:
+        if "file" in props and props["file"] is not MISSING:
+            props["file"].reset()
+
+        if "files" in props and props["files"] is not MISSING:
+            for f in props["files"]:
                 f.reset()
 
         assert isinstance(command := self.interaction.command, app_commands.Command)
+        props[
+            "content"
+        ] = f"{interaction.user.mention} used `{get_full_command(self.interaction, command)}`\n{props.get('content', '')}"
+
         await interaction.response.send_message(
-            content=f"{interaction.user.mention} used `{get_full_command(self.interaction, command)}`\n{self.content}",
-            embed=self.embed,
-            file=self.file,
-            files=self.files,
+            **props,
             allowed_mentions=discord.AllowedMentions.none(),
             view=DeleteButton(interaction=interaction),
         )
