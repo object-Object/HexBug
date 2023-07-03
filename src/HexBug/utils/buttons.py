@@ -85,7 +85,7 @@ class ShowToEveryoneButton(_BaseButton):
 
         assert isinstance(command := self.interaction.command, app_commands.Command)
         orig_content = props.get("content", "")
-        if orig_content is MISSING:
+        if orig_content is MISSING or orig_content == "...":
             orig_content = ""
         props[
             "content"
