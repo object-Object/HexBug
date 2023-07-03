@@ -1,17 +1,69 @@
+import json
+from collections import defaultdict
+from datetime import datetime
 from enum import Enum
+from pathlib import Path
 from typing import TypedDict
 
 import discord
+from attr import dataclass
 from discord import app_commands
 from discord.ext import commands
+from discord.utils import MISSING
 
 from ..utils.buttons import build_show_or_delete_button
 from ..utils.commands import HexBugBot
+
+_DATA_PATH = Path(__file__).parent / "info_counts.json"
 
 
 class InfoMessage(TypedDict, total=False):
     content: str
     embed: discord.Embed
+
+
+@dataclass(kw_only=True)
+class CountedInfoMessage:
+    content: str = MISSING
+    embed: discord.Embed
+
+    def message_without_footer(self) -> InfoMessage:
+        return {
+            "content": self.content,
+            "embed": self.embed.set_footer(),
+        }
+
+    def message_and_increment(self, name: str) -> InfoMessage:
+        return {
+            "content": self.content,
+            "embed": self.embed.set_footer(text=self._footer_and_increment(name)),
+        }
+
+    def _footer_and_increment(self, name: str) -> str:
+        # load data
+        if _DATA_PATH.exists():
+            raw_data = json.loads(_DATA_PATH.read_text("utf-8"))
+            assert isinstance(raw_data, dict), str(raw_data)
+        else:
+            raw_data = {}
+        data: defaultdict[str, tuple[int, float | None]] = defaultdict(lambda: (0, None), raw_data)
+
+        # increment
+        prev_count, prev_time = data[name]
+        count = prev_count + 1
+
+        # write
+        now = datetime.now()
+        data[name] = (count, now.timestamp())
+        _DATA_PATH.write_text(json.dumps(data), "utf-8")
+
+        # footer
+        footer = f"Times posted: {count}"
+        if prev_time is not None:
+            then = datetime.fromtimestamp(prev_time)
+            print(now, then)
+            footer += f"  ·  Days since last post: {(now - then).days}"
+        return footer
 
 
 class InfoMessages(Enum):
@@ -35,7 +87,7 @@ PAUCAL: https://github.com/gamma-delta/PAUCAL/issues""",
         embed=discord.Embed(
             description="""You can use a service like [Pastebin](https://pastebin.com) to post the crashlog.
 Do ***NOT*** upload it directly to Discord in a message or file."""
-        ).set_image(url="https://cdn.discordapp.com/attachments/326397739074060288/976135876046356560/image0-4-2.gif"),
+        ).set_image(url="https://hexxy.media/hexxy_media/i_will_not_give_crashlog.jpg"),
     )
 
     forum = InfoMessage(
@@ -53,18 +105,18 @@ Do ***NOT*** upload it directly to Discord in a message or file."""
         )
     )
 
-    gemini_skill_issue = InfoMessage(content="https://twitter.com/_Kinomoru/status/1550127535404359684")
+    gemini_skill_issue = InfoMessage(content="https://vxtwitter.com/_Kinomoru/status/1550127535404359684")
 
     git_log = InfoMessage(content="https://xkcd.com/1296/")
 
-    pk = InfoMessage(
+    pk = CountedInfoMessage(
         embed=discord.Embed(
             description="""**What are all the `[BOT]` messages doing?**
 This is the result of PluralKit, a discord bot for plural people. Plurality is the experience of having more than one mind in one body.
 
 PluralKit info: https://pluralkit.me/
 More info on plurality: https://morethanone.info/""",
-        ),
+        ).set_thumbnail(url="https://hexxy.media/hexxy_media/why_is_the_bot_talking.png"),
     )
 
     tools = InfoMessage(
@@ -74,10 +126,18 @@ More info on plurality: https://morethanone.info/""",
         )
     )
 
-    @property
-    def value(self) -> InfoMessage:
-        # for the type hints
-        return super().value
+    def message(self, show_to_everyone: bool) -> InfoMessage:
+        value = self.value
+        match value:
+            case dict():
+                return value
+            case CountedInfoMessage():
+                if show_to_everyone:
+                    return value.message_and_increment(self.name)
+                else:
+                    return value.message_without_footer()
+            case _:
+                raise TypeError(value)
 
 
 class InfoCog(commands.Cog):
@@ -92,10 +152,11 @@ class InfoCog(commands.Cog):
     @app_commands.rename(info="name")
     async def info(self, interaction: discord.Interaction, info: InfoMessages, show_to_everyone: bool = False):
         """Show a premade info message"""
+        message = info.message(show_to_everyone)
         await interaction.response.send_message(
-            **info.value,
+            **message,
             ephemeral=not show_to_everyone,
-            view=build_show_or_delete_button(show_to_everyone, interaction, **info.value),
+            view=build_show_or_delete_button(show_to_everyone, interaction, **message),
         )
 
 
