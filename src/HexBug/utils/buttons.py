@@ -84,9 +84,12 @@ class ShowToEveryoneButton(_BaseButton):
                 f.reset()
 
         assert isinstance(command := self.interaction.command, app_commands.Command)
+        orig_content = props.get("content", "")
+        if orig_content is MISSING:
+            orig_content = ""
         props[
             "content"
-        ] = f"{interaction.user.mention} used `{get_full_command(self.interaction, command)}`\n{props.get('content', '')}"
+        ] = f"{interaction.user.mention} used `{get_full_command(self.interaction, command)}`\n{orig_content}"
 
         await interaction.response.send_message(
             **props,
