@@ -1,25 +1,33 @@
-from typing import Sequence
+from typing import Callable, Sequence, TypedDict
 
 import discord
 from discord import app_commands
 from discord.utils import MISSING
+from typing_extensions import Unpack
 
 TIMEOUT = 120
+
+
+class MessageProps(TypedDict, total=False):
+    content: str
+    embed: discord.Embed
+    file: discord.File
+    files: Sequence[discord.File]
 
 
 def build_show_or_delete_button(
     show_to_everyone: bool,
     interaction: discord.Interaction,
-    content: str = "",
-    embed: discord.Embed = MISSING,
-    file: discord.File = MISSING,
-    files: Sequence[discord.File] = MISSING,
+    *,
+    builder: Callable[[], MessageProps] | None = None,
+    **kwargs: Unpack[MessageProps],
 ) -> discord.ui.View:
-    return (
-        DeleteButton(interaction=interaction)
-        if show_to_everyone
-        else ShowToEveryoneButton(interaction=interaction, content=content, embed=embed, file=file, files=files)
-    )
+    """If both builder and kwargs are specified, builder will take precedence in case of conflict."""
+    if show_to_everyone:
+        return DeleteButton(interaction)
+    if builder:
+        return ShowToEveryoneButton(interaction, **(kwargs | builder()))
+    return ShowToEveryoneButton(interaction=interaction, **kwargs)
 
 
 def get_full_command(interaction: discord.Interaction, command: app_commands.Command) -> str:

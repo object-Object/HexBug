@@ -11,29 +11,24 @@ from discord import app_commands
 from discord.ext import commands
 from discord.utils import MISSING
 
-from ..utils.buttons import build_show_or_delete_button
+from ..utils.buttons import MessageProps, build_show_or_delete_button
 from ..utils.commands import HexBugBot
 
 _DATA_PATH = Path(__file__).parent / "info_counts.json"
 
 
-class InfoMessage(TypedDict, total=False):
-    content: str
-    embed: discord.Embed
-
-
 @dataclass(kw_only=True)
-class CountedInfoMessage:
+class CountedMessageProps:
     content: str = MISSING
     embed: discord.Embed
 
-    def message_without_footer(self) -> InfoMessage:
+    def message_without_footer(self) -> MessageProps:
         return {
             "content": self.content,
             "embed": self.embed.set_footer(),
         }
 
-    def message_and_increment(self, name: str) -> InfoMessage:
+    def message_and_increment(self, name: str) -> MessageProps:
         return {
             "content": self.content,
             "embed": self.embed.set_footer(text=self._footer_and_increment(name)),
@@ -66,15 +61,15 @@ class CountedInfoMessage:
         return footer
 
 
-class InfoMessages(Enum):
-    addons = InfoMessage(
+class MessagePropss(Enum):
+    addons = MessageProps(
         embed=discord.Embed(
             title="Hex-related addons, mods, and tools",
             description="https://hexxy.media/addons",
         )
     )
 
-    bug_report = InfoMessage(
+    bug_report = MessageProps(
         embed=discord.Embed(
             description="""Please do not post your bug reports to Discord. Instead, post them to the issue tracker on the mod's GitHub.
 
@@ -83,14 +78,14 @@ PAUCAL: https://github.com/gamma-delta/PAUCAL/issues""",
         ),
     )
 
-    crashlog = InfoMessage(
+    crashlog = MessageProps(
         embed=discord.Embed(
             description="""You can use a service like [Pastebin](https://pastebin.com) to post the crashlog.
 Do ***NOT*** upload it directly to Discord in a message or file."""
         ).set_image(url="https://hexxy.media/hexxy_media/i_will_not_give_crashlog.jpg"),
     )
 
-    forum = InfoMessage(
+    forum = MessageProps(
         embed=discord.Embed(
             title="petrak@'s mods forum",
             url="https://forum.petra-k.at/index.php",
@@ -105,11 +100,11 @@ Do ***NOT*** upload it directly to Discord in a message or file."""
         )
     )
 
-    gemini_skill_issue = InfoMessage(content="https://vxtwitter.com/_Kinomoru/status/1550127535404359684")
+    gemini_skill_issue = MessageProps(content="https://vxtwitter.com/_Kinomoru/status/1550127535404359684")
 
-    git_log = InfoMessage(content="https://xkcd.com/1296/")
+    git_log = MessageProps(content="https://xkcd.com/1296/")
 
-    pk = CountedInfoMessage(
+    pk = CountedMessageProps(
         embed=discord.Embed(
             description="""**What are all the `[BOT]` messages doing?**
 This is the result of PluralKit, a discord bot for plural people. Plurality is the experience of having more than one mind in one body.
@@ -119,19 +114,19 @@ More info on plurality: https://morethanone.info/""",
         ).set_thumbnail(url="https://hexxy.media/hexxy_media/why_is_the_bot_talking.png"),
     )
 
-    tools = InfoMessage(
+    tools = MessageProps(
         embed=discord.Embed(
             title="Hex-related addons, mods, and tools",
             description="https://hexxy.media/addons#tools",
         )
     )
 
-    def message(self, show_to_everyone: bool) -> InfoMessage:
+    def message(self, show_to_everyone: bool) -> MessageProps:
         value = self.value
         match value:
             case dict():
                 return value
-            case CountedInfoMessage():
+            case CountedMessageProps():
                 if show_to_everyone:
                     return value.message_and_increment(self.name)
                 else:
@@ -150,13 +145,13 @@ class InfoCog(commands.Cog):
         show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
     )
     @app_commands.rename(info="name")
-    async def info(self, interaction: discord.Interaction, info: InfoMessages, show_to_everyone: bool = False):
+    async def info(self, interaction: discord.Interaction, info: MessagePropss, show_to_everyone: bool = False):
         """Show a premade info message"""
         message = info.message(show_to_everyone)
         await interaction.response.send_message(
             **message,
             ephemeral=not show_to_everyone,
-            view=build_show_or_delete_button(show_to_everyone, interaction, **message),
+            view=build_show_or_delete_button(show_to_everyone, interaction, builder=lambda: info.message(True)),
         )
 
 
