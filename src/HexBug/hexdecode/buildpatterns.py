@@ -132,7 +132,7 @@ async def build_registry(session: ClientSession) -> Registry | None:
         # classnames
         for directory in mod_info.operator_directories:
             for file_path in Path(directory).rglob("Op*.kt"):
-                file_path = file_path.relative_to(file_path.parts[0])
+                file_path = Path(*file_path.parts[2:])  # eg. vendor/Hexal/Common/... -> Common/...
                 _insert_classname(classname_to_path, file_path.stem, mod, file_path.as_posix())
 
         for info in build_extra_patterns(name_to_translation):
