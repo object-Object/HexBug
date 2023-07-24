@@ -67,7 +67,7 @@ You agree that your comments will not violate any right of any third-party, incl
 
 ## SECTION 8 - PERSONAL INFORMATION
 
-Your submission of personal information through HexBug is governed by our [Privacy Policy](privacy.md).
+Your submission of personal information through HexBug is governed by our [Privacy Policy](PRIVACY.md).
 
 ## SECTION 9 - ERRORS, INACCURACIES AND OMISSIONS
 
