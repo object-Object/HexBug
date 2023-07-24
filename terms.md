@@ -124,4 +124,4 @@ We reserve the right, at our sole discretion, to update, change or replace any p
 
 ## SECTION 18 - CONTACT INFORMATION
 
-Questions about the Terms of Service should be sent to us at `object@objectobject.ca`, or on Discord at `leftsquarebracket`.
+Questions about the Terms of Service should be sent to us at object@objectobject.ca, or on Discord at `leftsquarebracket`.
