@@ -1,9 +1,12 @@
+import re
 from fractions import Fraction
 from io import BytesIO
+from typing import Any, Callable, Coroutine
 
 import discord
 from discord import app_commands
 from discord.ext import commands
+from discord.utils import MISSING
 
 from ..hexdecode.hex_math import Direction
 from ..hexdecode.hexast import generate_bookkeeper
@@ -18,6 +21,8 @@ from .pattern import DEFAULT_ARROW_SCALE, DEFAULT_LINE_SCALE, SCALE_RANGE
 
 WIDTH_RANGE = app_commands.Range[int, 1, 100]
 
+GLOOP_REGEX = re.compile(r"<\s*(?P<direction>[a-z_-]+)(?:\s*[, ]\s*(?P<pattern>[aqweds]+))?\s*>", re.I | re.M)
+
 
 def space_sep(n: int) -> str:
     return f"{n:,}".replace(",", " ")
@@ -27,10 +32,98 @@ def stripped_eq(a: str, b: str) -> bool:
     return a.replace(",", "").replace(" ", "") == b.replace(",", "").replace(" ", "")
 
 
+async def send_hex(
+    interaction: discord.Interaction,
+    is_slash_command: bool,
+    patterns: list[tuple[Direction, str]],
+    unknown: list[str],
+    show_to_everyone: bool,
+    do_button: bool,
+    pretty_shorthand: str | None,
+    max_dot_width: WIDTH_RANGE,
+    max_pattern_width: WIDTH_RANGE,
+    palette: Palette,
+    theme: Theme,
+    line_scale: SCALE_RANGE,
+    arrow_scale: SCALE_RANGE,
+):
+    send = interaction.followup.send if is_slash_command else interaction.response.send_message
+
+    if unknown:
+        return await send(
+            "❌ Unknown patterns: ```\n" + "\n".join(unknown) + "\n```",
+            ephemeral=True,
+        )
+    elif not patterns:
+        return await send(
+            "❌ No patterns found.",
+            ephemeral=True,
+        )
+    elif len(patterns) > 64:
+        # this is why we can't have nice things
+        return await send(
+            "❌ Too many patterns (max of 64).",
+            ephemeral=True,
+        )
+    elif sum(len(pattern) for _, pattern in patterns) > 512:
+        # fine i'm taking away your toys since you can't play nice
+        return await send(
+            "❌ Too many angles (max of 512).",
+            ephemeral=True,
+        )
+
+    image, _ = draw_patterns_on_grid(
+        patterns=patterns,
+        max_dot_width=max_dot_width,
+        max_pattern_width=max_pattern_width,
+        palette=palette,
+        theme=theme,
+        line_scale=line_scale,
+        arrow_scale=arrow_scale,
+    )
+
+    embed = discord.Embed().set_image(url="attachment://patterns.png")
+    files = [discord.File(image, filename="patterns.png")]
+
+    description = f"```\n{pretty_shorthand}\n```" if pretty_shorthand else MISSING
+    footer = ", ".join(f"{d.name} {p}" for d, p in patterns)
+
+    if len(footer) > 2048 or (pretty_shorthand and len(description) + len(footer) > 6000):
+        files.append(discord.File(BytesIO(footer.encode("utf-8")), filename="angles.txt"))
+    else:
+        embed.set_footer(text=footer)
+
+    if pretty_shorthand:
+        if len(description) > 4096 or len(description) + len(embed.footer.text or "") > 6000:
+            files.append(discord.File(BytesIO(pretty_shorthand.encode("utf-8")), filename="names.txt"))
+        else:
+            embed.description = description
+
+    # put names before angles if both are present
+    if len(files) == 3:
+        files.reverse()
+
+    await send(
+        embed=embed,
+        files=files,
+        view=build_show_or_delete_button(show_to_everyone, interaction, embed=embed, files=files)
+        if do_button
+        else MISSING,
+        ephemeral=not show_to_everyone,
+    )
+
+
 class PatternsCog(commands.GroupCog, name="patterns"):
     def __init__(self, bot: HexBugBot) -> None:
         self.bot = bot
         self.registry = bot.registry
+
+        self.bot.tree.add_command(
+            app_commands.ContextMenu(
+                name="Show patterns",
+                callback=self.show_patterns,
+            )
+        )
 
         super().__init__()
 
@@ -182,31 +275,14 @@ class PatternsCog(commands.GroupCog, name="patterns"):
                 case _:
                     patterns.append((info.direction, info.pattern))
 
-        if unknown:
-            return await interaction.followup.send(
-                "❌ Unknown patterns: ```\n" + "\n".join(unknown) + "\n```",
-                ephemeral=True,
-            )
-        elif not patterns:
-            return await interaction.followup.send(
-                "❌ No patterns found.",
-                ephemeral=True,
-            )
-        elif len(patterns) > 64:
-            # this is why we can't have nice things
-            return await interaction.followup.send(
-                "❌ Too many patterns (max of 64).",
-                ephemeral=True,
-            )
-        elif sum(len(pattern) for _, pattern in patterns) > 512:
-            # fine i'm taking away your toys since you can't play nice
-            return await interaction.followup.send(
-                "❌ Too many angles (max of 512).",
-                ephemeral=True,
-            )
-
-        image, _ = draw_patterns_on_grid(
+        return await send_hex(
+            interaction=interaction,
+            is_slash_command=True,
             patterns=patterns,
+            unknown=unknown,
+            show_to_everyone=show_to_everyone,
+            do_button=True,
+            pretty_shorthand=pretty_shorthand,
             max_dot_width=max_dot_width,
             max_pattern_width=max_pattern_width,
             palette=palette,
@@ -215,31 +291,32 @@ class PatternsCog(commands.GroupCog, name="patterns"):
             arrow_scale=arrow_scale,
         )
 
-        embed = discord.Embed().set_image(url="attachment://patterns.png")
-        files = [discord.File(image, filename="patterns.png")]
+    async def show_patterns(self, interaction: discord.Interaction, message: discord.Message):
+        patterns = list[tuple[Direction, str]]()
+        unknown = list[str]()
 
-        description = f"```\n{pretty_shorthand}\n```"
-        footer = ", ".join(f"{d.name} {p}" for d, p in patterns)
+        for match in GLOOP_REGEX.finditer(message.content):
+            groups = match.groupdict()
 
-        if len(footer) > 2048 or len(description) + len(footer) > 6000:
-            files.append(discord.File(BytesIO(footer.encode("utf-8")), filename="angles.txt"))
-        else:
-            embed.set_footer(text=footer)
+            if direction := Direction.from_shorthand(groups["direction"]):
+                patterns.append((direction, groups.get("pattern", "")))
+            else:
+                unknown.append(match[0])
 
-        if len(description) > 4096 or len(description) + len(embed.footer.text or "") > 6000:
-            files.append(discord.File(BytesIO(pretty_shorthand.encode("utf-8")), filename="names.txt"))
-        else:
-            embed.description = description
-
-        # put names before angles if both are present
-        if len(files) == 3:
-            files.reverse()
-
-        await interaction.followup.send(
-            embed=embed,
-            files=files,
-            view=build_show_or_delete_button(show_to_everyone, interaction, embed=embed, files=files),
-            ephemeral=not show_to_everyone,
+        return await send_hex(
+            interaction=interaction,
+            is_slash_command=False,
+            patterns=patterns,
+            unknown=unknown,
+            show_to_everyone=False,
+            do_button=False,
+            pretty_shorthand=None,
+            max_dot_width=16,
+            max_pattern_width=100,
+            palette=Palette.Classic,
+            theme=Theme.Dark,
+            line_scale=DEFAULT_LINE_SCALE,
+            arrow_scale=DEFAULT_ARROW_SCALE,
         )
 
 

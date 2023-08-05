@@ -83,13 +83,16 @@ class ShowToEveryoneButton(_BaseButton):
             for f in props["files"]:
                 f.reset()
 
-        assert isinstance(command := self.interaction.command, app_commands.Command)
         orig_content = props.get("content", "")
         if orig_content is MISSING or orig_content == "...":
             orig_content = ""
-        props[
-            "content"
-        ] = f"{interaction.user.mention} used `{get_full_command(self.interaction, command)}`\n{orig_content}"
+
+        if isinstance(command := self.interaction.command, app_commands.Command):
+            props[
+                "content"
+            ] = f"{interaction.user.mention} used `{get_full_command(self.interaction, command)}`\n{orig_content}"
+        else:
+            props["content"] = orig_content
 
         await interaction.response.send_message(
             **props,
