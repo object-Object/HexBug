@@ -20,6 +20,7 @@ class ImageInfo(TypedDict):
 
 class ExtensionPatternInfo(TypedDict):
     name: str
+    modid: str
     modName: str
     image: ImageInfo | None
     direction: str | None
@@ -66,6 +67,7 @@ for info in registry.patterns:
 
     data: ExtensionPatternInfo = {
         "name": info.name,
+        "modid": info.mod.value.modid,
         "modName": info.mod.value.name,
         "image": {
             "filename": filename,

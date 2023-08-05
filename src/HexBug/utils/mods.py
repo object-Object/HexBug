@@ -133,10 +133,15 @@ class RegistryModInfo(_BaseModInfo, ABC):
             p.load(f, "utf-8")
         return p[version_property_key][0]
 
+    @property
+    def modid(self) -> str:
+        return self.book["modid"]
+
 
 @dataclass(kw_only=True)
 class _BaseAPIModInfo(_BaseModInfo, ABC):
     api_base_url: InitVar[str]
+    modid: str
     version: str
     """No trailing slash"""
 
@@ -334,6 +339,7 @@ class APIMod(Enum):
     # https://hexbound.cypher.coffee/versions.json
     Hexbound = APIWithBookModInfo(
         name="Hexbound",
+        modid="hexbound",
         description="Adds several utility patterns/spells (eg. item types, Hex Shields), quasi-playerless casting with Figments, pattern editing, and constructs (powerful automatable golems).",
         curseforge_url=None,
         modrinth_slug="hexbound",
