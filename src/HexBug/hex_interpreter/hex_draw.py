@@ -4,7 +4,7 @@ from itertools import pairwise
 
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib import colormaps  # type: ignore
+from matplotlib import colormaps  # pyright: ignore[reportGeneralTypeIssues]
 
 from ..hexdecode.hex_math import Coord
 
@@ -14,16 +14,22 @@ class Theme(StrEnum):
     Dark = "w"
 
 
+PaletteColor = str | tuple[float, float, float]
+
+
 class Palette(Enum):
     Classic = (["#ff6bff", "#a81ee3", "#6490ed", "#b189c7"], "#dd0000")
-    Turbo = ([colormaps["turbo"](x) for x in np.linspace(0.06, 1, 8)], "#d834eb")
-    Dark2 = ([colormaps["Dark2"](x) for x in np.linspace(0, 1, 8)], "#dd0000")
-    Tab10 = ([colormaps["tab10"](x) for x in np.linspace(0, 1, 10)], "#d834eb")
+    Turbo = ([colormaps["turbo"](x)[:3] for x in np.linspace(0.06, 1, 8)], "#d834eb")
+    Dark2 = ([colormaps["Dark2"](x)[:3] for x in np.linspace(0, 1, 8)], "#dd0000")
+    Tab10 = ([colormaps["tab10"](x)[:3] for x in np.linspace(0, 1, 10)], "#d834eb")
 
     @property
-    def value(self) -> tuple[list[str], str]:
-        """(colors, overlap_color)"""
-        return super().value
+    def colors(self) -> list[str] | list[tuple[float, float, float]]:
+        return self.value[0]
+
+    @property
+    def overlap_color(self) -> PaletteColor:
+        return self.value[1]
 
 
 def plot_monochrome(
@@ -62,10 +68,9 @@ def plot_intersect(
     theme: Theme,
     start_color_index=0,
 ) -> None:
-    colors, overlap_color = palette.value
-    start_color_index %= len(colors)
+    start_color_index %= len(palette.colors)
     current_color_index = start_color_index
-    current_color = colors[current_color_index]
+    current_color = palette.colors[current_color_index]
 
     # we only add to colors_used after moving, so add the color at the first point
     colors_used_by_point: defaultdict[Coord, set[int]] = defaultdict(set)
@@ -87,7 +92,7 @@ def plot_intersect(
         assert direction is not None
         arrow_angle = direction.as_pyplot_angle()
 
-        current_color = colors[current_color_index]
+        current_color = palette.colors[current_color_index]
         next_point_colors_used = colors_used_by_point[next_point]
 
         line_pair = frozenset((point, next_point))
@@ -99,11 +104,11 @@ def plot_intersect(
             # technically this does one extra check but python doesn't have do-while
             # only do this if there are colours left, otherwise it loops forever and kills the bot
             # that happened in production oops
-            if len(next_point_colors_used) < len(colors):
+            if len(next_point_colors_used) < len(palette.colors):
                 while current_color_index in next_point_colors_used:
-                    current_color_index = (current_color_index + 1) % len(colors)
+                    current_color_index = (current_color_index + 1) % len(palette.colors)
 
-            next_color = colors[current_color_index]
+            next_color = palette.colors[current_color_index]
 
             if not is_overlap:
                 # first half, second half, and arrow
@@ -116,7 +121,7 @@ def plot_intersect(
             plt.plot((x, next_x), (y, next_y), color=current_color, lw=scale)
 
         if is_overlap:
-            plt.plot((x, next_x), (y, next_y), dashes=[2, 1], color=overlap_color, lw=1.25 * scale)
+            plt.plot((x, next_x), (y, next_y), dashes=[2, 1], color=palette.overlap_color, lw=1.25 * scale)
 
         next_point_colors_used.add(current_color_index)
 
@@ -129,7 +134,7 @@ def plot_intersect(
             plt.plot(x, y, point_fmt, ms=2 * scale)
 
     # end point
-    _plot_fancy_point(*points[-1].pixel(), point_fmt, scale, overlap_color if is_overlap else current_color)
+    _plot_fancy_point(*points[-1].pixel(), point_fmt, scale, palette.overlap_color if is_overlap else current_color)
 
     # start point
-    _plot_fancy_point(*points[0].pixel(), point_fmt, scale, colors[start_color_index])
+    _plot_fancy_point(*points[0].pixel(), point_fmt, scale, palette.colors[start_color_index])
