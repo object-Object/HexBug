@@ -53,7 +53,9 @@ class EventsCog(commands.Cog):
         if interaction.type == discord.InteractionType.application_command and isinstance(
             command := interaction.command, app_commands.Command
         ):
-            logging.getLogger("bot").debug(f"Command executed: {get_full_command(interaction, command)}")
+            logging.getLogger("bot").debug(
+                f"Command executed: {get_full_command(interaction, command, truncate=False)}"
+            )
 
     @tasks.loop(hours=1)
     async def check_for_updates(self):

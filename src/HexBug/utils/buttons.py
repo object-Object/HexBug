@@ -29,9 +29,9 @@ def build_show_or_delete_button(
     return ShowToEveryoneButton(interaction=interaction, **kwargs)
 
 
-def get_full_command(interaction: discord.Interaction, command: app_commands.Command) -> str:
+def get_full_command(interaction: discord.Interaction, command: app_commands.Command, truncate: bool = True) -> str:
     args = " ".join(
-        f"{name}: {str(value)[:100] + ' ... (truncated)' if len(str(value)) > 100 else value}"
+        f"{name}: {str(value)[:100] + ' ... (truncated)' if truncate and len(str(value)) > 100 else value}"
         for name, value in interaction.namespace
     )
     return f"/{command.qualified_name} {args}"

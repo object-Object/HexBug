@@ -8,6 +8,8 @@ from discord import app_commands
 from discord.ext import commands
 from discord.utils import MISSING
 
+from HexBug.hexdecode.revealparser import GLOOP_REGEX
+
 from ..hexdecode.hex_math import Direction
 from ..hexdecode.hexast import generate_bookkeeper
 from ..hexdecode.registry import RawPatternInfo, SpecialHandlerPatternInfo
@@ -20,8 +22,6 @@ from ..utils.parse_rational import parse_rational
 from .pattern import DEFAULT_ARROW_SCALE, DEFAULT_LINE_SCALE, SCALE_RANGE
 
 WIDTH_RANGE = app_commands.Range[int, 1, 100]
-
-GLOOP_REGEX = re.compile(r"<\s*(?P<direction>[a-z_-]+)(?:\s*[, ]\s*(?P<pattern>[aqweds]+))?\s*>", re.I | re.M)
 
 
 def space_sep(n: int) -> str:

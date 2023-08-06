@@ -1,11 +1,15 @@
 from __future__ import annotations
 
+import re
+
 from lark.exceptions import LarkError
 from lark.lark import Lark
 from lark.visitors import Transformer
 
 from . import hexast
 from .hex_math import Direction
+
+GLOOP_REGEX = re.compile(r"<\s*(?P<direction>[a-z_-]+)(?:\s*[, ]\s*(?P<pattern>[aqweds]+))?\s*>", re.I | re.M)
 
 parser = Lark(
     """
@@ -51,7 +55,7 @@ class ToAST(Transformer):
         return hexast.UnknownPattern(initial_direction, turns)
 
     def DIRECTION(self, string):
-        return Direction[string]
+        return Direction.from_shorthand(string)
 
     def UNKNOWN(self, strings):
         return hexast.Unknown("".join(strings))
@@ -67,6 +71,9 @@ class ToAST(Transformer):
 
 
 def parse(text):
+    # i have no clue how to modify this parser so you're getting this hack instead
+    text = GLOOP_REGEX.sub(r"HexPattern(\g<direction> \g<pattern>)", text)
+
     try:
         tree = parser.parse(text)
         result = ToAST().transform(tree)
