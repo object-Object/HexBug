@@ -80,7 +80,7 @@ PAUCAL: https://github.com/gamma-delta/PAUCAL/issues""",
 
     crashlog = MessageProps(
         embed=discord.Embed(
-            description="""You can use a service like [Pastebin](https://pastebin.com) to post the crashlog.
+            description="""You can use a service like [mclo.gs](https://mclo.gs) or [Pastebin](https://pastebin.com) to post the crashlog.
 Do ***NOT*** upload it directly to Discord in a message or file."""
         ).set_image(url="https://hexxy.media/hexxy_media/i_will_not_give_crashlog.jpg"),
     )
