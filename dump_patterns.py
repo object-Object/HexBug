@@ -46,6 +46,10 @@ columns = [
 
 filename = sys.argv[1] if len(sys.argv) > 1 else "patterns.csv"
 with open(filename, "w", encoding="utf-8", newline="") as f:
+    # byte order mark to make Excel open it as UTF-8
+    # (byte order? kinky)
+    f.write("\ufeff")
+
     writer = csv.DictWriter(
         f,
         columns,
@@ -55,13 +59,12 @@ with open(filename, "w", encoding="utf-8", newline="") as f:
 
     writer.writeheader()
     for pattern in _sorted_patterns(registry):
-        writer.writerow(
-            asdict(pattern)
-            | {
-                "mod": pattern.mod.value.name,
-                "direction": pattern.direction.name if pattern.direction else None,
-                "is_great": str(pattern.is_great).lower(),
-                "modid": pattern.mod.value.modid,
-                "book_anchor": pattern.book_url,
-            }
-        )
+        row = asdict(pattern) | {
+            "mod": pattern.mod.value.name,
+            "direction": pattern.direction.name if pattern.direction else None,
+            "is_great": str(pattern.is_great).lower(),
+            "modid": pattern.mod.value.modid,
+            "args": pattern.args.replace("__", "").replace("**", "") if pattern.args else "",
+            "book_anchor": pattern.book_url,
+        }
+        writer.writerow(row)
