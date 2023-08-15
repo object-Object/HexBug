@@ -81,7 +81,8 @@ class EventsCog(commands.Cog):
             try:
                 versions = await mod.value.api.get_versions(self.bot.session)
             except ClientResponseError as e:
-                error_messages.append(_on_fetch_error(mod, e.status, e.message))
+                if not (500 <= e.status < 600):
+                    error_messages.append(_on_fetch_error(mod, e.status, e.message))
                 continue
             latest = versions["versions"][0]["id"]
             update_messages.extend(await self._check_update(mod, latest))
