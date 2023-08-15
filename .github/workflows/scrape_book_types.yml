@@ -18,7 +18,7 @@ jobs:
           cache: "pip"
       
       - name: Install Python deps
-        run: pip install .[all]
+        run: pip install -e .
       
       - name: Scrape book types
         run: |
@@ -33,9 +33,6 @@ jobs:
       
       - name: Dump patterns
         run: python dump_patterns.py patterns.csv.new
-
-      - name: Generate VSCode pattern info
-        run: python generate_pattern_info.py
       
       - name: Check out gh-pages
         uses: actions/checkout@v3
@@ -43,15 +40,11 @@ jobs:
           clean: false
           ref: gh-pages
       
-      - name: Overwrite files
-        run: |
-          mv patterns.csv.new patterns.csv
-          rm -r vscode.zip vscode
-          mv out vscode
-          (cd vscode && zip -r ../vscode.zip *)
+      - name: Overwrite file
+        run: mv patterns.csv.new patterns.csv
       
       - name: Commit updated pattern dump
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Update pattern dump
-          file_pattern: "patterns.csv vscode/* vscode.zip"
+          file_pattern: patterns.csv
