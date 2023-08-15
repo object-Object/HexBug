@@ -215,6 +215,8 @@ HexTweaks,Reroll Pattern,NORTH_EAST,qaqqqqwwawwqqeaddwwddas,false,hextweaks,gran
 HexTweaks,Suspicious Glyph,WEST,dewdeqwwedaqedwadweqewwd,true,hextweaks,suicide,OpSuicide,,#patterns/great_spells/suspicious_glyph@hextweaks:suicide
 Hexal,Accelerate,SOUTH_EAST,wwwdwdwwwawqqeqwqqwqeqwqq,true,hexal,tick,OpTick,vec →,#patterns/great_spells/tick@hexal:tick
 Hexal,Allegiance Distillation,SOUTH_WEST,dwqqwdedwqqwddwww,false,hexal,wisp/owner,OpWispOwner,"entity, entity → bool",#patterns/spells/wisps@hexal:wisp/owner
+Hexal,Allow Transfer,NORTH_WEST,qqqqqewwqeeeee,false,hexal,wisp/transfer/allow,OpTransferAllowed,num →,#patterns/spells/wisps@hexal:wisp/transfer/allow
+Hexal,Allow Transfer Others,SOUTH_WEST,eeeeeqwweqqqqq,false,hexal,wisp/transfer/others/allow,OpTransferAllowedOthers,"wisp, num →",#patterns/spells/wisps@hexal:wisp/transfer/others/allow
 Hexal,Bind Storage,NORTH_WEST,qaqwqaqwqaq,false,hexal,mote/storage/bind,OpBindStorage,vec →,#patterns/spells/motes@hexal:mote/storage/bind
 Hexal,Bind Storage - Temporary,NORTH_EAST,edewedewede,false,hexal,mote/storage/bind/temp,OpBindStorage,vec →,#patterns/spells/motes@hexal:mote/storage/bind/temp
 Hexal,Bind Wisp,SOUTH_WEST,aqweewqaeaqweewqaqwww,true,hexal,wisp/seon/set,OpSeonWispSet,entity →,#patterns/great_spells/great_wisps@hexal:wisp/seon/set
@@ -229,6 +231,8 @@ Hexal,Craft,SOUTH_EAST,wwawdedwawdewwdwaqawdwwedwawdedwaww,false,hexal,mote/craf
 Hexal,Delay Wisp,NORTH_WEST,aqawded,false,hexal,wisp/trigger/tick,OpWispSetTrigger,number →,#patterns/spells/wisps@hexal:wisp/trigger/tick
 Hexal,Depot Gambit,SOUTH_EAST,eeeeedw,false,hexal,mote/storage/set,OpSetMoteStorage,"mote, vec → mote",#patterns/spells/motes@hexal:mote/storage/set
 Hexal,Depot Purification,SOUTH_WEST,qqqqqaw,false,hexal,mote/storage/get,OpGetMoteStorage,mote → vec,#patterns/spells/motes@hexal:mote/storage/get
+Hexal,Disallow Transfer,NORTH_WEST,qqqqqeqdeddweqqqqq,false,hexal,wisp/transfer/disallow,OpTransferAllowed,num →,#patterns/spells/wisps@hexal:wisp/transfer/disallow
+Hexal,Disallow Transfer Others,SOUTH_WEST,eeeeeqeaqaawqeeeee,false,hexal,wisp/transfer/others/disallow,OpTransferAllowedOthers,"wisp, num →",#patterns/spells/wisps@hexal:wisp/transfer/others/disallow
 Hexal,Diver's Purification,NORTH_WEST,aqawdwaqawd,false,hexal,breath,OpGetBreath,entity → num,#patterns/hexal_basics@hexal:breath
 Hexal,Elysium's Gambit,SOUTH_EAST,qwqqqwqaeaqaaw,false,hexal,everbook/write,OpEverbookWrite,"vector, pattern →",#patterns/everbook@hexal:everbook/write
 Hexal,Entity Distillation: Type,NORTH_EAST,dadqqqqqdad,false,hexal,get_entity/type,OpGetEntityAtDyn,"entitytype, pos → entity | null",#patterns/types@hexal:get_entity/type
@@ -251,7 +255,7 @@ Hexal,Listen,EAST,aqqqqqwdeddw,false,hexal,wisp/trigger/comm,OpWispSetTrigger,,#
 Hexal,Manager's Purification,SOUTH_EAST,aweewaqaweewaawww,false,hexal,wisp/hex,OpWispHex,entity → [pattern],#patterns/spells/wisps@hexal:wisp/hex
 Hexal,Marked Distillation,EAST,edwwdeeede,false,hexal,gate/mark/get,OpGetMarkedGate,"gate, entity → bool",#patterns/great_spells/gates@hexal:gate/mark/get
 Hexal,Marked Purification,WEST,qawwaqqqaq,false,hexal,gate/mark/num/get,OpGetNumMarkedGate,gate → num,#patterns/great_spells/gates@hexal:gate/mark/num/get
-Hexal,Mediafy Item,WEST,eaqa,false,hexal,mote/make,OpMakeItem,"item | item, mote → mote",#patterns/spells/motes@hexal:mote/make
+Hexal,Mediafy Item,WEST,eaqa,false,hexal,mote/make,OpMakeMote,"item | item, mote → mote",#patterns/spells/motes@hexal:mote/make
 Hexal,Mnemosyne's Gambit,NORTH_EAST,eweeewedqdeddw,false,hexal,everbook/read,OpEverbookRead,"vector, pattern →",#patterns/everbook@hexal:everbook/read
 Hexal,Nurse's Purification,NORTH_WEST,aqwawqa,false,hexal,health,OpGetHealth,entity → num,#patterns/hexal_basics@hexal:health
 Hexal,Offering Purification,SOUTH_EAST,awdedwaawwqded,false,hexal,mote/trade/get,OpGetItemTrades,villager → [complicated!],#patterns/spells/motes@hexal:mote/trade/get
@@ -290,6 +294,7 @@ Hexal,Timekeeper's Reflection,NORTH_WEST,ddwaa,false,hexal,current_tick,OpCurren
 Hexal,Trade,NORTH_WEST,awdedwaeqded,false,hexal,mote/trade,OpTradeMote,"villager, [mote], int? → item",#patterns/spells/motes@hexal:mote/trade
 Hexal,Unclogging Gambit,SOUTH_EAST,aweeeeewa,false,hexal,link/comm/clear,OpClearReceivedIotas,,#patterns/spells/links@hexal:link/comm/clear
 Hexal,Unlink,WEST,qdeddqeeeeedwqdeddw,false,hexal,link/unlink,OpUnlink,num →,#patterns/spells/links@hexal:link/unlink
+Hexal,Unlink Others,WEST,qeeeeedweqqqqqaww,false,hexal,link/unlink/others,OpUnlinkOthers,"linkable, linkable →",#patterns/spells/links@hexal:link/unlink/others
 Hexal,Use Item On,EAST,qqqwqqqqaa,false,hexal,mote/use_on,OpUseMoteOn,"mote, (entity | vec, vec) →",#patterns/spells/motes@hexal:mote/use_on
 Hexal,Wander,EAST,eqwawqwaqww,false,hexal,wisp/trigger/move,OpWispSetTrigger,,#patterns/spells/wisps@hexal:wisp/trigger/move
 Hexal,Weighing Purification,NORTH_WEST,qqqqwqqqqqaa,false,hexal,mote/count/get,OpGetCountMote,mote → int,#patterns/spells/motes@hexal:mote/count/get
