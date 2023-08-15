@@ -26,5 +26,25 @@ jobs:
           mv book_types.py.new src/HexBug/utils/book_types.py
           python -m black src/HexBug/utils/book_types.py
 
-      - name: Ensure the scrape had no effect
-        run: git diff --exit-code
+      - name: Commit updated book types
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Update book types
+      
+      - name: Dump patterns
+        run: python dump_patterns.py patterns.csv.new
+      
+      - name: Check out gh-pages
+        uses: actions/checkout@v3
+        with:
+          clean: false
+          ref: gh-pages
+      
+      - name: Overwrite file
+        run: mv patterns.csv.new patterns.csv
+      
+      - name: Commit updated pattern dump
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Update pattern dump
+          file_pattern: patterns.csv

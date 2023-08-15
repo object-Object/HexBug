@@ -1,5 +1,6 @@
 /__version__.py
 info_counts.json
+patterns.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
