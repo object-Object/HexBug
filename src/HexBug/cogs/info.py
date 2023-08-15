@@ -62,25 +62,23 @@ class CountedMessageProps:
 
 
 class InfoMessages(Enum):
-    addons = MessageProps(
-        embed=discord.Embed(
-            title="Hex-related addons, mods, and tools",
-            description="https://hexxy.media/addons",
-        )
-    )
+    addons = MessageProps(content="https://hexxy.media/addons")
+
+    all_patterns = MessageProps(content="https://hexxy.media/patterns.csv")
 
     bug_report = MessageProps(
         embed=discord.Embed(
             description="""Please do not post your bug reports to Discord. Instead, post them to the issue tracker on the mod's GitHub.
 
 Hex Casting: https://github.com/gamma-delta/HexMod/issues
-PAUCAL: https://github.com/gamma-delta/PAUCAL/issues""",
+PAUCAL: https://github.com/gamma-delta/PAUCAL/issues
+Addons: </mod:1053755492364718170>""",
         ),
     )
 
     crashlog = MessageProps(
         embed=discord.Embed(
-            description="""You can use a service like [mclo.gs](https://mclo.gs) or [Pastebin](https://pastebin.com) to post the crashlog.
+            description="""You can use a service like [mclo.gs](https://mclo.gs) (preferred) or [Pastebin](https://pastebin.com) to post the crashlog.
 Do ***NOT*** upload it directly to Discord in a message or file."""
         ).set_image(url="https://hexxy.media/hexxy_media/i_will_not_give_crashlog.jpg"),
     )
@@ -109,17 +107,11 @@ Do ***NOT*** upload it directly to Discord in a message or file."""
             description="""**What are all the `[BOT]` messages doing?**
 This is the result of PluralKit, a discord bot for plural people. Plurality is the experience of having more than one mind in one body.
 
-PluralKit info: https://pluralkit.me/
-More info on plurality: https://morethanone.info/""",
+[PluralKit](https://pluralkit.me/)  |  [More info on plurality](https://morethanone.info/)""",
         ).set_thumbnail(url="https://hexxy.media/hexxy_media/why_is_the_bot_talking.png"),
     )
 
-    tools = MessageProps(
-        embed=discord.Embed(
-            title="Hex-related addons, mods, and tools",
-            description="https://hexxy.media/addons#tools",
-        )
-    )
+    tools = MessageProps(content="https://hexxy.media/addons#tools")
 
     def message(self, show_to_everyone: bool) -> MessageProps:
         value = self.value
