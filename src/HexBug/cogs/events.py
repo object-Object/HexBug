@@ -27,7 +27,9 @@ class EventsCog(commands.Cog):
 
     # return an iterable to make it easy to optionally insert into a list
     async def _check_update(self, mod: Mod, latest: str) -> Iterable[str]:
-        if (latest_ver := Version.parse(latest)) <= self.version_cache[mod]:
+        latest_ver = Version.parse(latest)
+        # walksanator pls
+        if latest_ver <= self.version_cache[mod] or (mod is RegistryMod.HexTweaks and latest == "3.2.3"):
             return []
 
         self.version_cache[mod] = latest_ver
