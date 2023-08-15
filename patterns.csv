@@ -1,363 +1,363 @@
-mod,translation,direction,pattern,is_great,modid,name,classname,args,book_anchor
-Hex Casting,Abacus Purification,EAST,aqaeaq,false,hexcasting,list_size,OpListSize,**__list__ → __num__**,#patterns/lists@hexcasting:list_size
-Hex Casting,Additive Distillation,NORTH_EAST,waaw,false,hexcasting,add,OpAdd,"**__num/vec, num/vec__ → __num/vec__**",#patterns/math@hexcasting:add
-Hex Casting,Akasha's Distillation,WEST,qqqwqqqqqaq,false,hexcasting,akashic/read,OpAkashicRead,"**__vector, pattern__ → __any__**",#patterns/akashic_patterns@hexcasting:akashic/read
-Hex Casting,Akasha's Gambit,EAST,eeeweeeeede,false,hexcasting,akashic/write,OpAkashicWrite,"**__vector, pattern, any__ →**",#patterns/akashic_patterns@hexcasting:akashic/write
-Hex Casting,Alidade's Purification,EAST,wa,false,hexcasting,get_entity_look,OpEntityLook,**__entity__ → __vector__**,#patterns/basics@hexcasting:get_entity_look
-Hex Casting,Alter Gravity,NORTH_WEST,wdwdwaaqw,false,hexcasting,interop/gravity/set,OpChangeGravity,"**__entity, vector__ →**",#interop/gravity@hexcasting:interop/gravity/set
-Hex Casting,Alter Scale,NORTH_EAST,ddwdwwdwwd,false,hexcasting,interop/pehkui/set,OpSetScale,"**__entity, double__ →**",#interop/pehkui@hexcasting:interop/pehkui/set
-Hex Casting,Arc's Reflection,NORTH_EAST,qdwdq,false,hexcasting,const/double/pi,makeConstantOp,**→ __num__**,#patterns/consts@hexcasting:const/double/pi
-Hex Casting,Archer's Distillation,EAST,wqaawdd,false,hexcasting,raycast,OpBlockRaycast,"**__vector, vector__ → __vector__**",#patterns/basics@hexcasting:raycast
-Hex Casting,Architect's Distillation,EAST,weddwaa,false,hexcasting,raycast/axis,OpBlockAxisRaycast,"**__vector, vector__ → __vector__**",#patterns/basics@hexcasting:raycast/axis
-Hex Casting,Assessor's Purification,EAST,wdwewewewewewqw,false,hexcasting,writable/entity,OpTheCoolerWritable,**__entity__ → __bool__**,#patterns/readwrite@hexcasting:writable/entity
-Hex Casting,Assessor's Reflection,EAST,deeeeeq,false,hexcasting,writable,OpWritable,**→ __bool__**,#patterns/readwrite@hexcasting:writable
-Hex Casting,Auditor's Purification,EAST,wawqwqwqwqwqwew,false,hexcasting,readable/entity,OpTheCoolerReadable,**__entity__ → __bool__**,#patterns/readwrite@hexcasting:readable/entity
-Hex Casting,Auditor's Reflection,EAST,aqqqqqe,false,hexcasting,readable,OpReadable,**→ __bool__**,#patterns/readwrite@hexcasting:readable
-Hex Casting,Augur's Exaltation,SOUTH_EAST,awdd,false,hexcasting,if,OpBoolIf,"**__bool, any, any__ → __any__**",#patterns/logic@hexcasting:if
-Hex Casting,Augur's Purification,NORTH_EAST,aw,false,hexcasting,bool_coerce,OpCoerceToBool,**__any__ → __bool__**,#patterns/logic@hexcasting:bool_coerce
-Hex Casting,Axial Purification,NORTH_WEST,qqqqqaww,false,hexcasting,coerce_axial,OpCoerceToAxial,**__vec__ → __vec__**,#patterns/math@hexcasting:coerce_axial
+﻿mod,translation,direction,pattern,is_great,modid,name,classname,args,book_anchor
+Hex Casting,Abacus Purification,EAST,aqaeaq,false,hexcasting,list_size,OpListSize,list → num,#patterns/lists@hexcasting:list_size
+Hex Casting,Additive Distillation,NORTH_EAST,waaw,false,hexcasting,add,OpAdd,"num/vec, num/vec → num/vec",#patterns/math@hexcasting:add
+Hex Casting,Akasha's Distillation,WEST,qqqwqqqqqaq,false,hexcasting,akashic/read,OpAkashicRead,"vector, pattern → any",#patterns/akashic_patterns@hexcasting:akashic/read
+Hex Casting,Akasha's Gambit,EAST,eeeweeeeede,false,hexcasting,akashic/write,OpAkashicWrite,"vector, pattern, any →",#patterns/akashic_patterns@hexcasting:akashic/write
+Hex Casting,Alidade's Purification,EAST,wa,false,hexcasting,get_entity_look,OpEntityLook,entity → vector,#patterns/basics@hexcasting:get_entity_look
+Hex Casting,Alter Gravity,NORTH_WEST,wdwdwaaqw,false,hexcasting,interop/gravity/set,OpChangeGravity,"entity, vector →",#interop/gravity@hexcasting:interop/gravity/set
+Hex Casting,Alter Scale,NORTH_EAST,ddwdwwdwwd,false,hexcasting,interop/pehkui/set,OpSetScale,"entity, double →",#interop/pehkui@hexcasting:interop/pehkui/set
+Hex Casting,Arc's Reflection,NORTH_EAST,qdwdq,false,hexcasting,const/double/pi,makeConstantOp,→ num,#patterns/consts@hexcasting:const/double/pi
+Hex Casting,Archer's Distillation,EAST,wqaawdd,false,hexcasting,raycast,OpBlockRaycast,"vector, vector → vector",#patterns/basics@hexcasting:raycast
+Hex Casting,Architect's Distillation,EAST,weddwaa,false,hexcasting,raycast/axis,OpBlockAxisRaycast,"vector, vector → vector",#patterns/basics@hexcasting:raycast/axis
+Hex Casting,Assessor's Purification,EAST,wdwewewewewewqw,false,hexcasting,writable/entity,OpTheCoolerWritable,entity → bool,#patterns/readwrite@hexcasting:writable/entity
+Hex Casting,Assessor's Reflection,EAST,deeeeeq,false,hexcasting,writable,OpWritable,→ bool,#patterns/readwrite@hexcasting:writable
+Hex Casting,Auditor's Purification,EAST,wawqwqwqwqwqwew,false,hexcasting,readable/entity,OpTheCoolerReadable,entity → bool,#patterns/readwrite@hexcasting:readable/entity
+Hex Casting,Auditor's Reflection,EAST,aqqqqqe,false,hexcasting,readable,OpReadable,→ bool,#patterns/readwrite@hexcasting:readable
+Hex Casting,Augur's Exaltation,SOUTH_EAST,awdd,false,hexcasting,if,OpBoolIf,"bool, any, any → any",#patterns/logic@hexcasting:if
+Hex Casting,Augur's Purification,NORTH_EAST,aw,false,hexcasting,bool_coerce,OpCoerceToBool,any → bool,#patterns/logic@hexcasting:bool_coerce
+Hex Casting,Axial Purification,NORTH_WEST,qqqqqaww,false,hexcasting,coerce_axial,OpCoerceToAxial,vec → vec,#patterns/math@hexcasting:coerce_axial
 Hex Casting,Banish Sentinel,NORTH_EAST,qdwdqdw,false,hexcasting,sentinel/destroy,OpDestroySentinel,,#patterns/spells/sentinels@hexcasting:sentinel/destroy
-Hex Casting,Black Sun's Nadir,SOUTH_WEST,qqqqqaewawawe,false,hexcasting,potion/wither,OpPotionEffect,"**__entity, number, number__ →**",#patterns/spells/nadirs@hexcasting:potion/wither
-Hex Casting,Black Sun's Zenith,SOUTH_WEST,qqaawawaeqqdd,true,hexcasting,potion/absorption,OpPotionEffect,"**__entity, number, number__ →**",#patterns/great_spells/zeniths@hexcasting:potion/absorption
-Hex Casting,Blink,SOUTH_WEST,awqqqwaq,false,hexcasting,blink,OpBlink,"**__entity, number__ →**",#patterns/spells/basic@hexcasting:blink
-Hex Casting,Blue Sun's Nadir,WEST,qqqqqawwawawd,false,hexcasting,potion/levitation,OpPotionEffect,"**__entity, number__ →**",#patterns/spells/nadirs@hexcasting:potion/levitation
-Hex Casting,Blue Sun's Zenith,WEST,qqqaawawaeqdd,true,hexcasting,potion/night_vision,OpPotionEffect,"**__entity, number__ →**",#patterns/great_spells/zeniths@hexcasting:potion/night_vision
-Hex Casting,Bookkeeper's Gambit,,,false,hexcasting,mask,SpecialHandler,**__many__ → __many__**,#patterns/stackmanip@hexcasting:mask
-Hex Casting,Break Block,EAST,qaqqqqq,false,hexcasting,break_block,OpBreakBlock,**__vector__ →**,#patterns/spells/blockworks@hexcasting:break_block
-Hex Casting,Ceiling Purification,EAST,qwe,false,hexcasting,ceil,OpCeil,**__num__ → __num__**,#patterns/math@hexcasting:ceil
+Hex Casting,Black Sun's Nadir,SOUTH_WEST,qqqqqaewawawe,false,hexcasting,potion/wither,OpPotionEffect,"entity, number, number →",#patterns/spells/nadirs@hexcasting:potion/wither
+Hex Casting,Black Sun's Zenith,SOUTH_WEST,qqaawawaeqqdd,true,hexcasting,potion/absorption,OpPotionEffect,"entity, number, number →",#patterns/great_spells/zeniths@hexcasting:potion/absorption
+Hex Casting,Blink,SOUTH_WEST,awqqqwaq,false,hexcasting,blink,OpBlink,"entity, number →",#patterns/spells/basic@hexcasting:blink
+Hex Casting,Blue Sun's Nadir,WEST,qqqqqawwawawd,false,hexcasting,potion/levitation,OpPotionEffect,"entity, number →",#patterns/spells/nadirs@hexcasting:potion/levitation
+Hex Casting,Blue Sun's Zenith,WEST,qqqaawawaeqdd,true,hexcasting,potion/night_vision,OpPotionEffect,"entity, number →",#patterns/great_spells/zeniths@hexcasting:potion/night_vision
+Hex Casting,Bookkeeper's Gambit,,,false,hexcasting,mask,SpecialHandler,many → many,#patterns/stackmanip@hexcasting:mask
+Hex Casting,Break Block,EAST,qaqqqqq,false,hexcasting,break_block,OpBreakBlock,vector →,#patterns/spells/blockworks@hexcasting:break_block
+Hex Casting,Ceiling Purification,EAST,qwe,false,hexcasting,ceil,OpCeil,num → num,#patterns/math@hexcasting:ceil
 Hex Casting,Charon's Gambit,SOUTH_WEST,aqdee,false,hexcasting,halt,OpHalt,,#patterns/meta@hexcasting:halt
-Hex Casting,Chronicler's Gambit,EAST,wdwewewewewew,false,hexcasting,write/entity,OpTheCoolerWrite,"**__entity, any__ →**",#patterns/readwrite@hexcasting:write/entity
-Hex Casting,Chronicler's Purification,EAST,wawqwqwqwqwqw,false,hexcasting,read/entity,OpTheCoolerRead,**__entity__ → __any__**,#patterns/readwrite@hexcasting:read/entity
-Hex Casting,Circle's Reflection,NORTH_WEST,eawae,false,hexcasting,const/double/tau,makeConstantOp,**→ __num__**,#patterns/consts@hexcasting:const/double/tau
-Hex Casting,Combination Distillation,NORTH_WEST,qaeaq,false,hexcasting,concat,OpConcat,"**__list, list__ → __list__**",#patterns/lists@hexcasting:concat
-Hex Casting,Compass' Purification,EAST,aa,false,hexcasting,entity_pos/eye,OpEntityPos,**__entity__ → __vector__**,#patterns/basics@hexcasting:entity_pos/eye
-Hex Casting,Compass' Purification II,NORTH_EAST,dd,false,hexcasting,entity_pos/foot,OpEntityPos,**__entity__ → __vector__**,#patterns/basics@hexcasting:entity_pos/foot
-Hex Casting,Conjunction Distillation,NORTH_EAST,wdw,false,hexcasting,and,OpBoolAnd,"**__bool, bool__ → __bool__**",#patterns/logic@hexcasting:and
-Hex Casting,Conjure Block,NORTH_EAST,qqa,false,hexcasting,conjure_block,OpConjureBlock,**__vector__ →**,#patterns/spells/blockworks@hexcasting:conjure_block
-Hex Casting,Conjure Light,NORTH_EAST,qqd,false,hexcasting,conjure_light,OpConjureBlock,**__vector__ →**,#patterns/spells/blockworks@hexcasting:conjure_light
+Hex Casting,Chronicler's Gambit,EAST,wdwewewewewew,false,hexcasting,write/entity,OpTheCoolerWrite,"entity, any →",#patterns/readwrite@hexcasting:write/entity
+Hex Casting,Chronicler's Purification,EAST,wawqwqwqwqwqw,false,hexcasting,read/entity,OpTheCoolerRead,entity → any,#patterns/readwrite@hexcasting:read/entity
+Hex Casting,Circle's Reflection,NORTH_WEST,eawae,false,hexcasting,const/double/tau,makeConstantOp,→ num,#patterns/consts@hexcasting:const/double/tau
+Hex Casting,Combination Distillation,NORTH_WEST,qaeaq,false,hexcasting,concat,OpConcat,"list, list → list",#patterns/lists@hexcasting:concat
+Hex Casting,Compass' Purification,EAST,aa,false,hexcasting,entity_pos/eye,OpEntityPos,entity → vector,#patterns/basics@hexcasting:entity_pos/eye
+Hex Casting,Compass' Purification II,NORTH_EAST,dd,false,hexcasting,entity_pos/foot,OpEntityPos,entity → vector,#patterns/basics@hexcasting:entity_pos/foot
+Hex Casting,Conjunction Distillation,NORTH_EAST,wdw,false,hexcasting,and,OpBoolAnd,"bool, bool → bool",#patterns/logic@hexcasting:and
+Hex Casting,Conjure Block,NORTH_EAST,qqa,false,hexcasting,conjure_block,OpConjureBlock,vector →,#patterns/spells/blockworks@hexcasting:conjure_block
+Hex Casting,Conjure Light,NORTH_EAST,qqd,false,hexcasting,conjure_light,OpConjureBlock,vector →,#patterns/spells/blockworks@hexcasting:conjure_light
 Hex Casting,Consideration,WEST,qqqaw,false,hexcasting,escape,CONSIDERATION,,#patterns/patterns_as_iotas@hexcasting:escape
-Hex Casting,Cosine Purification,SOUTH_EAST,qqqqqad,false,hexcasting,cos,OpCos,**__num__ → __num__**,#patterns/advanced_math@hexcasting:cos
-Hex Casting,Craft Artifact,EAST,wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq,false,hexcasting,craft/artifact,OpMakePackagedSpell,"**__entity, list of patterns__ →**",#patterns/spells/hexcasting@hexcasting:craft/artifact
-Hex Casting,Craft Cypher,EAST,waqqqqq,false,hexcasting,craft/cypher,OpMakePackagedSpell,"**__entity, list of patterns__ →**",#patterns/spells/hexcasting@hexcasting:craft/cypher
-Hex Casting,Craft Phial,SOUTH_WEST,aqqqaqwwaqqqqqeqaqqqawwqwqwqwqwqw,true,hexcasting,craft/battery,OpMakeBattery,**__entity__ →**,#patterns/great_spells/make_battery@hexcasting:craft/battery
-Hex Casting,Craft Trinket,EAST,wwaqqqqqeaqeaeqqqeaeq,false,hexcasting,craft/trinket,OpMakePackagedSpell,"**__entity, list of patterns__ →**",#patterns/spells/hexcasting@hexcasting:craft/trinket
-Hex Casting,Create Lava,EAST,eaqawqadaqd,true,hexcasting,create_lava,OpCreateFluid,**__vector__ →**,#patterns/great_spells/create_lava@hexcasting:create_lava
-Hex Casting,Create Water,SOUTH_EAST,aqawqadaq,false,hexcasting,create_water,OpCreateFluid,**__vector__ →**,#patterns/spells/blockworks@hexcasting:create_water
-Hex Casting,Destroy Liquid,SOUTH_WEST,dedwedade,false,hexcasting,destroy_water,OpDestroyFluid,**__vector__ →**,#patterns/spells/blockworks@hexcasting:destroy_water
-Hex Casting,Dioscuri Gambit,EAST,aadadaaw,false,hexcasting,2dup,OpTwiddling,"**__any, any__ → __any, any, any, any__**",#patterns/stackmanip@hexcasting:2dup
-Hex Casting,Disjunction Distillation,SOUTH_EAST,waw,false,hexcasting,or,OpBoolOr,"**__bool, bool__ → __bool__**",#patterns/logic@hexcasting:or
+Hex Casting,Cosine Purification,SOUTH_EAST,qqqqqad,false,hexcasting,cos,OpCos,num → num,#patterns/advanced_math@hexcasting:cos
+Hex Casting,Craft Artifact,EAST,wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq,false,hexcasting,craft/artifact,OpMakePackagedSpell,"entity, list of patterns →",#patterns/spells/hexcasting@hexcasting:craft/artifact
+Hex Casting,Craft Cypher,EAST,waqqqqq,false,hexcasting,craft/cypher,OpMakePackagedSpell,"entity, list of patterns →",#patterns/spells/hexcasting@hexcasting:craft/cypher
+Hex Casting,Craft Phial,SOUTH_WEST,aqqqaqwwaqqqqqeqaqqqawwqwqwqwqwqw,true,hexcasting,craft/battery,OpMakeBattery,entity →,#patterns/great_spells/make_battery@hexcasting:craft/battery
+Hex Casting,Craft Trinket,EAST,wwaqqqqqeaqeaeqqqeaeq,false,hexcasting,craft/trinket,OpMakePackagedSpell,"entity, list of patterns →",#patterns/spells/hexcasting@hexcasting:craft/trinket
+Hex Casting,Create Lava,EAST,eaqawqadaqd,true,hexcasting,create_lava,OpCreateFluid,vector →,#patterns/great_spells/create_lava@hexcasting:create_lava
+Hex Casting,Create Water,SOUTH_EAST,aqawqadaq,false,hexcasting,create_water,OpCreateFluid,vector →,#patterns/spells/blockworks@hexcasting:create_water
+Hex Casting,Destroy Liquid,SOUTH_WEST,dedwedade,false,hexcasting,destroy_water,OpDestroyFluid,vector →,#patterns/spells/blockworks@hexcasting:destroy_water
+Hex Casting,Dioscuri Gambit,EAST,aadadaaw,false,hexcasting,2dup,OpTwiddling,"any, any → any, any, any, any",#patterns/stackmanip@hexcasting:2dup
+Hex Casting,Disjunction Distillation,SOUTH_EAST,waw,false,hexcasting,or,OpBoolOr,"bool, bool → bool",#patterns/logic@hexcasting:or
 Hex Casting,Dispel Rain,EAST,eeewwweeewwaqqddqdqd,true,hexcasting,dispel_rain,OpWeather,,#patterns/great_spells/weather_manip@hexcasting:dispel_rain
-Hex Casting,Division Distillation,NORTH_EAST,wdedw,false,hexcasting,div_cross,OpDivCross,"**__num/vec, num/vec__ → __num/vec__**",#patterns/math@hexcasting:div_cross
-Hex Casting,Edify Sapling,NORTH_EAST,wqaqwd,false,hexcasting,edify,OpEdifySapling,**__vector__ →**,#patterns/spells/blockworks@hexcasting:edify
-Hex Casting,Entity Purification,SOUTH_EAST,qqqqqdaqa,false,hexcasting,get_entity,OpGetEntityAt,**__vector__ → __entity or null__**,#patterns/entities@hexcasting:get_entity
-Hex Casting,Entity Purification: Animal,SOUTH_EAST,qqqqqdaqaawa,false,hexcasting,get_entity/animal,OpGetEntityAt,**__vector__ → __entity or null__**,#patterns/entities@hexcasting:get_entity/animal
-Hex Casting,Entity Purification: Item,SOUTH_EAST,qqqqqdaqaaww,false,hexcasting,get_entity/item,OpGetEntityAt,**__vector__ → __entity or null__**,#patterns/entities@hexcasting:get_entity/item
-Hex Casting,Entity Purification: Living,SOUTH_EAST,qqqqqdaqaawd,false,hexcasting,get_entity/living,OpGetEntityAt,**__vector__ → __entity or null__**,#patterns/entities@hexcasting:get_entity/living
-Hex Casting,Entity Purification: Monster,SOUTH_EAST,qqqqqdaqaawq,false,hexcasting,get_entity/monster,OpGetEntityAt,**__vector__ → __entity or null__**,#patterns/entities@hexcasting:get_entity/monster
-Hex Casting,Entity Purification: Player,SOUTH_EAST,qqqqqdaqaawe,false,hexcasting,get_entity/player,OpGetEntityAt,**__vector__ → __entity or null__**,#patterns/entities@hexcasting:get_entity/player
-Hex Casting,Entropy Reflection,NORTH_WEST,eqqq,false,hexcasting,random,OpRandom,**→ __num__**,#patterns/math@hexcasting:random
-Hex Casting,Equality Distillation,EAST,ad,false,hexcasting,equals,OpEquality,"**__any, any__ → __number__**",#patterns/logic@hexcasting:equals
+Hex Casting,Division Distillation,NORTH_EAST,wdedw,false,hexcasting,div_cross,OpDivCross,"num/vec, num/vec → num/vec",#patterns/math@hexcasting:div_cross
+Hex Casting,Edify Sapling,NORTH_EAST,wqaqwd,false,hexcasting,edify,OpEdifySapling,vector →,#patterns/spells/blockworks@hexcasting:edify
+Hex Casting,Entity Purification,SOUTH_EAST,qqqqqdaqa,false,hexcasting,get_entity,OpGetEntityAt,vector → entity or null,#patterns/entities@hexcasting:get_entity
+Hex Casting,Entity Purification: Animal,SOUTH_EAST,qqqqqdaqaawa,false,hexcasting,get_entity/animal,OpGetEntityAt,vector → entity or null,#patterns/entities@hexcasting:get_entity/animal
+Hex Casting,Entity Purification: Item,SOUTH_EAST,qqqqqdaqaaww,false,hexcasting,get_entity/item,OpGetEntityAt,vector → entity or null,#patterns/entities@hexcasting:get_entity/item
+Hex Casting,Entity Purification: Living,SOUTH_EAST,qqqqqdaqaawd,false,hexcasting,get_entity/living,OpGetEntityAt,vector → entity or null,#patterns/entities@hexcasting:get_entity/living
+Hex Casting,Entity Purification: Monster,SOUTH_EAST,qqqqqdaqaawq,false,hexcasting,get_entity/monster,OpGetEntityAt,vector → entity or null,#patterns/entities@hexcasting:get_entity/monster
+Hex Casting,Entity Purification: Player,SOUTH_EAST,qqqqqdaqaawe,false,hexcasting,get_entity/player,OpGetEntityAt,vector → entity or null,#patterns/entities@hexcasting:get_entity/player
+Hex Casting,Entropy Reflection,NORTH_WEST,eqqq,false,hexcasting,random,OpRandom,→ num,#patterns/math@hexcasting:random
+Hex Casting,Equality Distillation,EAST,ad,false,hexcasting,equals,OpEquality,"any, any → number",#patterns/logic@hexcasting:equals
 Hex Casting,Erase Item,EAST,qdqawwaww,false,hexcasting,erase,OpErase,,#patterns/spells/hexcasting@hexcasting:erase
-Hex Casting,Euler's Reflection,EAST,aaq,false,hexcasting,const/double/e,makeConstantOp,**→ __num__**,#patterns/consts@hexcasting:const/double/e
-Hex Casting,Excisor's Distillation,SOUTH_WEST,edqdewaqa,false,hexcasting,list_remove,OpRemove,"**__list, num__ → __list__**",#patterns/lists@hexcasting:list_remove
-Hex Casting,Exclusion Distillation,NORTH_WEST,dwa,false,hexcasting,xor,OpBoolXor,"**__bool, bool__ → __bool__**",#patterns/logic@hexcasting:xor
-Hex Casting,Exclusionary Distillation,NORTH_WEST,dwaeaqa,false,hexcasting,xor_bit,OpXor,"**__num, num/list, list__ → __num/list__**",#patterns/sets@hexcasting:xor_bit
-Hex Casting,Explosion,EAST,aawaawaa,false,hexcasting,explode,OpExplode,"**__vector, number__ →**",#patterns/spells/basic@hexcasting:explode
-Hex Casting,Extinguish Area,SOUTH_WEST,ddedwdwd,false,hexcasting,extinguish,OpExtinguish,**__vector__ →**,#patterns/spells/blockworks@hexcasting:extinguish
-Hex Casting,False Reflection,NORTH_EAST,dedq,false,hexcasting,const/false,makeConstantOp,**→ __bool__**,#patterns/consts@hexcasting:const/false
-Hex Casting,Fireball,EAST,ddwddwdd,false,hexcasting,explode/fire,OpExplode,"**__vector, number__ →**",#patterns/spells/basic@hexcasting:explode/fire
-Hex Casting,Fisherman's Gambit,WEST,ddad,false,hexcasting,fisherman,OpFisherman,**__number__ → __any__**,#patterns/stackmanip@hexcasting:fisherman
-Hex Casting,Fisherman's Gambit II,EAST,aada,false,hexcasting,fisherman/copy,OpFishermanButItCopies,**__number__ → __any__**,#patterns/stackmanip@hexcasting:fisherman/copy
-Hex Casting,Flay Mind,NORTH_EAST,qeqwqwqwqwqeqaeqeaqeqaeqaqded,true,hexcasting,brainsweep,OpBrainsweep,"**__entity, vector__ →**",#patterns/great_spells/brainsweep@hexcasting:brainsweep
-Hex Casting,Flight,NORTH_WEST,eawwaeawawaa,true,hexcasting,flight,OpFlight,"**__entity, number, number__ →**",#patterns/great_spells/flight@hexcasting:flight
-Hex Casting,Flock's Disintegration,NORTH_WEST,qwaeawq,false,hexcasting,splat,OpSplat,**__list__ → __many__**,#patterns/lists@hexcasting:splat
-Hex Casting,Flock's Gambit,SOUTH_WEST,ewdqdwe,false,hexcasting,last_n_list,OpLastNToList,"**__many, num__ → __list__**",#patterns/lists@hexcasting:last_n_list
-Hex Casting,Flock's Reflection,NORTH_WEST,qwaeawqaeaqa,false,hexcasting,stack_len,OpStackSize,**→ __number__**,#patterns/stackmanip@hexcasting:stack_len
-Hex Casting,Floor Purification,EAST,ewq,false,hexcasting,floor,OpFloor,**__num__ → __num__**,#patterns/math@hexcasting:floor
-Hex Casting,Gemini Decomposition,EAST,aadaa,false,hexcasting,duplicate,OpTwiddling,"**__any__ → __any, any__**",#patterns/stackmanip@hexcasting:duplicate
-Hex Casting,Gemini Gambit,EAST,aadaadaa,false,hexcasting,duplicate_n,OpDuplicateN,"**__any, number__ → __many__**",#patterns/stackmanip@hexcasting:duplicate_n
-Hex Casting,Gravitational Purification,NORTH_EAST,wawawddew,false,hexcasting,interop/gravity/get,OpGetGravity,**__entity__ → __vector__**,#interop/gravity@hexcasting:interop/gravity/get
-Hex Casting,Greater Fold Reflection,WEST,aqwqawaaqa,false,hexcasting,circle/bounds/max,OpCircleBounds,**→ __vector__**,#patterns/circle@hexcasting:circle/bounds/max
-Hex Casting,Greater Teleport,EAST,wwwqqqwwwqqeqqwwwqqwqqdqqqqqdqq,true,hexcasting,teleport,OpTeleport,"**__entity, vector__ →**",#patterns/great_spells/teleport@hexcasting:teleport
-Hex Casting,Green Sun's Nadir,SOUTH_EAST,qqqqqadwawaw,false,hexcasting,potion/slowness,OpPotionEffect,"**__entity, number, number__ →**",#patterns/spells/nadirs@hexcasting:potion/slowness
-Hex Casting,Green Sun's Zenith,EAST,aawawaeqqqqdd,true,hexcasting,potion/strength,OpPotionEffect,"**__entity, number, number__ →**",#patterns/great_spells/zeniths@hexcasting:potion/strength
-Hex Casting,Gulliver's Purification,NORTH_WEST,aawawwawwa,false,hexcasting,interop/pehkui/get,OpGetScale,**__entity__ → __double__**,#interop/pehkui@hexcasting:interop/pehkui/get
-Hex Casting,Hermes' Gambit,SOUTH_EAST,deaqq,false,hexcasting,eval,OpEval,**__[pattern] | pattern__ → __many__**,#patterns/meta@hexcasting:eval
-Hex Casting,Huginn's Gambit,NORTH_WEST,eqqwawqaaw,false,hexcasting,write/local,OpPushLocal,**__any__ →**,#patterns/readwrite@hexcasting:write/local
-Hex Casting,Ignite Block,SOUTH_EAST,aaqawawa,false,hexcasting,ignite,OpIgnite,**__vector__ →**,#patterns/spells/blockworks@hexcasting:ignite
-Hex Casting,Impulse,SOUTH_WEST,awqqqwaqw,false,hexcasting,add_motion,OpAddMotion,"**__entity, vector__ →**",#patterns/spells/basic@hexcasting:add_motion
-Hex Casting,Inequality Distillation,EAST,da,false,hexcasting,not_equals,OpEquality,"**__any, any__ → __number__**",#patterns/logic@hexcasting:not_equals
-Hex Casting,Integration Distillation,SOUTH_WEST,edqde,false,hexcasting,append,OpAppend,"**__list, any__ → __list__**",#patterns/lists@hexcasting:append
+Hex Casting,Euler's Reflection,EAST,aaq,false,hexcasting,const/double/e,makeConstantOp,→ num,#patterns/consts@hexcasting:const/double/e
+Hex Casting,Excisor's Distillation,SOUTH_WEST,edqdewaqa,false,hexcasting,list_remove,OpRemove,"list, num → list",#patterns/lists@hexcasting:list_remove
+Hex Casting,Exclusion Distillation,NORTH_WEST,dwa,false,hexcasting,xor,OpBoolXor,"bool, bool → bool",#patterns/logic@hexcasting:xor
+Hex Casting,Exclusionary Distillation,NORTH_WEST,dwaeaqa,false,hexcasting,xor_bit,OpXor,"num, num/list, list → num/list",#patterns/sets@hexcasting:xor_bit
+Hex Casting,Explosion,EAST,aawaawaa,false,hexcasting,explode,OpExplode,"vector, number →",#patterns/spells/basic@hexcasting:explode
+Hex Casting,Extinguish Area,SOUTH_WEST,ddedwdwd,false,hexcasting,extinguish,OpExtinguish,vector →,#patterns/spells/blockworks@hexcasting:extinguish
+Hex Casting,False Reflection,NORTH_EAST,dedq,false,hexcasting,const/false,makeConstantOp,→ bool,#patterns/consts@hexcasting:const/false
+Hex Casting,Fireball,EAST,ddwddwdd,false,hexcasting,explode/fire,OpExplode,"vector, number →",#patterns/spells/basic@hexcasting:explode/fire
+Hex Casting,Fisherman's Gambit,WEST,ddad,false,hexcasting,fisherman,OpFisherman,number → any,#patterns/stackmanip@hexcasting:fisherman
+Hex Casting,Fisherman's Gambit II,EAST,aada,false,hexcasting,fisherman/copy,OpFishermanButItCopies,number → any,#patterns/stackmanip@hexcasting:fisherman/copy
+Hex Casting,Flay Mind,NORTH_EAST,qeqwqwqwqwqeqaeqeaqeqaeqaqded,true,hexcasting,brainsweep,OpBrainsweep,"entity, vector →",#patterns/great_spells/brainsweep@hexcasting:brainsweep
+Hex Casting,Flight,NORTH_WEST,eawwaeawawaa,true,hexcasting,flight,OpFlight,"entity, number, number →",#patterns/great_spells/flight@hexcasting:flight
+Hex Casting,Flock's Disintegration,NORTH_WEST,qwaeawq,false,hexcasting,splat,OpSplat,list → many,#patterns/lists@hexcasting:splat
+Hex Casting,Flock's Gambit,SOUTH_WEST,ewdqdwe,false,hexcasting,last_n_list,OpLastNToList,"many, num → list",#patterns/lists@hexcasting:last_n_list
+Hex Casting,Flock's Reflection,NORTH_WEST,qwaeawqaeaqa,false,hexcasting,stack_len,OpStackSize,→ number,#patterns/stackmanip@hexcasting:stack_len
+Hex Casting,Floor Purification,EAST,ewq,false,hexcasting,floor,OpFloor,num → num,#patterns/math@hexcasting:floor
+Hex Casting,Gemini Decomposition,EAST,aadaa,false,hexcasting,duplicate,OpTwiddling,"any → any, any",#patterns/stackmanip@hexcasting:duplicate
+Hex Casting,Gemini Gambit,EAST,aadaadaa,false,hexcasting,duplicate_n,OpDuplicateN,"any, number → many",#patterns/stackmanip@hexcasting:duplicate_n
+Hex Casting,Gravitational Purification,NORTH_EAST,wawawddew,false,hexcasting,interop/gravity/get,OpGetGravity,entity → vector,#interop/gravity@hexcasting:interop/gravity/get
+Hex Casting,Greater Fold Reflection,WEST,aqwqawaaqa,false,hexcasting,circle/bounds/max,OpCircleBounds,→ vector,#patterns/circle@hexcasting:circle/bounds/max
+Hex Casting,Greater Teleport,EAST,wwwqqqwwwqqeqqwwwqqwqqdqqqqqdqq,true,hexcasting,teleport,OpTeleport,"entity, vector →",#patterns/great_spells/teleport@hexcasting:teleport
+Hex Casting,Green Sun's Nadir,SOUTH_EAST,qqqqqadwawaw,false,hexcasting,potion/slowness,OpPotionEffect,"entity, number, number →",#patterns/spells/nadirs@hexcasting:potion/slowness
+Hex Casting,Green Sun's Zenith,EAST,aawawaeqqqqdd,true,hexcasting,potion/strength,OpPotionEffect,"entity, number, number →",#patterns/great_spells/zeniths@hexcasting:potion/strength
+Hex Casting,Gulliver's Purification,NORTH_WEST,aawawwawwa,false,hexcasting,interop/pehkui/get,OpGetScale,entity → double,#interop/pehkui@hexcasting:interop/pehkui/get
+Hex Casting,Hermes' Gambit,SOUTH_EAST,deaqq,false,hexcasting,eval,OpEval,[pattern] | pattern → many,#patterns/meta@hexcasting:eval
+Hex Casting,Huginn's Gambit,NORTH_WEST,eqqwawqaaw,false,hexcasting,write/local,OpPushLocal,any →,#patterns/readwrite@hexcasting:write/local
+Hex Casting,Ignite Block,SOUTH_EAST,aaqawawa,false,hexcasting,ignite,OpIgnite,vector →,#patterns/spells/blockworks@hexcasting:ignite
+Hex Casting,Impulse,SOUTH_WEST,awqqqwaqw,false,hexcasting,add_motion,OpAddMotion,"entity, vector →",#patterns/spells/basic@hexcasting:add_motion
+Hex Casting,Inequality Distillation,EAST,da,false,hexcasting,not_equals,OpEquality,"any, any → number",#patterns/logic@hexcasting:not_equals
+Hex Casting,Integration Distillation,SOUTH_WEST,edqde,false,hexcasting,append,OpAppend,"list, any → list",#patterns/lists@hexcasting:append
 Hex Casting,Internalize Pigment,EAST,awddwqawqwawq,false,hexcasting,colorize,OpColorize,,#patterns/spells/colorize@hexcasting:colorize
-Hex Casting,Intersection Distillation,NORTH_EAST,wdweaqa,false,hexcasting,and_bit,OpAnd,"**__num, num/list, list__ → __num/list__**",#patterns/sets@hexcasting:and_bit
+Hex Casting,Intersection Distillation,NORTH_EAST,wdweaqa,false,hexcasting,and_bit,OpAnd,"num, num/list, list → num/list",#patterns/sets@hexcasting:and_bit
 Hex Casting,Introspection,WEST,qqq,false,hexcasting,open_paren,INTROSPECTION,,#patterns/patterns_as_iotas@hexcasting:open_paren
-Hex Casting,Inverse Cosine Purification,NORTH_EAST,adeeeee,false,hexcasting,arccos,OpArcCos,**__num__ → __num__**,#patterns/advanced_math@hexcasting:arccos
-Hex Casting,Inverse Sine Purification,SOUTH_EAST,ddeeeee,false,hexcasting,arcsin,OpArcSin,**__num__ → __num__**,#patterns/advanced_math@hexcasting:arcsin
-Hex Casting,Inverse Tangent Purification,NORTH_EAST,eadeeeeew,false,hexcasting,arctan,OpArcTan,**__num__ → __num__**,#patterns/advanced_math@hexcasting:arctan
-Hex Casting,Inversion Purification,NORTH_WEST,dweaqa,false,hexcasting,not_bit,OpNot,**__num__ → __num__**,#patterns/sets@hexcasting:not_bit
-Hex Casting,Jester's Gambit,EAST,aawdd,false,hexcasting,swap,OpTwiddling,"**__any, any__ → __any, any__**",#patterns/stackmanip@hexcasting:swap
-Hex Casting,Length Purification,NORTH_EAST,wqaqw,false,hexcasting,abs_len,OpAbsLen,**__num/vec__ → __number__**,#patterns/math@hexcasting:abs_len
-Hex Casting,Lesser Fold Reflection,SOUTH_WEST,eaqwqaewdd,false,hexcasting,circle/bounds/min,OpCircleBounds,**→ __vector__**,#patterns/circle@hexcasting:circle/bounds/min
-Hex Casting,Locate Sentinel,EAST,waeawaede,false,hexcasting,sentinel/get_pos,OpGetSentinelPos,**→ __vector__**,#patterns/spells/sentinels@hexcasting:sentinel/get_pos
-Hex Casting,Locator's Distillation,EAST,dedqde,false,hexcasting,index_of,OpIndexOf,"**__list, any__ → __num__**",#patterns/lists@hexcasting:index_of
-Hex Casting,Lodestone Reflection,SOUTH_WEST,eaqwqaewede,false,hexcasting,circle/impetus_dir,OpImpetusDir,**→ __vector__**,#patterns/circle@hexcasting:circle/impetus_dir
-Hex Casting,Logarithmic Distillation,NORTH_WEST,eqaqe,false,hexcasting,logarithm,OpLog,"**__num, num__ → __num__**",#patterns/advanced_math@hexcasting:logarithm
-Hex Casting,Make Note,WEST,adaa,false,hexcasting,beep,OpBeep,"**__vector, number, number__ →**",#patterns/spells/basic@hexcasting:beep
-Hex Casting,Maximus Distillation,SOUTH_EAST,e,false,hexcasting,greater,OpCompare,"**__number, number__ → __number__**",#patterns/logic@hexcasting:greater
-Hex Casting,Maximus Distillation II,SOUTH_EAST,ee,false,hexcasting,greater_eq,OpCompare,"**__number, number__ → __number__**",#patterns/logic@hexcasting:greater_eq
-Hex Casting,Mind's Reflection,NORTH_EAST,qaq,false,hexcasting,get_caster,OpGetCaster,**→ __entity__**,#patterns/basics@hexcasting:get_caster
-Hex Casting,Minimus Distillation,SOUTH_WEST,q,false,hexcasting,less,OpCompare,"**__number, number__ → __number__**",#patterns/logic@hexcasting:less
-Hex Casting,Minimus Distillation II,SOUTH_WEST,qq,false,hexcasting,less_eq,OpCompare,"**__number, number__ → __number__**",#patterns/logic@hexcasting:less_eq
-Hex Casting,Modulus Distillation,NORTH_EAST,addwaad,false,hexcasting,modulo,OpModulo,"**__num, num__ → __num__**",#patterns/math@hexcasting:modulo
-Hex Casting,Multiplicative Distillation,SOUTH_EAST,waqaw,false,hexcasting,mul_dot,OpMulDot,"**__num/vec, num/vec__ → __num/vec__**",#patterns/math@hexcasting:mul_dot
-Hex Casting,Muninn's Reflection,NORTH_EAST,qeewdweddw,false,hexcasting,read/local,OpPeekLocal,**→ __any__**,#patterns/readwrite@hexcasting:read/local
-Hex Casting,Negation Purification,NORTH_WEST,dw,false,hexcasting,not,OpBoolNot,**__any__ → __number__**,#patterns/logic@hexcasting:not
-Hex Casting,Nullary Reflection,EAST,d,false,hexcasting,const/null,makeConstantOp,**→ __influence__**,#patterns/consts@hexcasting:const/null
-Hex Casting,Numerical Reflection,,,false,hexcasting,number,SpecialHandler,**→ __number__**,#patterns/numbers@Numbers
-Hex Casting,Overgrow,NORTH_EAST,wqaqwawqaqw,false,hexcasting,bonemeal,OpTheOnlyReasonAnyoneDownloadedPsi,**__vector__ →**,#patterns/spells/blockworks@hexcasting:bonemeal
-Hex Casting,Pace Purification,EAST,wq,false,hexcasting,get_entity_velocity,OpEntityVelocity,**__entity__ → __vector__**,#patterns/basics@hexcasting:get_entity_velocity
-Hex Casting,Place Block,SOUTH_WEST,eeeeede,false,hexcasting,place_block,OpPlaceBlock,**__vector__ →**,#patterns/spells/blockworks@hexcasting:place_block
-Hex Casting,Power Distillation,NORTH_WEST,wedew,false,hexcasting,pow_proj,OpPowProj,"**__num/vec, num/vec__ → __num/vec__**",#patterns/math@hexcasting:pow_proj
-Hex Casting,Prospector's Gambit,EAST,aaedd,false,hexcasting,over,OpTwiddling,"**__any, any__ → __any, any, any__**",#patterns/stackmanip@hexcasting:over
-Hex Casting,Recharge Item,NORTH_WEST,qqqqqwaeaeaeaeaea,false,hexcasting,recharge,OpRecharge,**__entity__ →**,#patterns/spells/hexcasting@hexcasting:recharge
-Hex Casting,Red Sun's Nadir,SOUTH_EAST,qqqqqadwawaww,false,hexcasting,potion/poison,OpPotionEffect,"**__entity, number, number__ →**",#patterns/spells/nadirs@hexcasting:potion/poison
-Hex Casting,Red Sun's Zenith,SOUTH_EAST,qaawawaeqqqdd,true,hexcasting,potion/haste,OpPotionEffect,"**__entity, number, number__ →**",#patterns/great_spells/zeniths@hexcasting:potion/haste
-Hex Casting,Retrograde Purification,EAST,qqqaede,false,hexcasting,reverse_list,OpReverski,**__list__ → __list__**,#patterns/lists@hexcasting:reverse_list
+Hex Casting,Inverse Cosine Purification,NORTH_EAST,adeeeee,false,hexcasting,arccos,OpArcCos,num → num,#patterns/advanced_math@hexcasting:arccos
+Hex Casting,Inverse Sine Purification,SOUTH_EAST,ddeeeee,false,hexcasting,arcsin,OpArcSin,num → num,#patterns/advanced_math@hexcasting:arcsin
+Hex Casting,Inverse Tangent Purification,NORTH_EAST,eadeeeeew,false,hexcasting,arctan,OpArcTan,num → num,#patterns/advanced_math@hexcasting:arctan
+Hex Casting,Inversion Purification,NORTH_WEST,dweaqa,false,hexcasting,not_bit,OpNot,num → num,#patterns/sets@hexcasting:not_bit
+Hex Casting,Jester's Gambit,EAST,aawdd,false,hexcasting,swap,OpTwiddling,"any, any → any, any",#patterns/stackmanip@hexcasting:swap
+Hex Casting,Length Purification,NORTH_EAST,wqaqw,false,hexcasting,abs_len,OpAbsLen,num/vec → number,#patterns/math@hexcasting:abs_len
+Hex Casting,Lesser Fold Reflection,SOUTH_WEST,eaqwqaewdd,false,hexcasting,circle/bounds/min,OpCircleBounds,→ vector,#patterns/circle@hexcasting:circle/bounds/min
+Hex Casting,Locate Sentinel,EAST,waeawaede,false,hexcasting,sentinel/get_pos,OpGetSentinelPos,→ vector,#patterns/spells/sentinels@hexcasting:sentinel/get_pos
+Hex Casting,Locator's Distillation,EAST,dedqde,false,hexcasting,index_of,OpIndexOf,"list, any → num",#patterns/lists@hexcasting:index_of
+Hex Casting,Lodestone Reflection,SOUTH_WEST,eaqwqaewede,false,hexcasting,circle/impetus_dir,OpImpetusDir,→ vector,#patterns/circle@hexcasting:circle/impetus_dir
+Hex Casting,Logarithmic Distillation,NORTH_WEST,eqaqe,false,hexcasting,logarithm,OpLog,"num, num → num",#patterns/advanced_math@hexcasting:logarithm
+Hex Casting,Make Note,WEST,adaa,false,hexcasting,beep,OpBeep,"vector, number, number →",#patterns/spells/basic@hexcasting:beep
+Hex Casting,Maximus Distillation,SOUTH_EAST,e,false,hexcasting,greater,OpCompare,"number, number → number",#patterns/logic@hexcasting:greater
+Hex Casting,Maximus Distillation II,SOUTH_EAST,ee,false,hexcasting,greater_eq,OpCompare,"number, number → number",#patterns/logic@hexcasting:greater_eq
+Hex Casting,Mind's Reflection,NORTH_EAST,qaq,false,hexcasting,get_caster,OpGetCaster,→ entity,#patterns/basics@hexcasting:get_caster
+Hex Casting,Minimus Distillation,SOUTH_WEST,q,false,hexcasting,less,OpCompare,"number, number → number",#patterns/logic@hexcasting:less
+Hex Casting,Minimus Distillation II,SOUTH_WEST,qq,false,hexcasting,less_eq,OpCompare,"number, number → number",#patterns/logic@hexcasting:less_eq
+Hex Casting,Modulus Distillation,NORTH_EAST,addwaad,false,hexcasting,modulo,OpModulo,"num, num → num",#patterns/math@hexcasting:modulo
+Hex Casting,Multiplicative Distillation,SOUTH_EAST,waqaw,false,hexcasting,mul_dot,OpMulDot,"num/vec, num/vec → num/vec",#patterns/math@hexcasting:mul_dot
+Hex Casting,Muninn's Reflection,NORTH_EAST,qeewdweddw,false,hexcasting,read/local,OpPeekLocal,→ any,#patterns/readwrite@hexcasting:read/local
+Hex Casting,Negation Purification,NORTH_WEST,dw,false,hexcasting,not,OpBoolNot,any → number,#patterns/logic@hexcasting:not
+Hex Casting,Nullary Reflection,EAST,d,false,hexcasting,const/null,makeConstantOp,→ influence,#patterns/consts@hexcasting:const/null
+Hex Casting,Numerical Reflection,,,false,hexcasting,number,SpecialHandler,→ number,#patterns/numbers@Numbers
+Hex Casting,Overgrow,NORTH_EAST,wqaqwawqaqw,false,hexcasting,bonemeal,OpTheOnlyReasonAnyoneDownloadedPsi,vector →,#patterns/spells/blockworks@hexcasting:bonemeal
+Hex Casting,Pace Purification,EAST,wq,false,hexcasting,get_entity_velocity,OpEntityVelocity,entity → vector,#patterns/basics@hexcasting:get_entity_velocity
+Hex Casting,Place Block,SOUTH_WEST,eeeeede,false,hexcasting,place_block,OpPlaceBlock,vector →,#patterns/spells/blockworks@hexcasting:place_block
+Hex Casting,Power Distillation,NORTH_WEST,wedew,false,hexcasting,pow_proj,OpPowProj,"num/vec, num/vec → num/vec",#patterns/math@hexcasting:pow_proj
+Hex Casting,Prospector's Gambit,EAST,aaedd,false,hexcasting,over,OpTwiddling,"any, any → any, any, any",#patterns/stackmanip@hexcasting:over
+Hex Casting,Recharge Item,NORTH_WEST,qqqqqwaeaeaeaeaea,false,hexcasting,recharge,OpRecharge,entity →,#patterns/spells/hexcasting@hexcasting:recharge
+Hex Casting,Red Sun's Nadir,SOUTH_EAST,qqqqqadwawaww,false,hexcasting,potion/poison,OpPotionEffect,"entity, number, number →",#patterns/spells/nadirs@hexcasting:potion/poison
+Hex Casting,Red Sun's Zenith,SOUTH_EAST,qaawawaeqqqdd,true,hexcasting,potion/haste,OpPotionEffect,"entity, number, number →",#patterns/great_spells/zeniths@hexcasting:potion/haste
+Hex Casting,Retrograde Purification,EAST,qqqaede,false,hexcasting,reverse_list,OpReverski,list → list,#patterns/lists@hexcasting:reverse_list
 Hex Casting,Retrospection,EAST,eee,false,hexcasting,close_paren,RETROSPECTION,,#patterns/patterns_as_iotas@hexcasting:close_paren
-Hex Casting,Reveal,NORTH_EAST,de,false,hexcasting,print,OpPrint,**__any__ → __any__**,#patterns/basics@hexcasting:print
-Hex Casting,Rotation Gambit,EAST,aaeaa,false,hexcasting,rotate,OpTwiddling,"**__any, any, any__ → __any, any, any__**",#patterns/stackmanip@hexcasting:rotate
-Hex Casting,Rotation Gambit II,NORTH_EAST,ddqdd,false,hexcasting,rotate_reverse,OpTwiddling,"**__any, any, any__ → __any, any, any__**",#patterns/stackmanip@hexcasting:rotate_reverse
-Hex Casting,Scout's Distillation,EAST,weaqa,false,hexcasting,raycast/entity,OpEntityRaycast,"**__vector, vector__ → __entity__**",#patterns/basics@hexcasting:raycast/entity
-Hex Casting,Scribe's Gambit,EAST,deeeee,false,hexcasting,write,OpWrite,**__any__ →**,#patterns/readwrite@hexcasting:write
-Hex Casting,Scribe's Reflection,EAST,aqqqqq,false,hexcasting,read,OpRead,**→ __any__**,#patterns/readwrite@hexcasting:read
-Hex Casting,Selection Distillation,NORTH_WEST,deeed,false,hexcasting,index,OpIndex,"**__list, number__ → __any__**",#patterns/lists@hexcasting:index
-Hex Casting,Selection Exaltation,NORTH_WEST,qaeaqwded,false,hexcasting,slice,OpSlice,"**__list, num, num__ → __list__**",#patterns/lists@hexcasting:slice
-Hex Casting,Sine Purification,SOUTH_EAST,qqqqqaa,false,hexcasting,sin,OpSin,**__num__ → __num__**,#patterns/advanced_math@hexcasting:sin
-Hex Casting,Single's Purification,EAST,adeeed,false,hexcasting,singleton,OpSingleton,**__any__ → __list__**,#patterns/lists@hexcasting:singleton
-Hex Casting,Speaker's Decomposition,SOUTH_WEST,aaqwqaa,false,hexcasting,deconstruct,OpUnCons,"**__list__ → __list, any__**",#patterns/lists@hexcasting:deconstruct
-Hex Casting,Speaker's Distillation,SOUTH_EAST,ddewedd,false,hexcasting,construct,OpCons,"**__list, any__ → __list__**",#patterns/lists@hexcasting:construct
-Hex Casting,Stadiometer's Purification,NORTH_EAST,awq,false,hexcasting,get_entity_height,OpEntityHeight,**__entity__ → __num__**,#patterns/basics@hexcasting:get_entity_height
-Hex Casting,Subtractive Distillation,NORTH_WEST,wddw,false,hexcasting,sub,OpSub,"**__num/vec, num/vec__ → __num/vec__**",#patterns/math@hexcasting:sub
-Hex Casting,Summon Greater Sentinel,EAST,waeawaeqqqwqwqqwq,true,hexcasting,sentinel/create/great,OpCreateSentinel,**__vector__ →**,
-Hex Casting,Summon Lightning,EAST,waadwawdaaweewq,true,hexcasting,lightning,OpLightning,**__vector__ →**,#patterns/great_spells/weather_manip@hexcasting:lightning
+Hex Casting,Reveal,NORTH_EAST,de,false,hexcasting,print,OpPrint,any → any,#patterns/basics@hexcasting:print
+Hex Casting,Rotation Gambit,EAST,aaeaa,false,hexcasting,rotate,OpTwiddling,"any, any, any → any, any, any",#patterns/stackmanip@hexcasting:rotate
+Hex Casting,Rotation Gambit II,NORTH_EAST,ddqdd,false,hexcasting,rotate_reverse,OpTwiddling,"any, any, any → any, any, any",#patterns/stackmanip@hexcasting:rotate_reverse
+Hex Casting,Scout's Distillation,EAST,weaqa,false,hexcasting,raycast/entity,OpEntityRaycast,"vector, vector → entity",#patterns/basics@hexcasting:raycast/entity
+Hex Casting,Scribe's Gambit,EAST,deeeee,false,hexcasting,write,OpWrite,any →,#patterns/readwrite@hexcasting:write
+Hex Casting,Scribe's Reflection,EAST,aqqqqq,false,hexcasting,read,OpRead,→ any,#patterns/readwrite@hexcasting:read
+Hex Casting,Selection Distillation,NORTH_WEST,deeed,false,hexcasting,index,OpIndex,"list, number → any",#patterns/lists@hexcasting:index
+Hex Casting,Selection Exaltation,NORTH_WEST,qaeaqwded,false,hexcasting,slice,OpSlice,"list, num, num → list",#patterns/lists@hexcasting:slice
+Hex Casting,Sine Purification,SOUTH_EAST,qqqqqaa,false,hexcasting,sin,OpSin,num → num,#patterns/advanced_math@hexcasting:sin
+Hex Casting,Single's Purification,EAST,adeeed,false,hexcasting,singleton,OpSingleton,any → list,#patterns/lists@hexcasting:singleton
+Hex Casting,Speaker's Decomposition,SOUTH_WEST,aaqwqaa,false,hexcasting,deconstruct,OpUnCons,"list → list, any",#patterns/lists@hexcasting:deconstruct
+Hex Casting,Speaker's Distillation,SOUTH_EAST,ddewedd,false,hexcasting,construct,OpCons,"list, any → list",#patterns/lists@hexcasting:construct
+Hex Casting,Stadiometer's Purification,NORTH_EAST,awq,false,hexcasting,get_entity_height,OpEntityHeight,entity → num,#patterns/basics@hexcasting:get_entity_height
+Hex Casting,Subtractive Distillation,NORTH_WEST,wddw,false,hexcasting,sub,OpSub,"num/vec, num/vec → num/vec",#patterns/math@hexcasting:sub
+Hex Casting,Summon Greater Sentinel,EAST,waeawaeqqqwqwqqwq,true,hexcasting,sentinel/create/great,OpCreateSentinel,vector →,
+Hex Casting,Summon Lightning,EAST,waadwawdaaweewq,true,hexcasting,lightning,OpLightning,vector →,#patterns/great_spells/weather_manip@hexcasting:lightning
 Hex Casting,Summon Rain,WEST,wwweeewwweewdawdwad,true,hexcasting,summon_rain,OpWeather,,#patterns/great_spells/weather_manip@hexcasting:summon_rain
-Hex Casting,Summon Sentinel,EAST,waeawae,false,hexcasting,sentinel/create,OpCreateSentinel,**__vector__ →**,#patterns/spells/sentinels@hexcasting:sentinel/create
-Hex Casting,Surgeon's Exaltation,NORTH_WEST,wqaeaqw,false,hexcasting,modify_in_place,OpModifyInPlace,"**__list, num, any__ → __list__**",#patterns/lists@hexcasting:modify_in_place
-Hex Casting,Swindler's Gambit,SOUTH_EAST,qaawdde,false,hexcasting,swizzle,OpAlwinfyHasAscendedToABeingOfPureMath,"**__many, number__ → __many__**",#patterns/stackmanip@hexcasting:swizzle
-Hex Casting,Tangent Purification,SOUTH_WEST,wqqqqqadq,false,hexcasting,tan,OpTan,**__num__ → __num__**,#patterns/advanced_math@hexcasting:tan
-Hex Casting,Thoth's Gambit,NORTH_EAST,dadad,false,hexcasting,for_each,OpForEach,"**__list of patterns, list__ → __list__**",#patterns/meta@hexcasting:for_each
-Hex Casting,True Reflection,SOUTH_EAST,aqae,false,hexcasting,const/true,makeConstantOp,**→ __bool__**,#patterns/consts@hexcasting:const/true
-Hex Casting,Undertaker's Gambit,EAST,ddqaa,false,hexcasting,tuck,OpTwiddling,"**__any, any__ → __any, any, any__**",#patterns/stackmanip@hexcasting:tuck
-Hex Casting,Unifying Distillation,SOUTH_EAST,waweaqa,false,hexcasting,or_bit,OpOr,"**__num, num/list, list__ → __num/list__**",#patterns/sets@hexcasting:or_bit
-Hex Casting,Uniqueness Purification,NORTH_EAST,aweaqa,false,hexcasting,to_set,OpToSet,**__list__ → __list__**,#patterns/sets@hexcasting:to_set
-Hex Casting,Vacant Reflection,NORTH_EAST,qqaeaae,false,hexcasting,empty_list,OpEmptyList,**→ __list__**,#patterns/lists@hexcasting:empty_list
-Hex Casting,Vector Disintegration,EAST,qeeeee,false,hexcasting,deconstruct_vec,OpDeconstructVec,"**__vector__ → __num, num, num__**",#patterns/math@hexcasting:deconstruct_vec
-Hex Casting,Vector Exaltation,EAST,eqqqqq,false,hexcasting,construct_vec,OpConstructVec,"**__num, num, num__ → __vector__**",#patterns/math@hexcasting:construct_vec
-Hex Casting,Vector Reflection +X,NORTH_WEST,qqqqqea,false,hexcasting,const/vec/px,makeConstantOp,**→ __vector__**,#patterns/consts@hexcasting:const/vec/x
-Hex Casting,Vector Reflection +Y,NORTH_WEST,qqqqqew,false,hexcasting,const/vec/py,makeConstantOp,**→ __vector__**,#patterns/consts@hexcasting:const/vec/y
-Hex Casting,Vector Reflection +Z,NORTH_WEST,qqqqqed,false,hexcasting,const/vec/pz,makeConstantOp,**→ __vector__**,#patterns/consts@hexcasting:const/vec/z
-Hex Casting,Vector Reflection -X,SOUTH_WEST,eeeeeqa,false,hexcasting,const/vec/nx,makeConstantOp,**→ __vector__**,#patterns/consts@hexcasting:const/vec/x
-Hex Casting,Vector Reflection -Y,SOUTH_WEST,eeeeeqw,false,hexcasting,const/vec/ny,makeConstantOp,**→ __vector__**,#patterns/consts@hexcasting:const/vec/y
-Hex Casting,Vector Reflection -Z,SOUTH_WEST,eeeeeqd,false,hexcasting,const/vec/nz,makeConstantOp,**→ __vector__**,#patterns/consts@hexcasting:const/vec/z
-Hex Casting,Vector Reflection Zero,NORTH_WEST,qqqqq,false,hexcasting,const/vec/0,makeConstantOp,**→ __vector__**,#patterns/consts@hexcasting:const/vec/0
-Hex Casting,Wayfind Sentinel,EAST,waeawaedwa,false,hexcasting,sentinel/wayfind,OpGetSentinelWayfind,**__vector__ → __vector__**,#patterns/spells/sentinels@hexcasting:sentinel/wayfind
-Hex Casting,Waystone Reflection,SOUTH_WEST,eaqwqae,false,hexcasting,circle/impetus_pos,OpImpetusPos,**→ __vector__**,#patterns/circle@hexcasting:circle/impetus_pos
-Hex Casting,White Sun's Nadir,NORTH_WEST,qqqqqaqwawaw,false,hexcasting,potion/weakness,OpPotionEffect,"**__entity, number, number__ →**",#patterns/spells/nadirs@hexcasting:potion/weakness
-Hex Casting,White Sun's Zenith,NORTH_WEST,qqqqaawawaedd,true,hexcasting,potion/regeneration,OpPotionEffect,"**__entity, number, number__ →**",#patterns/great_spells/zeniths@hexcasting:potion/regeneration
-Hex Casting,Zone Distillation: Animal,SOUTH_EAST,qqqqqwdeddwa,false,hexcasting,zone_entity/animal,OpGetEntitiesBy,"**__vector, number__ → __list__**",#patterns/entities@hexcasting:zone_entity/animal
-Hex Casting,Zone Distillation: Any,SOUTH_EAST,qqqqqwded,false,hexcasting,zone_entity,OpGetEntitiesBy,"**__vector, number__ → __list__**",#patterns/entities@hexcasting:zone_entity
-Hex Casting,Zone Distillation: Item,SOUTH_EAST,qqqqqwdeddww,false,hexcasting,zone_entity/item,OpGetEntitiesBy,"**__vector, number__ → __list__**",#patterns/entities@hexcasting:zone_entity/item
-Hex Casting,Zone Distillation: Living,SOUTH_EAST,qqqqqwdeddwd,false,hexcasting,zone_entity/living,OpGetEntitiesBy,"**__vector, number__ → __list__**",#patterns/entities@hexcasting:zone_entity/living
-Hex Casting,Zone Distillation: Monster,SOUTH_EAST,qqqqqwdeddwq,false,hexcasting,zone_entity/monster,OpGetEntitiesBy,"**__vector, number__ → __list__**",#patterns/entities@hexcasting:zone_entity/monster
-Hex Casting,Zone Distillation: Non-Animal,NORTH_EAST,eeeeewaqaawa,false,hexcasting,zone_entity/not_animal,OpGetEntitiesBy,"**__vector, number__ → __list__**",#patterns/entities@hexcasting:zone_entity/not_animal
-Hex Casting,Zone Distillation: Non-Item,NORTH_EAST,eeeeewaqaaww,false,hexcasting,zone_entity/not_item,OpGetEntitiesBy,"**__vector, number__ → __list__**",#patterns/entities@hexcasting:zone_entity/not_item
-Hex Casting,Zone Distillation: Non-Living,NORTH_EAST,eeeeewaqaawd,false,hexcasting,zone_entity/not_living,OpGetEntitiesBy,"**__vector, number__ → __list__**",#patterns/entities@hexcasting:zone_entity/not_living
-Hex Casting,Zone Distillation: Non-Monster,NORTH_EAST,eeeeewaqaawq,false,hexcasting,zone_entity/not_monster,OpGetEntitiesBy,"**__vector, number__ → __list__**",#patterns/entities@hexcasting:zone_entity/not_monster
-Hex Casting,Zone Distillation: Non-Player,NORTH_EAST,eeeeewaqaawe,false,hexcasting,zone_entity/not_player,OpGetEntitiesBy,"**__vector, number__ → __list__**",#patterns/entities@hexcasting:zone_entity/not_player
-Hex Casting,Zone Distillation: Player,SOUTH_EAST,qqqqqwdeddwe,false,hexcasting,zone_entity/player,OpGetEntitiesBy,"**__vector, number__ → __list__**",#patterns/entities@hexcasting:zone_entity/player
-HexKinetics,Alidade's Purification II,EAST,waa,false,hexkinetics,direction/const,OpRoundedEntityLook,**__entity__ → __vector__**,#patterns/actions@hexkinetics:direction/const
-HexKinetics,Greater Translocation,SOUTH_EAST,eeqeeqeeeqeeqdeeqeqqwqqqeeqeqqwqq,false,hexkinetics,move_block/spell,OpMoveBlock,"**__vector, vector__ →**",#patterns/great_spells/greater_translocation@hexkinetics:move_block/spell
-HexKinetics,Hadamard's Distillation,WEST,awaqawa,false,hexkinetics,hadamard/const,OpVectorComponentMultiplication,"**__vector, vector__ → __vector__**",#patterns/math_actions@hexkinetics:hadamard/const
-HexKinetics,Imprecision Purification,SOUTH_EAST,aadeeaa,false,hexkinetics,round/const,OpRoundNumber,**__num/vec__ → __num/vec__**,#patterns/math_actions@hexkinetics:round/const
-HexKinetics,Inertia Purification,EAST,daad,false,hexkinetics,is_gravity/const,OpGravityPurification,**__entity__ → __bool__**,#patterns/actions@hexkinetics:is_gravity/const
-HexKinetics,Jockey Purification,SOUTH_EAST,qqdeeaedeaee,false,hexkinetics,get_rider/const,OpSecretTwo,**__entity__ → __entity__**,#patterns/actions@hexkinetics:get_rider/const
-HexKinetics,Lesser Teleport,NORTH_EAST,edqdewqaeaq,false,hexkinetics,lesser_teleport/spell,OpLesserTeleport,"**__entity, vec/num__ →**",#patterns/spells/spells@hexkinetics:lesser_teleport/spell
-HexKinetics,Momentum Swap,SOUTH_WEST,adaadaqedaddad,false,hexkinetics,swap/spell,OpMomentumSwap,"**__entity, entity__ →**",#patterns/spells/spells@hexkinetics:swap/spell
-HexKinetics,Optician's Distillation,SOUTH_EAST,qqqqqdqqqqq,false,hexkinetics,reflection/const,OpVectorReflection,"**__vector, vector__ → __vector__**",#patterns/math_actions@hexkinetics:reflection/const
-HexKinetics,Place Projectile,SOUTH_EAST,weeeweede,false,hexkinetics,projectile/spell,OpPlaceProjectile,**__vector__ →**,#patterns/spells/spells@hexkinetics:projectile/spell
-HexKinetics,Propulsion,SOUTH_WEST,wqeqaaeeeweeeaaqeqqaaq,true,hexkinetics,fast/spell,OpAcceleration,"**__entity, number, vector__ →**",#patterns/great_spells/great_spells@hexkinetics:fast/spell
-HexKinetics,Rotate,EAST,qqqadeeed,false,hexkinetics,rotate/spell,OpRotateSpell,"**__entity, vec__ →**",#patterns/spells/rotate_spells@hexkinetics:rotate/spell
-HexKinetics,Rotate II,WEST,eeedaqqqa,false,hexkinetics,rotate_two/spell,OpRotateTwoSpell,"**__entity, vec__ →**",#patterns/spells/rotate_spells@hexkinetics:rotate_two/spell
-HexKinetics,Rotate: Block,SOUTH_EAST,qqqqqaqqqwadeeed,false,hexkinetics,rotate_block/spell,OpRotateBlockSpell,"**__vector, vector__ →**",#patterns/spells/rotate_spells@hexkinetics:rotate_block/spell
-HexKinetics,Shooter Purification,EAST,aadedade,false,hexkinetics,get_shooter/const,OpSecretThree,**__entity__ → __entity__**,#patterns/actions@hexkinetics:get_shooter/const
-HexKinetics,Sniper's Distillation,EAST,weqaqded,false,hexkinetics,pixel/raycast,OpPixelRaycast,"**__vector, vector__ → __vector__**",#patterns/actions@hexkinetics:pixel/raycast
-HexKinetics,Span Distillation,WEST,qaqeeqaq,false,hexkinetics,get_vec_from/const,OpGetVectorsFrom,"**__vector, vector__ → __list__**",#patterns/math_actions@hexkinetics:get_vec_from/const
-HexKinetics,Sphere Distillation,SOUTH_EAST,qqqqqeddedq,false,hexkinetics,get_vec/const,OpGetVectorsBy,"**__vec, num__ → __list__**",#patterns/math_actions@hexkinetics:get_vec/const
-HexKinetics,Twokai's Ideal Condition,SOUTH_WEST,wwqqqwadaadawqqqww,true,hexkinetics,zero_g/spell,OpZeroG,"**__entity, number__ →**",#patterns/great_spells/great_spells@hexkinetics:zero_g/spell
-HexKinetics,Vehicle Purification,SOUTH_EAST,qqdeewee,false,hexkinetics,get_vehicle/const,OpSecret,**__entity__ → __entity__**,#patterns/actions@hexkinetics:get_vehicle/const
-HexKinetics,Visibility Distillation,NORTH_WEST,aqadwawaw,false,hexkinetics,visibility/const,OpVisibilityDistillation,"**__entity, vector__ → __bool__**",#patterns/actions@hexkinetics:visibility/const
-HexTweaks,Clerk's Abacus Purification,NORTH_EAST,qaqwaqeewaqaeaq,false,hextweaks,dict/size,OpDictSize,**__dict__ → __num__**,#patterns/hextweaks_dict@hextweaks:dict/size
-HexTweaks,Clerk's Decomposition,NORTH_EAST,qaqwaqdwqqqwae,false,hextweaks,dict/break,OpDictBreak,"**__dict__ → __[key],[any]__**",#patterns/hextweaks_dict@hextweaks:dict/break
-HexTweaks,Clerk's Decomposition II,NORTH_EAST,qaqwaqdwqqqwq,false,hextweaks,dict/break/single,OpDictBreakSingle,"**__dict__ → __key,value__**",#patterns/hextweaks_dict@hextweaks:dict/break/single
-HexTweaks,Clerk's Distillation,NORTH_EAST,qaqwaqeqdweeew,false,hextweaks,dict/from,OpDictFrom,"**__[key],[any]__ → __dict__**",#patterns/hextweaks_dict@hextweaks:dict/from
-HexTweaks,Clerk's Excisor's Distillation,NORTH_EAST,qaqwaqeqdd,false,hextweaks,dict/remove,OpDictRemove,"**__dict, key__ → __dict__**",#patterns/hextweaks_dict@hextweaks:dict/remove
-HexTweaks,Clerk's Integration Exaltation,NORTH_EAST,qaqwaqdqedqde,false,hextweaks,dict/set,OpDictSet,"**__dict, key, any__ → __dict__**",#patterns/hextweaks_dict@hextweaks:dict/set
-HexTweaks,Clerk's Surgeon's Exaltation,NORTH_EAST,qaqwaqdadeeed,false,hextweaks,dict/get,OpDictPop,"**__dict, key__ → __dict, any__**",#patterns/hextweaks_dict@hextweaks:dict/get
-HexTweaks,Clerk's Thoths Gambit,NORTH_EAST,qaqwaqedadad,false,hextweaks,dict/thoths,OpDictThoths,"**__[patterns],dict__ → __[any]__**",#patterns/hextweaks_dict@hextweaks:dict/thoths
-HexTweaks,Clerk's Vacant Reflection,NORTH_EAST,qaqwaq,false,hextweaks,dict/new,OpNewDict,**→ __dict__**,#patterns/hextweaks_dict@hextweaks:dict/new
-HexTweaks,Iterators Purification,NORTH_EAST,wdwaw,false,hextweaks,itter,OpItterator,**__Number__ → __[Number]__**,#patterns/hextweaks_utility@hextweaks:itter
-HexTweaks,Mass Mindflay,NORTH_EAST,qeqwqwqwqwqeqaeqeaqeqaeqaqdededwaqdedsde,false,hextweaks,grand/massbrainsweep,OpMassMindflay,"**__[Entity], any__ →**",#patterns/grand_spells/massmindflay@hextweaks:grand/massbrainsweep
-HexTweaks,Nadir of Nausea,EAST,weed,false,hextweaks,nausea,OpPotionEffect,"**__entity, number, number__ →**",#patterns/spells/naseua@hextweaks:nausea
-HexTweaks,Natural Search,WEST,wqqewawqwqedawdweewaeqwawdaqwdewawdadwawqwawdadwaw,true,hextweaks,craft/grandscroll,OpCraftGrandScroll,"**__Entity, Vec__ →**",#patterns/great_spells/craftgrandscroll@hextweaks:craft/grandscroll
+Hex Casting,Summon Sentinel,EAST,waeawae,false,hexcasting,sentinel/create,OpCreateSentinel,vector →,#patterns/spells/sentinels@hexcasting:sentinel/create
+Hex Casting,Surgeon's Exaltation,NORTH_WEST,wqaeaqw,false,hexcasting,modify_in_place,OpModifyInPlace,"list, num, any → list",#patterns/lists@hexcasting:modify_in_place
+Hex Casting,Swindler's Gambit,SOUTH_EAST,qaawdde,false,hexcasting,swizzle,OpAlwinfyHasAscendedToABeingOfPureMath,"many, number → many",#patterns/stackmanip@hexcasting:swizzle
+Hex Casting,Tangent Purification,SOUTH_WEST,wqqqqqadq,false,hexcasting,tan,OpTan,num → num,#patterns/advanced_math@hexcasting:tan
+Hex Casting,Thoth's Gambit,NORTH_EAST,dadad,false,hexcasting,for_each,OpForEach,"list of patterns, list → list",#patterns/meta@hexcasting:for_each
+Hex Casting,True Reflection,SOUTH_EAST,aqae,false,hexcasting,const/true,makeConstantOp,→ bool,#patterns/consts@hexcasting:const/true
+Hex Casting,Undertaker's Gambit,EAST,ddqaa,false,hexcasting,tuck,OpTwiddling,"any, any → any, any, any",#patterns/stackmanip@hexcasting:tuck
+Hex Casting,Unifying Distillation,SOUTH_EAST,waweaqa,false,hexcasting,or_bit,OpOr,"num, num/list, list → num/list",#patterns/sets@hexcasting:or_bit
+Hex Casting,Uniqueness Purification,NORTH_EAST,aweaqa,false,hexcasting,to_set,OpToSet,list → list,#patterns/sets@hexcasting:to_set
+Hex Casting,Vacant Reflection,NORTH_EAST,qqaeaae,false,hexcasting,empty_list,OpEmptyList,→ list,#patterns/lists@hexcasting:empty_list
+Hex Casting,Vector Disintegration,EAST,qeeeee,false,hexcasting,deconstruct_vec,OpDeconstructVec,"vector → num, num, num",#patterns/math@hexcasting:deconstruct_vec
+Hex Casting,Vector Exaltation,EAST,eqqqqq,false,hexcasting,construct_vec,OpConstructVec,"num, num, num → vector",#patterns/math@hexcasting:construct_vec
+Hex Casting,Vector Reflection +X,NORTH_WEST,qqqqqea,false,hexcasting,const/vec/px,makeConstantOp,→ vector,#patterns/consts@hexcasting:const/vec/x
+Hex Casting,Vector Reflection +Y,NORTH_WEST,qqqqqew,false,hexcasting,const/vec/py,makeConstantOp,→ vector,#patterns/consts@hexcasting:const/vec/y
+Hex Casting,Vector Reflection +Z,NORTH_WEST,qqqqqed,false,hexcasting,const/vec/pz,makeConstantOp,→ vector,#patterns/consts@hexcasting:const/vec/z
+Hex Casting,Vector Reflection -X,SOUTH_WEST,eeeeeqa,false,hexcasting,const/vec/nx,makeConstantOp,→ vector,#patterns/consts@hexcasting:const/vec/x
+Hex Casting,Vector Reflection -Y,SOUTH_WEST,eeeeeqw,false,hexcasting,const/vec/ny,makeConstantOp,→ vector,#patterns/consts@hexcasting:const/vec/y
+Hex Casting,Vector Reflection -Z,SOUTH_WEST,eeeeeqd,false,hexcasting,const/vec/nz,makeConstantOp,→ vector,#patterns/consts@hexcasting:const/vec/z
+Hex Casting,Vector Reflection Zero,NORTH_WEST,qqqqq,false,hexcasting,const/vec/0,makeConstantOp,→ vector,#patterns/consts@hexcasting:const/vec/0
+Hex Casting,Wayfind Sentinel,EAST,waeawaedwa,false,hexcasting,sentinel/wayfind,OpGetSentinelWayfind,vector → vector,#patterns/spells/sentinels@hexcasting:sentinel/wayfind
+Hex Casting,Waystone Reflection,SOUTH_WEST,eaqwqae,false,hexcasting,circle/impetus_pos,OpImpetusPos,→ vector,#patterns/circle@hexcasting:circle/impetus_pos
+Hex Casting,White Sun's Nadir,NORTH_WEST,qqqqqaqwawaw,false,hexcasting,potion/weakness,OpPotionEffect,"entity, number, number →",#patterns/spells/nadirs@hexcasting:potion/weakness
+Hex Casting,White Sun's Zenith,NORTH_WEST,qqqqaawawaedd,true,hexcasting,potion/regeneration,OpPotionEffect,"entity, number, number →",#patterns/great_spells/zeniths@hexcasting:potion/regeneration
+Hex Casting,Zone Distillation: Animal,SOUTH_EAST,qqqqqwdeddwa,false,hexcasting,zone_entity/animal,OpGetEntitiesBy,"vector, number → list",#patterns/entities@hexcasting:zone_entity/animal
+Hex Casting,Zone Distillation: Any,SOUTH_EAST,qqqqqwded,false,hexcasting,zone_entity,OpGetEntitiesBy,"vector, number → list",#patterns/entities@hexcasting:zone_entity
+Hex Casting,Zone Distillation: Item,SOUTH_EAST,qqqqqwdeddww,false,hexcasting,zone_entity/item,OpGetEntitiesBy,"vector, number → list",#patterns/entities@hexcasting:zone_entity/item
+Hex Casting,Zone Distillation: Living,SOUTH_EAST,qqqqqwdeddwd,false,hexcasting,zone_entity/living,OpGetEntitiesBy,"vector, number → list",#patterns/entities@hexcasting:zone_entity/living
+Hex Casting,Zone Distillation: Monster,SOUTH_EAST,qqqqqwdeddwq,false,hexcasting,zone_entity/monster,OpGetEntitiesBy,"vector, number → list",#patterns/entities@hexcasting:zone_entity/monster
+Hex Casting,Zone Distillation: Non-Animal,NORTH_EAST,eeeeewaqaawa,false,hexcasting,zone_entity/not_animal,OpGetEntitiesBy,"vector, number → list",#patterns/entities@hexcasting:zone_entity/not_animal
+Hex Casting,Zone Distillation: Non-Item,NORTH_EAST,eeeeewaqaaww,false,hexcasting,zone_entity/not_item,OpGetEntitiesBy,"vector, number → list",#patterns/entities@hexcasting:zone_entity/not_item
+Hex Casting,Zone Distillation: Non-Living,NORTH_EAST,eeeeewaqaawd,false,hexcasting,zone_entity/not_living,OpGetEntitiesBy,"vector, number → list",#patterns/entities@hexcasting:zone_entity/not_living
+Hex Casting,Zone Distillation: Non-Monster,NORTH_EAST,eeeeewaqaawq,false,hexcasting,zone_entity/not_monster,OpGetEntitiesBy,"vector, number → list",#patterns/entities@hexcasting:zone_entity/not_monster
+Hex Casting,Zone Distillation: Non-Player,NORTH_EAST,eeeeewaqaawe,false,hexcasting,zone_entity/not_player,OpGetEntitiesBy,"vector, number → list",#patterns/entities@hexcasting:zone_entity/not_player
+Hex Casting,Zone Distillation: Player,SOUTH_EAST,qqqqqwdeddwe,false,hexcasting,zone_entity/player,OpGetEntitiesBy,"vector, number → list",#patterns/entities@hexcasting:zone_entity/player
+HexKinetics,Alidade's Purification II,EAST,waa,false,hexkinetics,direction/const,OpRoundedEntityLook,entity → vector,#patterns/actions@hexkinetics:direction/const
+HexKinetics,Greater Translocation,SOUTH_EAST,eeqeeqeeeqeeqdeeqeqqwqqqeeqeqqwqq,false,hexkinetics,move_block/spell,OpMoveBlock,"vector, vector →",#patterns/great_spells/greater_translocation@hexkinetics:move_block/spell
+HexKinetics,Hadamard's Distillation,WEST,awaqawa,false,hexkinetics,hadamard/const,OpVectorComponentMultiplication,"vector, vector → vector",#patterns/math_actions@hexkinetics:hadamard/const
+HexKinetics,Imprecision Purification,SOUTH_EAST,aadeeaa,false,hexkinetics,round/const,OpRoundNumber,num/vec → num/vec,#patterns/math_actions@hexkinetics:round/const
+HexKinetics,Inertia Purification,EAST,daad,false,hexkinetics,is_gravity/const,OpGravityPurification,entity → bool,#patterns/actions@hexkinetics:is_gravity/const
+HexKinetics,Jockey Purification,SOUTH_EAST,qqdeeaedeaee,false,hexkinetics,get_rider/const,OpSecretTwo,entity → entity,#patterns/actions@hexkinetics:get_rider/const
+HexKinetics,Lesser Teleport,NORTH_EAST,edqdewqaeaq,false,hexkinetics,lesser_teleport/spell,OpLesserTeleport,"entity, vec/num →",#patterns/spells/spells@hexkinetics:lesser_teleport/spell
+HexKinetics,Momentum Swap,SOUTH_WEST,adaadaqedaddad,false,hexkinetics,swap/spell,OpMomentumSwap,"entity, entity →",#patterns/spells/spells@hexkinetics:swap/spell
+HexKinetics,Optician's Distillation,SOUTH_EAST,qqqqqdqqqqq,false,hexkinetics,reflection/const,OpVectorReflection,"vector, vector → vector",#patterns/math_actions@hexkinetics:reflection/const
+HexKinetics,Place Projectile,SOUTH_EAST,weeeweede,false,hexkinetics,projectile/spell,OpPlaceProjectile,vector →,#patterns/spells/spells@hexkinetics:projectile/spell
+HexKinetics,Propulsion,SOUTH_WEST,wqeqaaeeeweeeaaqeqqaaq,true,hexkinetics,fast/spell,OpAcceleration,"entity, number, vector →",#patterns/great_spells/great_spells@hexkinetics:fast/spell
+HexKinetics,Rotate,EAST,qqqadeeed,false,hexkinetics,rotate/spell,OpRotateSpell,"entity, vec →",#patterns/spells/rotate_spells@hexkinetics:rotate/spell
+HexKinetics,Rotate II,WEST,eeedaqqqa,false,hexkinetics,rotate_two/spell,OpRotateTwoSpell,"entity, vec →",#patterns/spells/rotate_spells@hexkinetics:rotate_two/spell
+HexKinetics,Rotate: Block,SOUTH_EAST,qqqqqaqqqwadeeed,false,hexkinetics,rotate_block/spell,OpRotateBlockSpell,"vector, vector →",#patterns/spells/rotate_spells@hexkinetics:rotate_block/spell
+HexKinetics,Shooter Purification,EAST,aadedade,false,hexkinetics,get_shooter/const,OpSecretThree,entity → entity,#patterns/actions@hexkinetics:get_shooter/const
+HexKinetics,Sniper's Distillation,EAST,weqaqded,false,hexkinetics,pixel/raycast,OpPixelRaycast,"vector, vector → vector",#patterns/actions@hexkinetics:pixel/raycast
+HexKinetics,Span Distillation,WEST,qaqeeqaq,false,hexkinetics,get_vec_from/const,OpGetVectorsFrom,"vector, vector → list",#patterns/math_actions@hexkinetics:get_vec_from/const
+HexKinetics,Sphere Distillation,SOUTH_EAST,qqqqqeddedq,false,hexkinetics,get_vec/const,OpGetVectorsBy,"vec, num → list",#patterns/math_actions@hexkinetics:get_vec/const
+HexKinetics,Twokai's Ideal Condition,SOUTH_WEST,wwqqqwadaadawqqqww,true,hexkinetics,zero_g/spell,OpZeroG,"entity, number →",#patterns/great_spells/great_spells@hexkinetics:zero_g/spell
+HexKinetics,Vehicle Purification,SOUTH_EAST,qqdeewee,false,hexkinetics,get_vehicle/const,OpSecret,entity → entity,#patterns/actions@hexkinetics:get_vehicle/const
+HexKinetics,Visibility Distillation,NORTH_WEST,aqadwawaw,false,hexkinetics,visibility/const,OpVisibilityDistillation,"entity, vector → bool",#patterns/actions@hexkinetics:visibility/const
+HexTweaks,Clerk's Abacus Purification,NORTH_EAST,qaqwaqeewaqaeaq,false,hextweaks,dict/size,OpDictSize,dict → num,#patterns/hextweaks_dict@hextweaks:dict/size
+HexTweaks,Clerk's Decomposition,NORTH_EAST,qaqwaqdwqqqwae,false,hextweaks,dict/break,OpDictBreak,"dict → [key],[any]",#patterns/hextweaks_dict@hextweaks:dict/break
+HexTweaks,Clerk's Decomposition II,NORTH_EAST,qaqwaqdwqqqwq,false,hextweaks,dict/break/single,OpDictBreakSingle,"dict → key,value",#patterns/hextweaks_dict@hextweaks:dict/break/single
+HexTweaks,Clerk's Distillation,NORTH_EAST,qaqwaqeqdweeew,false,hextweaks,dict/from,OpDictFrom,"[key],[any] → dict",#patterns/hextweaks_dict@hextweaks:dict/from
+HexTweaks,Clerk's Excisor's Distillation,NORTH_EAST,qaqwaqeqdd,false,hextweaks,dict/remove,OpDictRemove,"dict, key → dict",#patterns/hextweaks_dict@hextweaks:dict/remove
+HexTweaks,Clerk's Integration Exaltation,NORTH_EAST,qaqwaqdqedqde,false,hextweaks,dict/set,OpDictSet,"dict, key, any → dict",#patterns/hextweaks_dict@hextweaks:dict/set
+HexTweaks,Clerk's Surgeon's Exaltation,NORTH_EAST,qaqwaqdadeeed,false,hextweaks,dict/get,OpDictPop,"dict, key → dict, any",#patterns/hextweaks_dict@hextweaks:dict/get
+HexTweaks,Clerk's Thoths Gambit,NORTH_EAST,qaqwaqedadad,false,hextweaks,dict/thoths,OpDictThoths,"[patterns],dict → [any]",#patterns/hextweaks_dict@hextweaks:dict/thoths
+HexTweaks,Clerk's Vacant Reflection,NORTH_EAST,qaqwaq,false,hextweaks,dict/new,OpNewDict,→ dict,#patterns/hextweaks_dict@hextweaks:dict/new
+HexTweaks,Iterators Purification,NORTH_EAST,wdwaw,false,hextweaks,itter,OpItterator,Number → [Number],#patterns/hextweaks_utility@hextweaks:itter
+HexTweaks,Mass Mindflay,NORTH_EAST,qeqwqwqwqwqeqaeqeaqeqaeqaqdededwaqdedsde,false,hextweaks,grand/massbrainsweep,OpMassMindflay,"[Entity], any →",#patterns/grand_spells/massmindflay@hextweaks:grand/massbrainsweep
+HexTweaks,Nadir of Nausea,EAST,weed,false,hextweaks,nausea,OpPotionEffect,"entity, number, number →",#patterns/spells/naseua@hextweaks:nausea
+HexTweaks,Natural Search,WEST,wqqewawqwqedawdweewaeqwawdaqwdewawdadwawqwawdadwaw,true,hextweaks,craft/grandscroll,OpCraftGrandScroll,"Entity, Vec →",#patterns/great_spells/craftgrandscroll@hextweaks:craft/grandscroll
 HexTweaks,Progress Gambit,SOUTH_WEST,qqaw,false,hextweaks,page/right,OpPageFlip,,#patterns/hextweaks_utility@hextweaks:page/right
 HexTweaks,Regress Gambit,SOUTH_EAST,eedw,false,hextweaks,page/left,OpPageFlip,,#patterns/hextweaks_utility@hextweaks:page/left
-HexTweaks,Reroll Pattern,NORTH_EAST,qaqqqqwwawwqqeaddwwddas,false,hextweaks,grand/reroll,OpReroll,**__Entity__ →**,#patterns/grand_spells/reroll@hextweaks:grand/reroll
+HexTweaks,Reroll Pattern,NORTH_EAST,qaqqqqwwawwqqeaddwwddas,false,hextweaks,grand/reroll,OpReroll,Entity →,#patterns/grand_spells/reroll@hextweaks:grand/reroll
 HexTweaks,Suspicious Glyph,WEST,dewdeqwwedaqedwadweqewwd,true,hextweaks,suicide,OpSuicide,,#patterns/great_spells/suspicious_glyph@hextweaks:suicide
-Hexal,Accelerate,SOUTH_EAST,wwwdwdwwwawqqeqwqqwqeqwqq,true,hexal,tick,OpTick,**__vec__ →**,#patterns/great_spells/tick@hexal:tick
-Hexal,Allegiance Distillation,SOUTH_WEST,dwqqwdedwqqwddwww,false,hexal,wisp/owner,OpWispOwner,"**__entity, entity__ → __bool__**",#patterns/spells/wisps@hexal:wisp/owner
-Hexal,Bind Storage,NORTH_WEST,qaqwqaqwqaq,false,hexal,mote/storage/bind,OpBindStorage,**__vec__ →**,#patterns/spells/motes@hexal:mote/storage/bind
-Hexal,Bind Storage - Temporary,NORTH_EAST,edewedewede,false,hexal,mote/storage/bind/temp,OpBindStorage,**__vec__ →**,#patterns/spells/motes@hexal:mote/storage/bind/temp
-Hexal,Bind Wisp,SOUTH_WEST,aqweewqaeaqweewqaqwww,true,hexal,wisp/seon/set,OpSeonWispSet,**__entity__ →**,#patterns/great_spells/great_wisps@hexal:wisp/seon/set
-Hexal,Boxer's Purification,EAST,aeqqqqea,false,hexal,toughness,OpGetToughness,**__entity__ → __num__**,#patterns/hexal_basics@hexal:toughness
-Hexal,Brigh's Gambit,SOUTH_WEST,eweeewedww,false,hexal,everbook/toggle_macro,OpToggleMacro,**__pattern__ →**,#patterns/everbook@hexal:everbook/toggle_macro
-Hexal,Capacity Reflection,SOUTH_EAST,awedqdewa,false,hexal,mote/storage/remaining_capacity/get,OpGetStorageRemainingCapacity,**→ __int__**,#patterns/spells/motes@hexal:mote/storage/remaining_capacity/get
-Hexal,Classifier's Purification,SOUTH_WEST,awd,false,hexal,type/iota,OpTypeIota,**__any__ → __iotatype__**,#patterns/types@hexal:type/iota
+Hexal,Accelerate,SOUTH_EAST,wwwdwdwwwawqqeqwqqwqeqwqq,true,hexal,tick,OpTick,vec →,#patterns/great_spells/tick@hexal:tick
+Hexal,Allegiance Distillation,SOUTH_WEST,dwqqwdedwqqwddwww,false,hexal,wisp/owner,OpWispOwner,"entity, entity → bool",#patterns/spells/wisps@hexal:wisp/owner
+Hexal,Bind Storage,NORTH_WEST,qaqwqaqwqaq,false,hexal,mote/storage/bind,OpBindStorage,vec →,#patterns/spells/motes@hexal:mote/storage/bind
+Hexal,Bind Storage - Temporary,NORTH_EAST,edewedewede,false,hexal,mote/storage/bind/temp,OpBindStorage,vec →,#patterns/spells/motes@hexal:mote/storage/bind/temp
+Hexal,Bind Wisp,SOUTH_WEST,aqweewqaeaqweewqaqwww,true,hexal,wisp/seon/set,OpSeonWispSet,entity →,#patterns/great_spells/great_wisps@hexal:wisp/seon/set
+Hexal,Boxer's Purification,EAST,aeqqqqea,false,hexal,toughness,OpGetToughness,entity → num,#patterns/hexal_basics@hexal:toughness
+Hexal,Brigh's Gambit,SOUTH_WEST,eweeewedww,false,hexal,everbook/toggle_macro,OpToggleMacro,pattern →,#patterns/everbook@hexal:everbook/toggle_macro
+Hexal,Capacity Reflection,SOUTH_EAST,awedqdewa,false,hexal,mote/storage/remaining_capacity/get,OpGetStorageRemainingCapacity,→ int,#patterns/spells/motes@hexal:mote/storage/remaining_capacity/get
+Hexal,Classifier's Purification,SOUTH_WEST,awd,false,hexal,type/iota,OpTypeIota,any → iotatype,#patterns/types@hexal:type/iota
 Hexal,Close Transmit,EAST,ewaqawe,false,hexal,link/comm/close_transmit,OpCloseTransmit,,#patterns/spells/links@hexal:link/comm/close_transmit
-Hexal,Consume Wisp,NORTH_WEST,wawqwawwwewwwewwwawqwawwwewwwewdeaweewaqaweewaawwww,true,hexal,wisp/consume,OpConsumeWisp,**__entity__ →**,#patterns/great_spells/great_wisps@hexal:wisp/consume
-Hexal,Containment Distillation,NORTH_EAST,dwqaeaqwd,false,hexal,mote/storage/contains,OpStorageContains,"**__vec, (itemtype | mote)__ → __bool__**",#patterns/spells/motes@hexal:mote/storage/contains
-Hexal,Craft,SOUTH_EAST,wwawdedwawdewwdwaqawdwwedwawdedwaww,false,hexal,mote/craft,OpCraftMote,**__mote | [mote] | [[mote]]__ → __[mote]__**,#patterns/spells/motes@hexal:mote/craft
-Hexal,Delay Wisp,NORTH_WEST,aqawded,false,hexal,wisp/trigger/tick,OpWispSetTrigger,**__number__ →**,#patterns/spells/wisps@hexal:wisp/trigger/tick
-Hexal,Depot Gambit,SOUTH_EAST,eeeeedw,false,hexal,mote/storage/set,OpSetMoteStorage,"**__mote, vec__ → __mote__**",#patterns/spells/motes@hexal:mote/storage/set
-Hexal,Depot Purification,SOUTH_WEST,qqqqqaw,false,hexal,mote/storage/get,OpGetMoteStorage,**__mote__ → __vec__**,#patterns/spells/motes@hexal:mote/storage/get
-Hexal,Diver's Purification,NORTH_WEST,aqawdwaqawd,false,hexal,breath,OpGetBreath,**__entity__ → __num__**,#patterns/hexal_basics@hexal:breath
-Hexal,Elysium's Gambit,SOUTH_EAST,qwqqqwqaeaqaaw,false,hexal,everbook/write,OpEverbookWrite,"**__vector, pattern__ →**",#patterns/everbook@hexal:everbook/write
-Hexal,Entity Distillation: Type,NORTH_EAST,dadqqqqqdad,false,hexal,get_entity/type,OpGetEntityAtDyn,"**__entitytype, pos__ → __entity | null__**",#patterns/types@hexal:get_entity/type
-Hexal,Entity Purification: Wisp,SOUTH_EAST,qqwdedwqqdaqaaww,false,hexal,get_entity/wisp,OpGetEntityAt,**__vec__ → __entity | null__**,#patterns/spells/wisps@hexal:get_entity/wisp
-Hexal,Factorial Purification,SOUTH_EAST,wawdedwaw,false,hexal,factorial,OpFactorial,**__num__ → __num__**,#patterns/hexal_maths@hexal:factorial
-Hexal,Falling Block,EAST,wqwawqwqwqwqwqw,false,hexal,falling_block,OpFallingBlock,**__vec__ →**,#patterns/spells/hexal_spells@hexal:falling_block
-Hexal,Familiar's Reflection,EAST,daqweewqaeaqweewqaqwwww,false,hexal,wisp/seon/get,OpSeonWispGet,**→ __entity | null__**,#patterns/great_spells/great_wisps@hexal:wisp/seon/get
-Hexal,Freeze,WEST,weeeweedada,false,hexal,freeze,OpFreeze,**__vec__ →**,#patterns/spells/hexal_spells@hexal:freeze
-Hexal,Gate's Closing,WEST,qqqwwqqqwqqawdedw,false,hexal,gate/close,OpCloseGate,"**__gate | gate, vec__ →**",#patterns/great_spells/gates@hexal:gate/close
-Hexal,Gate's Dismissal,EAST,edeqqaq,false,hexal,gate/unmark,OpUnmarkGate,"**__gate, entity__ →**",#patterns/great_spells/gates@hexal:gate/unmark
-Hexal,Gate's Opening,WEST,qaqeede,false,hexal,gate/mark,OpMarkGate,"**__gate, entity__ →**",#patterns/great_spells/gates@hexal:gate/mark
-Hexal,Gate's Reflection,WEST,qwqwqwqwqwqqeaeaeaeaeae,true,hexal,gate/make,OpMakeGate,"**__null | vec | vec, entity__ → __gate__**",#patterns/great_spells/gates@hexal:gate/make
-Hexal,Haste,WEST,aeawqqqae,false,hexal,wisp/move/speed/set,OpMoveSpeedSet,**__num__ →**,#patterns/spells/wisps@hexal:wisp/move/speed/set
-Hexal,Identity Reflection,NORTH_EAST,dedwqqwdedwqqaw,false,hexal,wisp/self,OpWispSelf,**→ __entity__**,#patterns/spells/wisps@hexal:wisp/self
-Hexal,Lamplighter's Purification,NORTH_EAST,qedqde,false,hexal,light_level,OpGetLightLevel,**__vec__ → __num__**,#patterns/hexal_basics@hexal:light_level
-Hexal,Lethe's Gambit,SOUTH_EAST,qwqqqwqaww,false,hexal,everbook/delete,OpEverbookDelete,**__pattern__ →**,#patterns/everbook@hexal:everbook/delete
-Hexal,Link,EAST,eaqaaeqqqqqaweaqaaw,false,hexal,link,OpLink,**__linkable__ →**,#patterns/spells/links@hexal:link
-Hexal,Link Others,EAST,eqqqqqawqeeeeedww,false,hexal,link/others,OpLinkOthers,"**__linkable, linkable__ →**",#patterns/spells/links@hexal:link/others
+Hexal,Consume Wisp,NORTH_WEST,wawqwawwwewwwewwwawqwawwwewwwewdeaweewaqaweewaawwww,true,hexal,wisp/consume,OpConsumeWisp,entity →,#patterns/great_spells/great_wisps@hexal:wisp/consume
+Hexal,Containment Distillation,NORTH_EAST,dwqaeaqwd,false,hexal,mote/storage/contains,OpStorageContains,"vec, (itemtype | mote) → bool",#patterns/spells/motes@hexal:mote/storage/contains
+Hexal,Craft,SOUTH_EAST,wwawdedwawdewwdwaqawdwwedwawdedwaww,false,hexal,mote/craft,OpCraftMote,mote | [mote] | [[mote]] → [mote],#patterns/spells/motes@hexal:mote/craft
+Hexal,Delay Wisp,NORTH_WEST,aqawded,false,hexal,wisp/trigger/tick,OpWispSetTrigger,number →,#patterns/spells/wisps@hexal:wisp/trigger/tick
+Hexal,Depot Gambit,SOUTH_EAST,eeeeedw,false,hexal,mote/storage/set,OpSetMoteStorage,"mote, vec → mote",#patterns/spells/motes@hexal:mote/storage/set
+Hexal,Depot Purification,SOUTH_WEST,qqqqqaw,false,hexal,mote/storage/get,OpGetMoteStorage,mote → vec,#patterns/spells/motes@hexal:mote/storage/get
+Hexal,Diver's Purification,NORTH_WEST,aqawdwaqawd,false,hexal,breath,OpGetBreath,entity → num,#patterns/hexal_basics@hexal:breath
+Hexal,Elysium's Gambit,SOUTH_EAST,qwqqqwqaeaqaaw,false,hexal,everbook/write,OpEverbookWrite,"vector, pattern →",#patterns/everbook@hexal:everbook/write
+Hexal,Entity Distillation: Type,NORTH_EAST,dadqqqqqdad,false,hexal,get_entity/type,OpGetEntityAtDyn,"entitytype, pos → entity | null",#patterns/types@hexal:get_entity/type
+Hexal,Entity Purification: Wisp,SOUTH_EAST,qqwdedwqqdaqaaww,false,hexal,get_entity/wisp,OpGetEntityAt,vec → entity | null,#patterns/spells/wisps@hexal:get_entity/wisp
+Hexal,Factorial Purification,SOUTH_EAST,wawdedwaw,false,hexal,factorial,OpFactorial,num → num,#patterns/hexal_maths@hexal:factorial
+Hexal,Falling Block,EAST,wqwawqwqwqwqwqw,false,hexal,falling_block,OpFallingBlock,vec →,#patterns/spells/hexal_spells@hexal:falling_block
+Hexal,Familiar's Reflection,EAST,daqweewqaeaqweewqaqwwww,false,hexal,wisp/seon/get,OpSeonWispGet,→ entity | null,#patterns/great_spells/great_wisps@hexal:wisp/seon/get
+Hexal,Freeze,WEST,weeeweedada,false,hexal,freeze,OpFreeze,vec →,#patterns/spells/hexal_spells@hexal:freeze
+Hexal,Gate's Closing,WEST,qqqwwqqqwqqawdedw,false,hexal,gate/close,OpCloseGate,"gate | gate, vec →",#patterns/great_spells/gates@hexal:gate/close
+Hexal,Gate's Dismissal,EAST,edeqqaq,false,hexal,gate/unmark,OpUnmarkGate,"gate, entity →",#patterns/great_spells/gates@hexal:gate/unmark
+Hexal,Gate's Opening,WEST,qaqeede,false,hexal,gate/mark,OpMarkGate,"gate, entity →",#patterns/great_spells/gates@hexal:gate/mark
+Hexal,Gate's Reflection,WEST,qwqwqwqwqwqqeaeaeaeaeae,true,hexal,gate/make,OpMakeGate,"null | vec | vec, entity → gate",#patterns/great_spells/gates@hexal:gate/make
+Hexal,Haste,WEST,aeawqqqae,false,hexal,wisp/move/speed/set,OpMoveSpeedSet,num →,#patterns/spells/wisps@hexal:wisp/move/speed/set
+Hexal,Identity Reflection,NORTH_EAST,dedwqqwdedwqqaw,false,hexal,wisp/self,OpWispSelf,→ entity,#patterns/spells/wisps@hexal:wisp/self
+Hexal,Lamplighter's Purification,NORTH_EAST,qedqde,false,hexal,light_level,OpGetLightLevel,vec → num,#patterns/hexal_basics@hexal:light_level
+Hexal,Lethe's Gambit,SOUTH_EAST,qwqqqwqaww,false,hexal,everbook/delete,OpEverbookDelete,pattern →,#patterns/everbook@hexal:everbook/delete
+Hexal,Link,EAST,eaqaaeqqqqqaweaqaaw,false,hexal,link,OpLink,linkable →,#patterns/spells/links@hexal:link
+Hexal,Link Others,EAST,eqqqqqawqeeeeedww,false,hexal,link/others,OpLinkOthers,"linkable, linkable →",#patterns/spells/links@hexal:link/others
 Hexal,Listen,EAST,aqqqqqwdeddw,false,hexal,wisp/trigger/comm,OpWispSetTrigger,,#patterns/spells/wisps@hexal:wisp/trigger/comm
-Hexal,Manager's Purification,SOUTH_EAST,aweewaqaweewaawww,false,hexal,wisp/hex,OpWispHex,**__entity__ → __[pattern]__**,#patterns/spells/wisps@hexal:wisp/hex
-Hexal,Marked Distillation,EAST,edwwdeeede,false,hexal,gate/mark/get,OpGetMarkedGate,"**__gate, entity__ → __bool__**",#patterns/great_spells/gates@hexal:gate/mark/get
-Hexal,Marked Purification,WEST,qawwaqqqaq,false,hexal,gate/mark/num/get,OpGetNumMarkedGate,**__gate__ → __num__**,#patterns/great_spells/gates@hexal:gate/mark/num/get
-Hexal,Mediafy Item,WEST,eaqa,false,hexal,mote/make,OpMakeItem,"**__item | item, mote__ → __mote__**",#patterns/spells/motes@hexal:mote/make
-Hexal,Mnemosyne's Gambit,NORTH_EAST,eweeewedqdeddw,false,hexal,everbook/read,OpEverbookRead,"**__vector, pattern__ →**",#patterns/everbook@hexal:everbook/read
-Hexal,Nurse's Purification,NORTH_WEST,aqwawqa,false,hexal,health,OpGetHealth,**__entity__ → __num__**,#patterns/hexal_basics@hexal:health
-Hexal,Offering Purification,SOUTH_EAST,awdedwaawwqded,false,hexal,mote/trade/get,OpGetItemTrades,**__villager__ → __[complicated!]__**,#patterns/spells/motes@hexal:mote/trade/get
-Hexal,Open Transmit,WEST,qwdedwq,false,hexal,link/comm/open_transmit,OpOpenTransmit,**__num__ →**,#patterns/spells/links@hexal:link/comm/open_transmit
-Hexal,Particles,NORTH_EAST,eqqqqa,false,hexal,particles,OpParticles,**__vec | [vec]__ →**,#patterns/spells/hexal_spells@hexal:particles
-Hexal,Pathfinder's Gambit,WEST,awqwawqaw,false,hexal,wisp/move/target/set,OpMoveTargetSet,**__vec__ →**,#patterns/spells/wisps@hexal:wisp/move/target/set
-Hexal,Pathfinder's Reflection,EAST,ewdwewdew,false,hexal,wisp/move/target/get,OpMoveTargetGet,**→ __vec__**,#patterns/spells/wisps@hexal:wisp/move/target/get
-Hexal,Phase Block,WEST,daqqqa,false,hexal,interop/fabric_only/phase_block,OpPhaseBlock,"**__vec, num__ →**",#interop/fabric_only_hexal@hexal:interop/fabric_only/phase_block
-Hexal,Phonebook Purification,EAST,eqqqqqaww,false,hexal,link/get,OpGetLinked,**__num__ → __linkable__**,#patterns/spells/links@hexal:link/get
-Hexal,Physician's Purification,SOUTH_WEST,qawde,false,hexal,type/entity,OpTypeEntity,**__entity__ → __entitytype__**,#patterns/types@hexal:type/entity
-Hexal,Place Block II,WEST,eeeeedeeeee,false,hexal,place_type,OpPlaceType,"**__(itemtype | mote), vec__ →**",#patterns/spells/hexal_spells@hexal:place_type
-Hexal,Popularity Reflection,WEST,qeeeeedww,false,hexal,link/num,OpNumLinked,**→ __num__**,#patterns/spells/links@hexal:link/num
-Hexal,Postmaster's Reflection,SOUTH_EAST,aweeeeewaa,false,hexal,link/comm/num,OpNumReceivedIota,**→ __num__**,#patterns/spells/links@hexal:link/comm/num
-Hexal,Recitation Reflection,NORTH_EAST,weeeeew,false,hexal,link/comm/read,OpReadReceivedIota,**→ __any__**,#patterns/spells/links@hexal:link/comm/read
-Hexal,Recognition Purification,SOUTH_WEST,aeqqqqqawwd,false,hexal,link/get_index,OpGetLinkedIndex,**__linkable__ → __num__**,#patterns/spells/links@hexal:link/get_index
-Hexal,Reservoir Reflection,NORTH_WEST,aqaweewaqaweedw,false,hexal,wisp/media,OpWispMedia,**→ __num__**,#patterns/spells/wisps@hexal:wisp/media
-Hexal,Return Item,EAST,qded,false,hexal,mote/return,OpReturnMote,"**__mote, vec | mote, vec, num__ →**",#patterns/spells/motes@hexal:mote/return
-Hexal,Running Product Purification,NORTH_EAST,qaawaaq,false,hexal,running/mul,OpRunningOp,**__[num]__ → __[num]__**,#patterns/hexal_maths@hexal:running/mul
-Hexal,Running Sum Purification,WEST,aea,false,hexal,running/sum,OpRunningOp,**__[num]__ → __[num]__**,#patterns/hexal_maths@hexal:running/sum
-Hexal,Send Iota,NORTH_WEST,qqqqqwdeddw,false,hexal,link/comm/send,OpSendIota,"**__num, any__ →**",#patterns/spells/links@hexal:link/comm/send
-Hexal,Seniority Purification,NORTH_WEST,qqwdedwqqaww,false,hexal,mote/villager/level/get,OpGetVillagerLevel,**__villager__ → __int__**,#patterns/spells/motes@hexal:mote/villager/level/get
-Hexal,Smelt,EAST,wqqqwqqadad,false,hexal,smelt,OpSmelt,**__vec | entity | mote__ →**,#patterns/spells/hexal_spells@hexal:smelt
-Hexal,Sorter's Purification,EAST,qaqqaea,false,hexal,type/block_item,OpTypeBlockItem,**__itemtypable__ → __itemtype__**,#patterns/types@hexal:type/block_item
-Hexal,Sorter's Reflection,SOUTH_WEST,edeedqd,false,hexal,type/item_held,OpTypeItemHeld,**→ __itemtype__**,#patterns/types@hexal:type/item_held
-Hexal,Speedometer's Reflection,EAST,eeewdqdee,false,hexal,wisp/move/speed/get,OpMoveSpeedGet,**→ __num__**,#patterns/spells/wisps@hexal:wisp/move/speed/get
-Hexal,Splitting Gambit,EAST,eaqaaw,false,hexal,mote/split,OpSplitMote,"**__mote, int__ → __mote, mote__**",#patterns/spells/motes@hexal:mote/split
-Hexal,Squire's Purification,NORTH_WEST,wqqqqw,false,hexal,armour,OpGetArmour,**__entity__ → __num__**,#patterns/hexal_basics@hexal:armour
-Hexal,Stacking Distillation,NORTH_WEST,aqaeqded,false,hexal,mote/combine,OpCombineMotes,"**__mote, mote__ → __mote__**",#patterns/spells/motes@hexal:mote/combine
-Hexal,Stacking Distillation II,SOUTH_WEST,dedqeaqa,false,hexal,mote/combinable,OpMotesCombinable,"**__mote, (mote | item)__ → __bool__**",#patterns/spells/motes@hexal:mote/combinable
-Hexal,Stocktake Purification,SOUTH_EAST,aweeeeewaaww,false,hexal,mote/contained/get,OpGetContainedMotes,**__mote | itemtype__ → __[mote]__**,#patterns/spells/motes@hexal:mote/contained/get
-Hexal,Stocktake Reflection,NORTH_EAST,dwqqqqqwddww,false,hexal,mote/contained_type/get,OpGetContainedItemTypes,**→ __[itemtype]__**,#patterns/spells/motes@hexal:mote/contained_type/get
-Hexal,Summon Cyclic Wisp,NORTH_WEST,aqaweewaqawee,false,hexal,wisp/summon/ticking,OpSummonWisp,"**__[pattern], vec, number__ →**",#patterns/spells/wisps@hexal:wisp/summon/ticking
-Hexal,Summon Projectile Wisp,NORTH_WEST,aqaeqeeeee,false,hexal,wisp/summon/projectile,OpSummonWisp,"**__[pattern], vec, vec, number__ →**",#patterns/spells/wisps@hexal:wisp/summon/projectile
-Hexal,Thanatos' Reflection,SOUTH_EAST,qqaed,false,hexal,remaining_evals,OpRemainingEvals,**→ __number__**,#patterns/hexal_basics@hexal:remaining_evals
-Hexal,Timekeeper's Reflection,NORTH_WEST,ddwaa,false,hexal,current_tick,OpCurrentTick,**→ __number__**,#patterns/hexal_basics@hexal:current_tick
-Hexal,Trade,NORTH_WEST,awdedwaeqded,false,hexal,mote/trade,OpTradeMote,"**__villager, [mote], int?__ → __item__**",#patterns/spells/motes@hexal:mote/trade
+Hexal,Manager's Purification,SOUTH_EAST,aweewaqaweewaawww,false,hexal,wisp/hex,OpWispHex,entity → [pattern],#patterns/spells/wisps@hexal:wisp/hex
+Hexal,Marked Distillation,EAST,edwwdeeede,false,hexal,gate/mark/get,OpGetMarkedGate,"gate, entity → bool",#patterns/great_spells/gates@hexal:gate/mark/get
+Hexal,Marked Purification,WEST,qawwaqqqaq,false,hexal,gate/mark/num/get,OpGetNumMarkedGate,gate → num,#patterns/great_spells/gates@hexal:gate/mark/num/get
+Hexal,Mediafy Item,WEST,eaqa,false,hexal,mote/make,OpMakeItem,"item | item, mote → mote",#patterns/spells/motes@hexal:mote/make
+Hexal,Mnemosyne's Gambit,NORTH_EAST,eweeewedqdeddw,false,hexal,everbook/read,OpEverbookRead,"vector, pattern →",#patterns/everbook@hexal:everbook/read
+Hexal,Nurse's Purification,NORTH_WEST,aqwawqa,false,hexal,health,OpGetHealth,entity → num,#patterns/hexal_basics@hexal:health
+Hexal,Offering Purification,SOUTH_EAST,awdedwaawwqded,false,hexal,mote/trade/get,OpGetItemTrades,villager → [complicated!],#patterns/spells/motes@hexal:mote/trade/get
+Hexal,Open Transmit,WEST,qwdedwq,false,hexal,link/comm/open_transmit,OpOpenTransmit,num →,#patterns/spells/links@hexal:link/comm/open_transmit
+Hexal,Particles,NORTH_EAST,eqqqqa,false,hexal,particles,OpParticles,vec | [vec] →,#patterns/spells/hexal_spells@hexal:particles
+Hexal,Pathfinder's Gambit,WEST,awqwawqaw,false,hexal,wisp/move/target/set,OpMoveTargetSet,vec →,#patterns/spells/wisps@hexal:wisp/move/target/set
+Hexal,Pathfinder's Reflection,EAST,ewdwewdew,false,hexal,wisp/move/target/get,OpMoveTargetGet,→ vec,#patterns/spells/wisps@hexal:wisp/move/target/get
+Hexal,Phase Block,WEST,daqqqa,false,hexal,interop/fabric_only/phase_block,OpPhaseBlock,"vec, num →",#interop/fabric_only_hexal@hexal:interop/fabric_only/phase_block
+Hexal,Phonebook Purification,EAST,eqqqqqaww,false,hexal,link/get,OpGetLinked,num → linkable,#patterns/spells/links@hexal:link/get
+Hexal,Physician's Purification,SOUTH_WEST,qawde,false,hexal,type/entity,OpTypeEntity,entity → entitytype,#patterns/types@hexal:type/entity
+Hexal,Place Block II,WEST,eeeeedeeeee,false,hexal,place_type,OpPlaceType,"(itemtype | mote), vec →",#patterns/spells/hexal_spells@hexal:place_type
+Hexal,Popularity Reflection,WEST,qeeeeedww,false,hexal,link/num,OpNumLinked,→ num,#patterns/spells/links@hexal:link/num
+Hexal,Postmaster's Reflection,SOUTH_EAST,aweeeeewaa,false,hexal,link/comm/num,OpNumReceivedIota,→ num,#patterns/spells/links@hexal:link/comm/num
+Hexal,Recitation Reflection,NORTH_EAST,weeeeew,false,hexal,link/comm/read,OpReadReceivedIota,→ any,#patterns/spells/links@hexal:link/comm/read
+Hexal,Recognition Purification,SOUTH_WEST,aeqqqqqawwd,false,hexal,link/get_index,OpGetLinkedIndex,linkable → num,#patterns/spells/links@hexal:link/get_index
+Hexal,Reservoir Reflection,NORTH_WEST,aqaweewaqaweedw,false,hexal,wisp/media,OpWispMedia,→ num,#patterns/spells/wisps@hexal:wisp/media
+Hexal,Return Item,EAST,qded,false,hexal,mote/return,OpReturnMote,"mote, vec | mote, vec, num →",#patterns/spells/motes@hexal:mote/return
+Hexal,Running Product Purification,NORTH_EAST,qaawaaq,false,hexal,running/mul,OpRunningOp,[num] → [num],#patterns/hexal_maths@hexal:running/mul
+Hexal,Running Sum Purification,WEST,aea,false,hexal,running/sum,OpRunningOp,[num] → [num],#patterns/hexal_maths@hexal:running/sum
+Hexal,Send Iota,NORTH_WEST,qqqqqwdeddw,false,hexal,link/comm/send,OpSendIota,"num, any →",#patterns/spells/links@hexal:link/comm/send
+Hexal,Seniority Purification,NORTH_WEST,qqwdedwqqaww,false,hexal,mote/villager/level/get,OpGetVillagerLevel,villager → int,#patterns/spells/motes@hexal:mote/villager/level/get
+Hexal,Smelt,EAST,wqqqwqqadad,false,hexal,smelt,OpSmelt,vec | entity | mote →,#patterns/spells/hexal_spells@hexal:smelt
+Hexal,Sorter's Purification,EAST,qaqqaea,false,hexal,type/block_item,OpTypeBlockItem,itemtypable → itemtype,#patterns/types@hexal:type/block_item
+Hexal,Sorter's Reflection,SOUTH_WEST,edeedqd,false,hexal,type/item_held,OpTypeItemHeld,→ itemtype,#patterns/types@hexal:type/item_held
+Hexal,Speedometer's Reflection,EAST,eeewdqdee,false,hexal,wisp/move/speed/get,OpMoveSpeedGet,→ num,#patterns/spells/wisps@hexal:wisp/move/speed/get
+Hexal,Splitting Gambit,EAST,eaqaaw,false,hexal,mote/split,OpSplitMote,"mote, int → mote, mote",#patterns/spells/motes@hexal:mote/split
+Hexal,Squire's Purification,NORTH_WEST,wqqqqw,false,hexal,armour,OpGetArmour,entity → num,#patterns/hexal_basics@hexal:armour
+Hexal,Stacking Distillation,NORTH_WEST,aqaeqded,false,hexal,mote/combine,OpCombineMotes,"mote, mote → mote",#patterns/spells/motes@hexal:mote/combine
+Hexal,Stacking Distillation II,SOUTH_WEST,dedqeaqa,false,hexal,mote/combinable,OpMotesCombinable,"mote, (mote | item) → bool",#patterns/spells/motes@hexal:mote/combinable
+Hexal,Stocktake Purification,SOUTH_EAST,aweeeeewaaww,false,hexal,mote/contained/get,OpGetContainedMotes,mote | itemtype → [mote],#patterns/spells/motes@hexal:mote/contained/get
+Hexal,Stocktake Reflection,NORTH_EAST,dwqqqqqwddww,false,hexal,mote/contained_type/get,OpGetContainedItemTypes,→ [itemtype],#patterns/spells/motes@hexal:mote/contained_type/get
+Hexal,Summon Cyclic Wisp,NORTH_WEST,aqaweewaqawee,false,hexal,wisp/summon/ticking,OpSummonWisp,"[pattern], vec, number →",#patterns/spells/wisps@hexal:wisp/summon/ticking
+Hexal,Summon Projectile Wisp,NORTH_WEST,aqaeqeeeee,false,hexal,wisp/summon/projectile,OpSummonWisp,"[pattern], vec, vec, number →",#patterns/spells/wisps@hexal:wisp/summon/projectile
+Hexal,Thanatos' Reflection,SOUTH_EAST,qqaed,false,hexal,remaining_evals,OpRemainingEvals,→ number,#patterns/hexal_basics@hexal:remaining_evals
+Hexal,Timekeeper's Reflection,NORTH_WEST,ddwaa,false,hexal,current_tick,OpCurrentTick,→ number,#patterns/hexal_basics@hexal:current_tick
+Hexal,Trade,NORTH_WEST,awdedwaeqded,false,hexal,mote/trade,OpTradeMote,"villager, [mote], int? → item",#patterns/spells/motes@hexal:mote/trade
 Hexal,Unclogging Gambit,SOUTH_EAST,aweeeeewa,false,hexal,link/comm/clear,OpClearReceivedIotas,,#patterns/spells/links@hexal:link/comm/clear
-Hexal,Unlink,WEST,qdeddqeeeeedwqdeddw,false,hexal,link/unlink,OpUnlink,**__num__ →**,#patterns/spells/links@hexal:link/unlink
-Hexal,Use Item On,EAST,qqqwqqqqaa,false,hexal,mote/use_on,OpUseMoteOn,"**__mote, (entity | vec, vec)__ →**",#patterns/spells/motes@hexal:mote/use_on
+Hexal,Unlink,WEST,qdeddqeeeeedwqdeddw,false,hexal,link/unlink,OpUnlink,num →,#patterns/spells/links@hexal:link/unlink
+Hexal,Use Item On,EAST,qqqwqqqqaa,false,hexal,mote/use_on,OpUseMoteOn,"mote, (entity | vec, vec) →",#patterns/spells/motes@hexal:mote/use_on
 Hexal,Wander,EAST,eqwawqwaqww,false,hexal,wisp/trigger/move,OpWispSetTrigger,,#patterns/spells/wisps@hexal:wisp/trigger/move
-Hexal,Weighing Purification,NORTH_WEST,qqqqwqqqqqaa,false,hexal,mote/count/get,OpGetCountMote,**__mote__ → __int__**,#patterns/spells/motes@hexal:mote/count/get
-Hexal,Zone Distillation: Non-Wisp,NORTH_EAST,eewaqaweewaqaaww,false,hexal,zone_entity/not_wisp,OpGetEntitiesBy,"**__vec, num__ → __[entity]__**",#patterns/spells/wisps@hexal:zone_entity/not_wisp
-Hexal,Zone Distillation: Wisp,SOUTH_EAST,qqwdedwqqwdeddww,false,hexal,zone_entity/wisp,OpGetEntitiesBy,"**__vec, num__ → __[entity]__**",#patterns/spells/wisps@hexal:zone_entity/wisp
-Hexal,Zone Exaltation: Not-Type,NORTH_EAST,wdwqqqqqwdw,false,hexal,zone_entity/not_type,OpGetEntitiesByDyn,"**__entitytype, pos, num__ → __[entity]__**",#patterns/types@hexal:zone_entity/not_type
-Hexal,Zone Exaltation: Type,SOUTH_EAST,waweeeeewaw,false,hexal,zone_entity/type,OpGetEntitiesByDyn,"**__entitytype, pos, num__ → __[entity]__**",#patterns/types@hexal:zone_entity/type
-Hexbound,Artificer's Gambit,EAST,wqaawddewdwewewewewew,false,hexbound,bind_construct,OpBindConstruct,**__pattern | entity | null__ →**,#patterns/constructs/bind_broadcast@hexbound:bind_construct
-Hexbound,Automaton's Reflection,EAST,qaawedee,false,hexbound,construct_get_self,OpConstructGetSelf,**→ __entity__**,#patterns/constructs/constructs_intro@hexbound:construct_get_self
-Hexbound,Bind Figment,NORTH_EAST,qaqdaqwqaeedewd,true,hexbound,set_fake_impetus_player,OpSetImpetusFakePlayer,**__vector__ →**,#patterns/great_spells/impetus_fake_player@hexbound:set_fake_impetus_player
-Hexbound,Broadcast Instructions,SOUTH_EAST,qqaaqqqqwq,false,hexbound,instructions/broadcast,OpBroadcastInstructions,"**__vector, [pattern]__ →**",#patterns/constructs/bind_broadcast@hexbound:instructions/broadcast
-Hexbound,Collector's Distillation,NORTH_EAST,dewqa,false,hexbound,get_inventory/items,OpGetInventoryContents,"**__vector, vector__ → __list__**",#patterns/item_patterns@hexbound:get_inventory/items
-Hexbound,Command: Drop Item,EAST,qaaqdwdw,false,hexbound,give_command/drop_off,OpGiveCommandDropOff,**__[pattern]__ →**,#patterns/constructs/executing_commands@hexbound:give_command/drop_off
-Hexbound,Command: Harvest,EAST,qaaqqedwed,false,hexbound,give_command/harvest,OpGiveCommandHarvest,"**__vector, [pattern]__ →**",#patterns/constructs/executing_commands@hexbound:give_command/harvest
-Hexbound,Command: Move To Position,EAST,qaaqwdaqqqa,false,hexbound,give_command/move_to,OpGiveCommandMoveTo,"**__vector, [pattern]__ →**",#patterns/constructs/executing_commands@hexbound:give_command/move_to
-Hexbound,Command: Pick Up Item,EAST,eddeawaw,false,hexbound,give_command/pick_up,OpGiveCommandPickUp,"**__entity, [pattern]__ →**",#patterns/constructs/executing_commands@hexbound:give_command/pick_up
-Hexbound,Command: Use On Block,EAST,qaaqdee,false,hexbound,give_command/use/block,OpGiveCommandUseOnBlock,"**__vector, vector, [pattern]__ →**",#patterns/constructs/executing_commands@hexbound:give_command/use/block
-Hexbound,Create Spider Construct,SOUTH_WEST,wqwqwwqwqwqwwaeqaqdwdqaqe,false,hexbound,create_construct/spider,OpCreateSpiderConstruct,"**__entity, entity, entity__ →**",#patterns/constructs/spider_construct@hexbound:create_construct/spider
-Hexbound,Duelist's Purification,EAST,adeq,false,hexbound,get_main_hand,OpGetHeldItem,**__entity__ → __item stack__**,#patterns/item_patterns@hexbound:get_main_hand
-Hexbound,Ending Distillation,WEST,weeee,false,hexbound,pattern/tail,OpPatternTail,"**__pattern, num__ → __pattern__**",#patterns/pattern_editing@hexbound:pattern/tail
-Hexbound,Entity Purification: Construct,SOUTH_EAST,qqqqqdaqaawedde,false,hexbound,get_entity/construct,OpGetEntityAt,**__vector__ → __entity or null__**,#patterns/constructs/selecting_constructs@hexbound:get_entity/construct
-Hexbound,Forget Pigment,NORTH_EAST,wqwawqqawddwqwdd,false,hexbound,colorizer/delete,OpColorizerDelete,**__pattern__ →**,#patterns/spells/colorizer_storage@hexbound:colorizer/delete
-Hexbound,Fragment's Purification,WEST,eqqqq,false,hexbound,pattern/line_count,OpPatternLineCount,**__pattern__ → __num__**,#patterns/pattern_editing@hexbound:pattern/line_count
-Hexbound,Hex Shield,NORTH_EAST,eweeewe,false,hexbound,create_shield/normal,OpCreateShield,"**__vec, vec, num__ →**",#patterns/spells/shield@hexbound:colorizer/normal
-Hexbound,Hoarder's Distillation,NORTH_EAST,aqwed,false,hexbound,get_inventory/stacks,OpGetInventoryContents,"**__vector, vector__ → __list__**",#patterns/item_patterns@hexbound:get_inventory/stacks
-Hexbound,Logistician's Purification,WEST,dedqaa,false,hexbound,get_stack_prop/item,OpGetStackItem,**__item stack__ → __item__**,#patterns/item_patterns@hexbound:get_stack_prop/item
-Hexbound,Memorize Pigment,NORTH_EAST,wqwawqqawddwqwede,false,hexbound,colorizer/save,OpColorizerSave,**__pattern__ →**,#patterns/spells/colorizer_storage@hexbound:colorizer/save
-Hexbound,Painter's Distillation,NORTH_WEST,aqqqqa,false,hexbound,pattern/merge,OpMergePatterns,"**__pattern, pattern__ → __pattern__**",#patterns/pattern_editing@hexbound:pattern/merge
-Hexbound,Recall Pigment,NORTH_EAST,wqwawqqawddwqeqaq,false,hexbound,colorizer/load,OpColorizerLoad,**__pattern__ →**,#patterns/spells/colorizer_storage@hexbound:colorizer/load
-Hexbound,Revolving Distillation,WEST,deeee,false,hexbound,pattern/rotate,OpRotatePattern,"**__pattern, num__ → __pattern__**",#patterns/pattern_editing@hexbound:pattern/rotate
-Hexbound,Send Instructions,EAST,qaaq,false,hexbound,instructions/send,OpSendInstructions,"**__entity, [pattern]__ →**",#patterns/constructs/constructs_intro@hexbound:instructions/send
-Hexbound,Shieldbearer's Purification,EAST,qeda,false,hexbound,get_off_hand,OpGetHeldItem,**__entity__ → __item stack__**,#patterns/item_patterns@hexbound:get_off_hand
-Hexbound,Starting Distillation,EAST,wqqqq,false,hexbound,pattern/head,OpPatternHead,"**__pattern, num__ → __pattern__**",#patterns/pattern_editing@hexbound:pattern/head
-Hexbound,Treasurer's Purification,WEST,dedqaq,false,hexbound,get_stack_prop/size,OpGetStackSize,**__item stack__ → __num__**,#patterns/item_patterns@hexbound:get_stack_prop/size
-Hexbound,Unstable Hex Shield,NORTH_EAST,eqdweeqdw,false,hexbound,create_shield/glitchy,OpCreateShield,"**__vec, vec, num__ →**",#patterns/spells/shield@hexbound:create_shield/glitchy
-Hexbound,Winding Purification,WEST,qeeee,false,hexbound,pattern/start_dir,OpPatternStartDir,**__pattern__ → __num__**,#patterns/pattern_editing@hexbound:pattern/start_dir
-Hexbound,Zone Distillation: Construct,SOUTH_EAST,qqqqqwdeddwedde,false,hexbound,zone_entity/construct,OpGetEntitiesBy,"**__vector, number__ → __list__**",#patterns/constructs/selecting_constructs@hexbound:zone_entity/construct
-Hexbound,Zone Distillation: Non-Construct,SOUTH_EAST,eeeeewaqaawedde,false,hexbound,zone_entity/not_construct,OpGetEntitiesBy,"**__vector, number__ → __list__**",#patterns/constructs/selecting_constructs@hexbound:zone_entity/not_construct
-MoreIotas,Addition Distillation: Matrix,EAST,waawawaeawwaea,false,moreiotas,matrix/add,OpAddMatrix,"**__mat, mat__ → __mat__**",#patterns/matrices@moreiotas:matrix/add
-MoreIotas,Blank Reflection,SOUTH_EAST,awdwa,false,moreiotas,string/empty,makeConstantOp,**→ __str__**,#patterns/strings@moreiotas:string/empty
-MoreIotas,Breaking Reflection,EAST,waawaw,false,moreiotas,string/newline,makeConstantOp,**→ __str__**,#patterns/strings@moreiotas:string/newline
-MoreIotas,Case Distillation,WEST,dwwdwwdwdd,false,moreiotas,string/case,OpCaseString,"**__str, bool | null__ → __str__**",#patterns/strings@moreiotas:string/case
-MoreIotas,Comma Reflection,EAST,qa,false,moreiotas,string/comma,makeConstantOp,**→ __str__**,#patterns/strings@moreiotas:string/comma
-MoreIotas,Concatenation Distillation,NORTH_EAST,waawaqwawqq,false,moreiotas,string/add,OpAddStrings,"**__str, str__ → __str__**",#patterns/strings@moreiotas:string/add
-MoreIotas,Determinant Purification,WEST,aeawwaeawaw,false,moreiotas,matrix/determinant,OpDeterminantMatrix,**__mat__ → __num__**,#patterns/matrices@moreiotas:matrix/determinant
-MoreIotas,Discoverer's Distillation,EAST,waqwwaqa,false,moreiotas,string/find,OpFindString,"**__str, str__ → __num__**",#patterns/strings@moreiotas:string/find
-MoreIotas,Identity Purification,SOUTH_WEST,awwaeawwaqw,false,moreiotas,matrix/identity,OpIdentityMatrix,**__int ≥ 0__ → __mat__**,#patterns/matrices@moreiotas:matrix/identity
-MoreIotas,Input Purification,EAST,aqwaq,false,moreiotas,string/parse,OpParseString,**__str__ → __num | null__**,#patterns/strings@moreiotas:string/parse
-MoreIotas,Inverse Purification,WEST,wwdqdwwdqaq,false,moreiotas,matrix/inverse,OpInverseMatrix,**__mat__ → __mat__**,#patterns/matrices@moreiotas:matrix/inverse
-MoreIotas,Length Distillation: Str,EAST,waqaeaq,false,moreiotas,string/len,OpLenString,**__str__ → __num__**,#patterns/strings@moreiotas:string/len
-MoreIotas,Listener's Reflection,EAST,wded,false,moreiotas,string/chat/all,OpChatString,**→ __str__**,#patterns/strings@moreiotas:string/chat/all
-MoreIotas,Mitosis Gambit,SOUTH_WEST,dwaqawdwdwwdqdwwd,false,moreiotas,matrix/split/hori,OpSplitMatrix,"**__mat, num__ → __mat, mat__**",#patterns/matrices@moreiotas:matrix/split/hori
-MoreIotas,Multiplication Distillation: Matrix,SOUTH_EAST,waqawawwaeaww,false,moreiotas,matrix/mul,OpMulMatrix,"**__mat, mat__ → __mat__**",#patterns/matrices@moreiotas:matrix/mul
-MoreIotas,Patternmaster's Purification,NORTH_WEST,wdwewdwdw,false,moreiotas,string/action,OpActionString,**__pattern__ → __str | null__**,#patterns/strings@moreiotas:string/action
-MoreIotas,Reader's Purification,EAST,awqwawqe,false,moreiotas,string/block/get,OpGetBlockString,**__vec__ → __str | [str]__**,#patterns/strings@moreiotas:string/block/get
-MoreIotas,Restoration Purification,SOUTH_EAST,dwwdqdwwddawd,false,moreiotas,matrix/unmake,OpUnmakeMatrix,**__mat__ → __num | vec | list__**,#patterns/matrices@moreiotas:matrix/unmake
-MoreIotas,Rotation Distillation,SOUTH_WEST,awwaeawwawawddw,false,moreiotas,matrix/rotation,OpRotationMatrix,"**__vec, num__ → __mat__**",#patterns/matrices@moreiotas:matrix/rotation
-MoreIotas,Scrivener's Purification,EAST,wawqwawaw,false,moreiotas,string/iota,OpIotaString,**__any__ → __str__**,#patterns/strings@moreiotas:string/iota
-MoreIotas,Separation Distillation,EAST,aqwaqa,false,moreiotas,string/split,OpSplitString,"**__str, str__ → __[str]__**",#patterns/strings@moreiotas:string/split
-MoreIotas,Sifter's Gambit,SOUTH_EAST,qwaqa,false,moreiotas,string/chat/prefix/set,OpSetChatPrefix,**__str | null__ →**,#patterns/strings@moreiotas:string/chat/prefix/set
-MoreIotas,Sifter's Reflection,NORTH_EAST,ewded,false,moreiotas,string/chat/prefix/get,OpGetChatPrefix,**→ __str | null__**,#patterns/strings@moreiotas:string/chat/prefix/get
-MoreIotas,Spacing Reflection,SOUTH_EAST,awdwaaww,false,moreiotas,string/space,makeConstantOp,**→ __str__**,#patterns/strings@moreiotas:string/space
-MoreIotas,Sprawling Distillation,SOUTH_EAST,dwwdqdwwdwdwaqawd,false,moreiotas,matrix/concat/hori,OpConcatMatrix,"**__mat, mat__ → __mat__**",#patterns/matrices@moreiotas:matrix/concat/hori
-MoreIotas,Toppling Gambit,SOUTH_EAST,awdedwawawwaeawwa,false,moreiotas,matrix/split/vert,OpSplitMatrix,"**__mat, num__ → __mat, mat__**",#patterns/matrices@moreiotas:matrix/split/vert
-MoreIotas,Tower Distillation,SOUTH_WEST,awwaeawwawawdedwa,false,moreiotas,matrix/concat/vert,OpConcatMatrix,"**__mat, mat__ → __mat__**",#patterns/matrices@moreiotas:matrix/concat/vert
-MoreIotas,Transformation Purification,SOUTH_WEST,awwaeawwaadwa,false,moreiotas,matrix/make,OpMakeMatrix,**__num | vec | list__ → __mat__**,#patterns/matrices@moreiotas:matrix/make
-MoreIotas,Transpose Purification,EAST,wwaeawwaede,false,moreiotas,matrix/transpose,OpTransposeMatrix,**__mat__ → __mat__**,#patterns/matrices@moreiotas:matrix/transpose
-MoreIotas,Whisper Reflection,EAST,waqa,false,moreiotas,string/chat/caster,OpChatString,**→ __str__**,#patterns/strings@moreiotas:string/chat/caster
-MoreIotas,Winnowing Distillation,EAST,aqwwaqwaad,false,moreiotas,string/sub,OpSubString,"**__str, num, num__ → __str__**",#patterns/strings@moreiotas:string/sub
-MoreIotas,Write,WEST,dwewdweq,false,moreiotas,string/block/set,OpSetBlockString,"**__vec, str | [str]__ →**",#patterns/strings@moreiotas:string/block/set
-MoreIotas,Zero Distillation,SOUTH_WEST,awwaeawwa,false,moreiotas,matrix/zero,OpZeroMatrix,"**__int ≥ 0, int ≥ 0__ → __mat__**",#patterns/matrices@moreiotas:matrix/zero
+Hexal,Weighing Purification,NORTH_WEST,qqqqwqqqqqaa,false,hexal,mote/count/get,OpGetCountMote,mote → int,#patterns/spells/motes@hexal:mote/count/get
+Hexal,Zone Distillation: Non-Wisp,NORTH_EAST,eewaqaweewaqaaww,false,hexal,zone_entity/not_wisp,OpGetEntitiesBy,"vec, num → [entity]",#patterns/spells/wisps@hexal:zone_entity/not_wisp
+Hexal,Zone Distillation: Wisp,SOUTH_EAST,qqwdedwqqwdeddww,false,hexal,zone_entity/wisp,OpGetEntitiesBy,"vec, num → [entity]",#patterns/spells/wisps@hexal:zone_entity/wisp
+Hexal,Zone Exaltation: Not-Type,NORTH_EAST,wdwqqqqqwdw,false,hexal,zone_entity/not_type,OpGetEntitiesByDyn,"entitytype, pos, num → [entity]",#patterns/types@hexal:zone_entity/not_type
+Hexal,Zone Exaltation: Type,SOUTH_EAST,waweeeeewaw,false,hexal,zone_entity/type,OpGetEntitiesByDyn,"entitytype, pos, num → [entity]",#patterns/types@hexal:zone_entity/type
+Hexbound,Artificer's Gambit,EAST,wqaawddewdwewewewewew,false,hexbound,bind_construct,OpBindConstruct,pattern | entity | null →,#patterns/constructs/bind_broadcast@hexbound:bind_construct
+Hexbound,Automaton's Reflection,EAST,qaawedee,false,hexbound,construct_get_self,OpConstructGetSelf,→ entity,#patterns/constructs/constructs_intro@hexbound:construct_get_self
+Hexbound,Bind Figment,NORTH_EAST,qaqdaqwqaeedewd,true,hexbound,set_fake_impetus_player,OpSetImpetusFakePlayer,vector →,#patterns/great_spells/impetus_fake_player@hexbound:set_fake_impetus_player
+Hexbound,Broadcast Instructions,SOUTH_EAST,qqaaqqqqwq,false,hexbound,instructions/broadcast,OpBroadcastInstructions,"vector, [pattern] →",#patterns/constructs/bind_broadcast@hexbound:instructions/broadcast
+Hexbound,Collector's Distillation,NORTH_EAST,dewqa,false,hexbound,get_inventory/items,OpGetInventoryContents,"vector, vector → list",#patterns/item_patterns@hexbound:get_inventory/items
+Hexbound,Command: Drop Item,EAST,qaaqdwdw,false,hexbound,give_command/drop_off,OpGiveCommandDropOff,[pattern] →,#patterns/constructs/executing_commands@hexbound:give_command/drop_off
+Hexbound,Command: Harvest,EAST,qaaqqedwed,false,hexbound,give_command/harvest,OpGiveCommandHarvest,"vector, [pattern] →",#patterns/constructs/executing_commands@hexbound:give_command/harvest
+Hexbound,Command: Move To Position,EAST,qaaqwdaqqqa,false,hexbound,give_command/move_to,OpGiveCommandMoveTo,"vector, [pattern] →",#patterns/constructs/executing_commands@hexbound:give_command/move_to
+Hexbound,Command: Pick Up Item,EAST,eddeawaw,false,hexbound,give_command/pick_up,OpGiveCommandPickUp,"entity, [pattern] →",#patterns/constructs/executing_commands@hexbound:give_command/pick_up
+Hexbound,Command: Use On Block,EAST,qaaqdee,false,hexbound,give_command/use/block,OpGiveCommandUseOnBlock,"vector, vector, [pattern] →",#patterns/constructs/executing_commands@hexbound:give_command/use/block
+Hexbound,Create Spider Construct,SOUTH_WEST,wqwqwwqwqwqwwaeqaqdwdqaqe,false,hexbound,create_construct/spider,OpCreateSpiderConstruct,"entity, entity, entity →",#patterns/constructs/spider_construct@hexbound:create_construct/spider
+Hexbound,Duelist's Purification,EAST,adeq,false,hexbound,get_main_hand,OpGetHeldItem,entity → item stack,#patterns/item_patterns@hexbound:get_main_hand
+Hexbound,Ending Distillation,WEST,weeee,false,hexbound,pattern/tail,OpPatternTail,"pattern, num → pattern",#patterns/pattern_editing@hexbound:pattern/tail
+Hexbound,Entity Purification: Construct,SOUTH_EAST,qqqqqdaqaawedde,false,hexbound,get_entity/construct,OpGetEntityAt,vector → entity or null,#patterns/constructs/selecting_constructs@hexbound:get_entity/construct
+Hexbound,Forget Pigment,NORTH_EAST,wqwawqqawddwqwdd,false,hexbound,colorizer/delete,OpColorizerDelete,pattern →,#patterns/spells/colorizer_storage@hexbound:colorizer/delete
+Hexbound,Fragment's Purification,WEST,eqqqq,false,hexbound,pattern/line_count,OpPatternLineCount,pattern → num,#patterns/pattern_editing@hexbound:pattern/line_count
+Hexbound,Hex Shield,NORTH_EAST,eweeewe,false,hexbound,create_shield/normal,OpCreateShield,"vec, vec, num →",#patterns/spells/shield@hexbound:colorizer/normal
+Hexbound,Hoarder's Distillation,NORTH_EAST,aqwed,false,hexbound,get_inventory/stacks,OpGetInventoryContents,"vector, vector → list",#patterns/item_patterns@hexbound:get_inventory/stacks
+Hexbound,Logistician's Purification,WEST,dedqaa,false,hexbound,get_stack_prop/item,OpGetStackItem,item stack → item,#patterns/item_patterns@hexbound:get_stack_prop/item
+Hexbound,Memorize Pigment,NORTH_EAST,wqwawqqawddwqwede,false,hexbound,colorizer/save,OpColorizerSave,pattern →,#patterns/spells/colorizer_storage@hexbound:colorizer/save
+Hexbound,Painter's Distillation,NORTH_WEST,aqqqqa,false,hexbound,pattern/merge,OpMergePatterns,"pattern, pattern → pattern",#patterns/pattern_editing@hexbound:pattern/merge
+Hexbound,Recall Pigment,NORTH_EAST,wqwawqqawddwqeqaq,false,hexbound,colorizer/load,OpColorizerLoad,pattern →,#patterns/spells/colorizer_storage@hexbound:colorizer/load
+Hexbound,Revolving Distillation,WEST,deeee,false,hexbound,pattern/rotate,OpRotatePattern,"pattern, num → pattern",#patterns/pattern_editing@hexbound:pattern/rotate
+Hexbound,Send Instructions,EAST,qaaq,false,hexbound,instructions/send,OpSendInstructions,"entity, [pattern] →",#patterns/constructs/constructs_intro@hexbound:instructions/send
+Hexbound,Shieldbearer's Purification,EAST,qeda,false,hexbound,get_off_hand,OpGetHeldItem,entity → item stack,#patterns/item_patterns@hexbound:get_off_hand
+Hexbound,Starting Distillation,EAST,wqqqq,false,hexbound,pattern/head,OpPatternHead,"pattern, num → pattern",#patterns/pattern_editing@hexbound:pattern/head
+Hexbound,Treasurer's Purification,WEST,dedqaq,false,hexbound,get_stack_prop/size,OpGetStackSize,item stack → num,#patterns/item_patterns@hexbound:get_stack_prop/size
+Hexbound,Unstable Hex Shield,NORTH_EAST,eqdweeqdw,false,hexbound,create_shield/glitchy,OpCreateShield,"vec, vec, num →",#patterns/spells/shield@hexbound:create_shield/glitchy
+Hexbound,Winding Purification,WEST,qeeee,false,hexbound,pattern/start_dir,OpPatternStartDir,pattern → num,#patterns/pattern_editing@hexbound:pattern/start_dir
+Hexbound,Zone Distillation: Construct,SOUTH_EAST,qqqqqwdeddwedde,false,hexbound,zone_entity/construct,OpGetEntitiesBy,"vector, number → list",#patterns/constructs/selecting_constructs@hexbound:zone_entity/construct
+Hexbound,Zone Distillation: Non-Construct,SOUTH_EAST,eeeeewaqaawedde,false,hexbound,zone_entity/not_construct,OpGetEntitiesBy,"vector, number → list",#patterns/constructs/selecting_constructs@hexbound:zone_entity/not_construct
+MoreIotas,Addition Distillation: Matrix,EAST,waawawaeawwaea,false,moreiotas,matrix/add,OpAddMatrix,"mat, mat → mat",#patterns/matrices@moreiotas:matrix/add
+MoreIotas,Blank Reflection,SOUTH_EAST,awdwa,false,moreiotas,string/empty,makeConstantOp,→ str,#patterns/strings@moreiotas:string/empty
+MoreIotas,Breaking Reflection,EAST,waawaw,false,moreiotas,string/newline,makeConstantOp,→ str,#patterns/strings@moreiotas:string/newline
+MoreIotas,Case Distillation,WEST,dwwdwwdwdd,false,moreiotas,string/case,OpCaseString,"str, bool | null → str",#patterns/strings@moreiotas:string/case
+MoreIotas,Comma Reflection,EAST,qa,false,moreiotas,string/comma,makeConstantOp,→ str,#patterns/strings@moreiotas:string/comma
+MoreIotas,Concatenation Distillation,NORTH_EAST,waawaqwawqq,false,moreiotas,string/add,OpAddStrings,"str, str → str",#patterns/strings@moreiotas:string/add
+MoreIotas,Determinant Purification,WEST,aeawwaeawaw,false,moreiotas,matrix/determinant,OpDeterminantMatrix,mat → num,#patterns/matrices@moreiotas:matrix/determinant
+MoreIotas,Discoverer's Distillation,EAST,waqwwaqa,false,moreiotas,string/find,OpFindString,"str, str → num",#patterns/strings@moreiotas:string/find
+MoreIotas,Identity Purification,SOUTH_WEST,awwaeawwaqw,false,moreiotas,matrix/identity,OpIdentityMatrix,int ≥ 0 → mat,#patterns/matrices@moreiotas:matrix/identity
+MoreIotas,Input Purification,EAST,aqwaq,false,moreiotas,string/parse,OpParseString,str → num | null,#patterns/strings@moreiotas:string/parse
+MoreIotas,Inverse Purification,WEST,wwdqdwwdqaq,false,moreiotas,matrix/inverse,OpInverseMatrix,mat → mat,#patterns/matrices@moreiotas:matrix/inverse
+MoreIotas,Length Distillation: Str,EAST,waqaeaq,false,moreiotas,string/len,OpLenString,str → num,#patterns/strings@moreiotas:string/len
+MoreIotas,Listener's Reflection,EAST,wded,false,moreiotas,string/chat/all,OpChatString,→ str,#patterns/strings@moreiotas:string/chat/all
+MoreIotas,Mitosis Gambit,SOUTH_WEST,dwaqawdwdwwdqdwwd,false,moreiotas,matrix/split/hori,OpSplitMatrix,"mat, num → mat, mat",#patterns/matrices@moreiotas:matrix/split/hori
+MoreIotas,Multiplication Distillation: Matrix,SOUTH_EAST,waqawawwaeaww,false,moreiotas,matrix/mul,OpMulMatrix,"mat, mat → mat",#patterns/matrices@moreiotas:matrix/mul
+MoreIotas,Patternmaster's Purification,NORTH_WEST,wdwewdwdw,false,moreiotas,string/action,OpActionString,pattern → str | null,#patterns/strings@moreiotas:string/action
+MoreIotas,Reader's Purification,EAST,awqwawqe,false,moreiotas,string/block/get,OpGetBlockString,vec → str | [str],#patterns/strings@moreiotas:string/block/get
+MoreIotas,Restoration Purification,SOUTH_EAST,dwwdqdwwddawd,false,moreiotas,matrix/unmake,OpUnmakeMatrix,mat → num | vec | list,#patterns/matrices@moreiotas:matrix/unmake
+MoreIotas,Rotation Distillation,SOUTH_WEST,awwaeawwawawddw,false,moreiotas,matrix/rotation,OpRotationMatrix,"vec, num → mat",#patterns/matrices@moreiotas:matrix/rotation
+MoreIotas,Scrivener's Purification,EAST,wawqwawaw,false,moreiotas,string/iota,OpIotaString,any → str,#patterns/strings@moreiotas:string/iota
+MoreIotas,Separation Distillation,EAST,aqwaqa,false,moreiotas,string/split,OpSplitString,"str, str → [str]",#patterns/strings@moreiotas:string/split
+MoreIotas,Sifter's Gambit,SOUTH_EAST,qwaqa,false,moreiotas,string/chat/prefix/set,OpSetChatPrefix,str | null →,#patterns/strings@moreiotas:string/chat/prefix/set
+MoreIotas,Sifter's Reflection,NORTH_EAST,ewded,false,moreiotas,string/chat/prefix/get,OpGetChatPrefix,→ str | null,#patterns/strings@moreiotas:string/chat/prefix/get
+MoreIotas,Spacing Reflection,SOUTH_EAST,awdwaaww,false,moreiotas,string/space,makeConstantOp,→ str,#patterns/strings@moreiotas:string/space
+MoreIotas,Sprawling Distillation,SOUTH_EAST,dwwdqdwwdwdwaqawd,false,moreiotas,matrix/concat/hori,OpConcatMatrix,"mat, mat → mat",#patterns/matrices@moreiotas:matrix/concat/hori
+MoreIotas,Toppling Gambit,SOUTH_EAST,awdedwawawwaeawwa,false,moreiotas,matrix/split/vert,OpSplitMatrix,"mat, num → mat, mat",#patterns/matrices@moreiotas:matrix/split/vert
+MoreIotas,Tower Distillation,SOUTH_WEST,awwaeawwawawdedwa,false,moreiotas,matrix/concat/vert,OpConcatMatrix,"mat, mat → mat",#patterns/matrices@moreiotas:matrix/concat/vert
+MoreIotas,Transformation Purification,SOUTH_WEST,awwaeawwaadwa,false,moreiotas,matrix/make,OpMakeMatrix,num | vec | list → mat,#patterns/matrices@moreiotas:matrix/make
+MoreIotas,Transpose Purification,EAST,wwaeawwaede,false,moreiotas,matrix/transpose,OpTransposeMatrix,mat → mat,#patterns/matrices@moreiotas:matrix/transpose
+MoreIotas,Whisper Reflection,EAST,waqa,false,moreiotas,string/chat/caster,OpChatString,→ str,#patterns/strings@moreiotas:string/chat/caster
+MoreIotas,Winnowing Distillation,EAST,aqwwaqwaad,false,moreiotas,string/sub,OpSubString,"str, num, num → str",#patterns/strings@moreiotas:string/sub
+MoreIotas,Write,WEST,dwewdweq,false,moreiotas,string/block/set,OpSetBlockString,"vec, str | [str] →",#patterns/strings@moreiotas:string/block/set
+MoreIotas,Zero Distillation,SOUTH_WEST,awwaeawwa,false,moreiotas,matrix/zero,OpZeroMatrix,"int ≥ 0, int ≥ 0 → mat",#patterns/matrices@moreiotas:matrix/zero
