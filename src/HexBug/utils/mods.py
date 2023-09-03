@@ -211,7 +211,7 @@ class RegistryMod(Enum):
         directory="vendor/HexMod",
         book=hex_docgen.parse_book("vendor/HexMod/Common/src/main/resources", "hexcasting", "thehexbook"),
         registry_regex_type=RegistryRegexType.HexCasting,
-        book_url="https://gamma-delta.github.io/HexMod/",
+        book_url="https://object-object.github.io/HexMod/v/0.10.3/",
         curseforge_url="https://www.curseforge.com/minecraft/mc-mods/hexcasting/",
         modrinth_slug="hex-casting",
         source_url="https://github.com/gamma-delta/HexMod/",
