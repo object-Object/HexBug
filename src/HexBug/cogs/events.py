@@ -4,14 +4,14 @@ from typing import Iterable
 
 import discord
 from aiohttp import ClientResponseError
-from discord import Webhook, app_commands
+from discord import app_commands
 from discord.ext import commands, tasks
 from semver.version import Version
 
 from ..utils import modrinth
 from ..utils.buttons import get_full_command
 from ..utils.commands import HexBugBot
-from ..utils.mods import APIMod, Mod, ModInfo, RegistryMod
+from ..utils.mods import APIMod, Mod, RegistryMod
 
 
 def _on_fetch_error(mod: Mod, resp_status: int, resp_message: str):

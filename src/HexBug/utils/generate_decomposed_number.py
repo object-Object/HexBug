@@ -1,14 +1,9 @@
 import asyncio
 import atexit
-import functools
 import math
 import sys
-from concurrent import futures
-from decimal import Decimal, InvalidOperation
 from fractions import Fraction
 from timeit import default_timer as timer
-
-from hexnumgen import AStarOptions, GeneratedNumber, generate_number_pattern
 
 from ..hexdecode.buildpatterns import MAX_PREGEN_NUMBER
 from ..hexdecode.hex_math import Direction

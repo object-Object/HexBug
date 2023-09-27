@@ -1,4 +1,3 @@
-import logging
 import re
 from collections import defaultdict
 from dataclasses import dataclass, field
@@ -45,7 +44,7 @@ class NormalPatternInfo(_BasePatternInfo):
     """Tuple of rotated aligned segment sets for this pattern. Empty if is_great is false."""
 
     def __post_init__(self):
-        rotated_segments: tuple[frozenset[Segment]] = (
+        rotated_segments: tuple[frozenset[Segment], ...] = (
             tuple(get_rotated_aligned_pattern_segments(self.direction, self.pattern)) if self.is_great else tuple()
         )
         object.__setattr__(self, "rotated_segments", rotated_segments)

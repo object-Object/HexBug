@@ -3,7 +3,6 @@ from collections import defaultdict
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import TypedDict
 
 import discord
 from attr import dataclass

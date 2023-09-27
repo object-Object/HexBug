@@ -1,18 +1,10 @@
 from __future__ import annotations
 
-import asyncio
 import math
-import re
 from dataclasses import InitVar, dataclass
-from typing import Callable
-
-import matplotlib.pyplot as plt
-from aiohttp import ClientSession
 
 from ..hex_interpreter.hex_draw import Palette, Theme, plot_intersect
-from ..hexdecode.buildpatterns import build_registry
 from ..hexdecode.hex_math import Angle, Coord, Direction
-from ..hexdecode.registry import SpecialHandlerPatternInfo
 from .generate_image import get_scale, get_xy_bounds, prepare_fig, save_close_crop
 
 

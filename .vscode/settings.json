@@ -14,4 +14,7 @@
     "java.autobuild.enabled": false,
     "java.server.launchMode": "LightWeight",
     "files.eol": "\n",
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportUnusedImport": "warning",
+    }
 }

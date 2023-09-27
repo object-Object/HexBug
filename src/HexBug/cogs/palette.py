@@ -1,16 +1,15 @@
 import math
 from textwrap import dedent
-from typing import Any, Callable, Iterable
+from typing import Any, Callable
 
 import discord
 import matplotlib.colors
 from discord import app_commands
 from discord.ext import commands
-from discord.utils import MISSING
 
 from ..hex_interpreter.hex_draw import Palette, PaletteColor, Theme
 from ..hexdecode.hex_math import Direction
-from ..utils.buttons import MessageProps, build_show_or_delete_button
+from ..utils.buttons import build_show_or_delete_button
 from ..utils.commands import HexBugBot
 from ..utils.generate_image import draw_single_pattern
 from .pattern import DEFAULT_ARROW_SCALE, DEFAULT_LINE_SCALE, SCALE_RANGE
@@ -26,11 +25,12 @@ def _make_palette_showcase(num_colors: int) -> tuple[Direction, str]:
     )
 
 
+# FIXME: type errors because of indeterminate tuple length
 def _color_to_rgb(color: PaletteColor) -> tuple[int, int, int]:
     if isinstance(color, str):
-        color = matplotlib.colors.to_rgb(color)
+        color = matplotlib.colors.to_rgb(color)  # type: ignore
 
-    return tuple(math.floor(v * 255) for v in color)
+    return tuple(math.floor(v * 255) for v in color)  # type: ignore
 
 
 def _color_to_int(color: PaletteColor) -> int:

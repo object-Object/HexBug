@@ -1,7 +1,5 @@
-import re
 from fractions import Fraction
 from io import BytesIO
-from typing import Any, Callable, Coroutine
 
 import discord
 from discord import app_commands
