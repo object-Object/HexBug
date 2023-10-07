@@ -61,9 +61,7 @@ class CountedMessageProps:
 
 
 class InfoMessages(Enum):
-    addons = MessageProps(content="https://hexxy.media/addons")
-
-    all_patterns = MessageProps(content="https://hexxy.media/patterns.csv")
+    addons = MessageProps(content="https://addons.hexxy.media")
 
     bug_report = MessageProps(
         embed=discord.Embed(
@@ -101,6 +99,10 @@ Do ***NOT*** upload it directly to Discord in a message or file."""
 
     git_log = MessageProps(content="https://xkcd.com/1296/")
 
+    great_spells = MessageProps(content="https://media.hexxy.media/data/great_spells.zip")
+
+    patterns = MessageProps(content="https://media.hexxy.media/data/patterns.csv")
+
     pk = CountedMessageProps(
         embed=discord.Embed(
             description="""**What are all the `[BOT]` messages doing?**
@@ -110,7 +112,7 @@ This is the result of PluralKit, a discord bot for plural people. Plurality is t
         ).set_thumbnail(url="https://hexxy.media/hexxy_media/why_is_the_bot_talking.png"),
     )
 
-    tools = MessageProps(content="https://hexxy.media/addons#tools")
+    tools = MessageProps(content="https://addons.hexxy.media/#tools")
 
     def message(self, show_to_everyone: bool) -> MessageProps:
         value = self.value
