@@ -14,6 +14,7 @@ dependencies = [
 
 [project.optional-dependencies]
 all = [
+    "networkx~=3.1",
     "matplotlib~=3.6.0",
     "lark~=1.1.2",
     "numpy~=1.23.1",
@@ -40,3 +41,60 @@ extend-exclude = """(
     | ^/HexTweaks
     | ^/HexKinetics
 )"""
+
+[tool.pyright]
+pythonVersion = "3.11"
+pythonPlatform = "All"
+
+enableExperimentalFeatures = true
+
+typeCheckingMode = "basic"
+
+strictDictionaryInference = true
+strictListInference = true
+strictSetInference = true
+
+reportAssertAlwaysTrue = "error"
+reportConstantRedefinition = "error"
+reportDeprecated = "error"
+reportDuplicateImport = "error"
+reportFunctionMemberAccess = "error"
+reportIncompatibleMethodOverride = "error"
+reportIncompleteStub = "error"
+reportInconsistentConstructor = "error"
+reportInvalidStringEscapeSequence = "error"
+reportInvalidStubStatement = "error"
+reportInvalidTypeVarUse = "error"
+reportMatchNotExhaustive = "error"
+reportMissingParameterType = "error"
+reportMissingTypeStubs = "error"
+reportOverlappingOverload = "error"
+reportSelfClsParameterName = "error"
+reportTypeCommentUsage = "error"
+reportUnknownParameterType = "error"
+reportUnnecessaryCast = "error"
+reportUnnecessaryContains = "error"
+reportUnsupportedDunderAll = "error"
+reportUntypedBaseClass = "error"
+reportUntypedClassDecorator = "error"
+reportUntypedFunctionDecorator = "error"
+reportUntypedNamedTuple = "error"
+reportWildcardImportFromLibrary = "error"
+
+reportMissingTypeArgument = "warning"
+reportPrivateUsage = "warning"
+reportUnnecessaryComparison = "warning"
+reportUnnecessaryIsInstance =  	"warning"
+reportUnusedClass = "warning"
+reportUnusedExpression = "warning"
+reportUnusedFunction = "warning"
+reportUnusedImport = "warning"
+reportUnusedVariable = "warning"
+
+# TODO: move back to warning
+reportUnknownLambdaType = "none"
+reportUnknownArgumentType = "none"
+reportUnknownMemberType = "none"
+
+reportUnknownVariableType = "none"
+reportIncompatibleVariableOverride = "none"
