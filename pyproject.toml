@@ -35,7 +35,8 @@ sources = ["src", "vendor"]
 [tool.black]
 line-length = 120
 extend-exclude = """(
-      ^/Hexal
+    ^/vendor
+    | ^/Hexal
     | ^/HexMod
     | ^/MoreIotas
     | ^/HexTweaks
