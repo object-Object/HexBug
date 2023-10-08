@@ -204,7 +204,18 @@ async def build_registry(session: ClientSession) -> Registry | None:
 
             with open(filename, "r", encoding="utf-8") as file:
                 for match in mod_info.registry_regex.finditer(file.read()):
-                    (pattern, direction, name, classname, is_great) = match.groups()
+                    named_groups = match.groupdict()
+                    if len(named_groups) > 0:
+                        # use named groups instead of assuming the order
+                        pattern, direction, name, classname, is_great = (
+                            named_groups["pattern"],
+                            named_groups["direction"],
+                            named_groups["name"],
+                            named_groups["classname"],
+                            named_groups["is_great"],
+                        )
+                    else:
+                        (pattern, direction, name, classname, is_great) = match.groups()
                     class_mod, path = classname_to_path[classname]
                     try:
                         registry.add_pattern(
