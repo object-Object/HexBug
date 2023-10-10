@@ -14,6 +14,7 @@ from Hexal.doc import collate_data as hexal_docgen
 from HexKinetics.doc import collate_data as hexkinetics_docgen
 from HexMod.doc import collate_data as hex_docgen
 from HexTweaks.doc import collate_data as hextweaks_docgen
+from mediaworks.doc import collate_data as mediaworks_docgen
 from MoreIotas.doc import collate_data as moreiotas_docgen
 
 from .api import API
@@ -96,6 +97,14 @@ class RegistryRegexType(Enum):
 
     HexTweaks = re.compile(
         r'PatternRegistry.mapPattern\([\n ]+(?:HexPattern\.fromAngles|fromAnglesIllegal)\("([qweasd]+)", ?HexDir\.(.+)?\)[,\n ]+?new ResourceLocation\(".+"(.+)?"\),\n.+new (.+)\(.+, ?(true)?'
+    )
+
+    """
+    Mediaworks declares its spells in Java code.
+    Named groups are used because the is_great group is at the beginning of the match.
+    """
+    Mediaworks = re.compile(
+        r'register(?P<is_great>PerWorld)?\(HexPattern\.fromAngles\("(?P<pattern>[qweasd]+)", HexDir\.(?P<direction>\w+)\),\s*\"(?P<name>[^"]*)\",\s*new (?P<classname>Op\w+)'
     )
 
     @property
@@ -328,6 +337,32 @@ class RegistryMod(Enum):
         operator_directories=["Common/src/main/java/net/sonunte/hexkinetics/common/casting/actions"],
         pattern_stubs=hexkinetics_docgen.pattern_stubs,
         modloaders=[FABRIC, QUILT],
+    )
+
+    Mediaworks = RegistryModInfo(
+        name="Mediaworks",
+        description="Adds QOL features and new spells. Create HUD's and become a ghost!",  # stolen from addons.hexxy.media
+        directory="vendor/mediaworks",
+        book=mediaworks_docgen.parse_book(
+            "vendor/mediaworks/common/src/main/resources",
+            "vendor/mediaworks/doc/resources",
+            "mediaworks",
+            "mediaworksbook",
+        ),
+        registry_regex_type=RegistryRegexType.Mediaworks,
+        book_url="https://artynova.github.io/mediaworks/",
+        curseforge_url=None,
+        modrinth_slug="mediaworks",
+        source_url="https://github.com/artynova/mediaworks/",
+        icon_url="https://cdn-raw.modrinth.com/data/2kZJcMa9/58257ac58547acd70079e3c436bafccbb2d52620.png",
+        pattern_files=[
+            "common/src/main/java/io/github/artynova/mediaworks/casting/pattern/MediaworksPatterns.java",
+        ],
+        operator_directories=[
+            "common/src/main/java/io/github/artynova/mediaworks/casting/pattern",
+        ],
+        pattern_stubs=mediaworks_docgen.pattern_stubs,
+        modloaders=[FORGE, FABRIC, QUILT],
     )
 
     @property

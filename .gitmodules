@@ -13,3 +13,6 @@
 [submodule "HexKinetics"]
 	path = vendor/HexKinetics
 	url = https://github.com/Sonunte/HexKinetics
+[submodule "Mediaworks"]
+	path = vendor/mediaworks
+	url = https://github.com/artynova/mediaworks
