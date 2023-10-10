@@ -12,9 +12,7 @@ This document is a work-in-progress.
 
 ## Adding a mod
 
-* If your mod doesn't provide something like [Hexbound's docs API](https://hexbound.cypher.coffee/latest/docs.json):
-  * Add your mod's repository as a submodule here.
-  * Add the new submodule directory to the lists of globs in `pyproject.toml` and `.vscode/settings.json`.
+* If your mod doesn't provide something like [Hexbound's docs API](https://hexbound.cypher.coffee/latest/docs.json), add your mod's repository as a submodule here.
 * Add your mod to `utils/mods.py` in either the `RegistryMod` or `APIMod` enum, depending if your mod provides a docs API. Use the existing mods as examples. If necessary, add a subclass for your mod.
 * Run the book type scraper command listed in the README.
 * Test it out:

@@ -40,6 +40,8 @@ extend-exclude = "^/vendor"
 pythonVersion = "3.11"
 pythonPlatform = "All"
 
+ignore = ["vendor"]
+
 enableExperimentalFeatures = true
 
 typeCheckingMode = "basic"
