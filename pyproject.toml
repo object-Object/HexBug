@@ -34,13 +34,7 @@ sources = ["src", "vendor"]
 
 [tool.black]
 line-length = 120
-extend-exclude = """(
-      ^/Hexal
-    | ^/HexMod
-    | ^/MoreIotas
-    | ^/HexTweaks
-    | ^/HexKinetics
-)"""
+extend-exclude = "^/vendor"
 
 [tool.pyright]
 pythonVersion = "3.11"
