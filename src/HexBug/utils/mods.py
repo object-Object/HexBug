@@ -353,7 +353,7 @@ class RegistryMod(Enum):
         book_url="https://artynova.github.io/mediaworks/",
         curseforge_url=None,
         modrinth_slug="mediaworks",
-        source_url="https://github.com/artynova/mediaworks",
+        source_url="https://github.com/artynova/mediaworks/",
         icon_url="https://cdn-raw.modrinth.com/data/2kZJcMa9/58257ac58547acd70079e3c436bafccbb2d52620.png",
         pattern_files=[
             "common/src/main/java/io/github/artynova/mediaworks/casting/pattern/MediaworksPatterns.java",
