@@ -40,7 +40,7 @@ extend-exclude = "^/vendor"
 pythonVersion = "3.11"
 pythonPlatform = "All"
 
-ignore = ["vendor"]
+include = ["src"]
 
 enableExperimentalFeatures = true
 
