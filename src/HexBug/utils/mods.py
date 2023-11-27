@@ -216,11 +216,11 @@ class RegistryMod(Enum):
     # HEX NEEDS TO BE FIRST
     HexCasting = RegistryModInfo(
         name="Hex Casting",
-        description="A mod for Forge and Fabric adding stack-based programmable spellcasting, inspired by Psi. (Why are you using this bot if you don't know what Hex is?)",
+        description="A mod for Forge and Fabric adding stack-based programmable spellcasting, inspired by Psi.",
         directory="vendor/HexMod",
         book=hex_docgen.parse_book("vendor/HexMod/Common/src/main/resources", "hexcasting", "thehexbook"),
         registry_regex_type=RegistryRegexType.HexCasting,
-        book_url="https://object-object.github.io/HexMod/v/0.10.3/",
+        book_url="https://hexcasting.hexxy.media/v/0.10.3/1.0.dev20/en_us/",
         curseforge_url="https://www.curseforge.com/minecraft/mc-mods/hexcasting/",
         modrinth_slug="hex-casting",
         source_url="https://github.com/gamma-delta/HexMod/",
