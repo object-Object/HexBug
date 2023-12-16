@@ -12,7 +12,7 @@ from HexBug.hexdecode.registry import Registry
 def _sorted_patterns(registry: Registry):
     return sorted(
         registry.patterns,
-        key=lambda p: (p.mod.value.name, p.translation),
+        key=lambda p: (p.mod.value.name, p.translation or ""),
     )
 
 
