@@ -16,7 +16,7 @@ from ..utils.book_types import (
     BookPage_patchouli_text,
 )
 from ..utils.extra_patterns import build_extra_patterns
-from ..utils.mods import APIMod, APIWithBookModInfo, Mod, RegistryMod
+from ..utils.mods import APIMod, APIWithBookModInfo, HexdocMod, Mod, RegistryMod
 from ..utils.type_guards import is_typeddict_subtype
 from .hex_math import Direction
 from .registry import DuplicatePatternException, NormalPatternInfo, Registry
@@ -169,9 +169,10 @@ async def build_registry(session: ClientSession) -> Registry | None:
                 )
 
         for info in build_extra_patterns(name_to_translation):
-            _insert_classname(
-                classname_to_path, info.classname, info.class_mod, info.path
-            )
+            if info.classname and info.class_mod and info.path:
+                _insert_classname(
+                    classname_to_path, info.classname, info.class_mod, info.path
+                )
 
         for classname, path in mod_info.extra_classname_paths.items():
             _insert_classname(classname_to_path, classname, mod, path)
@@ -212,6 +213,19 @@ async def build_registry(session: ClientSession) -> Registry | None:
             )
         else:
             mod_info.__late_init__(docs["repositoryRoot"], docs["commitHash"])
+
+    for mod in HexdocMod:
+        mod_info = mod.value
+        logging.info(f"Loading {mod_info.name} {mod_info.version}")
+
+        # translations
+        assert mod_info.i18n.lookup is not None, f"Mod {mod.name} i18n.lookup is None"
+        _parse_i18n(
+            name_to_translation,
+            {key: str(value) for key, value in mod_info.i18n.lookup.items()},
+        )
+
+        # TODO: load classnames
 
     # patterns and books
 
@@ -321,6 +335,27 @@ async def build_registry(session: ClientSession) -> Registry | None:
 
         if isinstance(mod_info, APIWithBookModInfo):
             _build_urls(registry, categories, mod)
+
+    for mod in HexdocMod:
+        mod_info = mod.value
+
+        for pattern in mod_info.patterns:
+            try:
+                registry.add_pattern(
+                    NormalPatternInfo(
+                        name=pattern.name,
+                        translation=name_to_translation.get(pattern.name),
+                        mod=mod,
+                        is_great=pattern.is_per_world,
+                        direction=Direction[pattern.startdir.name],
+                        pattern=pattern.signature,
+                        class_mod=None,
+                        classname=None,
+                        path=None,
+                    )
+                )
+            except DuplicatePatternException as e:
+                duplicate_exceptions.append(e)
 
     for pattern in registry.patterns:
         if pattern.book_url is None:

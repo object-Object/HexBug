@@ -17,8 +17,10 @@ from HexTweaks.doc import collate_data as hextweaks_docgen
 from mediaworks.doc import collate_data as mediaworks_docgen
 from MoreIotas.doc import collate_data as moreiotas_docgen
 
+from HexBug.utils.hexdoc import load_hexdoc_mod
+
 from .api import API
-from .book_types import Book
+from .book_types import Book as BookTypeDef
 from .git import get_current_commit
 from .urls import wrap_url
 
@@ -117,7 +119,7 @@ class RegistryModInfo(_BaseModInfo, ABC):
     source_url: str
     book_url: str | None
     directory: str
-    book: Book
+    book: BookTypeDef
     registry_regex_type: InitVar[RegistryRegexType]
     version_property_key: InitVar[str] = field(default="modVersion")
     pattern_files: list[str]
@@ -214,6 +216,34 @@ class APIWithoutBookModInfo(_BaseAPIModInfo):
 
 
 APIModInfo = APIWithBookModInfo | APIWithoutBookModInfo
+
+
+@dataclass(kw_only=True)
+class HexdocModInfo(_BaseModInfo):
+    modid: str
+    book_id: str
+    lang: str = "en_us"
+
+    def __post_init__(self):
+        super().__post_init__()
+
+        with load_hexdoc_mod(
+            modid=self.modid,
+            book_id=self.book_id,
+            lang=self.lang,
+        ) as (plugin, book, context, metadata, hex_metadata):
+            self.version = plugin.mod_version
+
+            self.book_url = str(metadata.book_url) if metadata.book_url else None
+
+            # ('/', 'SamsTheNerd', 'HexGloop', '2176f6f40c1bee5c8eb8')
+            _, author, repo, self.commit = metadata.asset_url.parts
+            self.source_url = f"https://github.com/{author}/{repo}"
+
+            # new fields
+            self.patterns = hex_metadata.patterns
+            self.book = book
+            self.i18n = context.i18n
 
 
 class RegistryMod(Enum):
@@ -407,21 +437,38 @@ class APIMod(Enum):
         return super().value
 
 
-ModInfo = RegistryModInfo | APIModInfo
-Mod = RegistryMod | APIMod
+class HexdocMod(Enum):
+    HexGloop = HexdocModInfo(
+        name="Hex Gloop",
+        modid="hexgloop",
+        book_id="hexgloop:hexgloopbook",
+        description="Hex Casting's gloopiest addon! Adds exciting new items, blocks, QoL tweaks, and the occasional new spell or two.",
+        curseforge_url="https://www.curseforge.com/minecraft/mc-mods/hexgloop/",
+        modrinth_slug="hexgloop",
+        icon_url="https://cdn.modrinth.com/data/ryfyOhoP/fd47e532776ba9580c2e7b847b5308b7b8b9d7ae.png",
+        modloaders=[FORGE, FABRIC, QUILT],
+    )
+
+
+ModInfo = RegistryModInfo | APIModInfo | HexdocModInfo
+Mod = RegistryMod | APIMod | HexdocMod
+
+MOD_TYPES = (RegistryMod, APIMod, HexdocMod)
+MODS = tuple(chain(*MOD_TYPES))
 
 
 def get_mod(name: str) -> Mod:
-    try:
-        return RegistryMod[name]
-    except KeyError:
-        return APIMod[name]
+    for mod in MOD_TYPES:
+        try:
+            return mod[name]
+        except KeyError:
+            pass
+    raise KeyError(name)
 
 
 class ModTransformer(app_commands.Transformer):
     _choices = [
-        app_commands.Choice(name=mod.value.name, value=mod.name)
-        for mod in chain(RegistryMod, APIMod)
+        app_commands.Choice(name=mod.value.name, value=mod.name) for mod in MODS
     ]
 
     @property
@@ -437,7 +484,7 @@ class WithBookModTransformer(app_commands.Transformer):
     def choices(self) -> list[app_commands.Choice[str]]:
         return [
             app_commands.Choice(name=mod.value.name, value=mod.name)
-            for mod in chain(RegistryMod, APIMod)
+            for mod in MODS
             if mod.value.book_url is not None
         ]
 

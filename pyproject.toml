@@ -34,6 +34,8 @@ dependencies = [
     "discord.py~=2.0",
     "jproperties~=2.1",
     "typing_extensions~=4.7",
+    "hexdoc~=1!0.1.0a3",
+    "hexdoc-hexgloop @ https://github.com/SamsTheNerd/HexGloop/raw/dfae61519f/docs/v/latest/main/dist/hexdoc_hexgloop-0.2.0.1.0.dev0-py3-none-any.whl",
 ]
 
 [tool.hatch.metadata.hooks.gradle-properties.optional-dependencies]

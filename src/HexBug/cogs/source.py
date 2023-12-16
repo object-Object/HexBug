@@ -18,6 +18,7 @@ class SourceCog(commands.GroupCog, name="source"):
                 [info.name, info.classname],
             )
             for info in self.registry.patterns
+            if info.classname is not None
         ]
         self.autocomplete = build_autocomplete(initial_choices)
 
@@ -59,6 +60,12 @@ class SourceCog(commands.GroupCog, name="source"):
                 "❌ Unknown pattern.", ephemeral=True
             )
         mod_info = info.mod.value
+
+        if not (info.classname and info.class_mod and info.path):
+            return await interaction.response.send_message(
+                f"❌ Source info not found for {translation}.",
+                ephemeral=True,
+            )
 
         filename: str = info.path.split("/")[-1]
         source_url = info.class_mod.value.build_source_blob_url(info.path)

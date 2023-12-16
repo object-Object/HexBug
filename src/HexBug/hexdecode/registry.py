@@ -15,9 +15,9 @@ class _BasePatternInfo:
     name: str
     translation: str | None
     mod: Mod
-    path: str
-    classname: str
-    class_mod: Mod
+    path: str | None
+    classname: str | None
+    class_mod: Mod | None
     is_great: bool
 
     # late-initialized fields

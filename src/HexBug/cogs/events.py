@@ -1,5 +1,4 @@
 import logging
-from itertools import chain
 from typing import Iterable
 
 import discord
@@ -11,7 +10,7 @@ from semver.version import Version
 from ..utils import modrinth
 from ..utils.buttons import get_full_command
 from ..utils.commands import HexBugBot
-from ..utils.mods import APIMod, Mod, RegistryMod
+from ..utils.mods import MODS, APIMod, Mod, RegistryMod
 
 
 def _on_fetch_error(mod: Mod, resp_status: int, resp_message: str):
@@ -23,9 +22,7 @@ def _on_fetch_error(mod: Mod, resp_status: int, resp_message: str):
 class EventsCog(commands.Cog):
     def __init__(self, bot: HexBugBot) -> None:
         self.bot = bot
-        self.version_cache = {
-            mod: Version.parse(mod.value.version) for mod in chain(RegistryMod, APIMod)
-        }
+        self.version_cache = {mod: Version.parse(mod.value.version) for mod in MODS}
 
     # return an iterable to make it easy to optionally insert into a list
     async def _check_update(self, mod: Mod, latest: str) -> Iterable[str]:
@@ -95,6 +92,8 @@ class EventsCog(commands.Cog):
                 continue
             latest = versions["versions"][0]["id"]
             update_messages.extend(await self._check_update(mod, latest))
+
+        # TODO: check hexdoc mods somehow
 
         # if there's any new updates or any errors, log them
         await self._log_messages("**Update{s} available!**", update_messages)
