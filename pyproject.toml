@@ -19,6 +19,7 @@ dependencies = [
     "typing_extensions~=4.7",
     "hexdoc~=1!0.1.0a4",
     "hexdoc-hexgloop @ {root:uri}/vendor/hexdoc_hexgloop-0.2.0.1.0.dev0-py3-none-any.whl",
+    "hexdoc-oneironaut @ {root:uri}/vendor/hexdoc_oneironaut-0.1.1.1.0-py3-none-any.whl",
 ]
 
 [project.optional-dependencies]

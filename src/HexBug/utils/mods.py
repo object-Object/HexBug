@@ -449,6 +449,17 @@ class HexdocMod(Enum):
         modloaders=[FORGE, FABRIC, QUILT],
     )
 
+    Oneironaut = HexdocModInfo(
+        name="Oneironaut",
+        modid="oneironaut",
+        book_id="oneironaut:oneironautbook",
+        description="An addon for Hex Casting centered around exploration and use of the noosphere.",
+        curseforge_url=None,
+        modrinth_slug=None,
+        icon_url="https://raw.githubusercontent.com/beholderface/oneironaut/14a5797b9d40/fabric/src/main/resources/icon.png",
+        modloaders=[FORGE, FABRIC],
+    )
+
 
 ModInfo = RegistryModInfo | APIModInfo | HexdocModInfo
 Mod = RegistryMod | APIMod | HexdocMod
