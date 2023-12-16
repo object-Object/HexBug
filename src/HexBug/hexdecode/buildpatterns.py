@@ -3,13 +3,21 @@ import json
 import logging
 import re
 from pathlib import Path
+from typing import Iterable, cast
 
 from aiohttp import ClientSession
+from hexdoc.minecraft import LocalizedStr
+from hexdoc.patchouli import Category
+from hexdoc.patchouli.page import SpotlightPage, TextPage
+from hexdoc_hexcasting.book.page import (
+    LookupPatternPage,
+    PageWithOpPattern,
+    PageWithPattern,
+)
 
 from ..utils.api import APILocalPatternSource, APIPattern
 from ..utils.book_types import (
     BookCategory,
-    BookEntry,
     BookPage_hexcasting_manual_pattern,
     BookPage_hexcasting_pattern,
     BookPage_patchouli_spotlight,
@@ -32,7 +40,7 @@ PREGEN_NUMBERS_FILE = (
 
 def _build_pattern_urls(
     registry: Registry,
-    entry: BookEntry,
+    entry_id: str,
     page: BookPage_hexcasting_pattern
     | BookPage_hexcasting_manual_pattern
     | BookPage_patchouli_text,
@@ -41,7 +49,7 @@ def _build_pattern_urls(
     oup = f"__{oup}__" if (oup := page.get("output")) else ""
     args = f"**{f'{inp} → {oup}'.strip()}**" if inp or oup else None
 
-    url = f"#{entry['id']}@{page['anchor']}" if "anchor" in page else None
+    url = f"#{entry_id}@{page['anchor']}" if "anchor" in page else None
     names: set[str] = set()
     if "op_id" in page:
         names.add(page["op_id"].split(":", 1)[1])
@@ -62,12 +70,37 @@ def _build_pattern_urls(
     return (url, list(names))
 
 
+# hacky...
+def _build_hexdoc_pattern_urls(
+    registry: Registry,
+    entry_id: str,
+    page: PageWithPattern,
+):
+    raw_page = {}
+    if page.input:
+        raw_page["input"] = page.input
+    if page.output:
+        raw_page["output"] = page.output
+    if page.anchor:
+        raw_page["anchor"] = page.anchor
+    if isinstance(page, PageWithOpPattern):
+        raw_page["op_id"] = str(page.op_id)
+
+    return _build_pattern_urls(
+        registry,
+        entry_id,
+        cast(BookPage_hexcasting_pattern, raw_page),
+    )
+
+
 def _build_urls(registry: Registry, categories: list[BookCategory], mod: Mod):
+    urls = registry.page_title_to_url[mod]
+
     for category in categories:
-        registry.page_title_to_url[mod][category["name"]] = (f"#{category['id']}", [])
+        urls[category["name"]] = (f"#{category['id']}", [])
 
         for entry in category["entries"]:
-            registry.page_title_to_url[mod][entry["name"]] = (f"#{entry['id']}", [])
+            urls[entry["name"]] = (f"#{entry['id']}", [])
 
             for page in entry["pages"]:
                 if (
@@ -75,32 +108,60 @@ def _build_urls(registry: Registry, categories: list[BookCategory], mod: Mod):
                     and "title" in page
                     and "anchor" in page
                 ):
-                    registry.page_title_to_url[mod][page["title"]] = (
+                    urls[page["title"]] = (
                         f"#{entry['id']}@{page['anchor']}",
                         [],
                     )
-                    _build_pattern_urls(registry, entry, page)
+                    _build_pattern_urls(registry, entry["id"], page)
 
                 elif (
                     is_typeddict_subtype(page, BookPage_patchouli_spotlight)
                     and "anchor" in page
                 ):
-                    registry.page_title_to_url[mod][page["item_name"]] = (
+                    urls[page["item_name"]] = (
                         f"#{entry['id']}@{page['anchor']}",
                         [],
                     )
 
                 elif is_typeddict_subtype(page, BookPage_hexcasting_pattern) and (
-                    value := _build_pattern_urls(registry, entry, page)
+                    value := _build_pattern_urls(registry, entry["id"], page)
                 ):
-                    registry.page_title_to_url[mod][page["name"]] = value
+                    urls[page["name"]] = value
 
                 elif is_typeddict_subtype(
                     page, BookPage_hexcasting_manual_pattern
-                ) and (value := _build_pattern_urls(registry, entry, page)):
-                    registry.page_title_to_url[mod][
-                        header_regex.sub("", page["header"])
-                    ] = value
+                ) and (value := _build_pattern_urls(registry, entry["id"], page)):
+                    urls[header_regex.sub("", page["header"])] = value
+
+
+def _build_hexdoc_urls(registry: Registry, categories: Iterable[Category], mod: Mod):
+    urls = registry.page_title_to_url[mod]
+
+    for category in categories:
+        urls[str(category.name)] = (f"#{category.id.path}", [])
+
+        for entry in category.entries.values():
+            urls[str(entry.name)] = (f"#{entry.id.path}", [])
+
+            for page in entry.pages:
+                match page:
+                    case TextPage(title=LocalizedStr() as title, anchor=str(anchor)):
+                        urls[str(title)] = (f"#{entry.id.path}@{anchor}", [])
+
+                    case SpotlightPage(anchor=str(anchor)):
+                        urls[str(page.item.name)] = (f"#{entry.id.path}@{anchor}", [])
+
+                    case LookupPatternPage() if value := _build_hexdoc_pattern_urls(
+                        registry, entry.id.path, page
+                    ):
+                        pattern = registry.from_name[page.patterns[0].id.path]
+                        if pattern.translation:
+                            urls[pattern.translation] = value
+
+                    case PageWithPattern() if value := _build_hexdoc_pattern_urls(
+                        registry, entry.id.path, page
+                    ):
+                        urls[header_regex.sub("", str(page.header))] = value
 
 
 def _parse_i18n(name_to_translation: dict[str, str], i18n: dict[str, str]):
@@ -356,6 +417,8 @@ async def build_registry(session: ClientSession) -> Registry | None:
                 )
             except DuplicatePatternException as e:
                 duplicate_exceptions.append(e)
+
+        _build_hexdoc_urls(registry, mod_info.book.categories.values(), mod)
 
     for pattern in registry.patterns:
         if pattern.book_url is None:

@@ -63,7 +63,7 @@ class SourceCog(commands.GroupCog, name="source"):
 
         if not (info.classname and info.class_mod and info.path):
             return await interaction.response.send_message(
-                f"❌ Source info not found for {translation}.",
+                f"❌ `/source pattern` is not supported for {mod_info.name}.",
                 ephemeral=True,
             )
 
