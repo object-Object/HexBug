@@ -20,7 +20,12 @@ class DecodeCog(commands.Cog):
         data="The result of calling Reveal on your pattern list",
         show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
     )
-    async def decode(self, interaction: discord.Interaction, data: str, show_to_everyone: bool = False):
+    async def decode(
+        self,
+        interaction: discord.Interaction,
+        data: str,
+        show_to_everyone: bool = False,
+    ):
         """Decode a pattern list using hexdecode"""
         await interaction.response.defer(ephemeral=not show_to_everyone, thinking=True)
 
@@ -43,13 +48,17 @@ class DecodeCog(commands.Cog):
                 content,
                 ephemeral=not show_to_everyone,
                 file=file,
-                view=build_show_or_delete_button(show_to_everyone, interaction, content=content, file=file),
+                view=build_show_or_delete_button(
+                    show_to_everyone, interaction, content=content, file=file
+                ),
             )
 
         await interaction.followup.send(
             content,
             ephemeral=not show_to_everyone,
-            view=build_show_or_delete_button(show_to_everyone, interaction, content=content),
+            view=build_show_or_delete_button(
+                show_to_everyone, interaction, content=content
+            ),
         )
 
 

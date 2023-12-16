@@ -1,8 +1,13 @@
 from ..hexdecode.hex_math import Direction
-from ..hexdecode.registry import NormalPatternInfo, PatternInfo, SpecialHandlerPatternInfo
+from ..hexdecode.registry import (
+    NormalPatternInfo,
+    PatternInfo,
+    SpecialHandlerPatternInfo,
+)
 from .mods import RegistryMod
 
 _extra_patterns: list[PatternInfo] | None = None
+
 
 # this is here and not in mods because otherwise registry and mods would depend on each other
 def build_extra_patterns(name_to_translation: dict[str, str]) -> list[PatternInfo]:

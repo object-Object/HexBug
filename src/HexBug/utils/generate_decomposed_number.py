@@ -40,7 +40,11 @@ def _extend_patterns(
     paren: bool,
 ):
     if target > MAX_PREGEN_NUMBER:
-        new_patterns, new_math_ops, new_pattern_ops = _recursive_generate_decomposed_number(registry, target, align)
+        (
+            new_patterns,
+            new_math_ops,
+            new_pattern_ops,
+        ) = _recursive_generate_decomposed_number(registry, target, align)
 
         patterns.extend(new_patterns)
         pattern_ops.extend(new_pattern_ops)
@@ -67,15 +71,27 @@ def _recursive_generate_decomposed_number(
     math_ops: list[str] = []
     pattern_ops: list[str] = []
 
-    _extend_patterns(registry, patterns, align, math_ops, pattern_ops, target=base, paren=True)
+    _extend_patterns(
+        registry, patterns, align, math_ops, pattern_ops, target=base, paren=True
+    )
     math_ops.append("^")
-    _extend_patterns(registry, patterns, align, math_ops, pattern_ops, target=exponent, paren=True)
+    _extend_patterns(
+        registry, patterns, align, math_ops, pattern_ops, target=exponent, paren=True
+    )
     patterns.append(_POWER)
     pattern_ops.append("Power Distillation")
 
     if remainder != 0:
         math_ops.append(" + ")
-        _extend_patterns(registry, patterns, align, math_ops, pattern_ops, target=remainder, paren=False)
+        _extend_patterns(
+            registry,
+            patterns,
+            align,
+            math_ops,
+            pattern_ops,
+            target=remainder,
+            paren=False,
+        )
         patterns.append(_ADDITIVE)
         pattern_ops.append("Additive Distillation")
 
@@ -89,7 +105,9 @@ def _recursive_generate_decomposed_number(
     return patterns, math_ops, pattern_ops
 
 
-async def _timeout_generate_number_pattern(target: Fraction, timeout: float) -> tuple[Direction, str, float] | None:
+async def _timeout_generate_number_pattern(
+    target: Fraction, timeout: float
+) -> tuple[Direction, str, float] | None:
     proc = await asyncio.create_subprocess_exec(
         sys.executable,
         "hexnumgen_cli.py",
@@ -144,14 +162,22 @@ async def generate_decomposed_number(
                 [f"Numerical Reflection: {float(target)}"],
             )
 
-        numerator = await generate_decomposed_number(registry, target.numerator, align, True)
-        denominator = await generate_decomposed_number(registry, target.denominator, align, True)
+        numerator = await generate_decomposed_number(
+            registry, target.numerator, align, True
+        )
+        denominator = await generate_decomposed_number(
+            registry, target.denominator, align, True
+        )
 
         if numerator is None or denominator is None:
             return None
 
         numerator_patterns, numerator_math_ops, numerator_pattern_ops = numerator
-        denominator_patterns, denominator_math_ops, denominator_pattern_ops = denominator
+        (
+            denominator_patterns,
+            denominator_math_ops,
+            denominator_pattern_ops,
+        ) = denominator
 
         return (
             numerator_patterns + denominator_patterns + [_DIVISION],
@@ -168,7 +194,9 @@ async def generate_decomposed_number(
             )
 
         try:
-            patterns, math_ops, pattern_ops = _recursive_generate_decomposed_number(registry, target, align)
+            patterns, math_ops, pattern_ops = _recursive_generate_decomposed_number(
+                registry, target, align
+            )
             if paren:
                 math_ops = ["("] + math_ops + [")"]
             return patterns, "".join(math_ops), pattern_ops

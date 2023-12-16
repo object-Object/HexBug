@@ -9,7 +9,9 @@ from lark.visitors import Transformer
 from . import hexast
 from .hex_math import Direction
 
-GLOOP_REGEX = re.compile(r"<\s*(?P<direction>[a-z_-]+)(?:\s*[, ]\s*(?P<pattern>[aqweds]+))?\s*>", re.I | re.M)
+GLOOP_REGEX = re.compile(
+    r"<\s*(?P<direction>[a-z_-]+)(?:\s*[, ]\s*(?P<pattern>[aqweds]+))?\s*>", re.I | re.M
+)
 
 parser = Lark(
     """

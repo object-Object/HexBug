@@ -13,7 +13,10 @@ class BookCog(commands.GroupCog, name="book"):
         self.registry = bot.registry
         self.autocompletes = {
             mod.name: build_autocomplete(
-                [(app_commands.Choice(name=title, value=title), names) for title, (_, names) in pages.items()]
+                [
+                    (app_commands.Choice(name=title, value=title), names)
+                    for title, (_, names) in pages.items()
+                ]
             )
             for mod, pages in self.registry.page_title_to_url.items()
         }
@@ -31,11 +34,15 @@ class BookCog(commands.GroupCog, name="book"):
         show_to_everyone: bool = False,
         show_spoilers: bool = False,
     ) -> None:
-        assert (content := mod.value.build_book_url("", show_spoilers, True)) is not None
+        assert (
+            content := mod.value.build_book_url("", show_spoilers, True)
+        ) is not None
         await interaction.response.send_message(
             content,
             ephemeral=not show_to_everyone,
-            view=build_show_or_delete_button(show_to_everyone, interaction, content=content),
+            view=build_show_or_delete_button(
+                show_to_everyone, interaction, content=content
+            ),
         )
 
     @app_commands.command()
@@ -55,18 +62,26 @@ class BookCog(commands.GroupCog, name="book"):
     ) -> None:
         """Get a link to the web book"""
         if not (value := self.registry.page_title_to_url[mod].get(page_title)):
-            return await interaction.response.send_message("❌ Unknown page.", ephemeral=True)
+            return await interaction.response.send_message(
+                "❌ Unknown page.", ephemeral=True
+            )
 
         url, _ = value
-        assert (content := mod.value.build_book_url(url, show_spoilers, True)) is not None
+        assert (
+            content := mod.value.build_book_url(url, show_spoilers, True)
+        ) is not None
         await interaction.response.send_message(
             content,
             ephemeral=not show_to_everyone,
-            view=build_show_or_delete_button(show_to_everyone, interaction, content=content),
+            view=build_show_or_delete_button(
+                show_to_everyone, interaction, content=content
+            ),
         )
 
     @page.autocomplete("page_title")
-    async def page_autocomplete(self, interaction: discord.Interaction, current: str) -> list[app_commands.Choice]:
+    async def page_autocomplete(
+        self, interaction: discord.Interaction, current: str
+    ) -> list[app_commands.Choice]:
         mod = interaction.namespace.mod  # mod.name, not mod.value.name
         if mod is None or mod not in self.autocompletes.keys():
             return []

@@ -17,14 +17,21 @@ class ModCog(commands.Cog):
         show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
     )
     async def mod(
-        self, interaction: discord.Interaction, mod: ModTransformerHint, show_to_everyone: bool = False
+        self,
+        interaction: discord.Interaction,
+        mod: ModTransformerHint,
+        show_to_everyone: bool = False,
     ) -> None:
         """Show information and links for mods that are integrated into HexBug"""
         mod_info = mod.value
 
-        embed = discord.Embed(title=mod_info.name).set_footer(text=f"Version: {mod_info.version}")
+        embed = discord.Embed(title=mod_info.name).set_footer(
+            text=f"Version: {mod_info.version}"
+        )
         if mod_info.curseforge_url:
-            embed.add_field(name="CurseForge", value=mod_info.curseforge_url, inline=False)
+            embed.add_field(
+                name="CurseForge", value=mod_info.curseforge_url, inline=False
+            )
         if mod_info.modrinth_url:
             embed.add_field(name="Modrinth", value=mod_info.modrinth_url, inline=False)
         if mod_info.book_url:
@@ -36,7 +43,9 @@ class ModCog(commands.Cog):
         await interaction.response.send_message(
             embed=embed,
             ephemeral=not show_to_everyone,
-            view=build_show_or_delete_button(show_to_everyone, interaction, embed=embed),
+            view=build_show_or_delete_button(
+                show_to_everyone, interaction, embed=embed
+            ),
         )
 
 

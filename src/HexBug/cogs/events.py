@@ -23,13 +23,17 @@ def _on_fetch_error(mod: Mod, resp_status: int, resp_message: str):
 class EventsCog(commands.Cog):
     def __init__(self, bot: HexBugBot) -> None:
         self.bot = bot
-        self.version_cache = {mod: Version.parse(mod.value.version) for mod in chain(RegistryMod, APIMod)}
+        self.version_cache = {
+            mod: Version.parse(mod.value.version) for mod in chain(RegistryMod, APIMod)
+        }
 
     # return an iterable to make it easy to optionally insert into a list
     async def _check_update(self, mod: Mod, latest: str) -> Iterable[str]:
         latest_ver = Version.parse(latest)
         # walksanator pls
-        if latest_ver <= self.version_cache[mod] or (mod is RegistryMod.HexTweaks and latest == "3.2.3"):
+        if latest_ver <= self.version_cache[mod] or (
+            mod is RegistryMod.HexTweaks and latest == "3.2.3"
+        ):
             return []
 
         self.version_cache[mod] = latest_ver
@@ -52,8 +56,9 @@ class EventsCog(commands.Cog):
     @commands.Cog.listener()
     async def on_interaction(self, interaction: discord.Interaction):
         # log commands in case something breaks and i need to see how
-        if interaction.type == discord.InteractionType.application_command and isinstance(
-            command := interaction.command, app_commands.Command
+        if (
+            interaction.type == discord.InteractionType.application_command
+            and isinstance(command := interaction.command, app_commands.Command)
         ):
             logging.getLogger("bot").debug(
                 f"Command executed: {get_full_command(interaction, command, truncate=False)}"
@@ -71,7 +76,9 @@ class EventsCog(commands.Cog):
 
             # TODO: this is basically the same block as below, refactor it out
             try:
-                versions = await modrinth.get_versions(self.bot.session, mod.value.modrinth_slug)
+                versions = await modrinth.get_versions(
+                    self.bot.session, mod.value.modrinth_slug
+                )
             except ClientResponseError as e:
                 error_messages.append(_on_fetch_error(mod, e.status, e.message))
                 continue
@@ -91,7 +98,9 @@ class EventsCog(commands.Cog):
 
         # if there's any new updates or any errors, log them
         await self._log_messages("**Update{s} available!**", update_messages)
-        await self._log_messages("**Error{s} while checking for updates!**", error_messages)
+        await self._log_messages(
+            "**Error{s} while checking for updates!**", error_messages
+        )
 
 
 async def setup(bot: HexBugBot) -> None:

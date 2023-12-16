@@ -168,7 +168,9 @@ def draw_patterns_on_grid(
         pattern.shift(math.floor(delta_q), delta_r)
 
         # this is kinda gross. but idk if there's a better way
-        (pattern_min_x, pattern_min_y), (pattern_max_x, pattern_max_y) = get_xy_bounds(pattern.points)
+        (pattern_min_x, pattern_min_y), (pattern_max_x, pattern_max_y) = get_xy_bounds(
+            pattern.points
+        )
 
         scales.append(
             get_scale(

@@ -73,7 +73,9 @@ class API:
     def __post_init__(self):
         self.versioned_url = f"{self.base_url}{self.version}/"
 
-    async def _get_endpoint(self, session: ClientSession, endpoint: str, with_version: bool = True):
+    async def _get_endpoint(
+        self, session: ClientSession, endpoint: str, with_version: bool = True
+    ):
         root = self.versioned_url if with_version else self.base_url
         async with session.get(root + endpoint) as resp:
             resp.raise_for_status()
@@ -88,10 +90,14 @@ class API:
     async def get_lang(self, session: ClientSession, docs: APIDocs) -> dict[str, str]:
         return await self._get_endpoint(session, docs["defaultLangFile"])
 
-    async def get_patterns(self, session: ClientSession, docs: APIDocs) -> list[APIPattern]:
+    async def get_patterns(
+        self, session: ClientSession, docs: APIDocs
+    ) -> list[APIPattern]:
         return await self._get_endpoint(session, docs["patternPath"])
 
-    async def get_book(self, session: ClientSession, docs: APIDocs) -> list[BookCategory]:
+    async def get_book(
+        self, session: ClientSession, docs: APIDocs
+    ) -> list[BookCategory]:
         return await self._get_endpoint(session, docs["book"]["dumpPath"])
 
     def get_book_url(self, docs: APIDocs) -> str:

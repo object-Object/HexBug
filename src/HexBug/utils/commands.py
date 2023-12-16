@@ -8,7 +8,7 @@ from ..hexdecode.hexast import Registry
 
 
 def build_autocomplete(
-    initial_choices: list[tuple[app_commands.Choice, list[str]]]
+    initial_choices: list[tuple[app_commands.Choice, list[str]]],
 ) -> dict[str, list[app_commands.Choice]]:
     autocomplete: defaultdict[str, set[app_commands.Choice]] = defaultdict(set)
     for choice, other_names in initial_choices:
@@ -19,11 +19,16 @@ def build_autocomplete(
                     autocomplete[name[i : j + 1]].add(choice)
         autocomplete[""].add(choice)
 
-    return {key: sorted(list(value), key=lambda c: c.name) for key, value in autocomplete.items()}
+    return {
+        key: sorted(list(value), key=lambda c: c.name)
+        for key, value in autocomplete.items()
+    }
 
 
 class HexBugBot(commands.Bot):
-    def __init__(self, registry: Registry, session: ClientSession, log_webhook_url: str, **kwargs) -> None:
+    def __init__(
+        self, registry: Registry, session: ClientSession, log_webhook_url: str, **kwargs
+    ) -> None:
         super().__init__(**kwargs)
         self.registry = registry
         self.session = session

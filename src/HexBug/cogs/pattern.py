@@ -6,7 +6,12 @@ from discord.ext import commands
 
 from ..hexdecode.buildpatterns import MAX_PREGEN_NUMBER
 from ..hexdecode.hex_math import Direction
-from ..hexdecode.hexast import Registry, UnknownPattern, _parse_unknown_pattern, generate_bookkeeper
+from ..hexdecode.hexast import (
+    Registry,
+    UnknownPattern,
+    _parse_unknown_pattern,
+    generate_bookkeeper,
+)
 from ..hexdecode.registry import SpecialHandlerPatternInfo
 from ..utils.buttons import build_show_or_delete_button
 from ..utils.commands import HexBugBot, build_autocomplete
@@ -33,7 +38,12 @@ async def send_pattern(
     mod_info = info and info.mod.value
 
     book_url = None
-    if info and mod_info and not isinstance(mod_info, APIWithoutBookModInfo) and info.book_url is not None:
+    if (
+        info
+        and mod_info
+        and not isinstance(mod_info, APIWithoutBookModInfo)
+        and info.book_url is not None
+    ):
         book_url = mod_info.build_book_url(info.book_url, False, False)
 
     embed = discord.Embed(
@@ -42,7 +52,9 @@ async def send_pattern(
         description=info and info.args,
     ).set_image(url="attachment://pattern.png")
     if mod_info:
-        embed.set_author(name=mod_info.name, icon_url=mod_info.icon_url, url=mod_info.mod_url)
+        embed.set_author(
+            name=mod_info.name, icon_url=mod_info.icon_url, url=mod_info.mod_url
+        )
     if direction is not None and pattern is not None:
         embed.set_footer(text=f"{direction.name} {pattern}")
 
@@ -51,7 +63,9 @@ async def send_pattern(
     await interaction.response.send_message(
         embed=embed,
         file=file,
-        view=build_show_or_delete_button(show_to_everyone, interaction, embed=embed, file=file),
+        view=build_show_or_delete_button(
+            show_to_everyone, interaction, embed=embed, file=file
+        ),
         ephemeral=not show_to_everyone,
     )
 
@@ -65,7 +79,14 @@ class PatternCog(commands.GroupCog, name="pattern"):
         for info in self.registry.patterns:
             if isinstance(info, SpecialHandlerPatternInfo):
                 continue
-            initial_choices.append((app_commands.Choice(name=info.display_name, value=info.display_name), [info.name]))
+            initial_choices.append(
+                (
+                    app_commands.Choice(
+                        name=info.display_name, value=info.display_name
+                    ),
+                    [info.name],
+                )
+            )
 
         self.autocomplete = build_autocomplete(initial_choices)
 
@@ -103,7 +124,9 @@ class PatternCog(commands.GroupCog, name="pattern"):
                 ephemeral=True,
             )
 
-        pattern_iota, name = _parse_unknown_pattern(UnknownPattern(direction, pattern), self.registry)
+        pattern_iota, name = _parse_unknown_pattern(
+            UnknownPattern(direction, pattern), self.registry
+        )
 
         if pattern_iota._datum == "dewdeqwwedaqedwadweqewwd":
             translation = "Amogus"
@@ -156,9 +179,13 @@ class PatternCog(commands.GroupCog, name="pattern"):
         """Display the stroke order of a pattern from its name"""
         info = self.registry.from_display_name.get(translation)
         if info is None:
-            return await interaction.response.send_message("❌ Unknown pattern.", ephemeral=True)
+            return await interaction.response.send_message(
+                "❌ Unknown pattern.", ephemeral=True
+            )
         elif isinstance(info, SpecialHandlerPatternInfo):
-            return await interaction.response.send_message("❌ Use `/pattern special`.", ephemeral=True)
+            return await interaction.response.send_message(
+                "❌ Use `/pattern special`.", ephemeral=True
+            )
 
         image, _ = draw_single_pattern(
             direction=info.direction,
@@ -182,7 +209,9 @@ class PatternCog(commands.GroupCog, name="pattern"):
         )
 
     @name.autocomplete("translation")
-    async def name_autocomplete(self, interaction: discord.Interaction, current: str) -> list[app_commands.Choice]:
+    async def name_autocomplete(
+        self, interaction: discord.Interaction, current: str
+    ) -> list[app_commands.Choice]:
         return self.autocomplete.get(current.lower(), [])[:25]
 
     @app_commands.command()
@@ -209,9 +238,13 @@ class PatternCog(commands.GroupCog, name="pattern"):
         """Display the stroke order of a pattern from a particular mod given the pattern's name"""
         info = self.registry.from_display_name.get(translation)
         if info is None or info.mod != mod:
-            return await interaction.response.send_message("❌ Unknown pattern.", ephemeral=True)
+            return await interaction.response.send_message(
+                "❌ Unknown pattern.", ephemeral=True
+            )
         elif isinstance(info, SpecialHandlerPatternInfo):
-            return await interaction.response.send_message("❌ Use `/pattern special`.", ephemeral=True)
+            return await interaction.response.send_message(
+                "❌ Use `/pattern special`.", ephemeral=True
+            )
 
         image, _ = draw_single_pattern(
             direction=info.direction,
@@ -235,14 +268,19 @@ class PatternCog(commands.GroupCog, name="pattern"):
         )
 
     @from_mod.autocomplete("translation")
-    async def from_mod_autocomplete(self, interaction: discord.Interaction, current: str) -> list[app_commands.Choice]:
+    async def from_mod_autocomplete(
+        self, interaction: discord.Interaction, current: str
+    ) -> list[app_commands.Choice]:
         return [
             c
             for c in self.autocomplete.get(current.lower(), [])
-            if self.registry.from_display_name[c.value].mod.name == interaction.namespace.mod
+            if self.registry.from_display_name[c.value].mod.name
+            == interaction.namespace.mod
         ][:25]
 
-    special = app_commands.Group(name="special", description="Patterns with special handlers")
+    special = app_commands.Group(
+        name="special", description="Patterns with special handlers"
+    )
 
     @special.command()
     @app_commands.describe(
@@ -324,7 +362,9 @@ class PatternCog(commands.GroupCog, name="pattern"):
                 ephemeral=True,
             )
 
-        direction, pattern = align_horizontal(*gen, True) if should_align_horizontal else gen
+        direction, pattern = (
+            align_horizontal(*gen, True) if should_align_horizontal else gen
+        )
         info = self.registry.from_name["number"]
 
         image, _ = draw_single_pattern(

@@ -12,7 +12,10 @@ if __name__ == "__main__":
     denom = sys.argv[2] if len(sys.argv) == 3 else 1
 
     result = generate_number_pattern(
-        (int(numer), int(denom)), trim_larger=False, allow_fractions=True, options=AStarOptions()
+        (int(numer), int(denom)),
+        trim_larger=False,
+        allow_fractions=True,
+        options=AStarOptions(),
     )
     if result is None:
         sys.exit(1)

@@ -9,7 +9,6 @@ from aiohttp import ClientSession
 from discord.ext import commands
 from discord.utils import _ColourFormatter
 from dotenv import load_dotenv
-
 from HexBug.hexdecode.buildpatterns import build_registry
 from HexBug.utils.commands import HexBugBot
 

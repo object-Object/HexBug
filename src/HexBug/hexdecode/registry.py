@@ -45,7 +45,9 @@ class NormalPatternInfo(_BasePatternInfo):
 
     def __post_init__(self):
         rotated_segments: tuple[frozenset[Segment], ...] = (
-            tuple(get_rotated_aligned_pattern_segments(self.direction, self.pattern)) if self.is_great else tuple()
+            tuple(get_rotated_aligned_pattern_segments(self.direction, self.pattern))
+            if self.is_great
+            else tuple()
         )
         object.__setattr__(self, "rotated_segments", rotated_segments)
 
@@ -103,7 +105,9 @@ class Registry:
         self.from_pattern: dict[str, PatternInfo] = {}
         self.from_segments: dict[frozenset[Segment], PatternInfo] = {}
         self._from_shorthand: dict[str, PatternInfo] = {}
-        self.page_title_to_url: defaultdict[Mod, dict[str, tuple[str, list[str]]]] = defaultdict(dict)
+        self.page_title_to_url: defaultdict[
+            Mod, dict[str, tuple[str, list[str]]]
+        ] = defaultdict(dict)
         """mod: page_title: (url, names)"""
 
     def _insert_shorthand(self, info: PatternInfo):
@@ -151,7 +155,11 @@ class Registry:
 
             for option in options:
                 option = option.strip()
-                if option and option not in self._from_shorthand and option not in check_suffixes:
+                if (
+                    option
+                    and option not in self._from_shorthand
+                    and option not in check_suffixes
+                ):
                     self._from_shorthand[option] = info
 
     def _ensure_not_duplicate(self, info: PatternInfo) -> None:
@@ -167,12 +175,16 @@ class Registry:
                 duplicates.append((attribute, duplicate))
 
         _add_dup_if_exists("name", self.from_name.get(info.name))
-        _add_dup_if_exists("display_name", self.from_display_name.get(info.display_name))
+        _add_dup_if_exists(
+            "display_name", self.from_display_name.get(info.display_name)
+        )
 
         if not isinstance(info, SpecialHandlerPatternInfo):
             if info.is_great:
                 for i, segments in enumerate(info.rotated_segments):
-                    _add_dup_if_exists(f"segments[{i}]", self.from_segments.get(segments))
+                    _add_dup_if_exists(
+                        f"segments[{i}]", self.from_segments.get(segments)
+                    )
             else:
                 _add_dup_if_exists("pattern", self.from_pattern.get(info.pattern))
 
@@ -200,7 +212,9 @@ class Registry:
 
         self._insert_shorthand(info)
 
-    def from_shorthand(self, shorthand: str) -> tuple[PatternInfo | RawPatternInfo, Fraction | int | str | None] | None:
+    def from_shorthand(
+        self, shorthand: str
+    ) -> tuple[PatternInfo | RawPatternInfo, Fraction | int | str | None] | None:
         # TODO: why doesn't this return a class?????
         shorthand = hexpattern_re.sub(lambda m: m.group(1), shorthand).lower().strip()
 
@@ -226,15 +240,23 @@ class Registry:
         if (arg := parse_mask(shorthand)) is not None:
             return self.from_name["mask"], arg
 
-        if (match := raw_pattern_re.match(shorthand)) and (direction := Direction.from_shorthand(match.group(1))):
+        if (match := raw_pattern_re.match(shorthand)) and (
+            direction := Direction.from_shorthand(match.group(1))
+        ):
             return RawPatternInfo(direction, match.group(2) or ""), None
 
         return None
 
     def from_shorthand_list(
         self, all_shorthand: str
-    ) -> tuple[list[tuple[PatternInfo | RawPatternInfo, Fraction | int | str | None]], list[str], str]:
-        patterns: list[tuple[PatternInfo | RawPatternInfo, Fraction | int | str | None]] = []
+    ) -> tuple[
+        list[tuple[PatternInfo | RawPatternInfo, Fraction | int | str | None]],
+        list[str],
+        str,
+    ]:
+        patterns: list[
+            tuple[PatternInfo | RawPatternInfo, Fraction | int | str | None]
+        ] = []
         unknown: list[str] = []
 
         split = [stripped for s in all_shorthand.split(",") if (stripped := s.strip())]

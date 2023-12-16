@@ -15,11 +15,15 @@ from typing import Any, Iterator, TypeVar
 
 import networkx as nx
 from aiohttp import ClientSession
-from tqdm import tqdm
-
 from HexBug.hexdecode.buildpatterns import build_registry
 from HexBug.hexdecode.hex_math import Coord, Direction, get_pattern_segments
-from HexBug.hexdecode.registry import NormalPatternInfo, RawPatternInfo, Registry, SpecialHandlerPatternInfo
+from HexBug.hexdecode.registry import (
+    NormalPatternInfo,
+    RawPatternInfo,
+    Registry,
+    SpecialHandlerPatternInfo,
+)
+from tqdm import tqdm
 
 T = TypeVar("T")
 
@@ -74,7 +78,9 @@ def has_euler_extension(G: nx.Graph, source: Any) -> bool:
     return nx.has_eulerian_path(non_isolated_view(G), source)
 
 
-def all_patterns(position: int, G: nx.Graph, v: Coord, direction: int) -> tuple[int, str, list[str]]:
+def all_patterns(
+    position: int, G: nx.Graph, v: Coord, direction: int
+) -> tuple[int, str, list[str]]:
     with lock:
         bar = tqdm(position=position, desc=f"{position:>2}", leave=False)
 
@@ -148,7 +154,9 @@ def get_name_and_pattern(registry: Registry, target: str) -> tuple[str, str]:
         case RawPatternInfo(pattern=pattern), _:
             return pattern, pattern
         case SpecialHandlerPatternInfo(display_name=name), _:
-            raise ValueError(f"Pattern {name} (from {target}) does not have a predefined pattern")
+            raise ValueError(
+                f"Pattern {name} (from {target}) does not have a predefined pattern"
+            )
         case None:
             pass
 
@@ -185,7 +193,9 @@ if __name__ == "__main__":
 
         args = [
             (i, copy.deepcopy(G), start, direction)
-            for i, (start, direction) in enumerate((start, direction) for start in starts for direction in range(6))
+            for i, (start, direction) in enumerate(
+                (start, direction) for start in starts for direction in range(6)
+            )
         ]
     else:
         args = [(i, copy.deepcopy(G), start, i) for i, start in enumerate(starts)]

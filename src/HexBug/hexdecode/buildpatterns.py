@@ -25,13 +25,17 @@ translation_regex = re.compile(r"hexcasting.spell.[a-z]+:(.+)")
 header_regex = re.compile(r"\s*\(.+\)")
 
 MAX_PREGEN_NUMBER = 2000
-PREGEN_NUMBERS_FILE = f"{Path(__file__).parent.as_posix()}/numbers_{MAX_PREGEN_NUMBER}.json"
+PREGEN_NUMBERS_FILE = (
+    f"{Path(__file__).parent.as_posix()}/numbers_{MAX_PREGEN_NUMBER}.json"
+)
 
 
 def _build_pattern_urls(
     registry: Registry,
     entry: BookEntry,
-    page: BookPage_hexcasting_pattern | BookPage_hexcasting_manual_pattern | BookPage_patchouli_text,
+    page: BookPage_hexcasting_pattern
+    | BookPage_hexcasting_manual_pattern
+    | BookPage_patchouli_text,
 ):
     inp = f"__{inp}__" if (inp := page.get("input")) else ""
     oup = f"__{oup}__" if (oup := page.get("output")) else ""
@@ -43,7 +47,9 @@ def _build_pattern_urls(
         names.add(page["op_id"].split(":", 1)[1])
 
     # use .get with default to handle patchouli:text, which doesn't have op
-    for pattern, _, _ in page.get("op", []):  # pretty sure this only catches the vector reflections right now
+    for pattern, _, _ in page.get(
+        "op", []
+    ):  # pretty sure this only catches the vector reflections right now
         if info := registry.from_pattern.get(pattern):
             names.add(info.name)
 
@@ -64,22 +70,37 @@ def _build_urls(registry: Registry, categories: list[BookCategory], mod: Mod):
             registry.page_title_to_url[mod][entry["name"]] = (f"#{entry['id']}", [])
 
             for page in entry["pages"]:
-                if is_typeddict_subtype(page, BookPage_patchouli_text) and "title" in page and "anchor" in page:
-                    registry.page_title_to_url[mod][page["title"]] = (f"#{entry['id']}@{page['anchor']}", [])
+                if (
+                    is_typeddict_subtype(page, BookPage_patchouli_text)
+                    and "title" in page
+                    and "anchor" in page
+                ):
+                    registry.page_title_to_url[mod][page["title"]] = (
+                        f"#{entry['id']}@{page['anchor']}",
+                        [],
+                    )
                     _build_pattern_urls(registry, entry, page)
 
-                elif is_typeddict_subtype(page, BookPage_patchouli_spotlight) and "anchor" in page:
-                    registry.page_title_to_url[mod][page["item_name"]] = (f"#{entry['id']}@{page['anchor']}", [])
+                elif (
+                    is_typeddict_subtype(page, BookPage_patchouli_spotlight)
+                    and "anchor" in page
+                ):
+                    registry.page_title_to_url[mod][page["item_name"]] = (
+                        f"#{entry['id']}@{page['anchor']}",
+                        [],
+                    )
 
                 elif is_typeddict_subtype(page, BookPage_hexcasting_pattern) and (
                     value := _build_pattern_urls(registry, entry, page)
                 ):
                     registry.page_title_to_url[mod][page["name"]] = value
 
-                elif is_typeddict_subtype(page, BookPage_hexcasting_manual_pattern) and (
-                    value := _build_pattern_urls(registry, entry, page)
-                ):
-                    registry.page_title_to_url[mod][header_regex.sub("", page["header"])] = value
+                elif is_typeddict_subtype(
+                    page, BookPage_hexcasting_manual_pattern
+                ) and (value := _build_pattern_urls(registry, entry, page)):
+                    registry.page_title_to_url[mod][
+                        header_regex.sub("", page["header"])
+                    ] = value
 
 
 def _parse_i18n(name_to_translation: dict[str, str], i18n: dict[str, str]):
@@ -91,11 +112,17 @@ def _parse_i18n(name_to_translation: dict[str, str], i18n: dict[str, str]):
                 continue
             # because the new built in decoding interferes with this
             # and because hex has the wrong names
-            name_to_translation[name] = translation.replace(": %s", "").replace("Dstl.", "Distillation")
+            name_to_translation[name] = translation.replace(": %s", "").replace(
+                "Dstl.", "Distillation"
+            )
 
 
-def _insert_classname(classname_to_path: dict[str, tuple[Mod, str]], classname: str, mod: Mod, path: str):
-    if (duplicate := classname_to_path.get(classname)) and duplicate[1] != path:  # this *should* never happen
+def _insert_classname(
+    classname_to_path: dict[str, tuple[Mod, str]], classname: str, mod: Mod, path: str
+):
+    if (duplicate := classname_to_path.get(classname)) and duplicate[
+        1
+    ] != path:  # this *should* never happen
         raise Exception(f"Duplicate classname: {classname} ({path} and {duplicate[1]})")
     classname_to_path[classname] = (mod, path)
 
@@ -113,7 +140,9 @@ async def build_registry(session: ClientSession) -> Registry | None:
     logging.info("Building registry")
 
     with open(PREGEN_NUMBERS_FILE, "r", encoding="utf-8") as f:
-        pregen_numbers = {int(n): (Direction[d], p) for n, (d, p) in json.load(f).items()}
+        pregen_numbers = {
+            int(n): (Direction[d], p) for n, (d, p) in json.load(f).items()
+        }
 
     registry = Registry(pregen_numbers)
     name_to_translation: dict[str, str] = {}
@@ -132,11 +161,17 @@ async def build_registry(session: ClientSession) -> Registry | None:
         # classnames
         for directory in mod_info.operator_directories:
             for file_path in Path(directory).rglob("Op*.kt"):
-                file_path = Path(*file_path.parts[2:])  # eg. vendor/Hexal/Common/... -> Common/...
-                _insert_classname(classname_to_path, file_path.stem, mod, file_path.as_posix())
+                file_path = Path(
+                    *file_path.parts[2:]
+                )  # eg. vendor/Hexal/Common/... -> Common/...
+                _insert_classname(
+                    classname_to_path, file_path.stem, mod, file_path.as_posix()
+                )
 
         for info in build_extra_patterns(name_to_translation):
-            _insert_classname(classname_to_path, info.classname, info.class_mod, info.path)
+            _insert_classname(
+                classname_to_path, info.classname, info.class_mod, info.path
+            )
 
         for classname, path in mod_info.extra_classname_paths.items():
             _insert_classname(classname_to_path, classname, mod, path)
@@ -161,11 +196,20 @@ async def build_registry(session: ClientSession) -> Registry | None:
         for pattern in patterns:
             source = pattern["source"]
             if is_typeddict_subtype(source, APILocalPatternSource):
-                _insert_classname(classname_to_path, pattern["className"].split(".")[-1], mod, source["path"])
+                _insert_classname(
+                    classname_to_path,
+                    pattern["className"].split(".")[-1],
+                    mod,
+                    source["path"],
+                )
 
         # late init
         if isinstance(mod_info, APIWithBookModInfo):
-            mod_info.__late_init__(docs["repositoryRoot"], mod_info.api.get_book_url(docs), docs["commitHash"])
+            mod_info.__late_init__(
+                docs["repositoryRoot"],
+                mod_info.api.get_book_url(docs),
+                docs["commitHash"],
+            )
         else:
             mod_info.__late_init__(docs["repositoryRoot"], docs["commitHash"])
 
@@ -187,7 +231,9 @@ async def build_registry(session: ClientSession) -> Registry | None:
         #   update mod_info.operator_directories
         docgen_pattern_files = set()
         for loader, stub in mod_info.pattern_stubs:
-            filename = (Path(mod_info.book["resource_dir"]).parent / "java" / stub).as_posix()
+            filename = (
+                Path(mod_info.book["resource_dir"]).parent / "java" / stub
+            ).as_posix()
             if loader:
                 filename = filename.replace("Common", loader)
             docgen_pattern_files.add(filename)
@@ -195,12 +241,16 @@ async def build_registry(session: ClientSession) -> Registry | None:
             # yes this is inefficient because it's a list
             # no i don't care, there's like at most three entries in each and it only runs once
             if filename not in mod_info.pattern_files:
-                logging.warning(f"Pattern file in {mod_info.name} docgen but not ModInfo: {filename}")
+                logging.warning(
+                    f"Pattern file in {mod_info.name} docgen but not ModInfo: {filename}"
+                )
 
         # patterns - can't use the Book data here because we also need the class name :pensivewobble:
         for filename in mod_info.pattern_files:
             if filename not in docgen_pattern_files:
-                logging.warning(f"Pattern file in {mod_info.name} ModInfo but not docgen: {filename}")
+                logging.warning(
+                    f"Pattern file in {mod_info.name} ModInfo but not docgen: {filename}"
+                )
 
             with open(filename, "r", encoding="utf-8") as file:
                 for match in mod_info.registry_regex.finditer(file.read()):
@@ -283,7 +333,9 @@ async def build_registry(session: ClientSession) -> Registry | None:
             message = [f"Duplicate pattern: {e.info}"]
             for attribute, duplicate in e.duplicates:
                 value = getattr(e.info, attribute)
-                value_display = value if isinstance(value, (str, int, float, bool)) else type(value)
+                value_display = (
+                    value if isinstance(value, (str, int, float, bool)) else type(value)
+                )
                 message.append(f'{"":34}{duplicate}.{attribute} = "{value_display}"')
             logging.error("\n".join(message))
         return None

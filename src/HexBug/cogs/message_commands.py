@@ -26,7 +26,9 @@ class MessageCommandsCog(commands.Cog):
         assert ctx.guild
         async with ctx.channel.typing():
             await self.bot.tree.sync()
-        await ctx.reply("✅ Synced slash commands to all guilds (may take up to an hour to update everywhere).")
+        await ctx.reply(
+            "✅ Synced slash commands to all guilds (may take up to an hour to update everywhere)."
+        )
 
 
 async def setup(bot: HexBugBot):

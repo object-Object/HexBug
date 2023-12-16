@@ -40,7 +40,9 @@ class CountedMessageProps:
             assert isinstance(raw_data, dict), str(raw_data)
         else:
             raw_data = {}
-        data: defaultdict[str, tuple[int, float | None]] = defaultdict(lambda: (0, None), raw_data)
+        data: defaultdict[str, tuple[int, float | None]] = defaultdict(
+            lambda: (0, None), raw_data
+        )
 
         # increment
         prev_count, prev_time = data[name]
@@ -95,11 +97,15 @@ Do ***NOT*** upload it directly to Discord in a message or file."""
         )
     )
 
-    gemini_skill_issue = MessageProps(content="https://vxtwitter.com/_Kinomoru/status/1550127535404359684")
+    gemini_skill_issue = MessageProps(
+        content="https://vxtwitter.com/_Kinomoru/status/1550127535404359684"
+    )
 
     git_log = MessageProps(content="https://xkcd.com/1296/")
 
-    great_spells = MessageProps(content="https://media.hexxy.media/data/great_spells.zip")
+    great_spells = MessageProps(
+        content="https://media.hexxy.media/data/great_spells.zip"
+    )
 
     patterns = MessageProps(content="https://media.hexxy.media/data/patterns.csv")
 
@@ -109,7 +115,9 @@ Do ***NOT*** upload it directly to Discord in a message or file."""
 This is the result of PluralKit, a discord bot for plural people. Plurality is the experience of having more than one mind in one body.
 
 [PluralKit](https://pluralkit.me/)  |  [More info on plurality](https://morethanone.info/)""",
-        ).set_thumbnail(url="https://hexxy.media/hexxy_media/why_is_the_bot_talking.png"),
+        ).set_thumbnail(
+            url="https://hexxy.media/hexxy_media/why_is_the_bot_talking.png"
+        ),
     )
 
     tools = MessageProps(content="https://addons.hexxy.media/#tools")
@@ -138,13 +146,20 @@ class InfoCog(commands.Cog):
         show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
     )
     @app_commands.rename(info="name")
-    async def info(self, interaction: discord.Interaction, info: InfoMessages, show_to_everyone: bool = False):
+    async def info(
+        self,
+        interaction: discord.Interaction,
+        info: InfoMessages,
+        show_to_everyone: bool = False,
+    ):
         """Show a premade info message"""
         message = info.message(show_to_everyone)
         await interaction.response.send_message(
             **message,
             ephemeral=not show_to_everyone,
-            view=build_show_or_delete_button(show_to_everyone, interaction, builder=lambda show: info.message(show)),
+            view=build_show_or_delete_button(
+                show_to_everyone, interaction, builder=lambda show: info.message(show)
+            ),
         )
 
 
@@ -153,7 +168,9 @@ class TagCog(commands.Cog):
     @app_commands.command()
     async def tag(self, interaction: discord.Interaction):
         """This command has been renamed to /info."""
-        await interaction.response.send_message("This command has been renamed to `/info`.", ephemeral=True)
+        await interaction.response.send_message(
+            "This command has been renamed to `/info`.", ephemeral=True
+        )
 
 
 async def setup(bot: HexBugBot) -> None:

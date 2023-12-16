@@ -40,7 +40,10 @@ def parse_rational(number: str | float) -> Fraction | int | None:
 
     match rational := _parse_rational(number):
         case Fraction():
-            if abs(rational.numerator) > _MAX_NUMBER or abs(rational.denominator) > _MAX_NUMBER:
+            if (
+                abs(rational.numerator) > _MAX_NUMBER
+                or abs(rational.denominator) > _MAX_NUMBER
+            ):
                 return None
         case int():
             if abs(rational) > _MAX_NUMBER:

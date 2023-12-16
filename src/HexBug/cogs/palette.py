@@ -82,9 +82,17 @@ class PaletteCog(commands.Cog):
                 title=palette.name,
                 color=discord.Colour(_color_to_int(palette.colors[0])),
             )
-            .add_field(name="RGB", value=_format_colors(palette, _color_to_rgb), inline=True)
-            .add_field(name="Hex", value=_format_colors(palette, _color_to_hex), inline=True)
-            .add_field(name="Decimal", value=_format_colors(palette, _color_to_int), inline=True)
+            .add_field(
+                name="RGB", value=_format_colors(palette, _color_to_rgb), inline=True
+            )
+            .add_field(
+                name="Hex", value=_format_colors(palette, _color_to_hex), inline=True
+            )
+            .add_field(
+                name="Decimal",
+                value=_format_colors(palette, _color_to_int),
+                inline=True,
+            )
             .set_image(url="attachment://pattern.png")
         )
 
@@ -101,7 +109,9 @@ class PaletteCog(commands.Cog):
         await interaction.response.send_message(
             embed=embed,
             file=file,
-            view=build_show_or_delete_button(show_to_everyone, interaction, embed=embed, file=file),
+            view=build_show_or_delete_button(
+                show_to_everyone, interaction, embed=embed, file=file
+            ),
             ephemeral=not show_to_everyone,
         )
 

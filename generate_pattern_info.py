@@ -6,7 +6,6 @@ import sys
 from typing import TypedDict
 
 from aiohttp import ClientSession
-
 from HexBug.hexdecode.buildpatterns import build_registry
 from HexBug.hexdecode.registry import SpecialHandlerPatternInfo
 from HexBug.utils.generate_image import Palette, Theme, draw_single_pattern
@@ -79,7 +78,9 @@ for info in registry.patterns:
         "direction": direction,
         "pattern": info.pattern,
         "args": args,
-        "url": info.mod.value.build_book_url(info.book_url, False, False) if info.book_url is not None else None,
+        "url": info.mod.value.build_book_url(info.book_url, False, False)
+        if info.book_url is not None
+        else None,
     }
 
     output[info.translation] = data

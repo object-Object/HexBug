@@ -127,12 +127,16 @@ class RegistryModInfo(_BaseModInfo, ABC):
     # see https://github.com/microsoft/pylance-release/discussions/3383
     pattern_stubs: Iterable[tuple[str | None, str]]
 
-    def __post_init__(self, registry_regex: RegistryRegexType, version_property_key: str):
+    def __post_init__(
+        self, registry_regex: RegistryRegexType, version_property_key: str
+    ):
         super().__post_init__()
         self.commit = get_current_commit(self.directory)
         self.version = self._load_version(version_property_key)
         self.pattern_files = [f"{self.directory}/{s}" for s in self.pattern_files]
-        self.operator_directories = [f"{self.directory}/{s}" for s in self.operator_directories]
+        self.operator_directories = [
+            f"{self.directory}/{s}" for s in self.operator_directories
+        ]
         self.registry_regex = registry_regex.value
 
     def _load_version(self, version_property_key: str) -> str:
@@ -218,7 +222,9 @@ class RegistryMod(Enum):
         name="Hex Casting",
         description="A mod for Forge and Fabric adding stack-based programmable spellcasting, inspired by Psi.",
         directory="vendor/HexMod",
-        book=hex_docgen.parse_book("vendor/HexMod/Common/src/main/resources", "hexcasting", "thehexbook"),
+        book=hex_docgen.parse_book(
+            "vendor/HexMod/Common/src/main/resources", "hexcasting", "thehexbook"
+        ),
         registry_regex_type=RegistryRegexType.HexCasting,
         book_url="https://hexcasting.hexxy.media/v/0.10.3/1.0.dev20/en_us/",
         curseforge_url="https://www.curseforge.com/minecraft/mc-mods/hexcasting/",
@@ -287,8 +293,12 @@ class RegistryMod(Enum):
         modrinth_slug="moreiotas",
         source_url="https://github.com/Talia-12/MoreIotas/",
         icon_url="https://cdn.modrinth.com/data/Jmt7p37B/e4640394d665e134c80900c94d6d49ddb9047edd.png",
-        pattern_files=["Common/src/main/java/ram/talia/moreiotas/common/casting/Patterns.kt"],
-        operator_directories=["Common/src/main/java/ram/talia/moreiotas/common/casting/actions"],
+        pattern_files=[
+            "Common/src/main/java/ram/talia/moreiotas/common/casting/Patterns.kt"
+        ],
+        operator_directories=[
+            "Common/src/main/java/ram/talia/moreiotas/common/casting/actions"
+        ],
         pattern_stubs=moreiotas_docgen.pattern_stubs,
         modloaders=[FORGE, FABRIC, QUILT],
     )
@@ -311,8 +321,12 @@ class RegistryMod(Enum):
         curseforge_url=None,
         source_url="https://github.com/walksanatora/HexTweaks/",
         icon_url="https://cdn.modrinth.com/data/pim6pG9O/0f36451e826a46c00d337d7ef65e62c87bc40eba.png",
-        pattern_files=["common/src/main/java/net/walksanator/hextweaks/patterns/PatternRegister.java"],
-        operator_directories=["common/src/main/java/net/walksanator/hextweaks/patterns"],
+        pattern_files=[
+            "common/src/main/java/net/walksanator/hextweaks/patterns/PatternRegister.java"
+        ],
+        operator_directories=[
+            "common/src/main/java/net/walksanator/hextweaks/patterns"
+        ],
         pattern_stubs=hextweaks_docgen.pattern_stubs,
         modloaders=[FORGE, FABRIC, QUILT],
     )
@@ -333,8 +347,12 @@ class RegistryMod(Enum):
         modrinth_slug="hexkinetics",
         source_url="https://github.com/Sonunte/HexKinetics/",
         icon_url="https://cdn.modrinth.com/data/8FVr3ohp/66f16e550e1757a511674b26cb9d9cda8dbbbb24.png",
-        pattern_files=["Common/src/main/java/net/sonunte/hexkinetics/common/casting/Patterns.kt"],
-        operator_directories=["Common/src/main/java/net/sonunte/hexkinetics/common/casting/actions"],
+        pattern_files=[
+            "Common/src/main/java/net/sonunte/hexkinetics/common/casting/Patterns.kt"
+        ],
+        operator_directories=[
+            "Common/src/main/java/net/sonunte/hexkinetics/common/casting/actions"
+        ],
         pattern_stubs=hexkinetics_docgen.pattern_stubs,
         modloaders=[FABRIC, QUILT],
     )
@@ -401,7 +419,10 @@ def get_mod(name: str) -> Mod:
 
 
 class ModTransformer(app_commands.Transformer):
-    _choices = [app_commands.Choice(name=mod.value.name, value=mod.name) for mod in chain(RegistryMod, APIMod)]
+    _choices = [
+        app_commands.Choice(name=mod.value.name, value=mod.name)
+        for mod in chain(RegistryMod, APIMod)
+    ]
 
     @property
     def choices(self) -> list[app_commands.Choice[str]]:

@@ -45,7 +45,11 @@ async def send_hex(
     line_scale: SCALE_RANGE,
     arrow_scale: SCALE_RANGE,
 ):
-    send = interaction.followup.send if is_slash_command else interaction.response.send_message
+    send = (
+        interaction.followup.send
+        if is_slash_command
+        else interaction.response.send_message
+    )
 
     if unknown:
         return await send(
@@ -86,14 +90,25 @@ async def send_hex(
     description = f"```\n{pretty_shorthand}\n```" if pretty_shorthand else MISSING
     footer = ", ".join(f"{d.name} {p}" for d, p in patterns)
 
-    if len(footer) > 2048 or (pretty_shorthand and len(description) + len(footer) > 6000):
-        files.append(discord.File(BytesIO(footer.encode("utf-8")), filename="angles.txt"))
+    if len(footer) > 2048 or (
+        pretty_shorthand and len(description) + len(footer) > 6000
+    ):
+        files.append(
+            discord.File(BytesIO(footer.encode("utf-8")), filename="angles.txt")
+        )
     else:
         embed.set_footer(text=footer)
 
     if pretty_shorthand:
-        if len(description) > 4096 or len(description) + len(embed.footer.text or "") > 6000:
-            files.append(discord.File(BytesIO(pretty_shorthand.encode("utf-8")), filename="names.txt"))
+        if (
+            len(description) > 4096
+            or len(description) + len(embed.footer.text or "") > 6000
+        ):
+            files.append(
+                discord.File(
+                    BytesIO(pretty_shorthand.encode("utf-8")), filename="names.txt"
+                )
+            )
         else:
             embed.description = description
 
@@ -104,7 +119,9 @@ async def send_hex(
     await send(
         embed=embed,
         files=files,
-        view=build_show_or_delete_button(show_to_everyone, interaction, embed=embed, files=files)
+        view=build_show_or_delete_button(
+            show_to_everyone, interaction, embed=embed, files=files
+        )
         if do_button
         else MISSING,
         ephemeral=not show_to_everyone,
@@ -159,7 +176,11 @@ class PatternsCog(commands.GroupCog, name="patterns"):
                 ephemeral=True,
             )
 
-        if not (result := await generate_decomposed_number(self.registry, target, should_align_horizontal)):
+        if not (
+            result := await generate_decomposed_number(
+                self.registry, target, should_align_horizontal
+            )
+        ):
             return await interaction.followup.send(
                 "❌ Failed to generate number.",
                 ephemeral=True,
@@ -199,7 +220,9 @@ class PatternsCog(commands.GroupCog, name="patterns"):
         await interaction.followup.send(
             embed=embed,
             file=file,
-            view=build_show_or_delete_button(show_to_everyone, interaction, embed=embed, file=file),
+            view=build_show_or_delete_button(
+                show_to_everyone, interaction, embed=embed, file=file
+            ),
             ephemeral=not show_to_everyone,
         )
 
@@ -232,7 +255,9 @@ class PatternsCog(commands.GroupCog, name="patterns"):
         """Display a list of patterns on the staff grid"""
         await interaction.response.defer(ephemeral=not show_to_everyone, thinking=True)
 
-        pattern_infos, unknown, pretty_shorthand = self.registry.from_shorthand_list(all_shorthand)
+        pattern_infos, unknown, pretty_shorthand = self.registry.from_shorthand_list(
+            all_shorthand
+        )
 
         patterns: list[tuple[Direction, str]] = []
 
@@ -256,7 +281,9 @@ class PatternsCog(commands.GroupCog, name="patterns"):
                                 continue
 
                             if (
-                                result := await generate_decomposed_number(self.registry, arg, should_align_horizontal)
+                                result := await generate_decomposed_number(
+                                    self.registry, arg, should_align_horizontal
+                                )
                             ) is None:
                                 unknown.append(f"{info.display_name}: {arg}")
                                 continue
@@ -289,7 +316,9 @@ class PatternsCog(commands.GroupCog, name="patterns"):
             arrow_scale=arrow_scale,
         )
 
-    async def show_patterns(self, interaction: discord.Interaction, message: discord.Message):
+    async def show_patterns(
+        self, interaction: discord.Interaction, message: discord.Message
+    ):
         patterns = list[tuple[Direction, str]]()
         unknown = list[str]()
 

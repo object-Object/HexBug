@@ -3,7 +3,6 @@ from collections import defaultdict
 from typing import Any, Callable, Mapping
 
 from aiohttp import ClientSession
-
 from HexBug.utils.mods import APIMod, RegistryMod
 
 if __name__ != "__main__":
@@ -18,11 +17,15 @@ def add_keys(item: Mapping[str, Any], keys: BookKeys, _: BookNotRequired) -> Non
         keys[key].add(value.__class__.__name__)
 
 
-def add_not_required(item: Mapping[str, Any], keys: BookKeys, not_required: BookNotRequired) -> None:
+def add_not_required(
+    item: Mapping[str, Any], keys: BookKeys, not_required: BookNotRequired
+) -> None:
     not_required |= set(keys.keys()).difference(set(item.keys()))
 
 
-def set_value_where(keys: BookKeys, key: str, value: set[str], new_value: set[str]) -> None:
+def set_value_where(
+    keys: BookKeys, key: str, value: set[str], new_value: set[str]
+) -> None:
     if key in keys:
         if keys[key] == value:
             keys[key] = new_value
@@ -32,7 +35,13 @@ def set_value_where(keys: BookKeys, key: str, value: set[str], new_value: set[st
         raise KeyError(key)
 
 
-def print_class(name: str, keys: BookKeys, not_required: BookNotRequired, total=True, parent="TypedDict"):
+def print_class(
+    name: str,
+    keys: BookKeys,
+    not_required: BookNotRequired,
+    total=True,
+    parent="TypedDict",
+):
     print(f"\nclass {name}({parent}{', total=False' if not total else ''}):")
     for item in sorted(keys.items(), key=lambda i: (i[0] in not_required, i[0])):
         key, values = item
@@ -76,10 +85,14 @@ category_keys: BookKeys = defaultdict(set)
 category_not_required: BookNotRequired = set()
 entry_keys: BookKeys = defaultdict(set)
 entry_not_required: BookNotRequired = set()
-page_types: defaultdict[str, tuple[BookKeys, BookNotRequired]] = defaultdict(lambda: (defaultdict(set), set()))
+page_types: defaultdict[str, tuple[BookKeys, BookNotRequired]] = defaultdict(
+    lambda: (defaultdict(set), set())
+)
 
 
-def update_book(update: Callable[[Mapping[str, Any], BookKeys, BookNotRequired], None]) -> None:
+def update_book(
+    update: Callable[[Mapping[str, Any], BookKeys, BookNotRequired], None],
+) -> None:
     for mod in RegistryMod:
         update(mod.value.book, book_keys, book_not_required)
     for category in categories:

@@ -9,7 +9,9 @@ from ..hex_interpreter.hex_draw import Palette, Theme, plot_intersect, plot_mono
 from ..hexdecode.hex_math import Coord, Direction, get_pattern_points
 
 
-def get_xy_bounds(points: list[Coord]) -> tuple[tuple[float, float], tuple[float, float]]:
+def get_xy_bounds(
+    points: list[Coord],
+) -> tuple[tuple[float, float], tuple[float, float]]:
     """(min_x, min_y), (max_x, max_y)"""
     x_vals: list[float] = []
     y_vals: list[float] = []

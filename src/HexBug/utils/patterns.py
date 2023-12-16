@@ -1,14 +1,20 @@
 from ..hexdecode.hex_math import Angle, Direction, get_pattern_points
 
 
-def align_horizontal(direction: Direction, pattern: str, is_number: bool) -> tuple[Direction, str]:
+def align_horizontal(
+    direction: Direction, pattern: str, is_number: bool
+) -> tuple[Direction, str]:
     min_height = None
     best_direction = direction
 
     if is_number and len(pattern) <= 6:
         return direction, pattern
 
-    for option in [direction, direction.rotated(Angle.LEFT), direction.rotated(Angle.RIGHT)]:
+    for option in [
+        direction,
+        direction.rotated(Angle.LEFT),
+        direction.rotated(Angle.RIGHT),
+    ]:
         points = list(get_pattern_points(option, pattern))
         height = max(p.r for p in points) - min(p.r for p in points)
 

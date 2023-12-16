@@ -5,7 +5,6 @@ import sys
 from dataclasses import asdict
 
 from aiohttp import ClientSession
-
 from HexBug.hexdecode.buildpatterns import build_registry
 from HexBug.hexdecode.registry import Registry
 
@@ -64,7 +63,9 @@ with open(filename, "w", encoding="utf-8", newline="") as f:
             "direction": pattern.direction.name if pattern.direction else None,
             "is_great": str(pattern.is_great).lower(),
             "modid": pattern.mod.value.modid,
-            "args": pattern.args.replace("__", "").replace("**", "") if pattern.args else "",
+            "args": pattern.args.replace("__", "").replace("**", "")
+            if pattern.args
+            else "",
             "book_anchor": pattern.book_url,
         }
         writer.writerow(row)

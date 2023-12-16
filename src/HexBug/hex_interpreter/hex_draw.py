@@ -106,14 +106,18 @@ def plot_intersect(
             # that happened in production oops
             if len(next_point_colors_used) < len(palette.colors):
                 while current_color_index in next_point_colors_used:
-                    current_color_index = (current_color_index + 1) % len(palette.colors)
+                    current_color_index = (current_color_index + 1) % len(
+                        palette.colors
+                    )
 
             next_color = palette.colors[current_color_index]
 
             if not is_overlap:
                 # first half, second half, and arrow
                 plt.plot((x, arrow_x), (y, arrow_y), color=current_color, lw=scale)
-                plt.plot((arrow_x, next_x), (arrow_y, next_y), color=next_color, lw=scale)
+                plt.plot(
+                    (arrow_x, next_x), (arrow_y, next_y), color=next_color, lw=scale
+                )
                 _plot_arrow(arrow_x, arrow_y, arrow_angle, 2 * arrow_scale, next_color)
 
             current_color = next_color
@@ -121,7 +125,13 @@ def plot_intersect(
             plt.plot((x, next_x), (y, next_y), color=current_color, lw=scale)
 
         if is_overlap:
-            plt.plot((x, next_x), (y, next_y), dashes=[2, 1], color=palette.overlap_color, lw=1.25 * scale)
+            plt.plot(
+                (x, next_x),
+                (y, next_y),
+                dashes=[2, 1],
+                color=palette.overlap_color,
+                lw=1.25 * scale,
+            )
 
         next_point_colors_used.add(current_color_index)
 
@@ -134,7 +144,14 @@ def plot_intersect(
             plt.plot(x, y, point_fmt, ms=2 * scale)
 
     # end point
-    _plot_fancy_point(*points[-1].pixel(), point_fmt, scale, palette.overlap_color if is_overlap else current_color)
+    _plot_fancy_point(
+        *points[-1].pixel(),
+        point_fmt,
+        scale,
+        palette.overlap_color if is_overlap else current_color,
+    )
 
     # start point
-    _plot_fancy_point(*points[0].pixel(), point_fmt, scale, palette.colors[start_color_index])
+    _plot_fancy_point(
+        *points[0].pixel(), point_fmt, scale, palette.colors[start_color_index]
+    )

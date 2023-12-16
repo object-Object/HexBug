@@ -13,7 +13,10 @@ class SourceCog(commands.GroupCog, name="source"):
         self.registry = bot.registry
 
         initial_choices = [
-            (app_commands.Choice(name=info.display_name, value=info.display_name), [info.name, info.classname])
+            (
+                app_commands.Choice(name=info.display_name, value=info.display_name),
+                [info.name, info.classname],
+            )
             for info in self.registry.patterns
         ]
         self.autocomplete = build_autocomplete(initial_choices)
@@ -24,13 +27,18 @@ class SourceCog(commands.GroupCog, name="source"):
         show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
     )
     async def repo(
-        self, interaction: discord.Interaction, mod: ModTransformerHint, show_to_everyone: bool = False
+        self,
+        interaction: discord.Interaction,
+        mod: ModTransformerHint,
+        show_to_everyone: bool = False,
     ) -> None:
         content = mod.value.build_source_tree_url("")
         await interaction.response.send_message(
             content,
             ephemeral=not show_to_everyone,
-            view=build_show_or_delete_button(show_to_everyone, interaction, content=content),
+            view=build_show_or_delete_button(
+                show_to_everyone, interaction, content=content
+            ),
         )
 
     @app_commands.command()
@@ -39,29 +47,46 @@ class SourceCog(commands.GroupCog, name="source"):
         show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
     )
     @app_commands.rename(translation="name")
-    async def pattern(self, interaction: discord.Interaction, translation: str, show_to_everyone: bool = False) -> None:
+    async def pattern(
+        self,
+        interaction: discord.Interaction,
+        translation: str,
+        show_to_everyone: bool = False,
+    ) -> None:
         """Get a link to the web book"""
         if not (info := self.registry.from_display_name.get(translation)):
-            return await interaction.response.send_message("❌ Unknown pattern.", ephemeral=True)
+            return await interaction.response.send_message(
+                "❌ Unknown pattern.", ephemeral=True
+            )
         mod_info = info.mod.value
 
         filename: str = info.path.split("/")[-1]
         source_url = info.class_mod.value.build_source_blob_url(info.path)
-        title = filename if filename.split(".")[0] == info.classname else f"{filename} ({info.classname})"
+        title = (
+            filename
+            if filename.split(".")[0] == info.classname
+            else f"{filename} ({info.classname})"
+        )
         embed = (
             discord.Embed(title=title, url=source_url)
-            .set_author(name=mod_info.name, icon_url=mod_info.icon_url, url=mod_info.mod_url)
+            .set_author(
+                name=mod_info.name, icon_url=mod_info.icon_url, url=mod_info.mod_url
+            )
             .set_footer(text=f"{translation} ({info.name})")
         )
 
         await interaction.response.send_message(
             embed=embed,
             ephemeral=not show_to_everyone,
-            view=build_show_or_delete_button(show_to_everyone, interaction, embed=embed),
+            view=build_show_or_delete_button(
+                show_to_everyone, interaction, embed=embed
+            ),
         )
 
     @pattern.autocomplete("translation")
-    async def pattern_autocomplete(self, interaction: discord.Interaction, current: str) -> list[app_commands.Choice]:
+    async def pattern_autocomplete(
+        self, interaction: discord.Interaction, current: str
+    ) -> list[app_commands.Choice]:
         return self.autocomplete.get(current.lower(), [])[:25]
 
 

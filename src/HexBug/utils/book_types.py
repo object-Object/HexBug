@@ -19,7 +19,9 @@ class BookPage_patchouli_text(BookPage[Literal["patchouli:text"]]):
     title: NotRequired[str]
 
 
-class BookPage_hexcasting_manual_pattern_nosig(BookPage[Literal["hexcasting:manual_pattern_nosig"]]):
+class BookPage_hexcasting_manual_pattern_nosig(
+    BookPage[Literal["hexcasting:manual_pattern_nosig"]]
+):
     header: str
     op: list
     patterns: dict | list
@@ -43,7 +45,9 @@ class BookPage_patchouli_spotlight(BookPage[Literal["patchouli:spotlight"]]):
     title: NotRequired[str]
 
 
-class BookPage_hexcasting_crafting_multi(BookPage[Literal["hexcasting:crafting_multi"]]):
+class BookPage_hexcasting_crafting_multi(
+    BookPage[Literal["hexcasting:crafting_multi"]]
+):
     heading: str
     item_name: list
     recipes: list
@@ -83,7 +87,9 @@ class BookPage_hexcasting_pattern(BookPage[Literal["hexcasting:pattern"]]):
     output: NotRequired[str]
 
 
-class BookPage_hexcasting_manual_pattern(BookPage[Literal["hexcasting:manual_pattern"]]):
+class BookPage_hexcasting_manual_pattern(
+    BookPage[Literal["hexcasting:manual_pattern"]]
+):
     anchor: str
     header: str
     op: list
