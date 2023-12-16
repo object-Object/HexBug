@@ -1,3 +1,4 @@
+import os
 from contextlib import contextmanager
 from pathlib import Path
 
@@ -16,7 +17,12 @@ def load_hexdoc_mod(
     book_id: str,
     lang: str = "en_us",
 ):
-    """plugin, book, context"""
+    os.environ |= {
+        "GITHUB_SHA": "main",
+        "GITHUB_REPOSITORY": "object-Object/HexBug",
+        "GITHUB_PAGES_URL": "https://object-object.github.io/HexBug",
+    }
+
     props = Properties.load_data(
         props_dir=Path.cwd(),
         data={
