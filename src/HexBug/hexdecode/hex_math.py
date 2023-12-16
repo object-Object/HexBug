@@ -22,9 +22,14 @@ class Angle(Enum):
 
     @classmethod
     def from_number(cls, num: int):
-        return {0: cls.FORWARD, 1: cls.RIGHT, 2: cls.RIGHT_BACK, 3: cls.BACK, 4: cls.LEFT_BACK, 5: cls.LEFT}[
-            num % len(Angle)
-        ]
+        return {
+            0: cls.FORWARD,
+            1: cls.RIGHT,
+            2: cls.RIGHT_BACK,
+            3: cls.BACK,
+            4: cls.LEFT_BACK,
+            5: cls.LEFT,
+        }[num % len(Angle)]
 
     @classmethod
     def get_offset(cls, angle: Angle | str | int) -> int:
@@ -82,7 +87,10 @@ class Coord:
         return self.delta(other)
 
     def pixel(self, size=1) -> tuple[float, float]:
-        return (size * (math.sqrt(3) * self.q + math.sqrt(3) / 2 * self.r), -size * (3 / 2 * self.r))
+        return (
+            size * (math.sqrt(3) * self.q + math.sqrt(3) / 2 * self.r),
+            -size * (3 / 2 * self.r),
+        )
 
     def shifted(self, other: Direction | Coord) -> Coord:
         if isinstance(other, Direction):
@@ -148,7 +156,11 @@ class Direction(Enum):  # numbers increase clockwise
 
     @property
     def side(self):
-        return "WEST" if self in [Direction.NORTH_WEST, Direction.WEST, Direction.SOUTH_WEST] else "EAST"
+        return (
+            "WEST"
+            if self in [Direction.NORTH_WEST, Direction.WEST, Direction.SOUTH_WEST]
+            else "EAST"
+        )
 
     def angle_from(self, other: Direction) -> Angle:
         return Angle.from_number((self.value - other.value) % len(Angle))
@@ -190,8 +202,12 @@ class Segment:
         object.__setattr__(self, "end", self.root + self.direction)
         is_canonical = self.direction.side == "EAST"
         canonical_root = self.root if is_canonical else self.end
-        canonical_direction = self.direction if is_canonical else self.direction.rotated(Angle.BACK)
-        object.__setattr__(self, "_canonical_tuple", (canonical_root, canonical_direction))
+        canonical_direction = (
+            self.direction if is_canonical else self.direction.rotated(Angle.BACK)
+        )
+        object.__setattr__(
+            self, "_canonical_tuple", (canonical_root, canonical_direction)
+        )
 
     def __repr__(self) -> str:
         return f"{self.root}@{self.direction}"
@@ -236,7 +252,9 @@ class Segment:
         return self._canonical_tuple == other._canonical_tuple
 
 
-def get_pattern_points(direction: Direction, pattern: str) -> Generator[Coord, None, None]:
+def get_pattern_points(
+    direction: Direction, pattern: str
+) -> Generator[Coord, None, None]:
     compass = direction
     cursor = compass.as_delta()
 
@@ -249,7 +267,9 @@ def get_pattern_points(direction: Direction, pattern: str) -> Generator[Coord, N
         yield cursor
 
 
-def get_pattern_segments(direction: Direction, pattern: str) -> Generator[Segment, None, None]:
+def get_pattern_segments(
+    direction: Direction, pattern: str
+) -> Generator[Segment, None, None]:
     cursor = Coord.origin()
     compass = direction
 
@@ -271,7 +291,9 @@ def _align_segments_to_origin(segments: Iterable[Segment]) -> frozenset[Segment]
     return frozenset([segment.shifted(delta) for segment in segments])
 
 
-def get_aligned_pattern_segments(direction: Direction, pattern: str, align=True) -> frozenset[Segment]:
+def get_aligned_pattern_segments(
+    direction: Direction, pattern: str, align=True
+) -> frozenset[Segment]:
     segments = frozenset(get_pattern_segments(direction, pattern))
     return _align_segments_to_origin(segments) if align else segments
 

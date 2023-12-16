@@ -7,12 +7,15 @@ A Discord bot for the Hex Casting mod. `buildpatterns.py`, `revealparser.py`, an
 1. Clone this repo, including submodules: `git clone --recurse-submodules <url>`
 2. Set up a venv using Python 3.11 and enter it
 3. [Install Rust](https://www.rust-lang.org/tools/install) (for building `hexnumgen` in the next step)
-4. Install deps: `pip install -r requirements.txt`
+4. Install deps: `pip install -e '.[dev,all]'`
 5. Create a file named `.env` following this template:
 
     ```env
     TOKEN="your-bot-token"
     LOG_WEBHOOK_URL="https://discord.com/api/webhooks/id/token"
+    GITHUB_SHA=main
+    GITHUB_REPOSITORY=object-Object/HexBug
+    GITHUB_PAGES_URL=https://object-object.github.io/HexBug
     ```
 
 6. Run the bot: `python main.py`
@@ -26,7 +29,7 @@ Run `python scrape_book_types.py | tee utils/book_types.py && python -m black ut
 Note: I haven't tested these steps very thoroughly, so YMMV. Open an issue or ping me on Discord if something's broken.
 
 1. Clone this repo somewhere, including submodules: `git clone --recurse-submodules <url>`
-2. In your project, run `pip install path/to/HexBug[all]`
+2. In your project, run `pip install 'path/to/HexBug[all]'`
 3. Import from `HexBug`, eg. `from HexBug.utils.generate_image import draw_single_pattern`
 
 Alternatively, if you don't need anything which depends on the mod submodules, you *should* be able to install directly from Git:

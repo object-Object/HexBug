@@ -1,40 +1,81 @@
 [build-system]
-requires = ["hatchling"]
+requires = [
+    "hatchling",
+    "hatch-gradle-version>=0.8.0",
+]
 build-backend = "hatchling.build"
+
+# project metadata
 
 [project]
 name = "HexBug"
-version = "0.1.0" # TODO: auto-update this or something
+version = "0.1.0"
+readme = "README.md"
+authors = [
+    { name="object-Object" },
+]
+keywords = ["hexdoc"]
+requires-python = ">=3.11"
+dynamic = ["dependencies", "optional-dependencies"]
+
+[project.urls]
+Source = "https://github.com/object-Object/HexBug"
+
+# Gradle version/deps
+
+[tool.hatch.version]
+scheme = "gradle"
+source = "gradle-properties"
+py-path = "src/HexBug/__version__.py"
+key = "modVersion"
+
+[tool.hatch.metadata.hooks.gradle-properties]
 dependencies = [
-    "black~=22.10.0",
-    "discord.py~=2.0.1",
-    "jproperties~=2.1.1",
-    "typing_extensions~=4.7.1",
+    "discord.py~=2.0",
+    "jproperties~=2.1",
+    "typing_extensions~=4.7",
 ]
 
-[project.optional-dependencies]
+[tool.hatch.metadata.hooks.gradle-properties.optional-dependencies]
+dev = [
+    "ruff~=0.1.4",
+]
 all = [
     "networkx~=3.1",
-    "matplotlib~=3.6.0",
-    "lark~=1.1.2",
-    "numpy~=1.23.1",
-    "python-dotenv~=0.21.0",
-    "sty~=1.0.4",
-    "pillow~=9.2.0",
-    "semver~=3.0.0",
+    "matplotlib~=3.6",
+    "lark~=1.1",
+    "numpy~=1.23",
+    "python-dotenv~=0.21",
+    "sty~=1.0",
+    "pillow~=9.5",
+    "semver~=3.0",
     "hexnumgen @ git+https://github.com/object-Object/hexnumgen-rs.git@70d683ee9b",
 ]
 
 [tool.hatch.metadata]
 allow-direct-references = true
 
-[tool.hatch.build]
-include = ["src/HexBug", "vendor/*"]
-sources = ["src", "vendor"]
+# directory inclusion
 
-[tool.black]
-line-length = 120
-extend-exclude = "^/vendor"
+[tool.hatch.build]
+include = [
+    "src/HexBug",
+    "vendor/*",
+    "gradle.properties",
+]
+
+[tool.hatch.build.targets.wheel]
+sources = [
+    "src",
+    "vendor",
+]
+
+# hexdoc entry points
+
+[project.entry-points.hexdoc]
+hexbug = "HexBug._hooks:HexBugPlugin"
+
+# linting
 
 [tool.pyright]
 pythonVersion = "3.11"

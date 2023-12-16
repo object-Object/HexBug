@@ -1,0 +1,22 @@
+modid = "hexbug"
+book = "hexgloop:hexgloopbook"
+extra_books = []
+default_lang = "en_us"
+default_branch = "main"
+
+resource_dirs = [
+    { modid="hexgloop", external=false },
+    { modid="hexcasting" },
+    { modid="minecraft" },
+    { modid="hexdoc" },
+]
+
+[extra.hexcasting]
+pattern_stubs = []
+
+[textures]
+missing = [
+    "minecraft:chest",
+    "hexgloop:fake_spellbook_for_rei",
+    "emi:*",
+]
