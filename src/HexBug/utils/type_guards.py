@@ -1,6 +1,6 @@
-from typing import Any, Mapping, Type, TypedDict, TypeGuard, TypeVar, get_args
+from typing import Any, Mapping, Type, TypeGuard, TypeVar, get_args
 
-T = TypeVar("T", bound=TypedDict)
+T = TypeVar("T", bound=Mapping)
 
 
 def is_typeddict_subtype(

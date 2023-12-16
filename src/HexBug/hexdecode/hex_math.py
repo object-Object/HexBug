@@ -134,7 +134,7 @@ class Direction(Enum):  # numbers increase clockwise
     NORTH_WEST = 5
 
     @classmethod
-    def from_shorthand(cls, shorthand: str) -> Self | None:
+    def from_shorthand(cls, shorthand: str):
         shorthand = (
             shorthand.lower()
             .replace("_", "")
@@ -236,13 +236,13 @@ class Segment:
     def max_s(self):
         return max(self.root.s, self.end.s)
 
-    def shifted(self, other: Direction | Coord) -> Self:
+    def shifted(self, other: Direction | Coord):
         return Segment(self.root.shifted(other), self.direction)
 
-    def rotated(self, angle: Angle | str | int) -> Self:
+    def rotated(self, angle: Angle | str | int):
         return Segment(self.root.rotated(angle), self.direction.rotated(angle))
 
-    def next_segment(self, angle: Angle | str | int) -> Self:
+    def next_segment(self, angle: Angle | str | int):
         return Segment(self.end, self.direction.rotated(angle))
 
     def __hash__(self) -> int:
