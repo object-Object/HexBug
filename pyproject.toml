@@ -14,7 +14,7 @@ authors = [
 keywords = ["hexdoc"]
 requires-python = ">=3.11"
 dependencies = [
-    "discord.py~=2.0",
+    "discord.py~=2.3.2",
     "jproperties~=2.1",
     "typing_extensions~=4.7",
     "hexdoc~=1!0.1.0a4",
