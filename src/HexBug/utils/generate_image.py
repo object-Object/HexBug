@@ -71,7 +71,7 @@ def prepare_fig(
         fig_width, fig_height = fig_size, fig_size
 
     fig = plt.figure(figsize=(fig_width, fig_height))
-    ax = fig.add_axes([0, 0, 1, 1])
+    ax = fig.add_axes((0, 0, 1, 1))
     ax.set_aspect("equal")
     ax.axis("off")
 
