@@ -1,6 +1,6 @@
 # Contributing to HexBug
 
-This document is a work-in-progress.
+WIP.
 
 ## General guidelines
 
@@ -12,8 +12,16 @@ This document is a work-in-progress.
 
 ## Adding a mod
 
-* If your mod doesn't provide something like [Hexbound's docs API](https://hexbound.cypher.coffee/latest/docs.json), add your mod's repository as a submodule here.
-* Add your mod to `utils/mods.py` in either the `RegistryMod` or `APIMod` enum, depending if your mod provides a docs API. Use the existing mods as examples. If necessary, add a subclass for your mod.
+* If your web book uses the old `collate_data.py` system, add your mod's repository as a submodule here.
+* If your web book uses hexdoc:
+  * If you enabled PyPI publishing for your hexdoc plugin (recommended), add a pinned dependency to the `pyproject.toml` file in `project.dependencies`.
+    * Example: `hexdoc-hexcasting==0.11.1.1.0rc7.dev21`
+  * Otherwise, you can do **either** of the following options:
+    * Add a direct dependency to a permalinked wheel for your plugin to `pyproject.toml`.
+      * Example: `hexdoc-hexcasting @ https://github.com/object-Object/HexMod/raw/8469de237137/docs/v/0.11.1-7/1.0.dev22/dist/hexdoc_hexcasting-0.11.1.1.0rc7.dev22-py3-none-any.whl`
+    * Add a wheel for your plugin to `vendor/`, then add a `{root:uri}` dependency to `pyproject.toml`. You can get the wheel from your GitHub Actions web book workflow in the `hexdoc-build` artifact.
+      * Example: `hexdoc-hexgloop @ {root:uri}/vendor/hexdoc_hexgloop-0.2.0.1.0.dev0-py3-none-any.whl`
+* Add your mod to `src/HexBug/utils/mods.py` in the `RegistryMod`, `APIMod`, or `HexdocMod` enum, depending which system your web book is based on. Use the existing mods as examples. If necessary, add a subclass for your mod.
 * Run the book type scraper command listed in the README.
 * Test it out:
   * Try running the bot. You'll need to [create a bot account](https://discordpy.readthedocs.io/en/stable/discord.html) and put the token in `.env` as explained in the README.
