@@ -175,6 +175,8 @@ Hex Casting,Zone Distillation: Non-Living,NORTH_EAST,eeeeewaqaawd,false,hexcasti
 Hex Casting,Zone Distillation: Non-Monster,NORTH_EAST,eeeeewaqaawq,false,hexcasting,zone_entity/not_monster,OpGetEntitiesBy,"vector, number → list",#patterns/entities@hexcasting:zone_entity/not_monster
 Hex Casting,Zone Distillation: Non-Player,NORTH_EAST,eeeeewaqaawe,false,hexcasting,zone_entity/not_player,OpGetEntitiesBy,"vector, number → list",#patterns/entities@hexcasting:zone_entity/not_player
 Hex Casting,Zone Distillation: Player,SOUTH_EAST,qqqqqwdeddwe,false,hexcasting,zone_entity/player,OpGetEntitiesBy,"vector, number → list",#patterns/entities@hexcasting:zone_entity/player
+Hex Gloop,,NORTH_EAST,wwedwe,false,hexgloop,get_tags,,,
+Hex Gloop,,NORTH_EAST,wwedwew,false,hexgloop,check_tag,,,
 Hex Gloop,Acknowledge Truename,SOUTH_EAST,awwqaq,false,hexgloop,truename_agree_eula,,,#patterns/spells/truename_protection@hexgloop:truename_agree_eula
 Hex Gloop,Aergia's Gambit,NORTH_EAST,ddeaqq,false,hexgloop,opnop_useless,,,#patterns/gloopmisc@hexgloop:opnop_useless
 Hex Gloop,Anularis Gambit,EAST,deeeeeqdwewewewewew,false,hexgloop,write_ring,,any →,#patterns/trinket_focus_patterns@hexgloop:write_ring
@@ -192,11 +194,11 @@ Hex Gloop,Craft Gloopifact,EAST,wwaadaqwaweqqwaweewawqwwwwadeeeeeqww,false,hexgl
 Hex Gloop,Craft Potion,EAST,wawwedewwqqq,false,hexgloop,craft/potion,,"entity, [pattern] →",#patterns/spells/craft_potion@hexgloop:craft/potion
 Hex Gloop,Curiosity's Purification,NORTH_EAST,qwaeawqaqded,false,hexgloop,torty_get_type,,slot → itemtype,#items/inventorty@hexgloop:torty_get_type
 Hex Gloop,Cut Stone,EAST,edwdqeeeeaaeaeaeaea,false,hexgloop,stonecut,,"item entity, num | item type →",#patterns/spells/gloop_misc_spells@hexgloop:stonecut
-Hex Gloop,Dispense,SOUTH_WEST,wqwaeqqqeddqeqd,false,hexgloop,dispense,,"item entity, vec, vec →",#patterns/spells/gloop_misc_spells@hexgloop:dispense
+Hex Gloop,Dispense,SOUTH_WEST,wqwaeqqqeddqeqd,false,hexgloop,dispense,,"vec, vec, item ent →",#patterns/spells/gloop_misc_spells@hexgloop:dispense
 Hex Gloop,Dymo's Gambit,SOUTH_WEST,wwedwewdweqawqwqwqwqwqw,false,hexgloop,set_label,,labely →,#patterns/labels@hexgloop:set_label
 Hex Gloop,Etho's Purification,SOUTH_EAST,ddwwdwwdd,false,hexgloop,read_comparator,,vec → num,#patterns/redstone@hexgloop:read_comparator
 Hex Gloop,Euler's Purification,NORTH_EAST,qed,false,hexgloop,assert,,"boolean, ?any →",#patterns/gloopmisc@hexgloop:assert
-Hex Gloop,Everflame Reflection,EAST,eaqawqadaqdeewewewe,false,hexgloop,in_nether,,→ boolean,#patterns/gloopmisc@hexgloop:in_nether
+Hex Gloop,Everflame Reflection,EAST,eaqawqadaqdeewewewe,false,hexgloop,in_nether,,entity → boolean,#patterns/gloopmisc@hexgloop:in_nether
 Hex Gloop,Forge Hex Blade,EAST,waqqqqqwwwaqwwwwaq,false,hexgloop,craft/hex_blade,,"entity, [pattern] →",#items/hex_tools@hexgloop:craft/hex_blade
 Hex Gloop,Forge Hex Pickaxe,EAST,wwaqqqqqeaqdewaqweaewqawedqqqeaeq,false,hexgloop,craft/hex_pickaxe,,"entity, [pattern] →",#items/hex_tools@hexgloop:craft/hex_pickaxe
 Hex Gloop,Frogi Snack,EAST,wawadawaewqaw,false,hexgloop,frog_eat,,entity →,#items/casting_frog@hexgloop:frog_eat
@@ -232,7 +234,7 @@ Hex Gloop,Surveyor's Purification,EAST,aqqqqqeawqwawe,false,hexgloop,can_block_r
 Hex Gloop,Teach Frogi,EAST,wwaqqqqqeaqdqaqedeqaqdqqeaqwdwqae,false,hexgloop,craft/casting_frog,,"entity, [pattern] →",#items/casting_frog@hexgloop:craft/casting_frog
 Hex Gloop,Teach Inventorty,EAST,waqqqqqwqawqedeqwaq,false,hexgloop,craft/inventorty,,"entity, [pattern] →",#items/inventorty@hexgloop:craft/inventorty
 Hex Gloop,Temp Bind Mirror,NORTH_WEST,aqqqqawwawaw,false,hexgloop,temp_bind_mirror,,vec | null →,#patterns/spells/reflection@hexgloop:temp_bind_mirror
-Hex Gloop,Terra Reflection,SOUTH_EAST,aqawqadaqdeeweweweew,false,hexgloop,in_overworld,,→ boolean,#patterns/gloopmisc@hexgloop:in_overworld
+Hex Gloop,Terra Reflection,SOUTH_EAST,aqawqadaqdeeweweweew,false,hexgloop,in_overworld,,entity → boolean,#patterns/gloopmisc@hexgloop:in_overworld
 Hex Gloop,Torty Transfer,SOUTH_WEST,wawqwaqewdwwdade,false,hexgloop,torty_transfer,,"slot, slot | null, num → num, entity?",#items/inventorty@hexgloop:torty_transfer
 Hex Gloop,Torty's Max Purification,NORTH_WEST,ewdqdwewaqae,false,hexgloop,torty_max_count,,slot → num,#items/inventorty@hexgloop:torty_max_count
 Hex Gloop,Torty's Purification,EAST,awewdqdwewaaw,false,hexgloop,torty_count,,slot → num,#items/inventorty@hexgloop:torty_count
@@ -441,18 +443,21 @@ MoreIotas,Whisper Reflection,EAST,waqa,false,moreiotas,string/chat/caster,OpChat
 MoreIotas,Winnowing Distillation,EAST,aqwwaqwaad,false,moreiotas,string/sub,OpSubString,"str, num, num → str",#patterns/strings@moreiotas:string/sub
 MoreIotas,Write,WEST,dwewdweq,false,moreiotas,string/block/set,OpSetBlockString,"vec, str | [str] →",#patterns/strings@moreiotas:string/block/set
 MoreIotas,Zero Distillation,SOUTH_WEST,awwaeawwa,false,moreiotas,matrix/zero,OpZeroMatrix,"int ≥ 0, int ≥ 0 → mat",#patterns/matrices@moreiotas:matrix/zero
-Oneironaut,,WEST,eed,true,oneironaut,congrats,,,
-Oneironaut,,NORTH_WEST,edd,false,oneironaut,signum,,,
 Oneironaut,Baton Reflection,SOUTH_EAST,qwqqqwqawa,false,oneironaut,getrodlook,,→ vector,#items/reverberation_rod@oneironaut:getrodlook
 Oneironaut,Baton Reflection II,SOUTH_EAST,qwqqqwqawaa,false,oneironaut,getrodpos,,→ vector,#items/reverberation_rod@oneironaut:getrodpos
 Oneironaut,Conduct Rod,EAST,eqqqqqawweqqqqqawweqqqqqawwdeqewwwwweqeeeqewwwwweqe,false,oneironaut,craftrod,,"entity, list of patterns →",#items/reverberation_rod@oneironaut:craftrod
+Oneironaut,Decorator's Gambit,SOUTH_WEST,wwawwqwwawwaqdq,false,oneironaut,setframerotation,,"item frame, number →",#patterns/frame_patterns@oneironaut:setframerotation
+Oneironaut,Decorator's Purification,SOUTH_WEST,wwawwqwwawwaeae,false,oneironaut,readframerotation,,item frame → number,#patterns/frame_patterns@oneironaut:readframerotation
+Oneironaut,Deprecator's Purification lmao get it?,WEST,wqwqwqwqwqwawedeedqdq,false,oneironaut,readframeitem,,,
 Oneironaut,Encore,SOUTH_EAST,deaqqwqqqw,false,oneironaut,resetrod,,number →,#items/reverberation_rod@oneironaut:resetrod
 Oneironaut,Externalize Pigment,WEST,eqdweeqdwweeqddqdwwwdeww,false,oneironaut,paintconjured,,"Vector, itemtype →",#patterns/spells/paint_conjured@oneironaut:paintconjured
 Oneironaut,Finale,SOUTH_WEST,aqdeeweeew,false,oneironaut,haltrod,,,#items/reverberation_rod@oneironaut:haltrod
+Oneironaut,Inscribe Idea,EAST,eweweweweweeewqaqwe,false,oneironaut,writeidea,,"vector | player, any →",#patterns/idea_inscription@oneironaut:writeidea
 Oneironaut,Media Infusion,EAST,wwaqqqqqeqqqwwwqqeqqwwwqqweqadadadaqeqeqadadadaqe,true,oneironaut,infusemedia,,Vector →,#patterns/spells/great/infuse_media@oneironaut:infusemedia
 Oneironaut,Metronome Gambit,SOUTH_EAST,qwqqqwqaqddq,false,oneironaut,delayrod,,number →,#items/reverberation_rod@oneironaut:delayrod
 Oneironaut,Metronome Reflection,SOUTH_EAST,qwqqqwqawaaw,false,oneironaut,getrodstamp,,→ number,#items/reverberation_rod@oneironaut:getrodstamp
 Oneironaut,Noetic Gateway,NORTH_EAST,qeewwwweeqeqeewwwweeqdqqdwwwdqeqdwwwdqdadwwdqdwwddadaqadaawww,true,oneironaut,dimteleport,,"Entity, Imprint →",#patterns/spells/great/dim_teleport@oneironaut:dimteleport
+Oneironaut,Retrieve Idea,WEST,qwqwqwqwqwqqqwedewq,false,oneironaut,readidea,,vector | player → any,#patterns/idea_inscription@oneironaut:readidea
 Oneironaut,Spatial Interchange,EAST,wqqqwwwwwqqqwwwqdaqadwqqwdaqadweqeqqqqeqeqaqeqedeqeqa,true,oneironaut,swapspace,,"[vec, vec], [vec, vec], Imprint →",#patterns/spells/great/swap_space@oneironaut:swapspace
 Oneironaut,Spatial Reflection,WEST,wqwqwqwqwqwaeqqe,false,oneironaut,getdim1,,→ Imprint,#patterns/dim_iotas@oneironaut:getdim1
 Oneironaut,Spatial Reflection II,WEST,wqwqwqwqwqwaqeeq,false,oneironaut,getdim2,,→ Imprint | NULL,#patterns/dim_iotas@oneironaut:getdim2
