@@ -53,7 +53,10 @@ class _BaseModInfo(ABC):
     modloaders: list[str]
 
     def __post_init__(self):
-        self.modrinth_url = f"https://modrinth.com/mod/{self.modrinth_slug}/"
+        if self.modrinth_slug:
+            self.modrinth_url = f"https://modrinth.com/mod/{self.modrinth_slug}/"
+        else:
+            self.modrinth_url = None
 
     def build_source_tree_url(self, path: str) -> str:
         return f"{self.source_url}tree/{self.commit}/{path}"
@@ -69,7 +72,7 @@ class _BaseModInfo(ABC):
 
     @property
     def mod_url(self) -> str | None:
-        return self.curseforge_url or self.modrinth_url
+        return self.modrinth_url or self.curseforge_url
 
 
 class RegistryRegexType(Enum):
