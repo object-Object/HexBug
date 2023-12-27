@@ -15,10 +15,10 @@ WIP.
 * If your web book uses the old `collate_data.py` system, add your mod's repository as a submodule here.
 * If your web book uses hexdoc:
   * If you enabled PyPI publishing for your hexdoc plugin (recommended), add a pinned dependency to the `pyproject.toml` file in `project.dependencies`.
-    * Example: `hexdoc-hexcasting==0.11.1.1.0rc7.dev21`
+    * Example: `hexdoc-oneironaut==0.1.2.1.0`
   * Otherwise, you can do **either** of the following options:
     * Add a direct dependency to a permalinked wheel for your plugin to `pyproject.toml`.
-      * Example: `hexdoc-hexcasting @ https://github.com/object-Object/HexMod/raw/8469de237137/docs/v/0.11.1-7/1.0.dev22/dist/hexdoc_hexcasting-0.11.1.1.0rc7.dev22-py3-none-any.whl`
+      * Example: `hexdoc-hexgloop @ https://github.com/SamsTheNerd/HexGloop/raw/af72e6cc318d/docs/v/latest/main/dist/hexdoc_hexgloop-0.2.1.1.0.dev0-py3-none-any.whl`
     * Add a wheel for your plugin to `vendor/`, then add a `{root:uri}` dependency to `pyproject.toml`. You can get the wheel from your GitHub Actions web book workflow in the `hexdoc-build` artifact.
       * Example: `hexdoc-hexgloop @ {root:uri}/vendor/hexdoc_hexgloop-0.2.0.1.0.dev0-py3-none-any.whl`
 * Add your mod to `src/HexBug/utils/mods.py` in the `RegistryMod`, `APIMod`, or `HexdocMod` enum, depending which system your web book is based on. Use the existing mods as examples. If necessary, add a subclass for your mod.
@@ -28,7 +28,6 @@ WIP.
   * Make sure HexBug actually starts without any errors or warnings. Note that the warning about `HexCasting:sentinel/create/great` missing a URL is normal.
   * Run the chat command `@YourBotAccount sync` to sync slash commands to your current server, then try running some commands. Ensure everything works and there are no console errors. For example:
     * `/mod YourModName`
-    * `/info addons`
     * `/pattern name APatternInYourMod`
     * `/book home YourMod`
     * `/book page YourMod APageInYourMod`

@@ -6,6 +6,7 @@ from hexdoc.cli.utils.load import load_book
 from hexdoc.core import MinecraftVersion, ModResourceLoader, Properties
 from hexdoc.data import HexdocMetadata
 from hexdoc.minecraft import I18n
+from hexdoc.patchouli import Book
 from hexdoc.plugin import PluginManager
 from hexdoc_hexcasting.metadata import PatternMetadata
 
@@ -48,7 +49,7 @@ def load_hexdoc_mod(
     )
     assert props.book_id
 
-    pm = PluginManager("")
+    pm = PluginManager("", props)
     plugin = pm.mod_plugin(modid, book=True)
     MinecraftVersion.MINECRAFT_VERSION = pm.minecraft_version()
 
@@ -60,10 +61,12 @@ def load_hexdoc_mod(
             allow_missing=True,
         )[modid]
 
-        i18n = I18n.load(loader, lang)
+        book_data = Book.load_book_json(loader, props.book_id)
+
+        i18n = I18n.load(loader, book_data, lang)
 
         book, context = load_book(
-            book_id=props.book_id,
+            book_data=book_data,
             pm=pm,
             loader=loader,
             i18n=i18n,

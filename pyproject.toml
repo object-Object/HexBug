@@ -17,10 +17,10 @@ dependencies = [
     "discord.py~=2.3.2",
     "jproperties~=2.1",
     "typing_extensions~=4.7",
-    "hexdoc==1!0.1.0a4",
-    "hexdoc-hexgloop @ {root:uri}/vendor/hexdoc_hexgloop-0.2.0.1.0.dev0-py3-none-any.whl",
-    "hexdoc-oneironaut @ {root:uri}/vendor/hexdoc_oneironaut-0.1.1.1.0-py3-none-any.whl",
     "ruff~=0.1.4",
+    "hexdoc==1!0.1.0a7",
+    "hexdoc-hexgloop @ https://github.com/SamsTheNerd/HexGloop/raw/af72e6cc318d/docs/v/latest/main/dist/hexdoc_hexgloop-0.2.1.1.0.dev0-py3-none-any.whl",
+    "hexdoc-oneironaut==0.1.2.1.0",
 ]
 
 [project.optional-dependencies]

@@ -11,6 +11,7 @@ import discord
 import jproperties
 from discord import app_commands
 from Hexal.doc import collate_data as hexal_docgen
+from hexdoc.minecraft import I18n
 from HexKinetics.doc import collate_data as hexkinetics_docgen
 from HexMod.doc import collate_data as hex_docgen
 from HexTweaks.doc import collate_data as hextweaks_docgen
@@ -243,7 +244,7 @@ class HexdocModInfo(_BaseModInfo):
             # new fields
             self.patterns = hex_metadata.patterns
             self.book = book
-            self.i18n = context.i18n
+            self.i18n = I18n.of(context)
 
 
 class RegistryMod(Enum):
@@ -454,8 +455,8 @@ class HexdocMod(Enum):
         modid="oneironaut",
         book_id="oneironaut:oneironautbook",
         description="An addon for Hex Casting centered around exploration and use of the noosphere.",
-        curseforge_url=None,
-        modrinth_slug=None,
+        curseforge_url="https://www.curseforge.com/minecraft/mc-mods/oneironaut/",
+        modrinth_slug="oneironaut",
         icon_url="https://raw.githubusercontent.com/beholderface/oneironaut/14a5797b9d40/fabric/src/main/resources/icon.png",
         modloaders=[FORGE, FABRIC],
     )
