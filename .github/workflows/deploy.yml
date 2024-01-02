@@ -1,0 +1,143 @@
+name: Build and deploy
+
+on:
+  push:
+    branches:
+      - "main"
+  workflow_dispatch:
+
+env:
+  AWS_REGION: us-east-1
+  STACK_NAME: prod-HexBug
+  S3_BUCKET: prod-objectobject-ca-codedeploy-artifacts
+  CDK_IAM_ROLE_ARN: arn:aws:iam::511603859520:role/prod-objectobject-ca-GitHubActionsCDKRole19D97701-sweSB0Sp33WN
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+          cache: pip
+      
+      - name: Install Python packages
+        run: pip install . hatch
+      
+        # we use a GitHub deployment for this, so there's no artifact upload
+        # the build is just to see if it breaks or not
+      - name: Build wheel
+        run: hatch build --target wheel
+
+  deploy-aws-cdk:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: prod-aws-cdk
+    permissions:
+      id-token: write
+      contents: read
+    outputs:
+      application-name: ${{ steps.cdk-outputs.outputs.application-name }}
+      deployment-group-name: ${{ steps.cdk-outputs.outputs.deployment-group-name }}
+      iam-role-arn: ${{ steps.cdk-outputs.outputs.iam-role-arn }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: ${{ env.CDK_IAM_ROLE_ARN }}
+
+      - name: Install CDK CLI
+        run: npm install -g aws-cdk
+
+      - name: Install Python packages
+        run: pip install .[aws-cdk]
+      
+      - name: Deploy CDK stack
+        run: cdk deploy prod --ci --require-approval never --outputs-file outputs.json
+
+      - name: Parse CDK outputs file
+        id: cdk-outputs
+        run: |
+          outputs_json="$(cat outputs.json | jq '.["${{ env.STACK_NAME }}"]')"
+          echo "application-name=$(echo "$outputs_json" | jq '.ApplicationName' --raw-output)" >> "$GITHUB_OUTPUT"
+          echo "deployment-group-name=$(echo "$outputs_json" | jq '.DeploymentGroupName' --raw-output)" >> "$GITHUB_OUTPUT"
+          echo "iam-role-arn=$(echo "$outputs_json" | jq '.GitHubActionsRoleARN' --raw-output)" >> "$GITHUB_OUTPUT"
+
+  # deploy-codedeploy:
+  #   needs: deploy-aws-cdk
+  #   runs-on: ubuntu-latest
+  #   environment:
+  #     name: prod-codedeploy
+  #     url: ${{ steps.create-deployment.outputs.url }}
+  #   permissions:
+  #     id-token: write
+  #     contents: read
+  #   steps:
+  #     - uses: actions/checkout@v4
+
+  #     - uses: aws-actions/configure-aws-credentials@v4
+  #       with:
+  #         aws-region: ${{ env.AWS_REGION }}
+  #         role-to-assume: ${{ needs.deploy-aws-cdk.outputs.iam-role-arn }}
+
+  #     - name: Download build artifact
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: build
+  #         path: codedeploy/dist
+
+  #     - name: Set environment variables
+  #       run: |
+  #         cat <<EOF > codedeploy/.env
+  #         TOKEN="${{ secrets.DISCORD_TOKEN }}"
+  #         LOG_WEBHOOK_URL="${{ secrets.LOG_WEBHOOK_URL }}"
+  #         GITHUB_SHA=main
+  #         GITHUB_REPOSITORY=object-Object/HexBug
+  #         GITHUB_PAGES_URL=https://object-object.github.io/HexBug
+  #         EOF
+
+  #     - name: Upload deployment bundle to S3
+  #       id: upload-bundle
+  #       run: |
+  #         S3_KEY="${{ env.STACK_NAME }}/${{ github.sha }}.zip"
+  #         echo "s3-key=$S3_KEY" >> "$GITHUB_OUTPUT"
+  #         aws deploy push \
+  #           --application-name ${{ needs.deploy-aws-cdk.outputs.application-name }} \
+  #           --s3-location s3://${{ env.S3_BUCKET }}/$S3_KEY \
+  #           --source codedeploy
+
+  #     - name: Create CodeDeploy deployment
+  #       id: create-deployment
+  #       run: |
+  #         response="$(aws deploy create-deployment \
+  #           --application-name ${{ needs.deploy-aws-cdk.outputs.application-name }} \
+  #           --deployment-group-name ${{ needs.deploy-aws-cdk.outputs.deployment-group-name }} \
+  #           --s3-location "bucket=${{ env.S3_BUCKET }},key=${{ steps.upload-bundle.outputs.s3-key }},bundleType=zip")"
+          
+  #         deployment_id="$(echo "$response" | jq '.deploymentId' --raw-output)"
+  #         url="https://${{ env.AWS_REGION }}.console.aws.amazon.com/codesuite/codedeploy/deployments/${deployment_id}?region=${{ env.AWS_REGION }}"
+  #         echo "Deployment URL: $url"
+
+  #         echo "deployment-id=$deployment_id" >> "$GITHUB_OUTPUT"
+  #         echo "url=$url" >> "$GITHUB_OUTPUT"
+
+  #     - name: Wait for deployment to finish
+  #       run: aws deploy wait deployment-successful --deployment-id ${{ steps.create-deployment.outputs.deployment-id }}

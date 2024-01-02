@@ -24,7 +24,11 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-all = [
+aws-cdk = [
+    "aws-cdk-lib==2.102.0",
+    "aws-cdk-github-oidc==2.4.0",
+]
+runtime = [
     "networkx~=3.1",
     "matplotlib~=3.6",
     "lark~=1.1",
@@ -34,6 +38,9 @@ all = [
     "pillow~=9.5",
     "semver~=3.0",
     "hexnumgen @ git+https://github.com/object-Object/hexnumgen-rs.git@70d683ee9b",
+]
+dev = [
+    "HexBug[runtime,aws-cdk]"
 ]
 
 [project.urls]
