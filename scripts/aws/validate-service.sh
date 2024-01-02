@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euo pipefail
+set -euox pipefail
 
 run_pm2() {
     sudo su object -c "pm2 --no-color --mini-list $*"

@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euo pipefail
+set -euox pipefail
 
 cd /var/lib/codedeploy-apps/HexBug
 
