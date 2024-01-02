@@ -242,7 +242,7 @@ class HexdocModInfo(_BaseModInfo):
 
             # ('/', 'SamsTheNerd', 'HexGloop', '2176f6f40c1bee5c8eb8')
             _, author, repo, self.commit = metadata.asset_url.parts
-            self.source_url = f"https://github.com/{author}/{repo}"
+            self.source_url = f"https://github.com/{author}/{repo}/"
 
             # new fields
             self.patterns = hex_metadata.patterns
