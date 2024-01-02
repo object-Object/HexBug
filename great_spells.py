@@ -142,9 +142,9 @@ def points_to_pattern(points: list[Coord]) -> str:
     return pattern
 
 
-def init(l: synchronize.Lock):
+def init(init_lock: synchronize.Lock):
     global lock
-    lock = l
+    lock = init_lock
 
 
 def get_name_and_pattern(registry: Registry, target: str) -> tuple[str, str]:
@@ -187,8 +187,8 @@ if __name__ == "__main__":
 
     if len(starts) == 2:
         # scuffed. but i don't feel like setting up argparse
-        if sys.argv[2] == "--symmetric":
-            print(f"Assuming symmetric.")
+        if len(sys.argv) >= 3 and sys.argv[2] == "--symmetric":
+            print("Assuming symmetric.")
             starts = [starts[0]]
 
         args = [
