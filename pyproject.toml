@@ -13,7 +13,14 @@ authors = [
 ]
 keywords = ["hexdoc"]
 requires-python = ">=3.11"
-dependencies = [
+dependencies = []
+
+[project.optional-dependencies]
+aws-cdk = [
+    "aws-cdk-lib==2.102.0",
+    "aws-cdk-github-oidc==2.4.0",
+]
+scripts = [
     "discord.py~=2.3.2",
     "jproperties~=2.1",
     "typing_extensions~=4.7",
@@ -22,13 +29,8 @@ dependencies = [
     "hexdoc-hexgloop @ https://github.com/SamsTheNerd/HexGloop/raw/af72e6cc318d/docs/v/latest/main/dist/hexdoc_hexgloop-0.2.1.1.0.dev0-py3-none-any.whl",
     "hexdoc-oneironaut==0.1.2.1.0",
 ]
-
-[project.optional-dependencies]
-aws-cdk = [
-    "aws-cdk-lib==2.102.0",
-    "aws-cdk-github-oidc==2.4.0",
-]
 runtime = [
+    "HexBug[scripts]",
     "networkx~=3.1",
     "matplotlib~=3.6",
     "lark~=1.1",
@@ -40,7 +42,7 @@ runtime = [
     "hexnumgen @ git+https://github.com/object-Object/hexnumgen-rs.git@70d683ee9b",
 ]
 dev = [
-    "HexBug[runtime,aws-cdk]"
+    "HexBug[aws-cdk,scripts,runtime]"
 ]
 
 [project.urls]
