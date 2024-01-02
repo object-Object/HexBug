@@ -8,6 +8,9 @@ hooks:
   ApplicationStop:
     - location: scripts/aws/application-stop.sh
       timeout: 60
+  BeforeInstall:
+    - location: scripts/aws/before-install.sh
+      timeout: 60
   AfterInstall:
     - location: scripts/aws/after-install.sh
       timeout: 300
