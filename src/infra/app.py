@@ -40,8 +40,6 @@ def main():
     logger.info("Synthesizing.")
     app.synth()
 
-    print()
-
 
 def setup_logging(verbose: bool = False):
     if verbose:

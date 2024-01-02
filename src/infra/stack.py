@@ -45,10 +45,7 @@ class CDKStack(cdk.Stack):
 
         # codedeploy application
 
-        application = codedeploy.ServerApplication(
-            self,
-            f"{stack_name}-Application",
-        )
+        application = codedeploy.ServerApplication(self, "Application")
 
         deployment_config: codedeploy.ServerDeploymentConfig = (
             codedeploy.ServerDeploymentConfig.ONE_AT_A_TIME
