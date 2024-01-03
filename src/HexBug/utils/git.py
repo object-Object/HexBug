@@ -7,8 +7,8 @@ def _run_command(args: list[str], cwd: str) -> str:
     return result.stdout.strip()
 
 
-def get_current_commit(cwd: str) -> str:
-    return _run_command(["git", "rev-parse", "--short=10", "HEAD"], cwd)
+def get_current_commit(cwd: str, short: int = 10) -> str:
+    return _run_command(["git", "rev-parse", f"--short={short}", "HEAD"], cwd)
 
 
 def _get_commit_tags(cwd: str, commit: str) -> list[str]:
@@ -28,3 +28,10 @@ def get_latest_tags(cwd: str, commit: str) -> list[str]:
 
 def get_commit_message(cwd: str, commit: str) -> str:
     return _run_command(["git", "log", "-1", "--pretty=%B", commit], cwd)
+
+
+def get_commit_date(cwd: str, commit: str) -> str:
+    return _run_command(
+        ["git", "log", "-1", r"--date=format:'%Y-%m-%d'", r"--pretty=%cd", commit],
+        cwd,
+    ).strip("'")

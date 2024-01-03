@@ -11,6 +11,7 @@ from discord.utils import _ColourFormatter
 from dotenv import load_dotenv
 from HexBug.hexdecode.buildpatterns import build_registry
 from HexBug.utils.commands import HexBugBot
+from HexBug.utils.git import get_commit_date, get_current_commit
 
 MIN_PYTHON = (3, 11)
 if sys.version_info < MIN_PYTHON:
@@ -59,6 +60,9 @@ async def main():
     log_webhook_url = _get_env("LOG_WEBHOOK_URL")
     health_check_channel_id = int(_get_env("HEALTH_CHECK_CHANNEL_ID"))
 
+    commit_sha = get_current_commit(".", short=7)
+    commit_date = get_commit_date(".", commit_sha)
+
     _setup_logging()
 
     # build registry, hopefully
@@ -75,6 +79,7 @@ async def main():
             health_check_channel_id=health_check_channel_id,
             command_prefix=commands.when_mentioned,
             intents=intents,
+            activity=discord.Game(f"version {commit_sha} ({commit_date})"),
         )
 
         # load modules and run the bot
