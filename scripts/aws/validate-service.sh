@@ -32,7 +32,9 @@ for (( i=1; i<=attempts; i++ )); do
     fi
 
     # give it some time before the next attempt
-    sleep 10s
+    if [[ $i -lt $attempts ]]; then
+        sleep 10s
+    fi
 done
 
 echo "Failed to get health check response."
