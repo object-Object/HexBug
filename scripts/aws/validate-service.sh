@@ -2,10 +2,13 @@
 set -euox pipefail
 
 get_ssm_parameter() {
-    aws ssm get-parameter --name "$*" --region us-east-1 --with-decryption | jq --raw-output '.Parameter.Value'
+    aws ssm get-parameter --name "$*" --with-decryption | jq --raw-output '.Parameter.Value'
 }
 
 cd /var/lib/codedeploy-apps/HexBug
+
+export AWS_SHARED_CREDENTIALS_FILE=/home/object/codedeploy/temporary-credentials
+export AWS_REGION=us-east-1
 
 stage="prod"
 bot_id="$(get_ssm_parameter /$stage/HexBug/bot-id)"
