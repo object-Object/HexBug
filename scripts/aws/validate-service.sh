@@ -15,14 +15,10 @@ attempts=3
 want_uuid="$(uuidgen)"
 
 for (( i=1; i<=attempts; i++ )); do
-    # give it time to start up
-    echo "Waiting for startup. ($i/$attempts)"
-    sleep 10s
-
-    # send webhook message and wait a bit for a response
+    # send webhook message
     echo "Sending message. ($i/$attempts)"
     curl -H "Content-Type: application/json" -d "{\"content\":\"<@$bot_id> health_check $want_uuid\"}" "$webhook"
-    sleep 1s
+    sleep 2s
 
     # check the response
     if got_uuid=$(<health_check.txt); then
@@ -31,6 +27,9 @@ for (( i=1; i<=attempts; i++ )); do
             exit 0
         fi
     fi
+
+    # give it some time before the next attempt
+    sleep 10s
 done
 
 echo "Failed to get health check response."
