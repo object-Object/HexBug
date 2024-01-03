@@ -5,6 +5,10 @@ on:
     branches: "main"
   workflow_dispatch:
 
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
 env:
   AWS_REGION: us-east-1
   STACK_NAME: prod-HexBug
@@ -12,7 +16,7 @@ env:
   CDK_IAM_ROLE_ARN: arn:aws:iam::511603859520:role/prod-objectobject-ca-GitHubActionsCDKRole19D97701-sweSB0Sp33WN
 
 jobs:
-  scrape_book_types:
+  scrape-book-types:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -55,7 +59,6 @@ jobs:
           file_pattern: patterns.csv
 
   deploy-aws-cdk:
-    needs: scrape_book_types
     runs-on: ubuntu-latest
     environment:
       name: prod-aws-cdk
@@ -99,7 +102,9 @@ jobs:
           echo "iam-role-arn=$(echo "$outputs_json" | jq '.GitHubActionsRoleARN' --raw-output)" >> "$GITHUB_OUTPUT"
 
   deploy-codedeploy:
-    needs: deploy-aws-cdk
+    needs:
+      - scrape-book-types
+      - deploy-aws-cdk
     runs-on: ubuntu-latest
     env:
       APPLICATION_NAME: ${{ needs.deploy-aws-cdk.outputs.application-name }}
