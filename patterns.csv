@@ -443,21 +443,37 @@ MoreIotas,Whisper Reflection,EAST,waqa,false,moreiotas,string/chat/caster,OpChat
 MoreIotas,Winnowing Distillation,EAST,aqwwaqwaad,false,moreiotas,string/sub,OpSubString,"str, num, num → str",#patterns/strings@moreiotas:string/sub
 MoreIotas,Write,WEST,dwewdweq,false,moreiotas,string/block/set,OpSetBlockString,"vec, str | [str] →",#patterns/strings@moreiotas:string/block/set
 MoreIotas,Zero Distillation,SOUTH_WEST,awwaeawwa,false,moreiotas,matrix/zero,OpZeroMatrix,"int ≥ 0, int ≥ 0 → mat",#patterns/matrices@moreiotas:matrix/zero
+Oneironaut,Apothecary's Prfn.,SOUTH_WEST,qqqqqedwd,false,oneironaut,getstatus,,entity → [status],#patterns/status_iotas@oneironaut:getstatus
+Oneironaut,Apothecary's Prfn. II,SOUTH_EAST,eeeeeqawa,false,oneironaut,getstatuscategory,,status → num,#patterns/status_iotas@oneironaut:getstatuscategory
 Oneironaut,Baton Reflection,SOUTH_EAST,qwqqqwqawa,false,oneironaut,getrodlook,,→ vector,#items/reverberation_rod@oneironaut:getrodlook
 Oneironaut,Baton Reflection II,SOUTH_EAST,qwqqqwqawaa,false,oneironaut,getrodpos,,→ vector,#items/reverberation_rod@oneironaut:getrodpos
+Oneironaut,Circle,SOUTH_EAST,wwwwwwqwwwwwwqwwwwwwqwwwwwwqwwwwwwqwwwwww,false,oneironaut,circle,,,
+Oneironaut,Cleanse Status,SOUTH_WEST,eeeeedaqdewed,false,oneironaut,removestatus,,"entity, status →",#patterns/status_iotas@oneironaut:removestatus
 Oneironaut,Conduct Rod,EAST,eqqqqqawweqqqqqawweqqqqqawwdeqewwwwweqeeeqewwwwweqe,false,oneironaut,craftrod,,"entity, list of patterns →",#items/reverberation_rod@oneironaut:craftrod
 Oneironaut,Decorator's Gambit,SOUTH_WEST,wwawwqwwawwaqdq,false,oneironaut,setframerotation,,"item frame, number →",#patterns/frame_patterns@oneironaut:setframerotation
 Oneironaut,Decorator's Purification,SOUTH_WEST,wwawwqwwawwaeae,false,oneironaut,readframerotation,,item frame → number,#patterns/frame_patterns@oneironaut:readframerotation
-Oneironaut,Deprecator's Purification lmao get it?,WEST,wqwqwqwqwqwawedeedqdq,false,oneironaut,readframeitem,,,
+Oneironaut,Discern Shroud,SOUTH_EAST,qqqqqwwaawewaawdww,false,oneironaut,detectshroud,,"vector, number → [vector]",#patterns/spells/great/detection_shielding@oneironaut:detectshroud
+Oneironaut,Empower Mind Render,EAST,qweqadeqadeqadqqqwdaqedaqedaqeqaqdwawdwawdwaqawdwawdwawddwwwwwqdeddw,true,oneironaut,applymindrender,,entity →,#items/mindrender@oneironaut:applymindrender
 Oneironaut,Encore,SOUTH_EAST,deaqqwqqqw,false,oneironaut,resetrod,,number →,#items/reverberation_rod@oneironaut:resetrod
+Oneironaut,Entity Distillation: Status,EAST,eaeeeeeae,false,oneironaut,getbystatussingle,,"status, vector → entity | NULL",#patterns/status_iotas@oneironaut:getbystatussingle
 Oneironaut,Externalize Pigment,WEST,eqdweeqdwweeqddqdwwwdeww,false,oneironaut,paintconjured,,"Vector, itemtype →",#patterns/spells/paint_conjured@oneironaut:paintconjured
 Oneironaut,Finale,SOUTH_WEST,aqdeeweeew,false,oneironaut,haltrod,,,#items/reverberation_rod@oneironaut:haltrod
-Oneironaut,Inscribe Idea,EAST,eweweweweweeewqaqwe,false,oneironaut,writeidea,,"vector | player, any →",#patterns/idea_inscription@oneironaut:writeidea
+Oneironaut,Hidden Sun's Zenith,SOUTH_WEST,qqqqqaewawaweqa,true,oneironaut,invisibility,,"entity, number →",#patterns/spells/great/detection_shielding@oneironaut:invisibility
+Oneironaut,Inscribe Idea,EAST,eweweweweweeewqaqwe,false,oneironaut,writeidea,,"key, any →",#patterns/idea_inscription@oneironaut:writeidea
 Oneironaut,Media Infusion,EAST,wwaqqqqqeqqqwwwqqeqqwwwqqweqadadadaqeqeqadadadaqe,true,oneironaut,infusemedia,,Vector →,#patterns/spells/great/infuse_media@oneironaut:infusemedia
+Oneironaut,Metadata Distillation,WEST,qwqwqwqwqwqaeqedeqe,false,oneironaut,readideawriter,,"key, player → bool",#patterns/idea_inscription@oneironaut:readideawriter
+Oneironaut,Metadata Purification,WEST,qwqwqwqwqwqqqeqaqeq,false,oneironaut,readideatime,,key → number | NULL,#patterns/idea_inscription@oneironaut:readideatime
 Oneironaut,Metronome Gambit,SOUTH_EAST,qwqqqwqaqddq,false,oneironaut,delayrod,,number →,#items/reverberation_rod@oneironaut:delayrod
 Oneironaut,Metronome Reflection,SOUTH_EAST,qwqqqwqawaaw,false,oneironaut,getrodstamp,,→ number,#items/reverberation_rod@oneironaut:getrodstamp
 Oneironaut,Noetic Gateway,NORTH_EAST,qeewwwweeqeqeewwwweeqdqqdwwwdqeqdwwwdqdadwwdqdwwddadaqadaawww,true,oneironaut,dimteleport,,"Entity, Imprint →",#patterns/spells/great/dim_teleport@oneironaut:dimteleport
-Oneironaut,Retrieve Idea,WEST,qwqwqwqwqwqqqwedewq,false,oneironaut,readidea,,vector | player → any,#patterns/idea_inscription@oneironaut:readidea
+Oneironaut,Particle Burst,EAST,deeeewaaddwqqqqa,false,oneironaut,particleburst,,"vec, vec, num, num →",#patterns/spells/particle_burst@oneironaut:particleburst
+Oneironaut,Pharmacist's Prfn.,SOUTH_WEST,qqqqqedwdwd,false,oneironaut,getstatusduration,,"entity, status → num",#patterns/status_iotas@oneironaut:getstatusduration
+Oneironaut,Pharmacist's Prfn. II,SOUTH_EAST,eeeeeqawawa,false,oneironaut,getstatuslevel,,"entity, status → num",#patterns/status_iotas@oneironaut:getstatuslevel
+Oneironaut,Retrieve Idea,WEST,qwqwqwqwqwqqqwedewq,false,oneironaut,readidea,,key → any,#patterns/idea_inscription@oneironaut:readidea
+Oneironaut,Scrutinize Sentinel,EAST,waeawaeddwwd,false,oneironaut,readsentinel,,"vec, player → num | NULL",#greatwork/sentinel_detection@oneironaut:readsentinel
 Oneironaut,Spatial Interchange,EAST,wqqqwwwwwqqqwwwqdaqadwqqwdaqadweqeqqqqeqeqaqeqedeqeqa,true,oneironaut,swapspace,,"[vec, vec], [vec, vec], Imprint →",#patterns/spells/great/swap_space@oneironaut:swapspace
 Oneironaut,Spatial Reflection,WEST,wqwqwqwqwqwaeqqe,false,oneironaut,getdim1,,→ Imprint,#patterns/dim_iotas@oneironaut:getdim1
 Oneironaut,Spatial Reflection II,WEST,wqwqwqwqwqwaqeeq,false,oneironaut,getdim2,,→ Imprint | NULL,#patterns/dim_iotas@oneironaut:getdim2
+Oneironaut,Stealth Shroud,EAST,wawwwdwdwwaqqqqqe,true,oneironaut,resistdetection,,"entity, number →",#patterns/spells/great/detection_shielding@oneironaut:resistdetection
+Oneironaut,Zone Exltn.: Not-Status,EAST,qweeeeewq,false,oneironaut,getbystatusinverse,,"status, vec, num → [entity]",#patterns/status_iotas@oneironaut:getbystatusinverse
+Oneironaut,Zone Exltn.: Status,EAST,ewqqqqqwe,false,oneironaut,getbystatus,,"status, vec, num → [entity]",#patterns/status_iotas@oneironaut:getbystatus
