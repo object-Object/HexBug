@@ -12,7 +12,7 @@ authors = [
     { name="object-Object" },
 ]
 keywords = ["hexdoc"]
-requires-python = ">=3.11"
+requires-python = ">=3.11,<3.12"
 dependencies = []
 
 [project.optional-dependencies]
@@ -39,10 +39,15 @@ runtime = [
     "sty~=1.0",
     "pillow~=9.5",
     "semver~=3.0",
+]
+target-any = [
     "hexnumgen @ git+https://github.com/object-Object/hexnumgen-rs.git@70d683ee9b",
 ]
+target-linux = [ # x86_64-unknown-linux-gnu
+    "hexnumgen @ {root:uri}/vendor/hexnumgen-0.2.0-cp311-cp311-manylinux_2_28_x86_64.whl",
+]
 dev = [
-    "HexBug[aws-cdk,scripts,runtime]"
+    "HexBug[aws-cdk,scripts,runtime,target-any]",
 ]
 
 [project.urls]
