@@ -27,9 +27,15 @@ def build_autocomplete(
 
 class HexBugBot(commands.Bot):
     def __init__(
-        self, registry: Registry, session: ClientSession, log_webhook_url: str, **kwargs
+        self,
+        registry: Registry,
+        session: ClientSession,
+        log_webhook_url: str,
+        health_check_channel_id: int,
+        **kwargs,
     ) -> None:
         super().__init__(**kwargs)
         self.registry = registry
         self.session = session
         self.log_webhook = Webhook.from_url(log_webhook_url, session=session)
+        self.health_check_channel_id = health_check_channel_id

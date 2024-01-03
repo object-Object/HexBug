@@ -1,6 +1,7 @@
 /__version__.py
 info_counts.json
 patterns.csv
+health_check.txt
 
 # hexdoc
 _site/

@@ -57,6 +57,7 @@ async def main():
     load_dotenv(".env")
     token = _get_env("TOKEN")
     log_webhook_url = _get_env("LOG_WEBHOOK_URL")
+    health_check_channel_id = int(_get_env("HEALTH_CHECK_CHANNEL_ID"))
 
     _setup_logging()
 
@@ -71,6 +72,7 @@ async def main():
             registry=registry,
             session=session,
             log_webhook_url=log_webhook_url,
+            health_check_channel_id=health_check_channel_id,
             command_prefix=commands.when_mentioned,
             intents=intents,
         )

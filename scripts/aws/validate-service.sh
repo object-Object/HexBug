@@ -1,21 +1,37 @@
 #!/bin/bash
 set -euox pipefail
 
-run_pm2() {
-    sudo su object -c "pm2 --no-color --mini-list $*"
+get_ssm_parameter() {
+    aws.exe ssm get-parameter --name "$*" --region us-east-1 --with-decryption | jq --raw-output '.Parameter.Value'
 }
 
-# give it time to start up
-sleep 10s
+cd /var/lib/codedeploy-apps/HexBug
 
-# unix timestamp in milliseconds when the process was last started
-start="$(run_pm2 jlist | jq --exit-status '[.[] | if .name == "HexBug" then .pm2_env.pm_uptime else null end | values][0]')"
+stage="prod"
+bot_id="$(get_ssm_parameter /$stage/HexBug/bot-id)"
+webhook="$(get_ssm_parameter /$stage/HexBug/health-check-url)"
 
-# current unix timestamp in milliseconds
-end="$(date +%s%3N)"
+attempts=3
+want_uuid="$(uuidgen)"
 
-elapsed="$(( (end - start) / 1000 ))"
-if [[ $elapsed -lt 5 ]]; then
-    echo "Uptime too low (expected >=5 seconds, got $elapsed)."
-    exit 1
-fi
+for (( i=1; i<=attempts; i++ )); do
+    # give it time to start up
+    echo "Waiting for startup. ($i/$attempts)"
+    sleep 10s
+
+    # send webhook message and wait a bit for a response
+    echo "Sending message. ($i/$attempts)"
+    curl -H "Content-Type: application/json" -d "{\"content\":\"<@$bot_id> health_check $want_uuid\"}" "$webhook"
+    sleep 1s
+
+    # check the response
+    if got_uuid=$(<health_check.txt); then
+        if [[ "$want_uuid" == "$got_uuid" ]]; then
+            echo "Got expected UUID, health OK."
+            exit 0
+        fi
+    fi
+done
+
+echo "Failed to get health check response."
+exit 1

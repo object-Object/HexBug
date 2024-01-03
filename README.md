@@ -16,6 +16,7 @@ A Discord bot for the Hex Casting mod. `buildpatterns.py`, `revealparser.py`, an
     GITHUB_SHA=main
     GITHUB_REPOSITORY=object-Object/HexBug
     GITHUB_PAGES_URL=https://object-object.github.io/HexBug
+    HEALTH_CHECK_CHANNEL_ID="12345678"
     ```
 
 6. Run the bot: `python main.py`

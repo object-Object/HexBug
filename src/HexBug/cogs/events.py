@@ -12,6 +12,8 @@ from ..utils.buttons import get_full_command
 from ..utils.commands import HexBugBot
 from ..utils.mods import MODS, APIMod, Mod, RegistryMod
 
+logger = logging.getLogger("bot")
+
 
 def _on_fetch_error(mod: Mod, resp_status: int, resp_message: str):
     message = f"{mod.value.name}: [{resp_status}] {resp_message}"
@@ -47,7 +49,7 @@ class EventsCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        logging.getLogger("bot").info(f"Logged in as {self.bot.user}")
+        logger.info(f"Logged in as {self.bot.user}")
         self.check_for_updates.start()
 
     @commands.Cog.listener()
@@ -57,9 +59,20 @@ class EventsCog(commands.Cog):
             interaction.type == discord.InteractionType.application_command
             and isinstance(command := interaction.command, app_commands.Command)
         ):
-            logging.getLogger("bot").debug(
+            logger.debug(
                 f"Command executed: {get_full_command(interaction, command, truncate=False)}"
             )
+
+    @commands.Cog.listener()
+    async def on_message(self, message: discord.Message):
+        # allow bots/webhooks to run commands in the health check channel
+        if (
+            message.channel.id == self.bot.health_check_channel_id
+            and message.author.bot
+        ):
+            ctx = await self.bot.get_context(message)
+            if ctx.valid:
+                await self.bot.invoke(ctx)
 
     @tasks.loop(hours=1)
     async def check_for_updates(self):
