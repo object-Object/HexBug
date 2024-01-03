@@ -120,6 +120,10 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+          cache: pip
 
       - uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -165,3 +169,9 @@ jobs:
         run: |
           aws deploy wait deployment-successful \
             --deployment-id ${{ steps.create-deployment.outputs.deployment-id }}
+        
+      - name: Install Python packages
+        run: pip install .[codedeploy]
+      
+      - name: Purge old deployment bundles
+        run: python scripts/github/purge_deployments.py ${{ env.S3_BUCKET }} ${{ env.STACK_NAME }}
