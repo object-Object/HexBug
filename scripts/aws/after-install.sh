@@ -3,6 +3,8 @@ set -euox pipefail
 
 cd /var/lib/codedeploy-apps/HexBug
 
-python3.11 -m venv venv #--clear
+sudo chown -R object .
+
+python3.11 -m venv venv
 source venv/bin/activate
 pip install -e ".[runtime,target-linux]"
