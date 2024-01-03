@@ -2,7 +2,7 @@
 set -euox pipefail
 
 get_ssm_parameter() {
-    aws.exe ssm get-parameter --name "$*" --region us-east-1 --with-decryption | jq --raw-output '.Parameter.Value'
+    aws ssm get-parameter --name "$*" --region us-east-1 --with-decryption | jq --raw-output '.Parameter.Value'
 }
 
 cd /var/lib/codedeploy-apps/HexBug
