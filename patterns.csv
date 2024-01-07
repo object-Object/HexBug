@@ -467,8 +467,8 @@ Oneironaut,Metronome Gambit,SOUTH_EAST,qwqqqwqaqddq,false,oneironaut,delayrod,,n
 Oneironaut,Metronome Reflection,SOUTH_EAST,qwqqqwqawaaw,false,oneironaut,getrodstamp,,→ number,#items/reverberation_rod@oneironaut:getrodstamp
 Oneironaut,Noetic Gateway,NORTH_EAST,qeewwwweeqeqeewwwweeqdqqdwwwdqeqdwwwdqdadwwdqdwwddadaqadaawww,true,oneironaut,dimteleport,,"Entity, Imprint →",#patterns/spells/great/dim_teleport@oneironaut:dimteleport
 Oneironaut,Particle Burst,EAST,deeeewaaddwqqqqa,false,oneironaut,particleburst,,"vec, vec, num, num →",#patterns/spells/particle_burst@oneironaut:particleburst
-Oneironaut,Pharmacist's Prfn.,SOUTH_WEST,qqqqqedwdwd,false,oneironaut,getstatusduration,,"entity, status → num",#patterns/status_iotas@oneironaut:getstatusduration
-Oneironaut,Pharmacist's Prfn. II,SOUTH_EAST,eeeeeqawawa,false,oneironaut,getstatuslevel,,"entity, status → num",#patterns/status_iotas@oneironaut:getstatuslevel
+Oneironaut,Pharmacist's Dstln.,SOUTH_WEST,qqqqqedwdwd,false,oneironaut,getstatusduration,,"entity, status → num",#patterns/status_iotas@oneironaut:getstatusduration
+Oneironaut,Pharmacist's Dstln. II,SOUTH_EAST,eeeeeqawawa,false,oneironaut,getstatuslevel,,"entity, status → num",#patterns/status_iotas@oneironaut:getstatuslevel
 Oneironaut,Retrieve Idea,WEST,qwqwqwqwqwqqqwedewq,false,oneironaut,readidea,,key → any,#patterns/idea_inscription@oneironaut:readidea
 Oneironaut,Scrutinize Sentinel,EAST,waeawaeddwwd,false,oneironaut,readsentinel,,"vec, player → num | NULL",#greatwork/sentinel_detection@oneironaut:readsentinel
 Oneironaut,Spatial Interchange,EAST,wqqqwwwwwqqqwwwqdaqadwqqwdaqadweqeqqqqeqeqaqeqedeqeqa,true,oneironaut,swapspace,,"[vec, vec], [vec, vec], Imprint →",#patterns/spells/great/swap_space@oneironaut:swapspace
