@@ -19,7 +19,7 @@ want_uuid="$(uuidgen)"
 
 for (( i=1; i<=attempts; i++ )); do
     echo "Waiting for startup. ($i/$attempts)"
-    sleep 20s
+    sleep 30s
 
     echo "Sending message. ($i/$attempts)"
     curl -H "Content-Type: application/json" -d "{\"content\":\"<@$bot_id> health_check $want_uuid\"}" "$webhook"
