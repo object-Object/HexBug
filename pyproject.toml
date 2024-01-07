@@ -30,7 +30,7 @@ scripts = [
     "jproperties~=2.1",
     "typing_extensions~=4.7",
     "ruff~=0.1.4",
-    "hexdoc==1!0.1.0a7",
+    "hexdoc==1!0.1.0a10.dev0",
     "hexdoc-hexgloop @ https://github.com/SamsTheNerd/HexGloop/raw/af72e6cc318d/docs/v/latest/main/dist/hexdoc_hexgloop-0.2.1.1.0.dev0-py3-none-any.whl",
     "hexdoc-oneironaut==0.2.1.1.0",
 ]

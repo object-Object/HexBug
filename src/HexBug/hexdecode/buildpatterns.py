@@ -1,19 +1,22 @@
 import asyncio
+import itertools
 import json
 import logging
 import re
 from pathlib import Path
-from typing import Iterable, cast
+from typing import Any, Iterable, cast
 
 from aiohttp import ClientSession
 from hexdoc.minecraft import LocalizedStr
-from hexdoc.patchouli import Category
+from hexdoc.patchouli import Category, FormatTree
 from hexdoc.patchouli.page import SpotlightPage, TextPage
 from hexdoc_hexcasting.book.page import (
     LookupPatternPage,
     PageWithOpPattern,
     PageWithPattern,
 )
+
+from HexBug.utils.hexdoc import format_text
 
 from ..utils.api import APILocalPatternSource, APIPattern
 from ..utils.book_types import (
@@ -44,7 +47,16 @@ def _build_pattern_urls(
     page: BookPage_hexcasting_pattern
     | BookPage_hexcasting_manual_pattern
     | BookPage_patchouli_text,
+    text: Any | None,
 ):
+    match text:
+        case str(description):
+            pass
+        case FormatTree():
+            description = format_text(text)
+        case _:
+            description = None
+
     inp = f"__{inp}__" if (inp := page.get("input")) else ""
     oup = f"__{oup}__" if (oup := page.get("output")) else ""
     args = f"**{f'{inp} → {oup}'.strip()}**" if inp or oup else None
@@ -63,7 +75,11 @@ def _build_pattern_urls(
 
     for name in names:
         if info := registry.from_name.get(name):
-            info.__late_init__(url, args)
+            info.__late_init__(
+                book_url=url,
+                args=args,
+                description=description,
+            )
 
     if url is None:
         return None
@@ -75,6 +91,7 @@ def _build_hexdoc_pattern_urls(
     registry: Registry,
     entry_id: str,
     page: PageWithPattern,
+    text: Any | None,
 ):
     raw_page = {}
     if page.input:
@@ -89,7 +106,8 @@ def _build_hexdoc_pattern_urls(
     return _build_pattern_urls(
         registry,
         entry_id,
-        cast(BookPage_hexcasting_pattern, raw_page),
+        cast(BookPage_hexcasting_pattern, raw_page),  # lie
+        text,
     )
 
 
@@ -102,7 +120,22 @@ def _build_urls(registry: Registry, categories: list[BookCategory], mod: Mod):
         for entry in category["entries"]:
             urls[entry["name"]] = (f"#{entry['id']}", [])
 
-            for page in entry["pages"]:
+            for page, next_page in itertools.zip_longest(
+                entry["pages"],
+                entry["pages"][1:],
+                fillvalue=None,
+            ):
+                assert page is not None
+                text = (
+                    page.get("text")
+                    or (
+                        next_page
+                        and is_typeddict_subtype(next_page, BookPage_patchouli_text)
+                        and next_page.get("text")
+                    )
+                    or None
+                )
+
                 if (
                     is_typeddict_subtype(page, BookPage_patchouli_text)
                     and "title" in page
@@ -112,7 +145,7 @@ def _build_urls(registry: Registry, categories: list[BookCategory], mod: Mod):
                         f"#{entry['id']}@{page['anchor']}",
                         [],
                     )
-                    _build_pattern_urls(registry, entry["id"], page)
+                    _build_pattern_urls(registry, entry["id"], page, text)
 
                 elif (
                     is_typeddict_subtype(page, BookPage_patchouli_spotlight)
@@ -124,13 +157,13 @@ def _build_urls(registry: Registry, categories: list[BookCategory], mod: Mod):
                     )
 
                 elif is_typeddict_subtype(page, BookPage_hexcasting_pattern) and (
-                    value := _build_pattern_urls(registry, entry["id"], page)
+                    value := _build_pattern_urls(registry, entry["id"], page, text)
                 ):
                     urls[page["name"]] = value
 
                 elif is_typeddict_subtype(
                     page, BookPage_hexcasting_manual_pattern
-                ) and (value := _build_pattern_urls(registry, entry["id"], page)):
+                ) and (value := _build_pattern_urls(registry, entry["id"], page, text)):
                     urls[header_regex.sub("", page["header"])] = value
 
 
@@ -143,7 +176,18 @@ def _build_hexdoc_urls(registry: Registry, categories: Iterable[Category], mod: 
         for entry in category.entries.values():
             urls[str(entry.name)] = (f"#{entry.id.path}", [])
 
-            for page in entry.pages:
+            for page, next_page in itertools.zip_longest(
+                entry.pages,
+                entry.pages[1:],
+                fillvalue=None,
+            ):
+                assert page is not None
+                text = (
+                    getattr(page, "text", None)
+                    or (isinstance(next_page, TextPage) and next_page.text)
+                    or None
+                )
+
                 match page:
                     case TextPage(title=LocalizedStr() as title, anchor=str(anchor)):
                         urls[str(title)] = (f"#{entry.id.path}@{anchor}", [])
@@ -152,14 +196,20 @@ def _build_hexdoc_urls(registry: Registry, categories: Iterable[Category], mod: 
                         urls[str(page.item.name)] = (f"#{entry.id.path}@{anchor}", [])
 
                     case LookupPatternPage() if value := _build_hexdoc_pattern_urls(
-                        registry, entry.id.path, page
+                        registry,
+                        entry.id.path,
+                        page,
+                        text,
                     ):
                         pattern = registry.from_name[page.patterns[0].id.path]
                         if pattern.translation:
                             urls[pattern.translation] = value
 
                     case PageWithPattern() if value := _build_hexdoc_pattern_urls(
-                        registry, entry.id.path, page
+                        registry,
+                        entry.id.path,
+                        page,
+                        text,
                     ):
                         urls[header_regex.sub("", str(page.header))] = value
 

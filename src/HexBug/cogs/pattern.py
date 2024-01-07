@@ -46,14 +46,21 @@ async def send_pattern(
     ):
         book_url = mod_info.build_book_url(info.book_url, False, False)
 
+    # why am i allowed to write code lmao
+    description = None
+    if info:
+        description = "\n".join(v for v in [info.args, info.description] if v)
+
     embed = discord.Embed(
         title=translation,
         url=book_url,
-        description=info and info.args,
+        description=description,
     ).set_image(url="attachment://pattern.png")
     if mod_info:
         embed.set_author(
-            name=mod_info.name, icon_url=mod_info.icon_url, url=mod_info.mod_url
+            name=mod_info.name,
+            icon_url=mod_info.icon_url,
+            url=mod_info.mod_url,
         )
     if direction is not None and pattern is not None:
         embed.set_footer(text=f"{direction.name} {pattern}")
@@ -64,7 +71,10 @@ async def send_pattern(
         embed=embed,
         file=file,
         view=build_show_or_delete_button(
-            show_to_everyone, interaction, embed=embed, file=file
+            show_to_everyone,
+            interaction,
+            embed=embed,
+            file=file,
         ),
         ephemeral=not show_to_everyone,
     )

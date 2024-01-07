@@ -26,6 +26,7 @@ class ExtensionPatternInfo(TypedDict):
     pattern: str | None
     args: str | None
     url: str | None
+    description: str | None
 
 
 # don't use this in production
@@ -81,6 +82,7 @@ for info in registry.patterns:
         "url": info.mod.value.build_book_url(info.book_url, False, False)
         if info.book_url is not None
         else None,
+        "description": info.description,
     }
 
     output[info.translation] = data

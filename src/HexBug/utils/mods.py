@@ -11,6 +11,7 @@ import discord
 import jproperties
 from discord import app_commands
 from Hexal.doc import collate_data as hexal_docgen
+from hexdoc.core import ResourceLocation
 from hexdoc.minecraft import I18n
 from HexKinetics.doc import collate_data as hexkinetics_docgen
 from HexMod.doc import collate_data as hex_docgen
@@ -18,12 +19,28 @@ from HexTweaks.doc import collate_data as hextweaks_docgen
 from mediaworks.doc import collate_data as mediaworks_docgen
 from MoreIotas.doc import collate_data as moreiotas_docgen
 
-from HexBug.utils.hexdoc import load_hexdoc_mod
+from HexBug.utils.hexdoc import load_hexdoc_mod, load_plugin_manager, patch_collate_data
 
 from .api import API
 from .book_types import Book as BookTypeDef
 from .git import get_current_commit
 from .urls import wrap_url
+
+# monkeypatch the legacy docgens so we can use hexdoc's fancy text formatting
+pm = load_plugin_manager()
+for book_id, collate_data in [
+    ("hexal:hexalbook", hexal_docgen),
+    ("hexkinetics:hexkineticsbook", hexkinetics_docgen),
+    ("hexcasting:thehexbook", hex_docgen),
+    ("hextweaks:hextweaksbook", hextweaks_docgen),
+    ("mediaworks:mediaworksbook", mediaworks_docgen),
+    ("moreiotas:moreiotasbook", moreiotas_docgen),
+]:
+    patch_collate_data(
+        collate_data,
+        pm=pm,
+        book_id=ResourceLocation.from_str(book_id),
+    )
 
 # modloader emotes
 # this isn't an enum because it looks ugly as an enum, and for no other reason

@@ -23,10 +23,18 @@ class _BasePatternInfo:
     # late-initialized fields
     book_url: str | None = field(init=False, default=None)
     args: str | None = field(init=False, default=None)
+    description: str | None = field(init=False, default=None)
 
-    def __late_init__(self, book_url: str | None, args: str | None):
+    def __late_init__(
+        self,
+        *,
+        book_url: str | None,
+        args: str | None,
+        description: str | None,
+    ):
         object.__setattr__(self, "book_url", book_url)
         object.__setattr__(self, "args", args)
+        object.__setattr__(self, "description", description)
 
     def __repr__(self) -> str:
         return f"{self.mod.name}:{self.name}"
