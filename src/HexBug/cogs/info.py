@@ -109,8 +109,8 @@ Do ***NOT*** upload it directly to Discord in a message or file."""
 
     gtp_itemdrop = MessageProps(
         content="""When someone casts Greater Teleport on themself, each item in their inventory (except for those in their hands and any slots added by mods) has a random chance to drop at their destination.
-        For items in the main three inventory rows, the chance is N/10,000. For items in their hotbar, the chance is N/20,000. For items in their armor slots, the chance is N/40,000.
-        N is the length of the offset vector supplied to GTP. When the vector is over 32,768 meters long, the spell will fail to teleport the target, but items can still drop."""
+For items in the main three inventory rows, the chance is N/10,000. For items in their hotbar, the chance is N/20,000. For items in their armor slots, the chance is N/40,000.
+N is the length of the offset vector supplied to GTP. When the vector is over 32,768 meters long, the spell will fail to teleport the target, but items can still drop."""
     )
 
     patterns = MessageProps(content="https://media.hexxy.media/data/patterns.csv")
