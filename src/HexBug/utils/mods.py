@@ -424,6 +424,7 @@ class RegistryMod(Enum):
         ],
         pattern_stubs=hextweaks_docgen.pattern_stubs,
         modloaders=[FORGE, FABRIC, QUILT],
+        skipped_versions={"3.2.3"},
     )
 
     HexKinetics = RegistryModInfo(

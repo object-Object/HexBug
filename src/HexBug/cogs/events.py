@@ -9,7 +9,7 @@ from semver.version import Version
 
 from ..utils.buttons import get_full_command
 from ..utils.commands import HexBugBot
-from ..utils.mods import MODS, Mod, RegistryMod
+from ..utils.mods import MODS, Mod
 
 logger = logging.getLogger("bot")
 
@@ -28,10 +28,7 @@ class EventsCog(commands.Cog):
     # return an iterable to make it easy to optionally insert into a list
     async def _check_update(self, mod: Mod, latest: str) -> Iterable[str]:
         latest_ver = Version.parse(latest)
-        # walksanator pls
-        if latest_ver <= self.version_cache[mod] or (
-            mod is RegistryMod.HexTweaks and latest == "3.2.3"
-        ):
+        if latest_ver <= self.version_cache[mod]:
             return []
 
         self.version_cache[mod] = latest_ver
