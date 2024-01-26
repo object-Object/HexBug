@@ -1,14 +1,16 @@
 from __future__ import annotations
 
+import logging
 import re
 from abc import ABC, abstractmethod
 from dataclasses import InitVar, dataclass, field
 from enum import Enum
 from itertools import chain
-from typing import Iterable
+from typing import AsyncIterator, Iterable
 
 import discord
 import jproperties
+from aiohttp import ClientSession
 from discord import app_commands
 from Hexal.doc import collate_data as hexal_docgen
 from hexdoc.core import ResourceLocation
@@ -19,6 +21,7 @@ from HexTweaks.doc import collate_data as hextweaks_docgen
 from mediaworks.doc import collate_data as mediaworks_docgen
 from MoreIotas.doc import collate_data as moreiotas_docgen
 
+from HexBug.utils import modrinth
 from HexBug.utils.hexdoc import load_hexdoc_mod, load_plugin_manager, patch_collate_data
 
 from .api import API
@@ -41,6 +44,8 @@ for book_id, collate_data in [
         pm=pm,
         book_id=ResourceLocation.from_str(book_id),
     )
+
+logger = logging.getLogger(__name__)
 
 # modloader emotes
 # this isn't an enum because it looks ugly as an enum, and for no other reason
@@ -68,6 +73,8 @@ class _BaseModInfo(ABC):
     modrinth_slug: str | None
     icon_url: str | None
     modloaders: list[str]
+    version_regex: re.Pattern | None = None
+    skipped_versions: set[str] = field(default_factory=set)
 
     def __post_init__(self):
         if self.modrinth_slug:
@@ -90,6 +97,38 @@ class _BaseModInfo(ABC):
     @property
     def mod_url(self) -> str | None:
         return self.modrinth_url or self.curseforge_url
+
+    async def get_latest_version(self, session: ClientSession) -> str | None:
+        async for raw_version in self._get_raw_versions(session):
+            version = self._parse_version(raw_version)
+            if version not in self.skipped_versions:
+                return version
+
+    async def _get_raw_versions(self, session: ClientSession) -> AsyncIterator[str]:
+        """Fetches and returns the list of available versions for this mod, from newest
+        to oldest.
+
+        Raises `ClientResponseError` if a network error occurs.
+        """
+        if self.modrinth_slug is None:
+            return
+
+        versions = await modrinth.get_versions(session, self.modrinth_slug)
+        for version in versions:
+            yield version["version_number"]
+
+    def _parse_version(self, raw_version: str) -> str:
+        if not self.version_regex:
+            return raw_version
+
+        match = self.version_regex.search(raw_version)
+        if not match:
+            logger.warning(
+                f"Failed to match version regex for {self.name}: {raw_version}"
+            )
+            return raw_version
+
+        return match[1]
 
 
 class RegistryRegexType(Enum):
@@ -211,6 +250,11 @@ class _BaseAPIModInfo(_BaseModInfo, ABC):
         if self._commit is None:
             raise NotInitializedError(self)
         return self._commit
+
+    async def _get_raw_versions(self, session: ClientSession) -> AsyncIterator[str]:
+        versions = await self.api.get_versions(session)
+        for version in versions["versions"]:
+            yield version["id"]
 
 
 class APIWithBookModInfo(_BaseAPIModInfo):
@@ -468,6 +512,18 @@ class HexdocMod(Enum):
         modrinth_slug="hexgloop",
         icon_url="https://cdn.modrinth.com/data/ryfyOhoP/fd47e532776ba9580c2e7b847b5308b7b8b9d7ae.png",
         modloaders=[FORGE, FABRIC, QUILT],
+        version_regex=re.compile(
+            r"""
+                ^
+                1\.\d+\.\d+  # Minecraft version
+                -
+                (\d+\.\d+\.\d+)  # mod version (we want this part)
+                -
+                [a-zA-Z]+  # platform (eg. fabric, forge)
+                $
+            """,
+            re.MULTILINE | re.VERBOSE,
+        ),
     )
 
     Oneironaut = HexdocModInfo(
@@ -479,6 +535,7 @@ class HexdocMod(Enum):
         modrinth_slug="oneironaut",
         icon_url="https://raw.githubusercontent.com/beholderface/oneironaut/14a5797b9d40/fabric/src/main/resources/icon.png",
         modloaders=[FORGE, FABRIC],
+        skipped_versions={"0.2.3"},
     )
 
 

@@ -7,10 +7,9 @@ from discord import app_commands
 from discord.ext import commands, tasks
 from semver.version import Version
 
-from ..utils import modrinth
 from ..utils.buttons import get_full_command
 from ..utils.commands import HexBugBot
-from ..utils.mods import MODS, APIMod, Mod, RegistryMod
+from ..utils.mods import MODS, Mod, RegistryMod
 
 logger = logging.getLogger("bot")
 
@@ -79,36 +78,17 @@ class EventsCog(commands.Cog):
         update_messages = []
         error_messages = []
 
-        # check registry mods by fetching from Modrinth
-        for mod in RegistryMod:
-            if mod.value.modrinth_slug is None:
-                continue
-
-            # TODO: this is basically the same block as below, refactor it out
+        for mod in MODS:
             try:
-                versions = await modrinth.get_versions(
-                    self.bot.session, mod.value.modrinth_slug
-                )
-            except ClientResponseError as e:
-                error_messages.append(_on_fetch_error(mod, e.status, e.message))
-                continue
-            latest = versions[0]["version_number"]
-            update_messages.extend(await self._check_update(mod, latest))
-
-        # check API mods by querying the API
-        for mod in APIMod:
-            try:
-                versions = await mod.value.api.get_versions(self.bot.session)
+                latest = await mod.value.get_latest_version(self.bot.session)
             except ClientResponseError as e:
                 if not (500 <= e.status < 600):
                     error_messages.append(_on_fetch_error(mod, e.status, e.message))
                 continue
-            latest = versions["versions"][0]["id"]
-            update_messages.extend(await self._check_update(mod, latest))
 
-        # TODO: check hexdoc mods somehow
+            if latest is not None:
+                update_messages.extend(await self._check_update(mod, latest))
 
-        # if there's any new updates or any errors, log them
         await self._log_messages("**Update{s} available!**", update_messages)
         await self._log_messages(
             "**Error{s} while checking for updates!**", error_messages
