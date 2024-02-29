@@ -298,9 +298,8 @@ def get_aligned_pattern_segments(
     return _align_segments_to_origin(segments) if align else segments
 
 
-def get_rotated_aligned_pattern_segments(
-    direction: Direction, pattern: str
-) -> Generator[frozenset[Segment], None, None]:
+def get_rotated_aligned_pattern_segments(direction: Direction, pattern: str):
     segments = get_aligned_pattern_segments(direction, pattern, False)
     for n in range(6):
-        yield _align_segments_to_origin([segment.rotated(n) for segment in segments])
+        rotated_segments = [segment.rotated(n) for segment in segments]
+        yield _align_segments_to_origin(rotated_segments)

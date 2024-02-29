@@ -8,7 +8,7 @@ from typing import Generator
 
 from sty import fg
 
-from .hex_math import Angle, Direction, get_aligned_pattern_segments
+from .hex_math import Angle, Direction
 from .registry import Registry
 
 localize_regex = re.compile(r"((?:number|mask))(: .+)")
@@ -248,14 +248,8 @@ def _handle_named_pattern(name: str):
 def _parse_unknown_pattern(
     pattern: UnknownPattern, registry: Registry
 ) -> tuple[Pattern, str]:
-    if (
-        (info := registry.from_pattern.get(pattern._datum))
-        or (
-            segments := get_aligned_pattern_segments(
-                pattern._initial_direction, pattern._datum
-            )
-        )
-        and (info := registry.from_segments.get(segments))
+    if info := registry.from_pattern_or_segments(
+        pattern._initial_direction, pattern._datum
     ):
         return _handle_named_pattern(info.name), info.name
     elif bk := _parse_bookkeeper(pattern._initial_direction, pattern._datum):

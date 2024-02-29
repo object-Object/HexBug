@@ -478,9 +478,8 @@ async def build_registry(session: ClientSession) -> Registry | None:
 
     if duplicate_exceptions:
         for e in duplicate_exceptions:
-            message = [f"Duplicate pattern: {e.info}"]
-            for attribute, duplicate in e.duplicates:
-                value = getattr(e.info, attribute)
+            message = [f"Duplicate pattern: {e.info or '(unknown)'}"]
+            for attribute, (duplicate, value) in e.duplicates.items():
                 value_display = (
                     value if isinstance(value, (str, int, float, bool)) else type(value)
                 )
