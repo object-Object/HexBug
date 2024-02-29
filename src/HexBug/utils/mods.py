@@ -18,7 +18,6 @@ from hexdoc.minecraft import I18n
 from HexKinetics.doc import collate_data as hexkinetics_docgen
 from HexMod.doc import collate_data as hex_docgen
 from HexTweaks.doc import collate_data as hextweaks_docgen
-from mediaworks.doc import collate_data as mediaworks_docgen
 from MoreIotas.doc import collate_data as moreiotas_docgen
 
 from HexBug.utils import modrinth
@@ -36,7 +35,6 @@ for book_id, collate_data in [
     ("hexkinetics:hexkineticsbook", hexkinetics_docgen),
     ("hexcasting:thehexbook", hex_docgen),
     ("hextweaks:hextweaksbook", hextweaks_docgen),
-    ("mediaworks:mediaworksbook", mediaworks_docgen),
     ("moreiotas:moreiotasbook", moreiotas_docgen),
 ]:
     patch_collate_data(
@@ -453,32 +451,6 @@ class RegistryMod(Enum):
         modloaders=[FABRIC, QUILT],
     )
 
-    Mediaworks = RegistryModInfo(
-        name="Mediaworks",
-        description="Adds QOL features and new spells. Create HUD's and become a ghost!",  # stolen from addons.hexxy.media
-        directory="vendor/mediaworks",
-        book=mediaworks_docgen.parse_book(
-            "vendor/mediaworks/common/src/main/resources",
-            "vendor/mediaworks/doc/resources",
-            "mediaworks",
-            "mediaworksbook",
-        ),
-        registry_regex_type=RegistryRegexType.Mediaworks,
-        book_url="https://artynova.github.io/mediaworks/",
-        curseforge_url=None,
-        modrinth_slug="mediaworks",
-        source_url="https://github.com/artynova/mediaworks/",
-        icon_url="https://cdn-raw.modrinth.com/data/2kZJcMa9/58257ac58547acd70079e3c436bafccbb2d52620.png",
-        pattern_files=[
-            "common/src/main/java/io/github/artynova/mediaworks/casting/pattern/MediaworksPatterns.java",
-        ],
-        operator_directories=[
-            "common/src/main/java/io/github/artynova/mediaworks/casting/pattern",
-        ],
-        pattern_stubs=mediaworks_docgen.pattern_stubs,
-        modloaders=[FORGE, FABRIC, QUILT],
-    )
-
     @property
     def value(self) -> RegistryModInfo:
         return super().value
@@ -525,6 +497,17 @@ class HexdocMod(Enum):
             """,
             re.MULTILINE | re.VERBOSE,
         ),
+    )
+
+    Mediaworks = HexdocModInfo(
+        name="Mediaworks",
+        modid="mediaworks",
+        book_id="mediaworks:mediaworksbook",
+        description="Adds QOL features and new spells. Create HUDs and become a ghost!",  # stolen from addons.hexxy.media
+        curseforge_url=None,
+        modrinth_slug="mediaworks",
+        icon_url="https://cdn-raw.modrinth.com/data/2kZJcMa9/58257ac58547acd70079e3c436bafccbb2d52620.png",
+        modloaders=[FORGE, FABRIC, QUILT],
     )
 
     Oneironaut = HexdocModInfo(

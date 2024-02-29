@@ -478,13 +478,16 @@ async def build_registry(session: ClientSession) -> Registry | None:
 
     if duplicate_exceptions:
         for e in duplicate_exceptions:
-            message = [f"Duplicate pattern: {e.info}"]
-            for attribute, duplicate in e.duplicates:
-                value = getattr(e.info, attribute)
+            message = [f"Duplicate pattern: {e.info or '(unknown)'}"]
+            for duplicate in e.duplicates:
                 value_display = (
-                    value if isinstance(value, (str, int, float, bool)) else type(value)
+                    duplicate.value
+                    if isinstance(duplicate.value, (str, int, float, bool))
+                    else type(duplicate.value)
                 )
-                message.append(f'{"":34}{duplicate}.{attribute} = "{value_display}"')
+                message.append(
+                    f'{"":34}{duplicate.info}.{duplicate.attribute} = "{value_display}"'
+                )
             logging.error("\n".join(message))
         return None
 

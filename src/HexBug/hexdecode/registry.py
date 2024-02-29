@@ -2,12 +2,18 @@ import re
 from collections import defaultdict
 from dataclasses import dataclass, field
 from fractions import Fraction
-from typing import TypeVar
+from functools import cached_property
+from typing import Any, TypedDict, TypeVar, Unpack
 
 from ..utils.mods import Mod
 from ..utils.parse_rational import parse_rational
 from ..utils.patterns import parse_mask
-from .hex_math import Direction, Segment, get_rotated_aligned_pattern_segments
+from .hex_math import (
+    Direction,
+    Segment,
+    get_aligned_pattern_segments,
+    get_rotated_aligned_pattern_segments,
+)
 
 
 @dataclass(frozen=True, kw_only=True, repr=False)
@@ -43,21 +49,19 @@ class _BasePatternInfo:
     def display_name(self) -> str:
         return self.name if self.translation is None else self.translation
 
+    @property
+    def id(self):
+        return f"{self.mod.value.modid}:{self.name}"
+
 
 @dataclass(frozen=True, kw_only=True, repr=False)
 class NormalPatternInfo(_BasePatternInfo):
     direction: Direction
     pattern: str
-    rotated_segments: tuple[frozenset[Segment]] = field(init=False)
-    """Tuple of rotated aligned segment sets for this pattern. Empty if is_great is false."""
 
-    def __post_init__(self):
-        rotated_segments: tuple[frozenset[Segment], ...] = (
-            tuple(get_rotated_aligned_pattern_segments(self.direction, self.pattern))
-            if self.is_great
-            else tuple()
-        )
-        object.__setattr__(self, "rotated_segments", rotated_segments)
+    @cached_property
+    def rotated_segments(self):
+        return tuple(get_rotated_aligned_pattern_segments(self.direction, self.pattern))
 
 
 @dataclass(frozen=True, kw_only=True, repr=False)
@@ -76,10 +80,17 @@ class RawPatternInfo:
     pattern: str
 
 
+@dataclass(frozen=True)
+class DuplicatePattern:
+    info: PatternInfo
+    attribute: str
+    value: Any
+
+
 @dataclass
 class DuplicatePatternException(Exception):
-    info: PatternInfo
-    duplicates: list[tuple[str, PatternInfo]]
+    info: PatternInfo | None
+    duplicates: list[DuplicatePattern]
 
 
 T = TypeVar("T", str, None)
@@ -102,6 +113,13 @@ suffixes: list[tuple[str, list[str]]] = [
 check_suffixes = {s.strip() for old, all_new in suffixes for s in [old] + all_new}
 
 
+class DuplicateCheckerKwargs(TypedDict):
+    name: str | None
+    translation: str | None
+    pattern: str | None
+    is_great: bool | None
+
+
 @dataclass
 class Registry:
     pregen_numbers: dict[int, tuple[Direction, str]]
@@ -112,6 +130,11 @@ class Registry:
         self.from_display_name: dict[str, PatternInfo] = {}
         self.from_pattern: dict[str, PatternInfo] = {}
         self.from_segments: dict[frozenset[Segment], PatternInfo] = {}
+        """Only great spells."""
+        self._from_segments_total: defaultdict[
+            frozenset[Segment], set[PatternInfo]
+        ] = defaultdict(set)
+        """Includes non-great spells."""
         self._from_shorthand: dict[str, PatternInfo] = {}
         self.page_title_to_url: defaultdict[
             Mod, dict[str, tuple[str, list[str]]]
@@ -170,34 +193,67 @@ class Registry:
                 ):
                     self._from_shorthand[option] = info
 
-    def _ensure_not_duplicate(self, info: PatternInfo) -> None:
+    # TODO: scuffed
+    def ensure_not_duplicate(
+        self,
+        *,
+        info: PatternInfo | None = None,
+        **kwargs: Unpack[DuplicateCheckerKwargs],
+    ):
         """Ensures that this pattern doesn't yet exist in any of the registry lookups.
+
+        `info` is only used when raising exceptions.
 
         Raises:
             DuplicatePatternException: If a conflict is found.
         """
-        duplicates: list[tuple[str, PatternInfo]] = []
-
-        def _add_dup_if_exists(attribute: str, duplicate: PatternInfo | None):
-            if duplicate is not None:
-                duplicates.append((attribute, duplicate))
-
-        _add_dup_if_exists("name", self.from_name.get(info.name))
-        _add_dup_if_exists(
-            "display_name", self.from_display_name.get(info.display_name)
-        )
-
-        if not isinstance(info, SpecialHandlerPatternInfo):
-            if info.is_great:
-                for i, segments in enumerate(info.rotated_segments):
-                    _add_dup_if_exists(
-                        f"segments[{i}]", self.from_segments.get(segments)
-                    )
-            else:
-                _add_dup_if_exists("pattern", self.from_pattern.get(info.pattern))
-
-        if duplicates:
+        if duplicates := self.get_duplicates(**kwargs):
             raise DuplicatePatternException(info, duplicates)
+
+    def get_duplicates(self, **kwargs: Unpack[DuplicateCheckerKwargs]):
+        duplicates = [
+            DuplicatePattern(
+                attribute=attribute,
+                info=info,
+                value=value,
+            )
+            for attribute, info, value in self._get_possible_duplicates(**kwargs)
+            if info is not None
+        ]
+        duplicates.sort(key=lambda v: (v.info.display_name, v.attribute))
+        return duplicates
+
+    def _get_possible_duplicates(
+        self,
+        *,
+        name: str | None,
+        translation: str | None,
+        pattern: str | None,
+        is_great: bool | None,
+    ):
+        """yields (attribute, pattern_info, duplicate_value)"""
+
+        if name is not None:
+            yield "name", self.from_name.get(name), name
+
+        display_name = translation if translation is not None else name
+        if display_name is not None:
+            yield "display_name", self.from_display_name.get(display_name), display_name
+
+        if pattern is not None:
+            yield "pattern", self.from_pattern.get(pattern), pattern
+
+            segments = get_aligned_pattern_segments(Direction.EAST, pattern)
+            if is_great:
+                # great spells must not match the shape of ANY pattern
+                infos = self._from_segments_total[segments]
+            else:
+                # non-great-spells must not match the shape of any great spell
+                # but they can match the shape of other patterns
+                infos = [self.from_segments.get(segments)]
+
+            for info in infos:
+                yield "shape", info, segments
 
     def add_pattern(self, info: PatternInfo) -> None:
         """Insert a pattern into the registry.
@@ -205,13 +261,23 @@ class Registry:
         Raises:
             DuplicatePatternException: If the value of any lookup field already exists in the registry.
         """
-        self._ensure_not_duplicate(info)
+
+        self.ensure_not_duplicate(
+            info=info,
+            name=info.name,
+            translation=info.translation,
+            pattern=info.pattern,
+            is_great=info.is_great,
+        )
 
         self.patterns.append(info)
         self.from_name[info.name] = info
         self.from_display_name[info.display_name] = info
 
         if not isinstance(info, SpecialHandlerPatternInfo):
+            for segments in info.rotated_segments:
+                self._from_segments_total[segments].add(info)
+
             if info.is_great:
                 for segments in info.rotated_segments:
                     self.from_segments[segments] = info
@@ -281,3 +347,10 @@ class Registry:
             if info.translation is not None:
                 return info.translation
         return default
+
+    def from_pattern_or_segments(self, direction: Direction, pattern: str):
+        if info := self.from_pattern.get(pattern):
+            return info
+
+        segments = get_aligned_pattern_segments(direction, pattern)
+        return self.from_segments.get(segments)

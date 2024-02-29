@@ -1,3 +1,4 @@
+from collections import defaultdict
 from io import BytesIO
 
 import discord
@@ -12,7 +13,7 @@ from ..hexdecode.hexast import (
     _parse_unknown_pattern,
     generate_bookkeeper,
 )
-from ..hexdecode.registry import SpecialHandlerPatternInfo
+from ..hexdecode.registry import DuplicatePattern, SpecialHandlerPatternInfo
 from ..utils.buttons import build_show_or_delete_button
 from ..utils.commands import HexBugBot, build_autocomplete
 from ..utils.generate_image import Palette, Theme, draw_single_pattern
@@ -405,6 +406,69 @@ class PatternCog(commands.GroupCog, name="pattern"):
             pattern=pattern,
             image=image,
             show_to_everyone=show_to_everyone,
+        )
+
+    @app_commands.command()
+    @app_commands.describe(
+        pattern='The angle signature of the pattern (eg. aqaawde) — type "-" to leave blank',
+        is_great="Whether the pattern should be considered a great spell or not",
+        show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
+    )
+    async def check(
+        self,
+        interaction: discord.Interaction,
+        pattern: app_commands.Range[str, 1, 128],
+        is_great: bool,
+        show_to_everyone: bool = False,
+    ) -> None:
+        """Check if a pattern exists in any of HexBug's supported mods (ignores numbers/bookkeepers)"""
+
+        if pattern in ["-", '"-"']:
+            pattern = ""
+        elif not all(c in "aqweds" for c in pattern):
+            return await interaction.response.send_message(
+                "❌ Invalid angle signature, must only contain the characters `aqweds`.",
+                ephemeral=True,
+            )
+
+        embed = discord.Embed()
+
+        duplicates = self.registry.get_duplicates(
+            pattern=pattern,
+            is_great=is_great,
+            name=None,
+            translation=None,
+        )
+
+        if duplicates:
+            es = "" if len(duplicates) == 1 else "es"
+            embed.title = f"Match{es} found!"
+
+            duplicates_by_attribute = defaultdict[str, list[DuplicatePattern]](list)
+            for dupe in duplicates:
+                duplicates_by_attribute[dupe.attribute].append(dupe)
+
+            for attribute in sorted(duplicates_by_attribute.keys()):
+                embed.add_field(
+                    name=f"Same {attribute}",
+                    value="\n".join(
+                        f"* {duplicate.info.display_name} (`{duplicate.info.id}`)"
+                        for duplicate in duplicates_by_attribute[attribute]
+                    ),
+                    inline=False,
+                )
+        else:
+            embed.description = "No matches found."
+
+        # TODO: this is copied in a lot of places, it should probably be a function
+        await interaction.response.send_message(
+            embed=embed,
+            view=build_show_or_delete_button(
+                show_to_everyone,
+                interaction,
+                embed=embed,
+            ),
+            ephemeral=not show_to_everyone,
         )
 
 
