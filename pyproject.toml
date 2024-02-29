@@ -33,6 +33,7 @@ scripts = [
     "hexdoc==1!0.1.0a10.dev0",
     "hexdoc-hexgloop @ https://github.com/SamsTheNerd/HexGloop/raw/af72e6cc318d/docs/v/latest/main/dist/hexdoc_hexgloop-0.2.1.1.0.dev0-py3-none-any.whl",
     "hexdoc-oneironaut==0.2.2.1.0",
+    "hexdoc-mediaworks==1.0.6.1.0.dev0",
 ]
 runtime = [
     "HexBug[scripts]",
