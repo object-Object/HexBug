@@ -49,6 +49,10 @@ class _BasePatternInfo:
     def display_name(self) -> str:
         return self.name if self.translation is None else self.translation
 
+    @property
+    def id(self):
+        return f"{self.mod.value.modid}:{self.name}"
+
 
 @dataclass(frozen=True, kw_only=True, repr=False)
 class NormalPatternInfo(_BasePatternInfo):
@@ -76,11 +80,17 @@ class RawPatternInfo:
     pattern: str
 
 
+@dataclass(frozen=True)
+class DuplicatePattern:
+    info: PatternInfo
+    attribute: str
+    value: Any
+
+
 @dataclass
 class DuplicatePatternException(Exception):
     info: PatternInfo | None
-    duplicates: dict[str, tuple[PatternInfo, Any]]
-    """attribute -> (pattern_info, duplicate_value)"""
+    duplicates: list[DuplicatePattern]
 
 
 T = TypeVar("T", str, None)
@@ -201,11 +211,17 @@ class Registry:
             raise DuplicatePatternException(info, duplicates)
 
     def get_duplicates(self, **kwargs: Unpack[DuplicateCheckerKwargs]):
-        return {
-            attribute: (info, value)
+        duplicates = [
+            DuplicatePattern(
+                attribute=attribute,
+                info=info,
+                value=value,
+            )
             for attribute, info, value in self._get_possible_duplicates(**kwargs)
             if info is not None
-        }
+        ]
+        duplicates.sort(key=lambda v: (v.info.display_name, v.attribute))
+        return duplicates
 
     def _get_possible_duplicates(
         self,
@@ -237,7 +253,7 @@ class Registry:
                 infos = [self.from_segments.get(segments)]
 
             for info in infos:
-                yield "segments", info, segments
+                yield "shape", info, segments
 
     def add_pattern(self, info: PatternInfo) -> None:
         """Insert a pattern into the registry.
