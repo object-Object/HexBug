@@ -546,7 +546,7 @@ class HexdocMod(Enum):
         description="Unlock the secrets of your mind's library.",
         curseforge_url="https://www.curseforge.com/minecraft/mc-mods/hex-keys/",
         modrinth_slug="hexkeys",
-        icon_url="https://github.com/MoonlitJolteon/hex-keys-addon/blob/main/common/src/main/resources/hexkeys.png?raw=true",
+        icon_url="https://raw.githubusercontent.com/MoonlitJolteon/hex-keys-addon/799f2bd/common/src/main/resources/hexkeys.png",
         modloaders=[FORGE, FABRIC],
     )
 
