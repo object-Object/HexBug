@@ -539,6 +539,17 @@ class HexdocMod(Enum):
         skipped_versions={"0.2.3"},
     )
 
+    HexKeys = HexdocModInfo(
+        name="Hex Keys",
+        modid="hexkeys",
+        book_id="hexkeys:hexkeysbook",
+        description="Unlock the secrets of your mind's library.",
+        curseforge_url="https://www.curseforge.com/minecraft/mc-mods/hex-keys/",
+        modrinth_slug="hexkeys",
+        icon_url="https://github.com/MoonlitJolteon/hex-keys-addon/blob/main/common/src/main/resources/hexkeys.png?raw=true",
+        modloaders=[FORGE, FABRIC],
+    )
+
 
 ModInfo = RegistryModInfo | APIModInfo | HexdocModInfo
 Mod = RegistryMod | APIMod | HexdocMod
