@@ -11,7 +11,6 @@ class BookPage(TypedDict, Generic[T]):
 
 class BookPage_patchouli_text(BookPage[Literal["patchouli:text"]]):
     text: FormatTree | list
-    advancement: NotRequired[str]
     anchor: NotRequired[str]
     input: NotRequired[str]
     op_id: NotRequired[str]
@@ -37,12 +36,9 @@ class BookPage_patchouli_link(BookPage[Literal["patchouli:link"]]):
 class BookPage_patchouli_spotlight(BookPage[Literal["patchouli:spotlight"]]):
     item: str
     item_name: str
-    advancement: NotRequired[str]
+    link_recipe: bool
+    text: FormatTree
     anchor: NotRequired[str]
-    flag: NotRequired[str]
-    link_recipe: NotRequired[bool | str]
-    text: NotRequired[FormatTree]
-    title: NotRequired[str]
 
 
 class BookPage_hexcasting_crafting_multi(
