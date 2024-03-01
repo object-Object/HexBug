@@ -240,6 +240,10 @@ Hex Gloop,Torty's Max Purification,NORTH_WEST,ewdqdwewaqae,false,hexgloop,torty_
 Hex Gloop,Torty's Purification,EAST,awewdqdwewaaw,false,hexgloop,torty_count,,slot → num,#items/inventorty@hexgloop:torty_count
 Hex Gloop,Torty's Reflection,EAST,qaeaqeaq,false,hexgloop,torty_inv_sizes,,→ [num],#items/inventorty@hexgloop:torty_inv_sizes
 Hex Gloop,Torty's Reflection II,EAST,waeaeaeawa,false,hexgloop,torty_inv_names,,→ [string],#items/inventorty@hexgloop:torty_inv_names
+Hex Keys,Klein's Chest,SOUTH_EAST,eawaeawqawwawqq,true,hexkeys,kleins_chest,,,#patterns/spells/kliens_chest@hexkeys:kleins_chest
+Hex Keys,Library Key,NORTH_WEST,qqqqqewwddada,false,hexkeys,library,,,#patterns/spells/mindscape@hexkeys:library
+Hex Keys,Morpheus's Reflection,WEST,ewdwewdeewdwewdewewdwe,true,hexkeys,create_library_key,,→ Library Key,#patterns/spells/visit_mindscape@hexkeys:create_library_key
+Hex Keys,Visitor's Key,EAST,waqqqqqewwddada,false,hexkeys,visit_library,,Library Key →,#patterns/spells/visit_mindscape@hexkeys:visit_library
 HexKinetics,Alidade's Purification II,EAST,waa,false,hexkinetics,direction/const,OpRoundedEntityLook,entity → vector,#patterns/actions@hexkinetics:direction/const
 HexKinetics,Greater Translocation,SOUTH_EAST,eeqeeqeeeqeeqdeeqeqqwqqqeeqeqqwqq,false,hexkinetics,move_block/spell,OpMoveBlock,"vector, vector →",#patterns/great_spells/greater_translocation@hexkinetics:move_block/spell
 HexKinetics,Hadamard's Distillation,WEST,awaqawa,false,hexkinetics,hadamard/const,OpVectorComponentMultiplication,"vector, vector → vector",#patterns/math_actions@hexkinetics:hadamard/const
