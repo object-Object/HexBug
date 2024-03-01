@@ -398,18 +398,18 @@ Hexbound,Unstable Hex Shield,NORTH_EAST,eqdweeqdw,false,hexbound,create_shield/g
 Hexbound,Winding Purification,WEST,qeeee,false,hexbound,pattern/start_dir,OpPatternStartDir,pattern → num,#patterns/pattern_editing@hexbound:pattern/start_dir
 Hexbound,Zone Distillation: Construct,SOUTH_EAST,qqqqqwdeddwedde,false,hexbound,zone_entity/construct,OpGetEntitiesBy,"vector, number → list",#patterns/constructs/selecting_constructs@hexbound:zone_entity/construct
 Hexbound,Zone Distillation: Non-Construct,SOUTH_EAST,eeeeewaqaawedde,false,hexbound,zone_entity/not_construct,OpGetEntitiesBy,"vector, number → list",#patterns/constructs/selecting_constructs@hexbound:zone_entity/not_construct
-Mediaworks,Astral Gaze Reflection,NORTH_EAST,waawaq,false,mediaworks,astral_look,OpAstralLook,→ vector,#patterns/astral_utils@mediaworks:astral_look
-Mediaworks,Astral Locale Reflection,NORTH_EAST,qaqqqqaq,false,mediaworks,astral_pos,OpAstralPos,→ vector,#patterns/astral_utils@mediaworks:astral_pos
-Mediaworks,Astral Projection,NORTH_WEST,qdadwewewdadeadwddaaedqdeddew,true,mediaworks,astral_projection,OpAstralProjection,number →,#patterns/great_spells/astral_projection@mediaworks:astral_projection
-Mediaworks,Calligrapher's Exaltation,NORTH_EAST,aaqdwdwde,false,mediaworks,visage/text/bounded,OpVisageText,"number, number, any → visage",#patterns/macula/text_visages@mediaworks:visage/text/bounded
-Mediaworks,Calligrapher's Purification,NORTH_EAST,aaqdwdwd,false,mediaworks,visage/text/unbounded,OpVisageText,any → visage,#patterns/macula/text_visages@mediaworks:visage/text/unbounded
-Mediaworks,Etch Visage,NORTH_WEST,wddaaddw,false,mediaworks,macula/add,OpMaculaAdd,"vec, vis | vec, vis, num →",#patterns/macula/macula_patterns@mediaworks:macula/add
-Mediaworks,Macula Erasure,WEST,awawa,false,mediaworks,macula/clear,OpMaculaClear,,#patterns/macula/macula_patterns@mediaworks:macula/clear
-Mediaworks,Macula Gambit,NORTH_EAST,aawawaa,false,mediaworks,macula/dimensions,OpMaculaDimensions,"→ number, number",#patterns/macula/macula_patterns@mediaworks:macula/dimensions
-Mediaworks,Media Purification I,WEST,ddew,false,mediaworks,get_entity_media,OpGetEntityMedia,entity → number,#patterns/media_patterns@mediaworks:get_entity_media
-Mediaworks,Media Purification II,WEST,ddewa,false,mediaworks,get_pos_media,OpGetPosMedia,vector → number,#patterns/media_patterns@mediaworks:get_pos_media
-Mediaworks,Media Reflection,WEST,dde,false,mediaworks,get_media,OpGetMedia,→ number,#patterns/media_patterns@mediaworks:get_media
-Mediaworks,Medivh's Reflection,EAST,adda,false,mediaworks,cloak/read,OpCloakRead,→ any,#patterns/cloak_patterns@mediaworks:cloak/read
+Mediaworks,Astral Gaze Reflection,NORTH_EAST,waawaq,false,mediaworks,astral_look,,→ vector,#patterns/astral_utils@mediaworks:astral_look
+Mediaworks,Astral Locale Reflection,NORTH_EAST,qaqqqqaq,false,mediaworks,astral_pos,,→ vector,#patterns/astral_utils@mediaworks:astral_pos
+Mediaworks,Astral Projection,NORTH_WEST,qdadwewewdadeadwddaaedqdeddew,true,mediaworks,astral_projection,,number →,#patterns/great_spells/astral_projection@mediaworks:astral_projection
+Mediaworks,Calligrapher's Exaltation,NORTH_EAST,aaqdwdwde,false,mediaworks,visage/text/bounded,,"number, number, any → visage",#patterns/macula/text_visages@mediaworks:visage/text/bounded
+Mediaworks,Calligrapher's Purification,NORTH_EAST,aaqdwdwd,false,mediaworks,visage/text/unbounded,,any → visage,#patterns/macula/text_visages@mediaworks:visage/text/unbounded
+Mediaworks,Etch Visage,NORTH_WEST,wddaaddw,false,mediaworks,macula/add,,"vec, vis | vec, vis, num →",#patterns/macula/macula_patterns@mediaworks:macula/add
+Mediaworks,Macula Erasure,WEST,awawa,false,mediaworks,macula/clear,,,#patterns/macula/macula_patterns@mediaworks:macula/clear
+Mediaworks,Macula Gambit,NORTH_EAST,aawawaa,false,mediaworks,macula/dimensions,,"→ number, number",#patterns/macula/macula_patterns@mediaworks:macula/dimensions
+Mediaworks,Media Purification I,WEST,ddew,false,mediaworks,get_entity_media,,entity → number,#patterns/media_patterns@mediaworks:get_entity_media
+Mediaworks,Media Purification II,WEST,ddewa,false,mediaworks,get_pos_media,,vector → number,#patterns/media_patterns@mediaworks:get_pos_media
+Mediaworks,Media Reflection,WEST,dde,false,mediaworks,get_media,,→ number,#patterns/media_patterns@mediaworks:get_media
+Mediaworks,Medivh's Reflection,EAST,adda,false,mediaworks,cloak/read,,→ any,#patterns/cloak_patterns@mediaworks:cloak/read
 MoreIotas,Addition Distillation: Matrix,EAST,waawawaeawwaea,false,moreiotas,matrix/add,OpAddMatrix,"mat, mat → mat",#patterns/matrices@moreiotas:matrix/add
 MoreIotas,Blank Reflection,SOUTH_EAST,awdwa,false,moreiotas,string/empty,makeConstantOp,→ str,#patterns/strings@moreiotas:string/empty
 MoreIotas,Breaking Reflection,EAST,waawaw,false,moreiotas,string/newline,makeConstantOp,→ str,#patterns/strings@moreiotas:string/newline
