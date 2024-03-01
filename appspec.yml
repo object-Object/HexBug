@@ -19,4 +19,4 @@ hooks:
       timeout: 60
   ValidateService:
     - location: scripts/aws/validate-service.sh
-      timeout: 60
+      timeout: 180
