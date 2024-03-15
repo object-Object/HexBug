@@ -33,7 +33,7 @@ runtime = [
     "hexdoc==1!0.1.0a10",
     "importlib_resources>=5.10",
     "jproperties~=2.1",
-    "lark~=1.1",
+    "lark[interegular]~=1.1",
     "matplotlib~=3.6",
     "networkx~=3.1",
     "numpy~=1.23",
@@ -100,7 +100,7 @@ filterwarnings = [
 pythonVersion = "3.11"
 pythonPlatform = "All"
 
-include = ["src"]
+include = ["src", "test"]
 
 enableExperimentalFeatures = true
 

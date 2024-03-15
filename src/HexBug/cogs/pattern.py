@@ -8,12 +8,11 @@ from discord.ext import commands
 from ..hexdecode.buildpatterns import MAX_PREGEN_NUMBER
 from ..hexdecode.hex_math import Direction
 from ..hexdecode.hexast import (
-    Registry,
     UnknownPattern,
     _parse_unknown_pattern,
     generate_bookkeeper,
 )
-from ..hexdecode.registry import DuplicatePattern, SpecialHandlerPatternInfo
+from ..hexdecode.registry import DuplicatePattern, Registry, SpecialHandlerPatternInfo
 from ..utils.buttons import build_show_or_delete_button
 from ..utils.commands import HexBugBot, build_autocomplete
 from ..utils.generate_image import Palette, Theme, draw_single_pattern

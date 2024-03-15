@@ -1,0 +1,39 @@
+%import common.NUMBER -> UNSIGNED_NUMBER
+%import common (WORD, WS)
+%ignore WS
+
+// rules
+
+start: iota
+
+?iota: non_pattern_iota | pattern
+
+?non_pattern_iota: list
+                 | vector
+                 | NUMBER
+                 | BOOLEAN
+                 | NULL
+
+list: "[" ( _list_item "," )* _list_item? "]"
+
+// because HexGloop skips commas between consecutive patterns in latest.log
+_list_item: non_pattern_iota | pattern+
+
+pattern: "HexPattern(" DIRECTION ANGLES? ")"
+       | "<" DIRECTION ","? ANGLES? ">"
+
+vector: "(" NUMBER "," NUMBER "," NUMBER ")"
+
+// terminals
+
+DIRECTION: ( ( "north"i | "south"i ) "_"? )? ( "west"i | "east"i )
+
+ANGLES: /[aqweds]/i+
+
+NUMBER: "-"? UNSIGNED_NUMBER
+
+BOOLEAN: TRUE | FALSE
+TRUE: "True"
+FALSE: "False"
+
+NULL: "NULL" | "Null"

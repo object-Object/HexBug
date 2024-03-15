@@ -3,9 +3,10 @@ from io import BytesIO
 import discord
 from discord import app_commands
 from discord.ext import commands
+from lark import LarkError
 
 from ..hexdecode import revealparser
-from ..hexdecode.hexast import massage_raw_pattern_list
+from ..hexdecode.hexast import massage_raw_parsed_iota
 from ..utils.buttons import build_show_or_delete_button
 from ..utils.commands import HexBugBot
 
@@ -29,13 +30,20 @@ class DecodeCog(commands.Cog):
         """Decode a pattern list using hexdecode"""
         await interaction.response.defer(ephemeral=not show_to_everyone, thinking=True)
 
+        try:
+            iota = revealparser.parse_reveal(data)
+        except LarkError as e:
+            return await interaction.followup.send(
+                f"❌ Invalid input. ```\n{e}\n```",
+                ephemeral=True,
+            )
+
         output = ""
         level = 0
-        for pattern in revealparser.parse(data):
-            for iota in massage_raw_pattern_list(pattern, self.registry):
-                level = iota.preadjust(level)
-                output += iota.print(level, False, self.registry) + "\n"
-                level = iota.postadjust(level)
+        for child in massage_raw_parsed_iota(iota, self.registry):
+            level = child.preadjust(level)
+            output += child.print(level, False, self.registry) + "\n"
+            level = child.postadjust(level)
 
         if not output:
             return await interaction.followup.send("❌ Invalid input.", ephemeral=True)

@@ -6,7 +6,7 @@ import sys
 from aiohttp import ClientSession
 from HexBug.hexdecode import revealparser
 from HexBug.hexdecode.buildpatterns import build_registry
-from HexBug.hexdecode.hexast import massage_raw_pattern_list
+from HexBug.hexdecode.hexast import massage_raw_parsed_iota
 
 
 # don't use this in production
@@ -22,8 +22,8 @@ if (registry := asyncio.run(_build_registry())) is None:
 
 for line in fileinput.input(files=[], encoding="utf-8"):
     level = 0
-    for pattern in revealparser.parse(line):
-        for iota in massage_raw_pattern_list(pattern, registry):
-            level = iota.preadjust(level)
-            print(iota.print(level, True, registry))
-            level = iota.postadjust(level)
+    iota = revealparser.parse_reveal(line)
+    for child in massage_raw_parsed_iota(iota, registry):
+        level = child.preadjust(level)
+        print(child.print(level, True, registry))
+        level = child.postadjust(level)

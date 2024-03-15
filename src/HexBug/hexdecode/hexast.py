@@ -3,20 +3,28 @@ from __future__ import annotations
 import re
 import struct
 import uuid
+from dataclasses import dataclass, field
 from itertools import pairwise
-from typing import Generator
+from typing import TYPE_CHECKING, Any, Iterator, TypeAlias
 
+from lark import Token
 from sty import fg
 
 from .hex_math import Angle, Direction
-from .registry import Registry
+
+if TYPE_CHECKING:
+    from .registry import Registry
 
 localize_regex = re.compile(r"((?:number|mask))(: .+)")
 
 
+@dataclass
 class Iota:
-    def __init__(self, datum):
-        self._datum = datum
+    _datum: Any
+
+    def __post_init__(self):
+        if isinstance(self._datum, Token):
+            self._datum = str(self._datum)
 
     def color(self) -> str:
         return ""
@@ -82,13 +90,21 @@ class Unknown(Iota):
         return fg(124)  # red
 
 
+@dataclass
 class UnknownPattern(Unknown, Pattern):
-    def __init__(self, initial_direction, turns):
-        self._initial_direction = initial_direction
-        super().__init__(turns)
+    _datum: Any = field(init=False, compare=False, repr=False)
+    _initial_direction: Direction
+    _angles: str = ""
+
+    def __post_init__(self):
+        self._datum = self._angles
 
     def presentation_name(self):
-        return f"unknown: {self._initial_direction.name} {self._datum}"
+        return f"unknown: {self._initial_direction.name} {self._angles}"
+
+    @property
+    def _cmp_key(self):
+        return (self._initial_direction, self._angles)
 
 
 class Bookkeeper(Pattern):
@@ -131,29 +147,48 @@ class NumberConstant(Iota):
         return fg.li_green
 
 
+@dataclass
 class Vector(NumberConstant):
-    def __init__(self, x, y, z):
-        super().__init__(f"({x._datum}, {y._datum}, {z._datum})")
+    _datum: Any = field(init=False, compare=False, repr=False)
+    x: NumberConstant
+    y: NumberConstant
+    z: NumberConstant
+
+    def __post_init__(self):
+        self._datum = f"({self.x._datum}, {self.y._datum}, {self.z._datum})"
 
     def color(self):
         return fg(207)  # pink
 
 
+@dataclass
 class Entity(Iota):
-    def __init__(self, uuid_bits):
-        packed = struct.pack("iiii", *uuid_bits)
-        super().__init__(uuid.UUID(bytes_le=packed))
+    _datum: Any = field(init=False)
+    uuid_bits: Any
+
+    def __post_init__(self):
+        packed = struct.pack("iiii", *self.uuid_bits)
+        self._datum = uuid.UUID(bytes_le=packed)
 
     def color(self):
         return fg.li_blue
 
 
+@dataclass
 class Null(Iota):
-    def __init__(self):
-        super().__init__("NULL")
+    def color(self):
+        return fg.magenta
+
+
+class Boolean(Iota):
+    def __post_init__(self):
+        self.value = str(self._datum).lower() == "true"
 
     def color(self):
         return fg.magenta
+
+
+ParsedIota: TypeAlias = list["Iota"] | Iota
 
 
 def _parse_number(pattern):
@@ -260,16 +295,14 @@ def _parse_unknown_pattern(
         return pattern, ""
 
 
-def massage_raw_pattern_list(
-    pattern, registry: Registry
-) -> Generator[Iota, None, None]:
-    match pattern:
+def massage_raw_parsed_iota(iota: ParsedIota, registry: Registry) -> Iterator[Iota]:
+    match iota:
         case [*subpatterns]:
             yield ListOpener("[")
             for subpattern in subpatterns:
-                yield from massage_raw_pattern_list(subpattern, registry)
+                yield from massage_raw_parsed_iota(subpattern, registry)
             yield ListCloser("]")
         case UnknownPattern():
-            yield _parse_unknown_pattern(pattern, registry)[0]
+            yield _parse_unknown_pattern(iota, registry)[0]
         case other:
             yield other
