@@ -13,7 +13,6 @@ authors = [
 ]
 keywords = ["hexdoc"]
 requires-python = ">=3.11,<3.12"
-dependencies = []
 
 [project.optional-dependencies]
 aws-cdk = [
@@ -25,27 +24,25 @@ codedeploy = [
     "boto3-stubs-lite[s3]",
     "typer~=0.9",
 ]
-scripts = [
+runtime = [
     "discord.py~=2.3.2",
-    "jproperties~=2.1",
-    "typing_extensions~=4.7",
-    "ruff~=0.1.4,!=0.1.12",
-    "hexdoc==1!0.1.0a10",
     "hexdoc-hexgloop @ https://github.com/SamsTheNerd/HexGloop/raw/af72e6cc318d/docs/v/latest/main/dist/hexdoc_hexgloop-0.2.1.1.0.dev0-py3-none-any.whl",
-    "hexdoc-oneironaut==0.2.2.1.0",
     "hexdoc-hexkeys==0.1.1.1.0.dev0",
     "hexdoc-mediaworks==1.0.6.1.0.dev0",
-]
-runtime = [
-    "HexBug[scripts]",
-    "networkx~=3.1",
-    "matplotlib~=3.6",
+    "hexdoc-oneironaut==0.2.2.1.0",
+    "hexdoc==1!0.1.0a10",
+    "importlib_resources>=5.10",
+    "jproperties~=2.1",
     "lark~=1.1",
+    "matplotlib~=3.6",
+    "networkx~=3.1",
     "numpy~=1.23",
-    "python-dotenv~=0.21",
-    "sty~=1.0",
     "pillow~=9.5",
+    "python-dotenv~=0.21",
+    "ruff~=0.1.4,!=0.1.12",
     "semver~=3.0",
+    "sty~=1.0",
+    "typing_extensions~=4.7",
 ]
 target-any = [
     "hexnumgen @ git+https://github.com/object-Object/hexnumgen-rs.git@70d683ee9b",
@@ -53,8 +50,12 @@ target-any = [
 target-linux = [ # x86_64-unknown-linux-gnu
     "hexnumgen @ {root:uri}/vendor/hexnumgen-0.2.0-cp311-cp311-manylinux_2_28_x86_64.whl",
 ]
+test = [
+    "pytest~=8.1",
+]
 dev = [
-    "HexBug[aws-cdk,codedeploy,scripts,runtime,target-any]",
+    "HexBug[aws-cdk,codedeploy,runtime,target-any]",
+    "nox",
 ]
 
 [project.urls]
@@ -83,7 +84,17 @@ sources = [
 [project.entry-points.hexdoc]
 hexbug = "HexBug._hooks:HexBugPlugin"
 
-# linting
+# other tools
+
+[tool.pytest.ini_options]
+testpaths = ["test"]
+pythonpath = ["."]
+addopts = [
+    "--import-mode=importlib",
+]
+filterwarnings = [
+    'ignore:setDaemon\(\) is deprecated, set the daemon attribute instead:DeprecationWarning:javascript.events',
+]
 
 [tool.pyright]
 pythonVersion = "3.11"

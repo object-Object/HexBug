@@ -29,7 +29,7 @@ jobs:
           cache: pip
       
       - name: Install Python deps
-        run: pip install -e .[scripts]
+        run: pip install -e .[runtime]
       
       - name: Scrape book types
         run: |
