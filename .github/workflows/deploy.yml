@@ -17,6 +17,22 @@ env:
   HEALTH_CHECK_CHANNEL_ID: "1191901093077188710"
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+      
+      - name: Install Nox
+        run: pip install nox
+
+      - name: Run tests
+        run: nox
+
   scrape-book-types:
     runs-on: ubuntu-latest
     steps:
@@ -103,9 +119,7 @@ jobs:
           echo "iam-role-arn=$(echo "$outputs_json" | jq '.GitHubActionsRoleARN' --raw-output)" >> "$GITHUB_OUTPUT"
 
   deploy-codedeploy:
-    needs:
-      - scrape-book-types
-      - deploy-aws-cdk
+    needs: [test, scrape-book-types, deploy-aws-cdk]
     runs-on: ubuntu-latest
     env:
       APPLICATION_NAME: ${{ needs.deploy-aws-cdk.outputs.application-name }}
