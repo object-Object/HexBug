@@ -1,10 +1,17 @@
+import io
 import logging
+import traceback
 import uuid
+from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
+from textwrap import dedent, indent
+from typing import Any, TextIO
 
+import discord
 from discord.ext import commands
 
 from ..utils.commands import HexBugBot
+from ..utils.environment import Environment
 
 HEALTH_CHECK_FILE = Path("health_check.txt")
 
@@ -27,7 +34,6 @@ class MessageCommandsCog(commands.Cog):
         await ctx.reply("✅ Synced slash commands to this guild.")
 
     @commands.command()
-    @commands.guild_only()
     @commands.is_owner()
     async def global_sync(self, ctx: commands.Context):
         """Sync slash commands to all guilds"""
@@ -57,6 +63,86 @@ class MessageCommandsCog(commands.Cog):
         logger.info(f"Responding to health check with UUID: {raw_uuid}")
         HEALTH_CHECK_FILE.write_text(raw_uuid)
         await ctx.message.add_reaction("✅")
+
+    @commands.command()
+    @commands.is_owner()
+    @Environment.DEV.check()
+    async def exec(self, ctx: commands.Context, *, code: str):
+        code = code.strip().removeprefix("```py").strip("`").strip()
+
+        # execute the code and grab all the interesting outputs
+        stdout = io.StringIO()
+        stderr = io.StringIO()
+
+        locals_ = {
+            "discord": discord,
+            "ctx": ctx,
+            "bot": self.bot,
+        }
+
+        try:
+            ret, exc = _eval_or_exec(code, stdout, stderr, locals_)
+        except Exception:
+            ret = None
+            exc = traceback.format_exc()
+
+        # prettify
+        sections = {
+            "Stdout": stdout.getvalue(),
+            "Stderr": stderr.getvalue(),
+            "Return": repr(ret) if ret is not None else None,
+            "Exception": exc,
+        }
+
+        if exc:
+            color = discord.Color.red()
+        else:
+            color = discord.Color.green()
+
+        embed = discord.Embed(color=color)
+
+        for name, value in sections.items():
+            if value and (value := value.strip()):
+                embed.add_field(name=name, value=f"```\n{value}\n```")
+
+        await ctx.send(embed=embed)
+
+
+def _eval_or_exec(code: str, stdout: TextIO, stderr: TextIO, globals_: dict[str, Any]):
+    with redirect_stdout(stdout), redirect_stderr(stderr):
+        try:
+            return _wrapped_eval(code, globals_)
+        except SyntaxError:
+            pass
+
+        stdout.truncate()
+        stderr.truncate()
+        return _wrapped_exec(code, globals_)
+
+
+def _wrapped_eval(code: str, globals_: dict[str, Any]):
+    if "\n" in code:
+        raise SyntaxError
+    return _wrapped_exec(f"return {code}", globals_)
+
+
+def _wrapped_exec(code: str, globals_: dict[str, Any]):
+    wrapped_code = dedent(
+        """\
+        import traceback
+
+        def func():
+        {}
+        
+        try:
+            globals()["return"] = func()
+        except Exception:
+            globals()["exception"] = traceback.format_exc()
+        """
+    ).format(indent(code, " " * 4))
+
+    exec(wrapped_code, globals_)
+    return globals_.get("return"), globals_.get("exception")
 
 
 async def setup(bot: HexBugBot):
