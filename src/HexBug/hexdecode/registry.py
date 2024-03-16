@@ -1,9 +1,12 @@
+import dataclasses
 import re
 from collections import defaultdict
 from dataclasses import dataclass, field
 from fractions import Fraction
 from functools import cached_property
 from typing import Any, TypedDict, TypeVar, Unpack
+
+from HexBug.hexdecode.hexast import PatternIota
 
 from ..utils.mods import Mod
 from ..utils.parse_rational import parse_rational
@@ -14,6 +17,7 @@ from .hex_math import (
     get_aligned_pattern_segments,
     get_rotated_aligned_pattern_segments,
 )
+from .special_handlers import parse_bookkeeper, parse_numerical_reflection
 
 
 @dataclass(frozen=True, kw_only=True, repr=False)
@@ -59,6 +63,9 @@ class NormalPatternInfo(_BasePatternInfo):
     direction: Direction
     pattern: str
 
+    def print(self):
+        return self.display_name
+
     @cached_property
     def rotated_segments(self):
         return tuple(get_rotated_aligned_pattern_segments(self.direction, self.pattern))
@@ -66,18 +73,18 @@ class NormalPatternInfo(_BasePatternInfo):
 
 @dataclass(frozen=True, kw_only=True, repr=False)
 class SpecialHandlerPatternInfo(_BasePatternInfo):
-    direction: None = None
-    pattern: None = None
+    direction: Direction | None = None
+    pattern: str | None = None
     rotated_segments: None = None
+    value: Any | None = None
+
+    def print(self):
+        if self.value is None:
+            return self.display_name
+        return f"{self.display_name}: {self.value}"
 
 
 PatternInfo = NormalPatternInfo | SpecialHandlerPatternInfo
-
-
-@dataclass(frozen=True)
-class RawPatternInfo:
-    direction: Direction
-    pattern: str
 
 
 @dataclass(frozen=True)
@@ -288,7 +295,7 @@ class Registry:
 
     def from_shorthand(
         self, shorthand: str
-    ) -> tuple[PatternInfo | RawPatternInfo, Fraction | int | str | None] | None:
+    ) -> tuple[PatternInfo | PatternIota, Fraction | int | str | None] | None:
         # TODO: why doesn't this return a class?????
         shorthand = hexpattern_re.sub(lambda m: m.group(1), shorthand).lower().strip()
 
@@ -317,19 +324,20 @@ class Registry:
         if (match := raw_pattern_re.match(shorthand)) and (
             direction := Direction.from_shorthand(match.group(1))
         ):
-            return RawPatternInfo(direction, match.group(2) or ""), None
+            return PatternIota(direction, match.group(2) or ""), None
 
         return None
 
+    # FIXME: what the hell
     def from_shorthand_list(
         self, all_shorthand: str
     ) -> tuple[
-        list[tuple[PatternInfo | RawPatternInfo, Fraction | int | str | None]],
+        list[tuple[PatternInfo | PatternIota, Fraction | int | str | None]],
         list[str],
         str,
     ]:
         patterns: list[
-            tuple[PatternInfo | RawPatternInfo, Fraction | int | str | None]
+            tuple[PatternInfo | PatternIota, Fraction | int | str | None]
         ] = []
         unknown: list[str] = []
 
@@ -354,3 +362,22 @@ class Registry:
 
         segments = get_aligned_pattern_segments(direction, pattern)
         return self.from_segments.get(segments)
+
+    def parse_unknown_pattern(self, direction: Direction, pattern: str):
+        if info := self.from_pattern_or_segments(direction, pattern):
+            return info
+
+        for name, value in {
+            "mask": parse_bookkeeper(direction, pattern),
+            "number": parse_numerical_reflection(pattern),
+        }.items():
+            if value is not None:
+                info = self.from_name[name]
+                return dataclasses.replace(
+                    info,
+                    direction=direction,
+                    pattern=pattern,
+                    value=value,
+                )
+
+        return None

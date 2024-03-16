@@ -7,12 +7,12 @@ from discord.ext import commands
 
 from ..hexdecode.buildpatterns import MAX_PREGEN_NUMBER
 from ..hexdecode.hex_math import Direction
-from ..hexdecode.hexast import (
-    UnknownPattern,
-    _parse_unknown_pattern,
-    generate_bookkeeper,
+from ..hexdecode.hexast import generate_bookkeeper
+from ..hexdecode.registry import (
+    DuplicatePattern,
+    PatternInfo,
+    SpecialHandlerPatternInfo,
 )
-from ..hexdecode.registry import DuplicatePattern, Registry, SpecialHandlerPatternInfo
 from ..utils.buttons import build_show_or_delete_button
 from ..utils.commands import HexBugBot, build_autocomplete
 from ..utils.generate_image import Palette, Theme, draw_single_pattern
@@ -25,16 +25,14 @@ SCALE_RANGE = app_commands.Range[float, 0.1, 1000.0]
 
 
 async def send_pattern(
-    registry: Registry,
+    info: PatternInfo | None,
     interaction: discord.Interaction,
-    name: str,
     translation: str,
     direction: Direction | None,
     pattern: str | None,
     image: BytesIO,
     show_to_everyone: bool,
 ):
-    info = registry.from_name.get(name)
     mod_info = info and info.mod.value
 
     book_url = None
@@ -134,16 +132,14 @@ class PatternCog(commands.GroupCog, name="pattern"):
                 ephemeral=True,
             )
 
-        pattern_iota, name = _parse_unknown_pattern(
-            UnknownPattern(direction, pattern), self.registry
-        )
+        info = self.registry.parse_unknown_pattern(direction, pattern)
 
-        if pattern_iota._datum == "dewdeqwwedaqedwadweqewwd":
-            translation = "Amogus"
-        elif isinstance(pattern_iota, UnknownPattern):
+        if info is None:
             translation = "Unknown"
+        elif info.pattern == "dewdeqwwedaqedwadweqewwd":
+            translation = "Amogus"
         else:
-            translation = pattern_iota.localize_pattern_name(self.registry)
+            translation = info.print()
 
         image, _ = draw_single_pattern(
             direction=direction,
@@ -156,9 +152,8 @@ class PatternCog(commands.GroupCog, name="pattern"):
         )
 
         await send_pattern(
-            registry=self.registry,
+            info=info,
             interaction=interaction,
-            name=name,
             translation=translation,
             direction=None if hide_stroke_order else direction,
             pattern=None if hide_stroke_order else pattern,
@@ -208,9 +203,8 @@ class PatternCog(commands.GroupCog, name="pattern"):
         )
 
         await send_pattern(
-            registry=self.registry,
+            info=info,
             interaction=interaction,
-            name=info.name,
             translation=translation,
             direction=None if info.is_great else info.direction,
             pattern=None if info.is_great else info.pattern,
@@ -267,9 +261,8 @@ class PatternCog(commands.GroupCog, name="pattern"):
         )
 
         await send_pattern(
-            registry=self.registry,
+            info=info,
             interaction=interaction,
-            name=info.name,
             translation=translation,
             direction=None if info.is_great else info.direction,
             pattern=None if info.is_great else info.pattern,
@@ -333,9 +326,8 @@ class PatternCog(commands.GroupCog, name="pattern"):
         )
 
         await send_pattern(
-            registry=self.registry,
+            info=info,
             interaction=interaction,
-            name=info.name,
             translation=f"{info.display_name}: {mask}",
             direction=direction,
             pattern=pattern,
@@ -397,9 +389,8 @@ class PatternCog(commands.GroupCog, name="pattern"):
             translation += str(number)
 
         await send_pattern(
-            registry=self.registry,
+            info=info,
             interaction=interaction,
-            name=info.name,
             translation=translation,
             direction=direction,
             pattern=pattern,

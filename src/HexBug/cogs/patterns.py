@@ -8,8 +8,8 @@ from discord.ext import commands
 from discord.utils import MISSING
 
 from ..hexdecode.hex_math import Direction
-from ..hexdecode.hexast import generate_bookkeeper
-from ..hexdecode.registry import RawPatternInfo, SpecialHandlerPatternInfo
+from ..hexdecode.hexast import PatternIota, generate_bookkeeper
+from ..hexdecode.registry import SpecialHandlerPatternInfo
 from ..utils.buttons import build_show_or_delete_button
 from ..utils.commands import HexBugBot
 from ..utils.draw_patterns_on_grid import draw_patterns_on_grid
@@ -266,7 +266,7 @@ class PatternsCog(commands.GroupCog, name="patterns"):
 
         for info, arg in pattern_infos:
             match info:
-                case RawPatternInfo():
+                case PatternIota():
                     patterns.append((info.direction, info.pattern))
 
                 case SpecialHandlerPatternInfo():

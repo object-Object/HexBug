@@ -25,8 +25,8 @@ pattern: "HexPattern" "(" DIRECTION ANGLES? ")"
 
 vector: "(" NUMBER "," NUMBER "," NUMBER ")"
 
-matrix.1: "[" "(" INT "," INT ")" [ "|" _matrix_rows ] "]"
-_matrix_rows: _delimited{matrix_row, ";"}
+matrix.1: "[" "(" INT "," INT ")" ( "|" matrix_rows )? "]"
+matrix_rows: _delimited{matrix_row, ";"} -> list
 matrix_row: _delimited{NUMBER, ","} -> list
 
 // terminals
@@ -35,11 +35,9 @@ DIRECTION: ( ( "north"i | "south"i ) "_"? )? ( "west"i | "east"i )
 ANGLES: /[aqweds]+/i
 
 NUMBER: "-"? UNSIGNED_NUMBER
-
 INT.1: _INT
 
 BOOLEAN: "true"i | "false"i
-
 NULL: "null"i
 
 STRING: "\"" /[^"]*/ "\""
