@@ -95,7 +95,6 @@ jobs:
         with:
           python-version: "3.11"
           cache: pip
-
       - uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: ${{ env.AWS_REGION }}
@@ -139,7 +138,6 @@ jobs:
         with:
           python-version: "3.11"
           cache: pip
-
       - uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: ${{ env.AWS_REGION }}
@@ -185,7 +183,30 @@ jobs:
         run: |
           aws deploy wait deployment-successful \
             --deployment-id ${{ steps.create-deployment.outputs.deployment-id }}
-        
+
+  purge-deployments:
+    needs: [deploy-aws-cdk, deploy-codedeploy]
+    runs-on: ubuntu-latest
+    env:
+      IAM_ROLE_ARN: ${{ needs.deploy-aws-cdk.outputs.iam-role-arn }}
+    environment:
+      name: prod-codedeploy
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+          cache: pip
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: ${{ env.IAM_ROLE_ARN }}
+
       - name: Install Python packages
         run: pip install .[codedeploy]
       
