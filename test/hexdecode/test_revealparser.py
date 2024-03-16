@@ -5,6 +5,7 @@ from HexBug.hexdecode.hexast import (
     MatrixIota,
     NullIota,
     PatternIota,
+    UnknownIota,
     VectorIota,
 )
 from HexBug.hexdecode.revealparser import parse
@@ -135,4 +136,22 @@ def test_pattern(text: str, want: Iota):
     ],
 )
 def test_list(text: str, want: Iota):
+    assert want == parse(text)
+
+
+@pytest.mark.parametrize(
+    ["text", "want"],
+    [
+        ("Player", UnknownIota("Player")),
+        (
+            "[<east,w>, Player, 0.00]",
+            [
+                PatternIota(Direction.EAST, "w"),
+                UnknownIota("Player"),
+                0,
+            ],
+        ),
+    ],
+)
+def test_unknown(text: str, want: Iota):
     assert want == parse(text)

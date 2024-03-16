@@ -14,6 +14,7 @@ from .hexast import (
     MatrixIota,
     NullIota,
     PatternIota,
+    UnknownIota,
     VectorIota,
 )
 
@@ -31,6 +32,7 @@ class RevealTransformer(Transformer):
     pattern = PatternIota
     vector = VectorIota
     matrix = MatrixIota
+    UNKNOWN = UnknownIota
     NUMBER = TypeAdapter(float).validate_python
     BOOLEAN = TypeAdapter(bool).validate_python
 

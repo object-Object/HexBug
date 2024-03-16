@@ -1,15 +1,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Iterator, assert_never
+from typing import Iterator
 
-from .hexast import (
-    Iota,
-    MatrixIota,
-    NullIota,
-    PatternIota,
-    VectorIota,
-)
+from .hexast import Iota, PatternIota
 from .registry import NormalPatternInfo, Registry, SpecialHandlerPatternInfo
 
 
@@ -29,9 +23,6 @@ class IotaPrinter:
 
     def _flatten(self, iota: Iota, level: int) -> Iterator[Node]:
         match iota:
-            case VectorIota() | MatrixIota() | NullIota() | bool():
-                yield Node(str(iota), level)
-
             case float() | int():
                 yield Node(f"{iota:.4f}", level)
 
@@ -53,7 +44,7 @@ class IotaPrinter:
                 yield Node("]", level)
 
             case _:
-                assert_never(iota)
+                yield Node(str(iota), level)
 
     def _format_pattern(self, iota: PatternIota):
         if self.registry:

@@ -16,6 +16,7 @@ _non_pattern_iota: list
                  | BOOLEAN
                  | NULL
                  | STRING
+                 | UNKNOWN
 
 // note: HexGloop skips commas between consecutive patterns in latest.log
 list: "[" _delimited{_list_item, ","}? "]"
@@ -42,6 +43,8 @@ BOOLEAN: "true"i | "false"i
 NULL: "null"i
 
 STRING: "\"" /[^"]*/ "\""
+
+UNKNOWN.-1: /[^\n\[\]\,]+/
 
 // templates
 

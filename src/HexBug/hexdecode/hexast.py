@@ -26,6 +26,14 @@ class BaseIota:
 
 
 @dataclass
+class UnknownIota:
+    value: str
+
+    def __str__(self) -> str:
+        return self.value
+
+
+@dataclass
 class PatternIota(BaseIota):
     direction: Direction
     pattern: str = ""
