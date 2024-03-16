@@ -40,7 +40,7 @@ class DecodeCog(commands.GroupCog, name="decode"):
         tab_width="The amount of spaces per indentation level",
         show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
     )
-    async def file(
+    async def upload(
         self,
         interaction: discord.Interaction,
         file: discord.Attachment,
