@@ -1,4 +1,5 @@
 %import common.NUMBER -> UNSIGNED_NUMBER
+%import common.INT -> _INT
 %import common (WORD, WS)
 %ignore WS
 
@@ -6,34 +7,43 @@
 
 start: iota
 
-?iota: non_pattern_iota | pattern
-
-?non_pattern_iota: list
+?iota: _non_pattern_iota | pattern
+_non_pattern_iota: list
                  | vector
+                 | matrix
                  | NUMBER
                  | BOOLEAN
                  | NULL
+                 | STRING
 
-list: "[" ( _list_item "," )* _list_item? "]"
+// note: HexGloop skips commas between consecutive patterns in latest.log
+list: "[" _delimited{_list_item, ","}? "]"
+_list_item: _non_pattern_iota | pattern+
 
-// because HexGloop skips commas between consecutive patterns in latest.log
-_list_item: non_pattern_iota | pattern+
-
-pattern: "HexPattern(" DIRECTION ANGLES? ")"
+pattern: "HexPattern" "(" DIRECTION ANGLES? ")"
        | "<" DIRECTION ","? ANGLES? ">"
 
 vector: "(" NUMBER "," NUMBER "," NUMBER ")"
 
+matrix.1: "[" "(" INT "," INT ")" [ "|" _matrix_rows ] "]"
+_matrix_rows: _delimited{matrix_row, ";"}
+matrix_row: _delimited{NUMBER, ","} -> list
+
 // terminals
 
 DIRECTION: ( ( "north"i | "south"i ) "_"? )? ( "west"i | "east"i )
-
-ANGLES: /[aqweds]/i+
+ANGLES: /[aqweds]+/i
 
 NUMBER: "-"? UNSIGNED_NUMBER
 
-BOOLEAN: TRUE | FALSE
-TRUE: "True"
-FALSE: "False"
+INT.1: _INT
 
-NULL: "NULL" | "Null"
+BOOLEAN: "true"i | "false"i
+
+NULL: "null"i
+
+STRING: "\"" /[^"]*/ "\""
+
+// templates
+
+_delimited{value, separator}: value ( separator value )*

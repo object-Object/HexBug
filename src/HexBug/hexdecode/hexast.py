@@ -1,8 +1,6 @@
 from __future__ import annotations
 
 import re
-import struct
-import uuid
 from dataclasses import dataclass, field
 from itertools import pairwise
 from typing import TYPE_CHECKING, Any, Iterator, TypeAlias
@@ -93,10 +91,12 @@ class Unknown(Iota):
 @dataclass
 class UnknownPattern(Unknown, Pattern):
     _datum: Any = field(init=False, compare=False, repr=False)
+
     _initial_direction: Direction
     _angles: str = ""
 
     def __post_init__(self):
+        self._angles = str(self._angles)
         self._datum = self._angles
 
     def presentation_name(self):
@@ -140,6 +140,10 @@ class PatternCloser(Pattern):
 
 
 class NumberConstant(Iota):
+    def __post_init__(self):
+        super().__post_init__()
+        self._datum = float(self._datum)
+
     def str(self):
         return self._datum
 
@@ -150,6 +154,7 @@ class NumberConstant(Iota):
 @dataclass
 class Vector(NumberConstant):
     _datum: Any = field(init=False, compare=False, repr=False)
+
     x: NumberConstant
     y: NumberConstant
     z: NumberConstant
@@ -157,41 +162,70 @@ class Vector(NumberConstant):
     def __post_init__(self):
         self._datum = f"({self.x._datum}, {self.y._datum}, {self.z._datum})"
 
+    @classmethod
+    def from_raw(cls, x: float, y: float, z: float):
+        return cls(NumberConstant(x), NumberConstant(y), NumberConstant(z))
+
     def color(self):
         return fg(207)  # pink
 
 
-@dataclass
-class Entity(Iota):
-    _datum: Any = field(init=False)
-    uuid_bits: Any
-
-    def __post_init__(self):
-        packed = struct.pack("iiii", *self.uuid_bits)
-        self._datum = uuid.UUID(bytes_le=packed)
-
-    def color(self):
-        return fg.li_blue
-
-
-@dataclass
 class Null(Iota):
+    def __init__(self, *_: str):
+        super().__init__("NULL")
+
     def color(self):
         return fg.magenta
 
 
 class Boolean(Iota):
     def __post_init__(self):
-        self.value = str(self._datum).lower() == "true"
+        super().__post_init__()
+        match str(self._datum).lower():
+            case "true":
+                self._datum = True
+            case "false":
+                self._datum = False
+            case _:
+                raise ValueError(f"Invalid Boolean datum: {self._datum}")
 
     def color(self):
         return fg.magenta
 
 
-ParsedIota: TypeAlias = list["Iota"] | Iota
+class String(Iota):
+    def presentation_name(self):
+        return f'"{self._datum}"'
 
 
-def _parse_number(pattern):
+@dataclass
+class Matrix(Iota):
+    _datum: Any = field(init=False, compare=False, repr=False, default=None)
+
+    rows: int
+    """m"""
+    columns: int
+    """n"""
+    data: list[list[float]]
+    """rows"""
+
+    @classmethod
+    def from_rows(cls, *data: list[float]):
+        rows = len(data)
+        columns = 0
+
+        if data:
+            columns = len(data[0])
+            if any(len(r) != columns for r in data[1:]):
+                raise ValueError(f"Mismatched row count: {rows}")
+
+        return cls(rows, columns, list(data))
+
+
+ParsedIota: TypeAlias = list[Iota] | Iota
+
+
+def _parse_number(pattern: str):
     negate = pattern.startswith("dedd")
     accumulator = 0
     for c in pattern[4:]:
@@ -211,14 +245,14 @@ def _parse_number(pattern):
     return Number(accumulator)
 
 
-def _get_pattern_directions(starting_direction, pattern):
+def _get_pattern_directions(starting_direction: Direction, pattern: str):
     directions = [starting_direction]
     for c in pattern:
         directions.append(directions[-1].rotated(c))
     return directions
 
 
-def _parse_bookkeeper(starting_direction, pattern):
+def _parse_bookkeeper(starting_direction: Direction, pattern: str):
     if not pattern:
         return "-"
     directions = _get_pattern_directions(starting_direction, pattern)

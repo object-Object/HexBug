@@ -1,12 +1,23 @@
 from __future__ import annotations
 
+from typing import Any
+
 import importlib_resources as resources
-from lark import Token
+from lark import Token, v_args
 from lark.lark import Lark
 from lark.visitors import Transformer
 
 from .hex_math import Direction
-from .hexast import Boolean, Null, NumberConstant, ParsedIota, UnknownPattern, Vector
+from .hexast import (
+    Boolean,
+    Matrix,
+    Null,
+    NumberConstant,
+    ParsedIota,
+    String,
+    UnknownPattern,
+    Vector,
+)
 
 _PARSER_GRAMMAR = (resources.files() / "revealparser.lark").read_text()
 
@@ -17,22 +28,23 @@ _parser = Lark(
 )
 
 
+@v_args(inline=True)
 class RevealTransformer(Transformer):
-    # rules
+    pattern = UnknownPattern
+    vector = Vector
+    NUMBER = NumberConstant
+    BOOLEAN = Boolean
+    NULL = Null
 
-    list = list
+    def list(self, *values: Any):
+        return list(values)
 
-    def pattern(self, args: tuple[Direction] | tuple[Direction, Token]):
-        match args:
-            case (direction, angles):
-                return UnknownPattern(direction, angles)
-            case (direction,):
-                return UnknownPattern(direction)
-
-    def vector(self, args: list[NumberConstant]) -> Vector:
-        return Vector(*args)
-
-    # terminals
+    def matrix(self, rows: Token, columns: Token, *data: list[NumberConstant]):
+        return Matrix(
+            rows=int(rows),
+            columns=int(columns),
+            data=[[float(value._datum) for value in row] for row in data],
+        )
 
     def DIRECTION(self, token: Token):
         direction = Direction.from_shorthand(token.value)
@@ -40,13 +52,9 @@ class RevealTransformer(Transformer):
             raise ValueError(f"Invalid direction: {token.value}")
         return direction
 
-    def NUMBER(self, token: Token):
-        return NumberConstant(float(token))
-
-    def BOOLEAN(self, token: Token):
-        return Boolean(token.value)
-
-    NULL = Null
+    def STRING(self, token: Token):
+        # remove the leading and trailing quotes
+        return String(token[1:-1])
 
 
 def parse_reveal(text: str) -> ParsedIota:
