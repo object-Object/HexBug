@@ -62,18 +62,33 @@ class MatrixIota(BaseIota):
         )
 
     @model_validator(mode="after")
-    def _validate_columns(self):
+    def _validate_dimensions(self):
+        if len(self.data) != self.rows:
+            raise ValueError(
+                f"Invalid number of rows (expected {self.rows}, got {len(self.data)}): {self.data}"
+            )
+
         for row in self.data:
             if len(row) != self.columns:
                 raise ValueError(
-                    f"Invalid row size (expected {self.columns}, got {len(row)}): {row}"
+                    f"Invalid number of columns (expected {self.columns}, got {len(row)}): {row}"
                 )
+
         return self
+
+    def __str__(self) -> str:
+        shape = f"({self.rows}, {self.columns})"
+        if not self.data:
+            return f"[{shape}]"
+
+        values = "; ".join(", ".join(str(v) for v in row) for row in self.data)
+        return f"[{shape} | {values}]"
 
 
 @dataclass
 class NullIota(BaseIota):
-    pass
+    def __str__(self) -> str:
+        return "NULL"
 
 
 Iota = (
