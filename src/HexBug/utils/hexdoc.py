@@ -13,6 +13,7 @@ from hexdoc.core import (
     Properties,
     ResourceLocation,
 )
+from hexdoc.core.properties import LangProps
 from hexdoc.data import HexdocMetadata
 from hexdoc.minecraft import I18n
 from hexdoc.patchouli.text import FormatTree, Style
@@ -125,6 +126,7 @@ def patch_collate_data(
             lang="en_us",
             default_i18n=None,
             enabled=True,
+            lang_props=LangProps(quiet=True),
         )
         return FormatTree.format(
             i18n.localize(string).value,

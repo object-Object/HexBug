@@ -111,7 +111,7 @@ async def _timeout_generate_number_pattern(
     # AWFUL. why did i do this
     proc = await asyncio.create_subprocess_exec(
         sys.executable,
-        "hexnumgen_cli.py",
+        "scripts/bot/hexnumgen_cli.py",
         str(target.numerator),
         str(target.denominator),
         stdout=asyncio.subprocess.PIPE,

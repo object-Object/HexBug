@@ -1,22 +1,15 @@
 version: 0.0
 os: linux 
 files:
-  - source: /
-    destination: /var/lib/codedeploy-apps/HexBug/
+  - source: codedeploy
+    destination: /var/lib/codedeploy-apps/HexBug
+  - source: compose.yml
+    destination: /var/lib/codedeploy-apps/HexBug
 file_exists_behavior: OVERWRITE
 hooks:
   ApplicationStop:
-    - location: scripts/aws/application-stop.sh
+    - location: hooks/application-stop.sh
       timeout: 60
-  BeforeInstall:
-    - location: scripts/aws/before-install.sh
-      timeout: 60
-  AfterInstall:
-    - location: scripts/aws/after-install.sh
-      timeout: 300
   ApplicationStart:
-    - location: scripts/aws/application-start.sh
-      timeout: 60
-  ValidateService:
-    - location: scripts/aws/validate-service.sh
-      timeout: 180
+    - location: hooks/application-start.sh
+      timeout: 300

@@ -93,6 +93,7 @@ async def main():
                 logger.info(f"Loading {module}")
                 await bot.load_extension(module)
 
+            assert False
             await bot.start(token)
 
 

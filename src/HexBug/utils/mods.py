@@ -422,7 +422,9 @@ class RegistryMod(Enum):
         ],
         pattern_stubs=hextweaks_docgen.pattern_stubs,
         modloaders=[FORGE, FABRIC, QUILT],
-        skipped_versions={"3.2.3"},
+        skipped_versions={
+            "3.2.3",
+        },
     )
 
     HexKinetics = RegistryModInfo(
@@ -508,6 +510,10 @@ class HexdocMod(Enum):
         modrinth_slug="mediaworks",
         icon_url="https://cdn-raw.modrinth.com/data/2kZJcMa9/58257ac58547acd70079e3c436bafccbb2d52620.png",
         modloaders=[FORGE, FABRIC, QUILT],
+        skipped_versions={
+            "1.0.7-forge",
+            "1.0.7-fabric",
+        },
     )
 
     Oneironaut = HexdocModInfo(
@@ -519,7 +525,9 @@ class HexdocMod(Enum):
         modrinth_slug="oneironaut",
         icon_url="https://raw.githubusercontent.com/beholderface/oneironaut/14a5797b9d40/fabric/src/main/resources/icon.png",
         modloaders=[FORGE, FABRIC],
-        skipped_versions={"0.2.3"},
+        skipped_versions={
+            "0.2.3",
+        },
     )
 
     HexKeys = HexdocModInfo(

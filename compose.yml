@@ -1,0 +1,9 @@
+# common Compose configuration for all environments
+services:
+  bot:
+    volumes:
+      - data:/app/bot/data
+    environment:
+      AWS_REGION: us-east-1
+volumes:
+  data:

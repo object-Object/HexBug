@@ -3,4 +3,4 @@ set -euox pipefail
 
 cd /var/lib/codedeploy-apps/HexBug
 
-rm -rf .git
+docker compose down

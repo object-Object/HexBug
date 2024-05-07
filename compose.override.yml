@@ -1,0 +1,11 @@
+# development overrides for compose.yml
+services:
+  bot:
+    build: .
+    volumes:
+      - type: bind
+        source: ~/.aws
+        target: /root/.aws
+    environment:
+      ENVIRONMENT: dev
+    restart: always

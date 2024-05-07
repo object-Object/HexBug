@@ -13,7 +13,8 @@ from discord.utils import MISSING
 from ..utils.buttons import MessageProps, build_show_or_delete_button
 from ..utils.commands import HexBugBot
 
-_DATA_PATH = Path(__file__).parent / "info_counts.json"
+# note: data/ is a Docker volume
+_DATA_PATH = Path("data/info_counts.json")
 
 
 @dataclass(kw_only=True)
@@ -39,6 +40,7 @@ class CountedMessageProps:
             raw_data = json.loads(_DATA_PATH.read_text("utf-8"))
             assert isinstance(raw_data, dict), str(raw_data)
         else:
+            _DATA_PATH.parent.mkdir(parents=True, exist_ok=True)
             raw_data = {}
         data: defaultdict[str, tuple[int, float | None]] = defaultdict(
             lambda: (0, None), raw_data
