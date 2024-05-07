@@ -13,4 +13,4 @@ hooks:
       timeout: 120
   ValidateService:
     - location: hooks/validate-service.sh
-      timeout: 180
+      timeout: 240
