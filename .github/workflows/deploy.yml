@@ -129,6 +129,8 @@ jobs:
       name: prod-docker
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
       # https://stackoverflow.com/a/59797984
       - name: Add Docker APT repository
