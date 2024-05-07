@@ -3,7 +3,6 @@ import logging
 import traceback
 import uuid
 from contextlib import redirect_stderr, redirect_stdout
-from pathlib import Path
 from textwrap import dedent, indent
 from typing import Any, TextIO
 
@@ -12,8 +11,6 @@ from discord.ext import commands
 
 from ..utils.commands import HexBugBot
 from ..utils.environment import Environment
-
-HEALTH_CHECK_FILE = Path("data/health_check.txt")
 
 logger = logging.getLogger("bot")
 
@@ -46,7 +43,7 @@ class MessageCommandsCog(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
-    async def health_check(self, ctx: commands.Context, raw_uuid: str):
+    async def health_check(self, ctx: commands.Context, port: int, raw_uuid: str):
         if ctx.channel.id != self.bot.health_check_channel_id:
             return
 
@@ -60,9 +57,18 @@ class MessageCommandsCog(commands.Cog):
             await ctx.message.add_reaction("❌")
             return
 
-        logger.info(f"Responding to health check with UUID: {raw_uuid}")
-        HEALTH_CHECK_FILE.write_text(raw_uuid)
+        logger.info(f"Responding to health check on port {port} with UUID {raw_uuid}")
+
+        async with self.bot.session.get(
+            f"http://localhost:{port}/health-check-reply/{raw_uuid}",
+        ) as resp:
+            if not resp.ok:
+                logger.error(f"Health check request failed: {resp}")
+                await ctx.message.add_reaction("❌")
+                return
+
         await ctx.message.add_reaction("✅")
+        await ctx.message.delete(delay=5)
 
     @commands.command()
     @commands.is_owner()

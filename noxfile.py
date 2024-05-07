@@ -31,6 +31,24 @@ def run(session: nox.Session):
     session.run("python", "main.py", env={"ENVIRONMENT": "dev"})
 
 
+@nox.session(python=False)
+def health_check(session: nox.Session):
+    # fmt: off
+    session.run(
+        "docker", "compose", "exec",
+        "--env", "HEALTH_CHECK_DISPLAY_NAME=Nox",
+        "--env", "HEALTH_CHECK_PORT=40405",
+        "--env", "HEALTH_CHECK_STARTUP_DELAY=4",
+        "--env", "HEALTH_CHECK_ATTEMPTS=3",
+        "--env", "HEALTH_CHECK_INTERVAL=5",
+        "--env", "HEALTH_CHECK_TIMEOUT=6",
+        "bot",
+        "python", "scripts/bot/health_check.py",
+        external=True,
+    )
+    # fmt: on
+
+
 # helper functions
 
 

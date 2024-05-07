@@ -10,4 +10,7 @@ hooks:
       timeout: 60
   ApplicationStart:
     - location: hooks/application-start.sh
-      timeout: 300
+      timeout: 120
+  ValidateService:
+    - location: hooks/validate-service.sh
+      timeout: 180

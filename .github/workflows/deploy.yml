@@ -16,7 +16,6 @@ env:
   STACK_NAME: prod-HexBug
   S3_BUCKET: prod-objectobject-ca-codedeploy-artifacts
   CDK_IAM_ROLE_ARN: arn:aws:iam::511603859520:role/prod-objectobject-ca-GitHubActionsCDKRole19D97701-sweSB0Sp33WN
-  HEALTH_CHECK_CHANNEL_ID: "1191901093077188710"
 
 jobs:
   test:
@@ -171,12 +170,11 @@ jobs:
         run: |
           cat <<EOF > codedeploy/.env
           IMAGE_ID="${{ needs.build-image.outputs.image-id }}"
+          BOT_ID="${{ vars.BOT_ID }}"
+          HEALTH_CHECK_CHANNEL_ID="${{ vars.HEALTH_CHECK_CHANNEL_ID }}"
           TOKEN="${{ secrets.DISCORD_TOKEN }}"
           LOG_WEBHOOK_URL="${{ secrets.LOG_WEBHOOK_URL }}"
-          HEALTH_CHECK_CHANNEL_ID="${{ env.HEALTH_CHECK_CHANNEL_ID }}"
-          GITHUB_SHA=main
-          GITHUB_REPOSITORY=object-Object/HexBug
-          GITHUB_PAGES_URL=https://object-object.github.io/HexBug
+          HEALTH_CHECK_WEBHOOK_URL="${{ secrets.HEALTH_CHECK_WEBHOOK_URL }}"
           EOF
 
       - name: Upload deployment bundle to S3

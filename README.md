@@ -11,12 +11,11 @@ A Discord bot for the Hex Casting mod. `buildpatterns.py`, `revealparser.py`, an
 5. Create a file named `.env` following this template:
 
     ```env
+    BOT_ID="12345678"
+    HEALTH_CHECK_CHANNEL_ID="12345678"
     TOKEN="your-bot-token"
     LOG_WEBHOOK_URL="https://discord.com/api/webhooks/id/token"
-    GITHUB_SHA=main
-    GITHUB_REPOSITORY=object-Object/HexBug
-    GITHUB_PAGES_URL=https://object-object.github.io/HexBug
-    HEALTH_CHECK_CHANNEL_ID="12345678"
+    HEALTH_CHECK_WEBHOOK_URL="https://discord.com/api/webhooks/id/token"
     ```
 
 6. Run the bot: `python main.py`
