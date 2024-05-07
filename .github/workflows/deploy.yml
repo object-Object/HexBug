@@ -125,6 +125,8 @@ jobs:
     permissions:
       contents: read
       packages: write
+    environment:
+      name: prod-docker
     steps:
       - uses: actions/checkout@v4
 
@@ -149,6 +151,17 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - name: Set runtime environment variables
+        run: |
+          cat <<EOF > .env
+          TOKEN="${{ secrets.DISCORD_TOKEN }}"
+          LOG_WEBHOOK_URL="${{ secrets.LOG_WEBHOOK_URL }}"
+          HEALTH_CHECK_CHANNEL_ID="${{ env.HEALTH_CHECK_CHANNEL_ID }}"
+          GITHUB_SHA=main
+          GITHUB_REPOSITORY=object-Object/HexBug
+          GITHUB_PAGES_URL=https://object-object.github.io/HexBug
+          EOF
 
       - name: Build and push Docker image
         id: push
