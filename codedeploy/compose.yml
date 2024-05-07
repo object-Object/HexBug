@@ -1,6 +1,7 @@
 # common Compose configuration for all environments
 services:
   bot:
+    stop_signal: SIGINT
     volumes:
       - data:/app/bot/data
     environment:
