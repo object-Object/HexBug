@@ -25,12 +25,10 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: recursive
-      - uses: actions/setup-python@v4
+      - uses: object-Object/ci/setup@v0
         with:
-          python-version: "3.11"
-      
-      - name: Install Nox
-        run: pip install nox
+          python-version: 3.11
+          python-packages: nox
 
       - name: Run tests
         run: nox
@@ -41,13 +39,10 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: recursive
-      - uses: actions/setup-python@v4
+      - uses: object-Object/ci/setup@v0
         with:
-          python-version: "3.11"
-          cache: pip
-      
-      - name: Install Python deps
-        run: pip install -e .[runtime]
+          python-version: 3.11
+          python-packages: .[runtime]
       
       - name: Scrape book types
         run: |
@@ -90,23 +85,14 @@ jobs:
       iam-role-arn: ${{ steps.cdk-outputs.outputs.iam-role-arn }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
+      - uses: object-Object/ci/setup@v0
         with:
+          python-version: 3.11
+          python-packages: .[aws-cdk]
           node-version: 18
-      - uses: actions/setup-python@v4
-        with:
-          python-version: "3.11"
-          cache: pip
-      - uses: aws-actions/configure-aws-credentials@v4
-        with:
+          npm-packages: aws-cdk
           aws-region: ${{ env.AWS_REGION }}
           role-to-assume: ${{ env.CDK_IAM_ROLE_ARN }}
-
-      - name: Install CDK CLI
-        run: npm install -g aws-cdk
-
-      - name: Install Python packages
-        run: pip install .[aws-cdk]
       
       - name: Deploy CDK stack
         run: cdk deploy prod --ci --require-approval never --outputs-file outputs.json
@@ -174,14 +160,9 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
+      - uses: object-Object/ci/setup@v0
         with:
-          submodules: recursive
-      - uses: actions/setup-python@v4
-        with:
-          python-version: "3.11"
-          cache: pip
-      - uses: aws-actions/configure-aws-credentials@v4
-        with:
+          python-version: 3.11
           aws-region: ${{ env.AWS_REGION }}
           role-to-assume: ${{ env.IAM_ROLE_ARN }}
 

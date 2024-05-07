@@ -1,6 +1,7 @@
 import nox
 from nox.command import CommandFailed
 
+nox.options.default_venv_backend = "uv|virtualenv"
 nox.options.reuse_existing_virtualenvs = True
 
 nox.options.sessions = [
