@@ -59,7 +59,6 @@ async def main():
     token = _get_env("TOKEN")
     log_webhook_url = _get_env("LOG_WEBHOOK_URL")
     health_check_channel_id = int(_get_env("HEALTH_CHECK_CHANNEL_ID"))
-    health_check_port = int(_get_env("HEALTH_CHECK_PORT"))
 
     commit_sha = get_current_commit(".", short=7)
     commit_date = get_commit_date(".", commit_sha)
@@ -78,7 +77,6 @@ async def main():
             session=session,
             log_webhook_url=log_webhook_url,
             health_check_channel_id=health_check_channel_id,
-            health_check_port=health_check_port,
             command_prefix=commands.when_mentioned,
             intents=intents,
             activity=discord.Game(f"version {commit_sha} ({commit_date})"),

@@ -32,7 +32,6 @@ class HexBugBot(commands.Bot):
         session: ClientSession,
         log_webhook_url: str,
         health_check_channel_id: int,
-        health_check_port: int,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
@@ -40,4 +39,3 @@ class HexBugBot(commands.Bot):
         self.session = session
         self.log_webhook = Webhook.from_url(log_webhook_url, session=session)
         self.health_check_channel_id = health_check_channel_id
-        self.health_check_port = health_check_port
