@@ -23,7 +23,7 @@ CMD ["python", "main.py"]
 HEALTHCHECK \
     --interval=15m \
     --timeout=30s \
-    --start-period=30s \
+    --start-period=90s \
     --start-interval=30s \
     --retries=3 \
     CMD ["python", "scripts/bot/health_check.py"]
