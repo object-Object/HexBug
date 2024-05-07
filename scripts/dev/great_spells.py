@@ -19,7 +19,7 @@ from HexBug.hexdecode.buildpatterns import build_registry
 from HexBug.hexdecode.hex_math import Coord, Direction, get_pattern_segments
 from HexBug.hexdecode.registry import (
     NormalPatternInfo,
-    RawPatternInfo,
+    PatternIota,
     Registry,
     SpecialHandlerPatternInfo,
 )
@@ -151,7 +151,7 @@ def get_name_and_pattern(registry: Registry, target: str) -> tuple[str, str]:
     match registry.from_shorthand(target):
         case NormalPatternInfo(display_name=name, pattern=pattern), _:
             return name, pattern
-        case RawPatternInfo(pattern=pattern), _:
+        case PatternIota(pattern=pattern), _:
             return pattern, pattern
         case SpecialHandlerPatternInfo(display_name=name), _:
             raise ValueError(

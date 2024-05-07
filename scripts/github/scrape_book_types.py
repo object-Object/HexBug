@@ -109,9 +109,9 @@ def update_book(
 update_book(add_keys)
 update_book(add_not_required)
 
-set_value_where(entry_keys, "pages", {"list"}, {f"list[BookPage]"})
-set_value_where(category_keys, "entries", {"list"}, {f"list[BookEntry]"})
-set_value_where(book_keys, "categories", {"list"}, {f"list[BookCategory]"})
+set_value_where(entry_keys, "pages", {"list"}, {"list[BookPage]"})
+set_value_where(category_keys, "entries", {"list"}, {"list[BookEntry]"})
+set_value_where(book_keys, "categories", {"list"}, {"list[BookCategory]"})
 
 print(
     """from typing import Generic, Literal, LiteralString, NotRequired, TypedDict, TypeVar

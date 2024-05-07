@@ -49,7 +49,7 @@ jobs:
       
       - name: Scrape book types
         run: |
-          python scrape_book_types.py > book_types.py.new
+          python scripts/github/scrape_book_types.py > book_types.py.new
           mv book_types.py.new src/HexBug/utils/book_types.py
           ruff format src/HexBug/utils/book_types.py
           ruff check --select=I --fix src/HexBug/utils/book_types.py
@@ -58,7 +58,7 @@ jobs:
         run: git diff --exit-code
       
       - name: Dump patterns
-        run: python dump_patterns.py patterns.csv.new
+        run: python scripts/github/dump_patterns.py patterns.csv.new
       
       - name: Check out gh-pages
         uses: actions/checkout@v3

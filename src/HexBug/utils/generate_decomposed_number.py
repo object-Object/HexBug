@@ -108,6 +108,7 @@ def _recursive_generate_decomposed_number(
 async def _timeout_generate_number_pattern(
     target: Fraction, timeout: float
 ) -> tuple[Direction, str, float] | None:
+    # AWFUL. why did i do this
     proc = await asyncio.create_subprocess_exec(
         sys.executable,
         "hexnumgen_cli.py",
