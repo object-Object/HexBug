@@ -57,7 +57,7 @@ class MessageCommandsCog(commands.Cog):
             await ctx.message.add_reaction("❌")
             return
 
-        logger.info(f"Responding to health check on port {port} with UUID {raw_uuid}")
+        logger.debug(f"Responding to health check on port {port} with UUID {raw_uuid}")
 
         async with self.bot.session.get(
             f"http://localhost:{port}/health-check-reply/{raw_uuid}",
