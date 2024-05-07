@@ -120,13 +120,22 @@ jobs:
           echo "iam-role-arn=$(echo "$outputs_json" | jq '.GitHubActionsRoleARN' --raw-output)" >> "$GITHUB_OUTPUT"
 
   build-image:
-    needs: [test, scrape-book-types]
+    # needs: [test, scrape-book-types]
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
     steps:
       - uses: actions/checkout@v4
+
+      # https://stackoverflow.com/a/59797984
+      - name: Add Docker APT repository
+        run: sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu  $(lsb_release -cs)  stable"
+
+      - name: Install latest Docker version
+        uses: awalsh128/cache-apt-pkgs-action@v1
+        with:
+          packages: docker-ce docker-ce-cli
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
