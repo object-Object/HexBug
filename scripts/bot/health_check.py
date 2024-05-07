@@ -14,7 +14,10 @@ logger = logging.getLogger(__name__)
 def main():
     logging.basicConfig()
 
-    ssm: SSMClient = boto3.client("ssm")
+    ssm: SSMClient = boto3.client(
+        "ssm",
+        region_name="us-east-1",
+    )
 
     environment = getenv("ENVIRONMENT")
     bot_id = get_parameter(ssm, f"/{environment}/HexBug/bot-id")
