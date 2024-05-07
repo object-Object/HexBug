@@ -16,7 +16,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 COPY .git/ .git/
 COPY scripts/bot/ scripts/bot/
 COPY src/HexBug/ src/HexBug/
-COPY main.py .env ./
+COPY main.py ./
 
 CMD ["python", "main.py"]
 

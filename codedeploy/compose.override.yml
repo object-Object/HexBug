@@ -1,7 +1,7 @@
 # production overrides for compose.yml
 services:
   bot:
-    image: ghcr.io/object-Object/HexBug:${IMAGE_VERSION}
+    image: ghcr.io/object-object/hexbug:${IMAGE_VERSION}
     volumes:
       - type: bind
         source: /home/object/codedeploy

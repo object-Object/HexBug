@@ -127,6 +127,7 @@ jobs:
       packages: write
     environment:
       name: prod-docker
+      url: https://${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -134,15 +135,6 @@ jobs:
       
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-
-      # https://stackoverflow.com/a/59797984
-      # - name: Add Docker APT repository
-      #   run: sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu  $(lsb_release -cs)  stable"
-
-      # - name: Install latest Docker version
-      #   uses: awalsh128/cache-apt-pkgs-action@v1
-      #   with:
-      #     packages: docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
@@ -156,17 +148,6 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-
-      - name: Set runtime environment variables
-        run: |
-          cat <<EOF > .env
-          TOKEN="${{ secrets.DISCORD_TOKEN }}"
-          LOG_WEBHOOK_URL="${{ secrets.LOG_WEBHOOK_URL }}"
-          HEALTH_CHECK_CHANNEL_ID="${{ env.HEALTH_CHECK_CHANNEL_ID }}"
-          GITHUB_SHA=main
-          GITHUB_REPOSITORY=object-Object/HexBug
-          GITHUB_PAGES_URL=https://object-object.github.io/HexBug
-          EOF
 
       - name: Build and push Docker image
         id: push

@@ -5,5 +5,11 @@ services:
       - data:/app/bot/data
     environment:
       AWS_REGION: us-east-1
+    secrets:
+      - source: env
+        target: /app/bot/.env
 volumes:
   data:
+secrets:
+  env:
+    file: .env
