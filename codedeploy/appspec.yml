@@ -1,9 +1,7 @@
 version: 0.0
 os: linux 
 files:
-  - source: codedeploy
-    destination: /var/lib/codedeploy-apps/HexBug
-  - source: compose.yml
+  - source: /
     destination: /var/lib/codedeploy-apps/HexBug
 file_exists_behavior: OVERWRITE
 hooks:

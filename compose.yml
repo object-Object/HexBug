@@ -1,15 +1,2 @@
-# common Compose configuration for all environments
-services:
-  bot:
-    volumes:
-      - data:/app/bot/data
-    environment:
-      AWS_REGION: us-east-1
-    secrets:
-      - source: env
-        target: /app/bot/.env
-volumes:
-  data:
-secrets:
-  env:
-    file: .env
+include:
+  - path: codedeploy/compose.yml

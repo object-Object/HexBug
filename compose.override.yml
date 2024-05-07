@@ -8,4 +8,6 @@ services:
         target: /root/.aws
     environment:
       ENVIRONMENT: dev
-    restart: always
+secrets:
+  env:
+    file: .env
