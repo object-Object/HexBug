@@ -18,6 +18,8 @@ env:
   CDK_IAM_ROLE_ARN: arn:aws:iam::511603859520:role/prod-objectobject-ca-GitHubActionsCDKRole19D97701-sweSB0Sp33WN
 
 jobs:
+  # phase 1
+
   test:
     runs-on: ubuntu-latest
     steps:
@@ -52,6 +54,17 @@ jobs:
 
       - name: Fail if book types need to be updated
         run: git diff --exit-code
+
+  dump-patterns:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - uses: object-Object/ci/setup@v0
+        with:
+          python-version: 3.11
+          python-packages: .[runtime]
       
       - name: Dump patterns
         run: python scripts/github/dump_patterns.py patterns.csv.new
@@ -71,8 +84,13 @@ jobs:
           commit_message: Update pattern dump
           file_pattern: patterns.csv
 
+  # phase 2
+
   deploy-aws-cdk:
-    needs: [test, scrape-book-types]
+    needs:
+      - test
+      - scrape-book-types
+      - dump-patterns
     runs-on: ubuntu-latest
     environment:
       name: prod-aws-cdk
@@ -106,7 +124,10 @@ jobs:
           echo "iam-role-arn=$(echo "$outputs_json" | jq '.GitHubActionsRoleARN' --raw-output)" >> "$GITHUB_OUTPUT"
 
   build-image:
-    needs: [test, scrape-book-types]
+    needs: 
+      - test
+      - scrape-book-types
+      - dump-patterns
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -145,8 +166,12 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
+  # phase 3
+
   deploy-codedeploy:
-    needs: [deploy-aws-cdk, build-image]
+    needs:
+      - deploy-aws-cdk
+      - build-image
     runs-on: ubuntu-latest
     env:
       APPLICATION_NAME: ${{ needs.deploy-aws-cdk.outputs.application-name }}
@@ -206,32 +231,3 @@ jobs:
         run: |
           aws deploy wait deployment-successful \
             --deployment-id ${{ steps.create-deployment.outputs.deployment-id }}
-
-  # purge-deployments:
-  #   needs: [deploy-aws-cdk, deploy-codedeploy]
-  #   runs-on: ubuntu-latest
-  #   env:
-  #     IAM_ROLE_ARN: ${{ needs.deploy-aws-cdk.outputs.iam-role-arn }}
-  #   environment:
-  #     name: prod-codedeploy
-  #   permissions:
-  #     id-token: write
-  #     contents: read
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #       with:
-  #         submodules: recursive
-  #     - uses: actions/setup-python@v4
-  #       with:
-  #         python-version: "3.11"
-  #         cache: pip
-  #     - uses: aws-actions/configure-aws-credentials@v4
-  #       with:
-  #         aws-region: ${{ env.AWS_REGION }}
-  #         role-to-assume: ${{ env.IAM_ROLE_ARN }}
-
-  #     - name: Install Python packages
-  #       run: pip install .[codedeploy]
-      
-  #     - name: Purge old deployment bundles
-  #       run: python scripts/github/purge_deployments.py ${{ env.S3_BUCKET }} ${{ env.STACK_NAME }}
