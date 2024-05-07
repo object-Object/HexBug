@@ -8,6 +8,8 @@ import boto3
 import requests
 from mypy_boto3_ssm import SSMClient
 
+HEALTH_CHECK_FILE = Path("data/health_check.txt")
+
 logger = logging.getLogger(__name__)
 
 
@@ -38,7 +40,7 @@ def main():
 
     logger.info("Checking response.")
 
-    got_uuid = Path("health_check.txt").read_text("utf-8")
+    got_uuid = HEALTH_CHECK_FILE.read_text("utf-8")
     if got_uuid != want_uuid:
         raise RuntimeError(f"Incorrect UUID: expected {want_uuid}, got {got_uuid}")
 

@@ -13,7 +13,7 @@ from discord.ext import commands
 from ..utils.commands import HexBugBot
 from ..utils.environment import Environment
 
-HEALTH_CHECK_FILE = Path("health_check.txt")
+HEALTH_CHECK_FILE = Path("data/health_check.txt")
 
 logger = logging.getLogger("bot")
 

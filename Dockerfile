@@ -21,9 +21,9 @@ COPY main.py ./
 CMD ["python", "main.py"]
 
 HEALTHCHECK \
-    --interval=15m \
-    --timeout=30s \
+    --interval=5m \
+    --timeout=15s \
     --start-period=90s \
     --start-interval=30s \
-    --retries=3 \
+    --retries=1 \
     CMD ["python", "scripts/bot/health_check.py"]
