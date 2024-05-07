@@ -120,14 +120,15 @@ jobs:
           echo "iam-role-arn=$(echo "$outputs_json" | jq '.GitHubActionsRoleARN' --raw-output)" >> "$GITHUB_OUTPUT"
 
   build-image:
-    # needs: [test, scrape-book-types]
+    needs: [test, scrape-book-types]
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
     environment:
       name: prod-docker
-      url: https://${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+    outputs:
+      image-id: ${{ steps.push.outputs.imageid }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -158,72 +159,73 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-  # deploy-codedeploy:
-  #   needs: [deploy-aws-cdk, build-image]
-  #   runs-on: ubuntu-latest
-  #   env:
-  #     APPLICATION_NAME: ${{ needs.deploy-aws-cdk.outputs.application-name }}
-  #     DEPLOYMENT_GROUP_NAME: ${{ needs.deploy-aws-cdk.outputs.deployment-group-name }}
-  #     IAM_ROLE_ARN: ${{ needs.deploy-aws-cdk.outputs.iam-role-arn }}
-  #   environment:
-  #     name: prod-codedeploy
-  #     url: ${{ steps.create-deployment.outputs.url }}
-  #   permissions:
-  #     id-token: write
-  #     contents: read
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #       with:
-  #         submodules: recursive
-  #     - uses: actions/setup-python@v4
-  #       with:
-  #         python-version: "3.11"
-  #         cache: pip
-  #     - uses: aws-actions/configure-aws-credentials@v4
-  #       with:
-  #         aws-region: ${{ env.AWS_REGION }}
-  #         role-to-assume: ${{ env.IAM_ROLE_ARN }}
+  deploy-codedeploy:
+    needs: [deploy-aws-cdk, build-image]
+    runs-on: ubuntu-latest
+    env:
+      APPLICATION_NAME: ${{ needs.deploy-aws-cdk.outputs.application-name }}
+      DEPLOYMENT_GROUP_NAME: ${{ needs.deploy-aws-cdk.outputs.deployment-group-name }}
+      IAM_ROLE_ARN: ${{ needs.deploy-aws-cdk.outputs.iam-role-arn }}
+    environment:
+      name: prod-codedeploy
+      # url: ${{ steps.create-deployment.outputs.url }}
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+          cache: pip
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: ${{ env.IAM_ROLE_ARN }}
 
-  #     - name: Set environment variables
-  #       run: |
-  #         cat <<EOF > .env
-  #         TOKEN="${{ secrets.DISCORD_TOKEN }}"
-  #         LOG_WEBHOOK_URL="${{ secrets.LOG_WEBHOOK_URL }}"
-  #         HEALTH_CHECK_CHANNEL_ID="${{ env.HEALTH_CHECK_CHANNEL_ID }}"
-  #         GITHUB_SHA=main
-  #         GITHUB_REPOSITORY=object-Object/HexBug
-  #         GITHUB_PAGES_URL=https://object-object.github.io/HexBug
-  #         EOF
+      - name: Set runtime environment variables
+        run: |
+          cat <<EOF > codedeploy/.env
+          IMAGE_ID="${{ needs.build-image.outputs.image-id }}"
+          TOKEN="${{ secrets.DISCORD_TOKEN }}"
+          LOG_WEBHOOK_URL="${{ secrets.LOG_WEBHOOK_URL }}"
+          HEALTH_CHECK_CHANNEL_ID="${{ env.HEALTH_CHECK_CHANNEL_ID }}"
+          GITHUB_SHA=main
+          GITHUB_REPOSITORY=object-Object/HexBug
+          GITHUB_PAGES_URL=https://object-object.github.io/HexBug
+          EOF
 
-  #     - name: Upload deployment bundle to S3
-  #       id: upload-bundle
-  #       run: |
-  #         S3_KEY="${{ env.STACK_NAME }}/${{ github.sha }}.zip"
-  #         echo "s3-key=$S3_KEY" >> "$GITHUB_OUTPUT"
-  #         aws deploy push \
-  #           --application-name ${{ env.APPLICATION_NAME }} \
-  #           --s3-location s3://${{ env.S3_BUCKET }}/$S3_KEY \
-  #           --source .
+      - name: Upload deployment bundle to S3
+        id: upload-bundle
+        run: |
+          S3_KEY="${{ env.STACK_NAME }}/${{ github.sha }}.zip"
+          echo "s3-key=$S3_KEY" >> "$GITHUB_OUTPUT"
+          aws deploy push \
+            --application-name ${{ env.APPLICATION_NAME }} \
+            --s3-location s3://${{ env.S3_BUCKET }}/$S3_KEY \
+            --source codedeploy
 
-  #     - name: Create CodeDeploy deployment
-  #       id: create-deployment
-  #       run: |
-  #         response="$(aws deploy create-deployment \
-  #           --application-name ${{ env.APPLICATION_NAME }} \
-  #           --deployment-group-name ${{ env.DEPLOYMENT_GROUP_NAME }} \
-  #           --s3-location "bucket=${{ env.S3_BUCKET }},key=${{ steps.upload-bundle.outputs.s3-key }},bundleType=zip")"
+      # - name: Create CodeDeploy deployment
+      #   id: create-deployment
+      #   run: |
+      #     response="$(aws deploy create-deployment \
+      #       --application-name ${{ env.APPLICATION_NAME }} \
+      #       --deployment-group-name ${{ env.DEPLOYMENT_GROUP_NAME }} \
+      #       --s3-location "bucket=${{ env.S3_BUCKET }},key=${{ steps.upload-bundle.outputs.s3-key }},bundleType=zip")"
           
-  #         deployment_id="$(echo "$response" | jq '.deploymentId' --raw-output)"
-  #         url="https://${{ env.AWS_REGION }}.console.aws.amazon.com/codesuite/codedeploy/deployments/${deployment_id}?region=${{ env.AWS_REGION }}"
-  #         echo "Deployment URL: $url"
+      #     deployment_id="$(echo "$response" | jq '.deploymentId' --raw-output)"
+      #     url="https://${{ env.AWS_REGION }}.console.aws.amazon.com/codesuite/codedeploy/deployments/${deployment_id}?region=${{ env.AWS_REGION }}"
+      #     echo "Deployment URL: $url"
 
-  #         echo "deployment-id=$deployment_id" >> "$GITHUB_OUTPUT"
-  #         echo "url=$url" >> "$GITHUB_OUTPUT"
+      #     echo "deployment-id=$deployment_id" >> "$GITHUB_OUTPUT"
+      #     echo "url=$url" >> "$GITHUB_OUTPUT"
 
-  #     - name: Wait for deployment to finish
-  #       run: |
-  #         aws deploy wait deployment-successful \
-  #           --deployment-id ${{ steps.create-deployment.outputs.deployment-id }}
+      # - name: Wait for deployment to finish
+      #   run: |
+      #     aws deploy wait deployment-successful \
+      #       --deployment-id ${{ steps.create-deployment.outputs.deployment-id }}
 
   # purge-deployments:
   #   needs: [deploy-aws-cdk, deploy-codedeploy]
