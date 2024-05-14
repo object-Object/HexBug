@@ -67,6 +67,14 @@ class CountedMessageProps:
 class InfoMessages(Enum):
     addons = MessageProps(content="https://addons.hexxy.media")
 
+    bosnia = CountedMessageProps(
+        embed=discord.Embed(
+            description="Botania.",
+        ).set_thumbnail(
+            url="https://media.hexxy.media/images/bosnia.png",
+        )
+    )
+
     bug_report = MessageProps(
         embed=discord.Embed(
             description="""Please do not post your bug reports to Discord. Instead, post them to the issue tracker on the mod's GitHub.
