@@ -68,7 +68,6 @@ class MessageCommandsCog(commands.Cog):
                 return
 
         await ctx.message.add_reaction("✅")
-        await ctx.message.delete(delay=5)
 
     @commands.command()
     @commands.is_owner()
