@@ -244,6 +244,10 @@ Hex Keys,Klein's Chest,SOUTH_EAST,eawaeawqawwawqq,true,hexkeys,kleins_chest,,,#p
 Hex Keys,Library Key,NORTH_WEST,qqqqqewwddada,false,hexkeys,library,,,#patterns/spells/mindscape@hexkeys:library
 Hex Keys,Morpheus's Reflection,WEST,ewdwewdeewdwewdewewdwe,true,hexkeys,create_library_key,,→ Library Key,#patterns/spells/visit_mindscape@hexkeys:create_library_key
 Hex Keys,Visitor's Key,EAST,waqqqqqewwddada,false,hexkeys,visit_library,,Library Key →,#patterns/spells/visit_mindscape@hexkeys:visit_library
+HexDebug,Craft Debugger,SOUTH_WEST,aaewwwwwaqwawqwadawqwwwawwwqwwwaw,false,hexdebug,craft/debugger,,"entity, [pattern] →",#patterns/debugging@hexdebug:craft/debugger
+HexDebug,Debugger's Reflection,EAST,qqqqqewaa,false,hexdebug,const/debugging,,→ bool,#patterns/debugging@hexdebug:const/debugging
+HexDebug,Set Breakpoint After,EAST,wqqaewd,false,hexdebug,breakpoint/after,,,#patterns/debugging@hexdebug:breakpoint/after
+HexDebug,Set Breakpoint Before,SOUTH_WEST,awqdeew,false,hexdebug,breakpoint/before,,,#patterns/debugging@hexdebug:breakpoint/before
 HexKinetics,Alidade's Purification II,EAST,waa,false,hexkinetics,direction/const,OpRoundedEntityLook,entity → vector,#patterns/actions@hexkinetics:direction/const
 HexKinetics,Greater Translocation,SOUTH_EAST,eeqeeqeeeqeeqdeeqeqqwqqqeeqeqqwqq,false,hexkinetics,move_block/spell,OpMoveBlock,"vector, vector →",#patterns/great_spells/greater_translocation@hexkinetics:move_block/spell
 HexKinetics,Hadamard's Distillation,WEST,awaqawa,false,hexkinetics,hadamard/const,OpVectorComponentMultiplication,"vector, vector → vector",#patterns/math_actions@hexkinetics:hadamard/const
