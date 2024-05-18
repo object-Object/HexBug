@@ -541,6 +541,17 @@ class HexdocMod(Enum):
         modloaders=[FORGE, FABRIC],
     )
 
+    HexDebug = HexdocModInfo(
+        name="HexDebug",
+        modid="hexdebug",
+        book_id="hexdebug:hexdebook",
+        description="Hex Casting addon that runs a debug server using the Debug Adapter Protocol.",
+        curseforge_url=None,
+        modrinth_slug=None,
+        icon_url="https://raw.githubusercontent.com/object-Object/HexDebug/d993c847f2/Common/src/main/resources/icon.png",
+        modloaders=[FORGE, FABRIC, QUILT],
+    )
+
 
 ModInfo = RegistryModInfo | APIModInfo | HexdocModInfo
 Mod = RegistryMod | APIMod | HexdocMod
