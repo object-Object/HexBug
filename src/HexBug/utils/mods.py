@@ -546,8 +546,8 @@ class HexdocMod(Enum):
         modid="hexdebug",
         book_id="hexdebug:hexdebook",
         description="Hex Casting addon that runs a debug server using the Debug Adapter Protocol.",
-        curseforge_url=None,
-        modrinth_slug=None,
+        curseforge_url="https://www.curseforge.com/minecraft/mc-mods/hexdebug/",
+        modrinth_slug="hexdebug",
         icon_url="https://raw.githubusercontent.com/object-Object/HexDebug/d993c847f2/Common/src/main/resources/icon.png",
         modloaders=[FORGE, FABRIC, QUILT],
     )
