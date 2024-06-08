@@ -10,7 +10,7 @@ services:
     environment:
       ENVIRONMENT: prod
       AWS_SHARED_CREDENTIALS_FILE: /app/codedeploy/temporary-credentials
-    restart: always
+    restart: on-failure
 secrets:
   env:
     file: .env
