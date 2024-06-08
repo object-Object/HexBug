@@ -1,4 +1,5 @@
 from collections import defaultdict
+from datetime import datetime
 
 from aiohttp import ClientSession
 from discord import Webhook, app_commands
@@ -39,3 +40,4 @@ class HexBugBot(commands.Bot):
         self.session = session
         self.log_webhook = Webhook.from_url(log_webhook_url, session=session)
         self.health_check_channel_id = health_check_channel_id
+        self.start_time = datetime.fromtimestamp(0)  # updated in start event

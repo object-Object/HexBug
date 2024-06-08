@@ -8,6 +8,9 @@ hooks:
   ApplicationStop:
     - location: hooks/application-stop.sh
       timeout: 60
+  AfterInstall:
+    - location: hooks/after-install.sh
+      timeout: 60
   ApplicationStart:
     - location: hooks/application-start.sh
       timeout: 120

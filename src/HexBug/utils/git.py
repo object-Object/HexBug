@@ -1,4 +1,5 @@
 import subprocess
+from datetime import datetime
 
 
 def _run_command(args: list[str], cwd: str) -> str:
@@ -7,8 +8,12 @@ def _run_command(args: list[str], cwd: str) -> str:
     return result.stdout.strip()
 
 
-def get_current_commit(cwd: str, short: int = 10) -> str:
-    return _run_command(["git", "rev-parse", f"--short={short}", "HEAD"], cwd)
+def get_current_commit(cwd: str, short: int | None = 10) -> str:
+    if short:
+        command = ["git", "rev-parse", f"--short={short}", "HEAD"]
+    else:
+        command = ["git", "rev-parse", "HEAD"]
+    return _run_command(command, cwd)
 
 
 def _get_commit_tags(cwd: str, commit: str) -> list[str]:
@@ -35,3 +40,11 @@ def get_commit_date(cwd: str, commit: str) -> str:
         ["git", "log", "-1", r"--date=format:'%Y-%m-%d'", r"--pretty=%cd", commit],
         cwd,
     ).strip("'")
+
+
+def get_commit_datetime(cwd: str, commit: str) -> datetime:
+    timestamp = _run_command(
+        ["git", "log", "-1", r"--date=iso-strict", r"--pretty=%cd", commit],
+        cwd,
+    ).strip("'")
+    return datetime.fromisoformat(timestamp)

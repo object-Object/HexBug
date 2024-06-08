@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 from typing import Iterable
 
 import discord
@@ -47,6 +48,7 @@ class EventsCog(commands.Cog):
     async def on_ready(self):
         logger.info(f"Logged in as {self.bot.user}")
         self.check_for_updates.start()
+        self.bot.start_time = datetime.now()
 
     @commands.Cog.listener()
     async def on_interaction(self, interaction: discord.Interaction):
