@@ -460,17 +460,18 @@ class RegistryMod(Enum):
 
 class APIMod(Enum):
     # https://hexbound.cypher.coffee/versions.json
-    Hexbound = APIWithBookModInfo(
-        name="Hexbound",
-        modid="hexbound",
-        description="Adds several utility patterns/spells (eg. item types, Hex Shields), quasi-playerless casting with Figments, pattern editing, and constructs (powerful automatable golems).",
-        curseforge_url=None,
-        modrinth_slug="hexbound",
-        icon_url="https://cdn.modrinth.com/data/PHgo4bVw/daa508e0b61340a46e04f669af1cf5e557193bc4.png",
-        api_base_url="https://hexbound.cypher.coffee/",
-        version="0.1.3+1.19.2",
-        modloaders=[QUILT],
-    )
+    # TODO: replace with hexdoc book
+    # Hexbound = APIWithBookModInfo(
+    #     name="Hexbound",
+    #     modid="hexbound",
+    #     description="Adds several utility patterns/spells (eg. item types, Hex Shields), quasi-playerless casting with Figments, pattern editing, and constructs (powerful automatable golems).",
+    #     curseforge_url=None,
+    #     modrinth_slug="hexbound",
+    #     icon_url="https://cdn.modrinth.com/data/PHgo4bVw/daa508e0b61340a46e04f669af1cf5e557193bc4.png",
+    #     api_base_url="https://hexbound.cypher.coffee/",
+    #     version="0.1.3+1.19.2",
+    #     modloaders=[QUILT],
+    # )
 
     @property
     def value(self) -> APIModInfo:
