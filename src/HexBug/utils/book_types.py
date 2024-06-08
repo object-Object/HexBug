@@ -10,7 +10,7 @@ class BookPage(TypedDict, Generic[T]):
 
 
 class BookPage_patchouli_text(BookPage[Literal["patchouli:text"]]):
-    text: FormatTree | list
+    text: FormatTree
     anchor: NotRequired[str]
     input: NotRequired[str]
     op_id: NotRequired[str]
@@ -55,8 +55,7 @@ class BookPage_patchouli_crafting(BookPage[Literal["patchouli:crafting"]]):
     recipe: str
     anchor: NotRequired[str]
     recipe2: NotRequired[str]
-    text: NotRequired[FormatTree | list]
-    title: NotRequired[str]
+    text: NotRequired[FormatTree]
 
 
 class BookPage_hexcasting_brainsweep(BookPage[Literal["hexcasting:brainsweep"]]):
@@ -75,7 +74,7 @@ class BookPage_hexcasting_pattern(BookPage[Literal["hexcasting:pattern"]]):
     name: str
     op: list
     op_id: str
-    text: FormatTree | list
+    text: FormatTree
     anchor: NotRequired[str]
     header: NotRequired[str]
     hex_size: NotRequired[int]
@@ -121,7 +120,7 @@ class BookEntry(TypedDict):
 
 
 class BookCategory(TypedDict):
-    description: FormatTree | list
+    description: FormatTree
     entries: list[BookEntry]
     icon: str
     id: str
