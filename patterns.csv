@@ -375,6 +375,37 @@ Hexal,Zone Distillation: Non-Wisp,NORTH_EAST,eewaqaweewaqaaww,false,hexal,zone_e
 Hexal,Zone Distillation: Wisp,SOUTH_EAST,qqwdedwqqwdeddww,false,hexal,zone_entity/wisp,OpGetEntitiesBy,"vec, num → [entity]",#patterns/spells/wisps@hexal:zone_entity/wisp
 Hexal,Zone Exaltation: Not-Type,NORTH_EAST,wdwqqqqqwdw,false,hexal,zone_entity/not_type,OpGetEntitiesByDyn,"entitytype, pos, num → [entity]",#patterns/types@hexal:zone_entity/not_type
 Hexal,Zone Exaltation: Type,SOUTH_EAST,waweeeeewaw,false,hexal,zone_entity/type,OpGetEntitiesByDyn,"entitytype, pos, num → [entity]",#patterns/types@hexal:zone_entity/type
+Hexbound,Artificer's Gambit,EAST,wqaawddewdwewewewewew,false,hexbound,bind_construct,,pattern | entity | null →,#patterns/constructs/bind_broadcast@hexbound:bind_construct
+Hexbound,Automaton's Reflection,EAST,qaawedee,false,hexbound,construct_get_self,,→ entity,#patterns/constructs/constructs_intro@hexbound:construct_get_self
+Hexbound,Bind Figment,NORTH_EAST,qaqdaqwqaeedewd,true,hexbound,set_fake_impetus_player,,vector →,#patterns/great_spells/impetus_fake_player@hexbound:set_fake_impetus_player
+Hexbound,Broadcast Instructions,SOUTH_EAST,qqaaqqqqwq,false,hexbound,instructions/broadcast,,"vector, [pattern] →",#patterns/constructs/bind_broadcast@hexbound:instructions/broadcast
+Hexbound,Collector's Distillation,NORTH_EAST,dewqa,false,hexbound,get_inventory/items,,"vector, vector → list",#patterns/item_patterns@hexbound:get_inventory/items
+Hexbound,Command: Drop Item,EAST,qaaqdwdw,false,hexbound,give_command/drop_off,,[pattern] →,#patterns/constructs/executing_commands@hexbound:give_command/drop_off
+Hexbound,Command: Harvest,EAST,qaaqqedwed,false,hexbound,give_command/harvest,,"vector, [pattern] →",#patterns/constructs/executing_commands@hexbound:give_command/harvest
+Hexbound,Command: Move To Position,EAST,qaaqwdaqqqa,false,hexbound,give_command/move_to,,"vector, [pattern] →",#patterns/constructs/executing_commands@hexbound:give_command/move_to
+Hexbound,Command: Pick Up Item,EAST,eddeawaw,false,hexbound,give_command/pick_up,,"entity, [pattern] →",#patterns/constructs/executing_commands@hexbound:give_command/pick_up
+Hexbound,Command: Use On Block,EAST,qaaqdee,false,hexbound,give_command/use/block,,"vector, vector, [pattern] →",#patterns/constructs/executing_commands@hexbound:give_command/use/block
+Hexbound,Create Spider Construct,SOUTH_WEST,wqwqwwqwqwqwwaeqaqdwdqaqe,false,hexbound,create_construct/spider,,"entity, entity, entity →",#patterns/constructs/spider_construct@hexbound:create_construct/spider
+Hexbound,Duelist's Purification,EAST,adeq,false,hexbound,get_main_hand,,entity → item stack,#patterns/item_patterns@hexbound:get_main_hand
+Hexbound,Ending Distillation,WEST,weeee,false,hexbound,pattern/tail,,"pattern, num → pattern",#patterns/pattern_editing@hexbound:pattern/tail
+Hexbound,Entity Purification: Construct,SOUTH_EAST,qqqqqdaqaawedde,false,hexbound,get_entity/construct,,vector → entity or null,#patterns/constructs/selecting_constructs@hexbound:get_entity/construct
+Hexbound,Forget Pigment,NORTH_EAST,wqwawqqawddwqwdd,false,hexbound,colorizer/delete,,pattern →,#patterns/spells/colorizer_storage@hexbound:colorizer/delete
+Hexbound,Fragment's Purification,WEST,eqqqq,false,hexbound,pattern/line_count,,pattern → num,#patterns/pattern_editing@hexbound:pattern/line_count
+Hexbound,Hex Shield,NORTH_EAST,eweeewe,false,hexbound,create_shield/normal,,"vec, vec, num →",#patterns/spells/shield@hexbound:create_shield/normal
+Hexbound,Hoarder's Distillation,NORTH_EAST,aqwed,false,hexbound,get_inventory/stacks,,"vector, vector → list",#patterns/item_patterns@hexbound:get_inventory/stacks
+Hexbound,Logistician's Purification,WEST,dedqaa,false,hexbound,get_stack_prop/item,,item stack → item,#patterns/item_patterns@hexbound:get_stack_prop/item
+Hexbound,Memorize Pigment,NORTH_EAST,wqwawqqawddwqwede,false,hexbound,colorizer/save,,pattern →,#patterns/spells/colorizer_storage@hexbound:colorizer/save
+Hexbound,Painter's Distillation,NORTH_WEST,aqqqqa,false,hexbound,pattern/merge,,"pattern, pattern → pattern",#patterns/pattern_editing@hexbound:pattern/merge
+Hexbound,Recall Pigment,NORTH_EAST,wqwawqqawddwqeqaq,false,hexbound,colorizer/load,,pattern →,#patterns/spells/colorizer_storage@hexbound:colorizer/load
+Hexbound,Revolving Distillation,WEST,deeee,false,hexbound,pattern/rotate,,"pattern, num → pattern",#patterns/pattern_editing@hexbound:pattern/rotate
+Hexbound,Send Instructions,EAST,qaaq,false,hexbound,instructions/send,,"entity, [pattern] →",#patterns/constructs/constructs_intro@hexbound:instructions/send
+Hexbound,Shieldbearer's Purification,EAST,qeda,false,hexbound,get_off_hand,,entity → item stack,#patterns/item_patterns@hexbound:get_off_hand
+Hexbound,Starting Distillation,EAST,wqqqq,false,hexbound,pattern/head,,"pattern, num → pattern",#patterns/pattern_editing@hexbound:pattern/head
+Hexbound,Treasurer's Purification,WEST,dedqaq,false,hexbound,get_stack_prop/size,,item stack → num,#patterns/item_patterns@hexbound:get_stack_prop/size
+Hexbound,Unstable Hex Shield,NORTH_EAST,eqdweeqdw,false,hexbound,create_shield/glitchy,,"vec, vec, num →",#patterns/spells/shield@hexbound:create_shield/glitchy
+Hexbound,Winding Purification,WEST,qeeee,false,hexbound,pattern/start_dir,,pattern → num,#patterns/pattern_editing@hexbound:pattern/start_dir
+Hexbound,Zone Distillation: Construct,SOUTH_EAST,qqqqqwdeddwedde,false,hexbound,zone_entity/construct,,"vector, number → list",#patterns/constructs/selecting_constructs@hexbound:zone_entity/construct
+Hexbound,Zone Distillation: Non-Construct,SOUTH_EAST,eeeeewaqaawedde,false,hexbound,zone_entity/not_construct,,"vector, number → list",#patterns/constructs/selecting_constructs@hexbound:zone_entity/not_construct
 Mediaworks,Astral Gaze Reflection,NORTH_EAST,waawaq,false,mediaworks,astral_look,,→ vector,#patterns/astral_utils@mediaworks:astral_look
 Mediaworks,Astral Locale Reflection,NORTH_EAST,qaqqqqaq,false,mediaworks,astral_pos,,→ vector,#patterns/astral_utils@mediaworks:astral_pos
 Mediaworks,Astral Projection,NORTH_WEST,qdadwewewdadeadwddaaedqdeddew,true,mediaworks,astral_projection,,number →,#patterns/great_spells/astral_projection@mediaworks:astral_projection
