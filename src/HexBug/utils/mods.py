@@ -459,20 +459,6 @@ class RegistryMod(Enum):
 
 
 class APIMod(Enum):
-    # https://hexbound.cypher.coffee/versions.json
-    # TODO: replace with hexdoc book
-    # Hexbound = APIWithBookModInfo(
-    #     name="Hexbound",
-    #     modid="hexbound",
-    #     description="Adds several utility patterns/spells (eg. item types, Hex Shields), quasi-playerless casting with Figments, pattern editing, and constructs (powerful automatable golems).",
-    #     curseforge_url=None,
-    #     modrinth_slug="hexbound",
-    #     icon_url="https://cdn.modrinth.com/data/PHgo4bVw/daa508e0b61340a46e04f669af1cf5e557193bc4.png",
-    #     api_base_url="https://hexbound.cypher.coffee/",
-    #     version="0.1.3+1.19.2",
-    #     modloaders=[QUILT],
-    # )
-
     @property
     def value(self) -> APIModInfo:
         return super().value
@@ -551,6 +537,19 @@ class HexdocMod(Enum):
         modrinth_slug="hexdebug",
         icon_url="https://raw.githubusercontent.com/object-Object/HexDebug/d993c847f2/Common/src/main/resources/icon.png",
         modloaders=[FORGE, FABRIC, QUILT],
+    )
+
+    Hexbound = HexdocModInfo(
+        name="Hexbound",
+        modid="hexbound",
+        book_id="hexbound:hexboundbook",
+        description="Addon for Hex Casting adding programmable Constructs and more.",
+        # curseforge_url="https://www.curseforge.com/minecraft/mc-mods/hexbound-fork/",
+        # modrinth_slug="hexbound-fork",
+        curseforge_url=None,
+        modrinth_slug=None,
+        icon_url="https://raw.githubusercontent.com/object-Object/hexbound/d21a3ba956/src/main/resources/assets/hexbound/icon.png",
+        modloaders=[QUILT],
     )
 
 

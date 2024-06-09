@@ -75,6 +75,7 @@ def load_hexdoc_mod(
             "textures": {
                 "missing": [
                     "minecraft:chest",
+                    "minecraft:shield",
                     "hexgloop:fake_spellbook_for_rei",
                     "emi:*",
                 ]
