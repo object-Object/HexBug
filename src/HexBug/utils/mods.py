@@ -544,10 +544,8 @@ class HexdocMod(Enum):
         modid="hexbound",
         book_id="hexbound:hexboundbook",
         description="Addon for Hex Casting adding programmable Constructs and more.",
-        # curseforge_url="https://www.curseforge.com/minecraft/mc-mods/hexbound-fork/",
-        # modrinth_slug="hexbound-fork",
-        curseforge_url=None,
-        modrinth_slug=None,
+        curseforge_url="https://www.curseforge.com/minecraft/mc-mods/hexbound-fork/",
+        modrinth_slug="hexbound-fork",
         icon_url="https://raw.githubusercontent.com/object-Object/hexbound/d21a3ba956/src/main/resources/assets/hexbound/icon.png",
         modloaders=[QUILT],
     )
