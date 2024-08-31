@@ -557,7 +557,7 @@ class HexdocMod(Enum):
         description="A Hexcasting addon that adds property iota to store, sync, and transfer iota",
         curseforge_url=None,
         modrinth_slug="hexcellular",
-        icon_url="https://github.com/miyucomics/hexcellular/blob/5ad9aa1a442f8688bdc642c037e9cd8264fd4857/src/main/resources/assets/hexcellular/icon.png",
+        icon_url="https://github.com/miyucomics/hexcellular/blob/5ad9aa1a442f8688bdc642c037e9cd8264fd4857/src/main/resources/assets/hexcellular/icon.png?raw=true",
         modloaders=[FABRIC, QUILT],
     )
 
