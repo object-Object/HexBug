@@ -7,8 +7,9 @@ A Discord bot for the Hex Casting mod. `buildpatterns.py`, `revealparser.py`, an
 1. Clone this repo, including submodules: `git clone --recurse-submodules <url>`
 2. Set up a venv using Python 3.11 and enter it
 3. [Install Rust](https://www.rust-lang.org/tools/install) (for building `hexnumgen` in the next step)
-4. Install deps: `pip install -e '.[dev] --find-links ./vendor'`
-5. Create a file named `.env` following this template:
+4. Install deps: `pip install -e '.[dev]' --find-links ./vendor`
+   * If the above command fails with a message related to `hexnumgen`, try this one instead: `pip install -e '.[dev,target-any]' --find-links ./vendor`
+6. Create a file named `.env` following this template:
 
     ```env
     BOT_ID="12345678"
@@ -18,7 +19,7 @@ A Discord bot for the Hex Casting mod. `buildpatterns.py`, `revealparser.py`, an
     HEALTH_CHECK_WEBHOOK_URL="https://discord.com/api/webhooks/id/token"
     ```
 
-6. Run the bot: `python main.py`
+7. Run the bot: `python main.py`
 
 ## Scraping web book types
 
