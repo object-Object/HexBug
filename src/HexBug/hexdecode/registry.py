@@ -81,9 +81,9 @@ class InvalidSpecialHandlerArgumentException(Exception):
         self.display = display
 
 
-@dataclass
 class SpecialHandler(ABC):
-    info: SpecialHandlerPatternInfo = field(init=False)
+    def __init__(self) -> None:
+        self.info: SpecialHandlerPatternInfo
 
     @abstractmethod
     def parse_pattern(self, direction: Direction, pattern: str) -> Any | None:
