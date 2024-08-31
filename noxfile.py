@@ -58,6 +58,7 @@ def scrape_book_types(session: nox.Session):
     session.install("-e", ".[runtime]", "--find-links=./vendor")
 
     tmp_file = Path("out/book_types.py")
+    tmp_file.parent.mkdir(parents=True, exist_ok=True)
     with tmp_file.open("w", encoding="utf-8") as f:
         session.run(
             "python",
