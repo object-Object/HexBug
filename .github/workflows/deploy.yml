@@ -43,7 +43,7 @@ jobs:
       - uses: object-Object/ci/setup@v0
         with:
           python-version: 3.11
-          python-packages: .[runtime]
+          python-packages: .[runtime] --find-links ./vendor
       
       - name: Scrape book types
         run: |
@@ -64,7 +64,7 @@ jobs:
       - uses: object-Object/ci/setup@v0
         with:
           python-version: 3.11
-          python-packages: .[runtime]
+          python-packages: .[runtime] --find-links ./vendor
       
       - name: Dump patterns
         run: python scripts/github/dump_patterns.py patterns.csv.new

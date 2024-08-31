@@ -14,7 +14,7 @@ nox.options.sessions = [
 
 @nox.session
 def test(session: nox.Session):
-    session.install("-e", ".[runtime,test]")
+    session.install("-e", ".[runtime,test]", "--find-links=./vendor")
     install_hexnumgen(session)
 
     session.run("pytest", *session.posargs)
@@ -25,7 +25,7 @@ def test(session: nox.Session):
 
 @nox.session
 def run(session: nox.Session):
-    session.install("-e", ".[runtime]")
+    session.install("-e", ".[runtime]", "--find-links=./vendor")
     install_hexnumgen(session)
 
     session.run("python", "main.py", env={"ENVIRONMENT": "dev"})

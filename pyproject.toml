@@ -28,8 +28,8 @@ codedeploy = [
 runtime = [
     "discord.py~=2.3.2",
     "hexdoc-hexgloop @ https://github.com/SamsTheNerd/HexGloop/raw/af72e6cc318d/docs/v/latest/main/dist/hexdoc_hexgloop-0.2.1.1.0.dev0-py3-none-any.whl",
-    "hexdoc-hexal @ {root:uri}/vendor/hexdoc_hexal-0.2.19.1.0.dev0-py3-none-any.whl",
-    "hexdoc-hexbound @ {root:uri}/vendor/hexdoc_hexbound-0.1.4.1.19.2.1.0.dev1-py3-none-any.whl",
+    "hexdoc-hexal==0.2.19.1.0.dev0",
+    "hexdoc-hexbound==0.1.4.1.19.2.1.0.dev2",
     "hexdoc-hexkeys==0.1.1.1.0.dev0",
     "hexdoc-mediaworks==1.0.6.1.0.dev0",
     "hexdoc-oneironaut==0.3.1.1.0",
@@ -50,9 +50,6 @@ runtime = [
 ]
 target-any = [
     "hexnumgen @ git+https://github.com/object-Object/hexnumgen-rs.git@70d683ee9b",
-]
-target-linux = [ # x86_64-unknown-linux-gnu
-    "hexnumgen @ {root:uri}/vendor/hexnumgen-0.2.0-cp311-cp311-manylinux_2_28_x86_64.whl",
 ]
 test = [
     "pytest~=8.1",

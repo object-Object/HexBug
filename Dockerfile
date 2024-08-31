@@ -11,7 +11,7 @@ COPY pyproject.toml ./
 COPY src/HexBug/__init__.py src/HexBug/
 
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv pip install --system -e '.[runtime,target-linux]'
+    uv pip install --system -e '.[runtime]' --find-links ./vendor
 
 COPY .git/ .git/
 COPY scripts/bot/ scripts/bot/
