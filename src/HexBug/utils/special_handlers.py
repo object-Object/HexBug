@@ -34,10 +34,18 @@ class NumberSpecialHandler(SpecialHandler):
         arg: SpecialHandlerArgument,
         should_align_horizontal: bool,
     ) -> list[tuple[Direction, str]] | None:
-        if not isinstance(arg, str):
+        if not isinstance(arg, (Fraction, int)):
             raise InvalidSpecialHandlerArgumentException(self.info.display_name)
 
-        return [generate_bookkeeper(arg)]
+        result = await generate_decomposed_number(
+            registry, arg, should_align_horizontal
+        )
+        if result is None:
+            raise InvalidSpecialHandlerArgumentException(
+                f"{self.info.display_name}: {arg}"
+            )
+
+        return result[0]
 
 
 class MaskSpecialHandler(SpecialHandler):
@@ -56,15 +64,7 @@ class MaskSpecialHandler(SpecialHandler):
         arg: SpecialHandlerArgument,
         should_align_horizontal: bool,
     ) -> list[tuple[Direction, str]] | None:
-        if not isinstance(arg, (Fraction, int)):
+        if not isinstance(arg, str):
             raise InvalidSpecialHandlerArgumentException(self.info.display_name)
 
-        result = await generate_decomposed_number(
-            registry, arg, should_align_horizontal
-        )
-        if result is None:
-            raise InvalidSpecialHandlerArgumentException(
-                f"{self.info.display_name}: {arg}"
-            )
-
-        return result[0]
+        return [generate_bookkeeper(arg)]
