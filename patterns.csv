@@ -406,6 +406,9 @@ Hexbound,Unstable Hex Shield,NORTH_EAST,eqdweeqdw,false,hexbound,create_shield/g
 Hexbound,Winding Purification,WEST,qeeee,false,hexbound,pattern/start_dir,,pattern → num,#patterns/pattern_editing@hexbound:pattern/start_dir
 Hexbound,Zone Distillation: Construct,SOUTH_EAST,qqqqqwdeddwedde,false,hexbound,zone_entity/construct,,"vector, number → list",#patterns/constructs/selecting_constructs@hexbound:zone_entity/construct
 Hexbound,Zone Distillation: Non-Construct,SOUTH_EAST,eeeeewaqaawedde,false,hexbound,zone_entity/not_construct,,"vector, number → list",#patterns/constructs/selecting_constructs@hexbound:zone_entity/not_construct
+Hexcellular,Observation Purification,SOUTH_WEST,aawd,false,hexcellular,observe_property,,property → any,#properties@hexcellular:observe_property
+Hexcellular,Schrödinger's Gambit,SOUTH_WEST,aawq,false,hexcellular,set_property,,"property, any →",#properties@hexcellular:set_property
+Hexcellular,Schrödinger's Reflection,SOUTH_WEST,aawe,false,hexcellular,create_property,,→ property,#properties@hexcellular:create_property
 Mediaworks,Astral Gaze Reflection,NORTH_EAST,waawaq,false,mediaworks,astral_look,,→ vector,#patterns/astral_utils@mediaworks:astral_look
 Mediaworks,Astral Locale Reflection,NORTH_EAST,qaqqqqaq,false,mediaworks,astral_pos,,→ vector,#patterns/astral_utils@mediaworks:astral_pos
 Mediaworks,Astral Projection,NORTH_WEST,qdadwewewdadeadwddaaedqdeddew,true,mediaworks,astral_projection,,number →,#patterns/great_spells/astral_projection@mediaworks:astral_projection
