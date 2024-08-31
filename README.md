@@ -22,7 +22,7 @@ A Discord bot for the Hex Casting mod. `buildpatterns.py`, `revealparser.py`, an
 
 ## Scraping web book types
 
-Run `python scripts/github/scrape_book_types.py | tee src/HexBug/utils/book_types.py && ruff format src/HexBug/utils/book_types.py && ruff check --select=I --fix src/HexBug/utils/book_types.py`.
+Run `nox -s scrape_book_types`.
 
 ## Depending on HexBug
 

@@ -1,3 +1,7 @@
+import shutil
+import sys
+from pathlib import Path
+
 import nox
 from nox.command import CommandFailed
 
@@ -47,6 +51,28 @@ def health_check(session: nox.Session):
         external=True,
     )
     # fmt: on
+
+
+@nox.session
+def scrape_book_types(session: nox.Session):
+    session.install("-e", ".[runtime]", "--find-links=./vendor")
+
+    tmp_file = Path("out/book_types.py")
+    with tmp_file.open("w", encoding="utf-8") as f:
+        session.run(
+            "python",
+            "scripts/github/scrape_book_types.py",
+            stdout=f,
+            stderr=sys.stderr,
+        )
+
+    if not tmp_file.read_text("utf-8").strip():
+        session.error("No output printed by script.")
+
+    session.run("ruff", "format", tmp_file)
+    session.run("ruff", "check", "--select=I", "--fix", tmp_file)
+
+    shutil.move(tmp_file, "src/HexBug/utils/book_types.py")
 
 
 # helper functions

@@ -43,14 +43,10 @@ jobs:
       - uses: object-Object/ci/setup@v0
         with:
           python-version: 3.11
-          python-packages: .[runtime] --find-links ./vendor
+          python-packages: nox
       
       - name: Scrape book types
-        run: |
-          python scripts/github/scrape_book_types.py > book_types.py.new
-          mv book_types.py.new src/HexBug/utils/book_types.py
-          ruff format src/HexBug/utils/book_types.py
-          ruff check --select=I --fix src/HexBug/utils/book_types.py
+        run: nox --session scrape_book_types
 
       - name: Fail if book types need to be updated
         run: git diff --exit-code
