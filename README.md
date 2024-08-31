@@ -13,9 +13,9 @@ A Discord bot for the Hex Casting mod. `buildpatterns.py`, `revealparser.py`, an
 
     ```env
     BOT_ID="12345678"
-    HEALTH_CHECK_CHANNEL_ID="12345678"
     TOKEN="your-bot-token"
     LOG_WEBHOOK_URL="https://discord.com/api/webhooks/id/token"
+    HEALTH_CHECK_CHANNEL_ID="12345678"
     HEALTH_CHECK_WEBHOOK_URL="https://discord.com/api/webhooks/id/token"
     ```
 
@@ -24,6 +24,16 @@ A Discord bot for the Hex Casting mod. `buildpatterns.py`, `revealparser.py`, an
 ## Scraping web book types
 
 Run `nox -s scrape_book_types`.
+
+## Environment variables (`.env`)
+
+|Name|Type|Description|
+|----|----|-----------|
+|BOT_ID|int|User ID of the bot account being used to run the bot.|
+|TOKEN|str|Token of the bot account being used to run the bot.|
+|LOG_WEBHOOK_URL|str|Webhook URL used by the bot to send log messages.|
+|HEALTH_CHECK_CHANNEL_ID|int|Channel ID where the bot will respond to health check commands. Can be a dummy value (eg. `0`) if running the bot outside of Docker.|
+|HEALTH_CHECK_WEBHOOK_URL|str|Webhook URL used by the health check script to send commands to the bot. Not required if running the bot outside of Docker.|
 
 ## Depending on HexBug
 
