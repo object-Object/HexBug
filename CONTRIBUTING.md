@@ -36,6 +36,15 @@ WIP.
     * `/source pattern APatternInYourMod`
 * After ensuring there are no runtime or type errors, submit a PR.
 
+## Adding a pattern with a special handler (eg. Numerical Reflection)
+
+* Add a `SpecialHandlerPatternInfo` entry to the list in [src/HexBug/utils/extra_patterns.py](./src/HexBug/utils/extra_patterns.py).
+  * `path` is a path in the repository of `class_mod`, not `mod`.
+  * `classname` can't be the same as any other known pattern classes unless `path` is also the same (ie. if you want `/source pattern` to link to a file in your repo, `classname` cannot be `"SpecialHandler"`).
+* **Optional:**
+  * Add a subclass of `SpecialHandler` in [src/HexBug/utils/special_handlers.py](./src/HexBug/utils/special_handlers.py), and add it to the `SpecialHandlerPatternInfo` entry.
+  * Add a subcommand of `/pattern special` in [src/HexBug/cogs/pattern.py](./src/HexBug/cogs/pattern.py). Use `bookkeepers_gambit` and `numerical_reflection` as examples.
+
 ## Tips
 
 * If you see a bunch of nonsensical errors from Pylance showing up, try adding and deleting some text to one of the Python files. That should trigger it to refresh and the errors should disappear. I'm not sure what causes this.

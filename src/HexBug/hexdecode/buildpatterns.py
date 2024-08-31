@@ -1,6 +1,5 @@
 import asyncio
 import itertools
-import json
 import logging
 import re
 from pathlib import Path
@@ -16,6 +15,7 @@ from hexdoc_hexcasting.book.page import (
     PageWithPattern,
 )
 
+from HexBug.hexdecode.pregen_numbers import load_pregen_numbers
 from HexBug.utils.hexdoc import format_text
 
 from ..utils.api import APILocalPatternSource, APIPattern
@@ -34,11 +34,6 @@ from .registry import DuplicatePatternException, NormalPatternInfo, Registry
 
 translation_regex = re.compile(r"hexcasting.spell.[a-z]+:(.+)")
 header_regex = re.compile(r"\s*\(.+\)")
-
-MAX_PREGEN_NUMBER = 2000
-PREGEN_NUMBERS_FILE = (
-    f"{Path(__file__).parent.as_posix()}/numbers_{MAX_PREGEN_NUMBER}.json"
-)
 
 
 def _build_pattern_urls(
@@ -250,10 +245,7 @@ def merge_dicts(*dicts: dict[str, str]) -> dict[str, str]:
 async def build_registry(session: ClientSession) -> Registry | None:
     logging.info("Building registry")
 
-    with open(PREGEN_NUMBERS_FILE, "r", encoding="utf-8") as f:
-        pregen_numbers = {
-            int(n): (Direction[d], p) for n, (d, p) in json.load(f).items()
-        }
+    pregen_numbers = load_pregen_numbers()
 
     registry = Registry(pregen_numbers)
     name_to_translation: dict[str, str] = {}

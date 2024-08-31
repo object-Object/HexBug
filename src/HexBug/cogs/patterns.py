@@ -1,5 +1,4 @@
 import re
-from fractions import Fraction
 from io import BytesIO
 
 import discord
@@ -8,8 +7,11 @@ from discord.ext import commands
 from discord.utils import MISSING
 
 from ..hexdecode.hex_math import Direction
-from ..hexdecode.hexast import PatternIota, generate_bookkeeper
-from ..hexdecode.registry import SpecialHandlerPatternInfo
+from ..hexdecode.hexast import PatternIota
+from ..hexdecode.registry import (
+    InvalidSpecialHandlerArgumentException,
+    SpecialHandlerPatternInfo,
+)
 from ..utils.buttons import build_show_or_delete_button
 from ..utils.commands import HexBugBot
 from ..utils.draw_patterns_on_grid import draw_patterns_on_grid
@@ -270,35 +272,23 @@ class PatternsCog(commands.GroupCog, name="patterns"):
                     patterns.append((info.direction, info.pattern))
 
                 case SpecialHandlerPatternInfo():
-                    match info.name:
-                        case "mask":
-                            if not isinstance(arg, str):
-                                unknown.append(info.display_name)
-                                continue
-
-                            patterns.append(generate_bookkeeper(arg))
-
-                        case "number":
-                            if not isinstance(arg, (Fraction, int)):
-                                unknown.append(info.display_name)
-                                continue
-
-                            if (
-                                result := await generate_decomposed_number(
-                                    self.registry, arg, should_align_horizontal
+                    if info.handler:
+                        try:
+                            patterns.extend(
+                                await info.handler.generate_pattern(
+                                    self.registry,
+                                    arg,
+                                    should_align_horizontal,
                                 )
-                            ) is None:
-                                unknown.append(f"{info.display_name}: {arg}")
-                                continue
-
-                            new_patterns, _, _ = result
-                            patterns.extend(new_patterns)
-
-                        case name:
-                            return await interaction.followup.send(
-                                f"❌ Internal error: Unhandled pattern `{name}`.",
-                                ephemeral=True,
                             )
+                        except InvalidSpecialHandlerArgumentException as e:
+                            unknown.append(e.display)
+                            continue
+                    else:
+                        return await interaction.followup.send(
+                            f"❌ Internal error: Unhandled pattern `{info.name}`.",
+                            ephemeral=True,
+                        )
 
                 case _:
                     patterns.append((info.direction, info.pattern))

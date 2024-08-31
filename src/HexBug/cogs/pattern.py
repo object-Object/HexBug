@@ -5,9 +5,9 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-from ..hexdecode.buildpatterns import MAX_PREGEN_NUMBER
 from ..hexdecode.hex_math import Direction
 from ..hexdecode.hexast import generate_bookkeeper
+from ..hexdecode.pregen_numbers import MAX_PREGEN_NUMBER
 from ..hexdecode.registry import (
     DuplicatePattern,
     PatternInfo,

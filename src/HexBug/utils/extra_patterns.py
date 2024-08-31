@@ -5,6 +5,7 @@ from ..hexdecode.registry import (
     SpecialHandlerPatternInfo,
 )
 from .mods import RegistryMod
+from .special_handlers import MaskSpecialHandler, NumberSpecialHandler
 
 _extra_patterns: list[PatternInfo] | None = None
 
@@ -27,6 +28,7 @@ def build_extra_patterns(name_to_translation: dict[str, str]) -> list[PatternInf
                 is_great=False,
                 direction=Direction.WEST,
                 pattern="qqq",
+                shorthand_names=("{", "intro"),
             ),
             NormalPatternInfo(
                 name="close_paren",
@@ -38,6 +40,7 @@ def build_extra_patterns(name_to_translation: dict[str, str]) -> list[PatternInf
                 is_great=False,
                 direction=Direction.EAST,
                 pattern="eee",
+                shorthand_names=("}", "retro"),
             ),
             NormalPatternInfo(
                 name="escape",
@@ -58,6 +61,7 @@ def build_extra_patterns(name_to_translation: dict[str, str]) -> list[PatternInf
                 classname="SpecialHandler",
                 class_mod=RegistryMod.HexCasting,
                 is_great=False,
+                handler=NumberSpecialHandler(),
             ),
             SpecialHandlerPatternInfo(
                 name="mask",
@@ -67,6 +71,8 @@ def build_extra_patterns(name_to_translation: dict[str, str]) -> list[PatternInf
                 classname="SpecialHandler",
                 class_mod=RegistryMod.HexCasting,
                 is_great=False,
+                shorthand_names=("book",),
+                handler=MaskSpecialHandler(),
             ),
         ]
     return _extra_patterns

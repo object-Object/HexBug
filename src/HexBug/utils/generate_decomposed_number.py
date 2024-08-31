@@ -5,8 +5,8 @@ import sys
 from fractions import Fraction
 from timeit import default_timer as timer
 
-from ..hexdecode.buildpatterns import MAX_PREGEN_NUMBER
 from ..hexdecode.hex_math import Direction
+from ..hexdecode.pregen_numbers import MAX_PREGEN_NUMBER
 from ..hexdecode.registry import Registry
 from .patterns import align_horizontal
 

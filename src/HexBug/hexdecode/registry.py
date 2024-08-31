@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import dataclasses
 import re
+from abc import ABC, abstractmethod
 from collections import defaultdict
 from dataclasses import dataclass, field
 from fractions import Fraction
@@ -9,15 +12,12 @@ from typing import Any, TypedDict, TypeVar, Unpack
 from HexBug.hexdecode.hexast import PatternIota
 
 from ..utils.mods import Mod
-from ..utils.parse_rational import parse_rational
-from ..utils.patterns import parse_mask
 from .hex_math import (
     Direction,
     Segment,
     get_aligned_pattern_segments,
     get_rotated_aligned_pattern_segments,
 )
-from .special_handlers import parse_bookkeeper, parse_numerical_reflection
 
 
 @dataclass(frozen=True, kw_only=True, repr=False)
@@ -29,6 +29,7 @@ class _BasePatternInfo:
     classname: str | None
     class_mod: Mod | None
     is_great: bool
+    shorthand_names: tuple[str, ...] = tuple()
 
     # late-initialized fields
     book_url: str | None = field(init=False, default=None)
@@ -71,12 +72,57 @@ class NormalPatternInfo(_BasePatternInfo):
         return tuple(get_rotated_aligned_pattern_segments(self.direction, self.pattern))
 
 
+SpecialHandlerArgument = Fraction | int | str | None
+
+
+class InvalidSpecialHandlerArgumentException(Exception):
+    def __init__(self, display: str, *args: object) -> None:
+        super().__init__(f"Invalid special handler argument: {display}", *args)
+        self.display = display
+
+
+@dataclass
+class SpecialHandler(ABC):
+    info: SpecialHandlerPatternInfo = field(init=False)
+
+    @abstractmethod
+    def parse_pattern(self, direction: Direction, pattern: str) -> Any | None:
+        """Attempts to parse an unknown pattern with this handler.
+
+        Returns None if the pattern does not match this handler.
+        """
+
+    @abstractmethod
+    def parse_argument(self, value: str) -> SpecialHandlerArgument:
+        """Attempts to parse the argument for this pattern."""
+
+    @abstractmethod
+    async def generate_pattern(
+        self,
+        registry: Registry,
+        arg: SpecialHandlerArgument,
+        should_align_horizontal: bool,
+    ) -> list[tuple[Direction, str]]:
+        ...
+
+    def parse_shorthand(self, shorthand: str) -> SpecialHandlerArgument:
+        """Attempts to parse a full shorthand pattern into an argument for this
+        pattern.
+        """
+        return None
+
+
 @dataclass(frozen=True, kw_only=True, repr=False)
 class SpecialHandlerPatternInfo(_BasePatternInfo):
     direction: Direction | None = None
     pattern: str | None = None
     rotated_segments: None = None
     value: Any | None = None
+    handler: SpecialHandler | None = None
+
+    def __post_init__(self):
+        if self.handler:
+            self.handler.info = self
 
     def print(self):
         if self.value is None:
@@ -85,6 +131,8 @@ class SpecialHandlerPatternInfo(_BasePatternInfo):
 
 
 PatternInfo = NormalPatternInfo | SpecialHandlerPatternInfo
+
+ShorthandPattern = tuple[PatternInfo | PatternIota, SpecialHandlerArgument]
 
 
 @dataclass(frozen=True)
@@ -147,6 +195,7 @@ class Registry:
             Mod, dict[str, tuple[str, list[str]]]
         ] = defaultdict(dict)
         """mod: page_title: (url, names)"""
+        self.special_handlers: list[SpecialHandler] = []
 
     def _insert_shorthand(self, info: PatternInfo):
         self._from_shorthand[info.name.lower()] = info
@@ -182,14 +231,8 @@ class Registry:
                 if "ii" in option:
                     options.append(option.replace("ii", "2"))
 
-            if info.name == "mask":
-                options.append("book")
-            elif info.name == "open_paren":
-                options.append("{")
-                options.append("intro")
-            elif info.name == "close_paren":
-                options.append("}")
-                options.append("retro")
+            if info.shorthand_names:
+                options.extend(info.shorthand_names)
 
             for option in options:
                 option = option.strip()
@@ -281,7 +324,10 @@ class Registry:
         self.from_name[info.name] = info
         self.from_display_name[info.display_name] = info
 
-        if not isinstance(info, SpecialHandlerPatternInfo):
+        if isinstance(info, SpecialHandlerPatternInfo):
+            if info.handler:
+                self.special_handlers.append(info.handler)
+        else:
             for segments in info.rotated_segments:
                 self._from_segments_total[segments].add(info)
 
@@ -293,9 +339,7 @@ class Registry:
 
         self._insert_shorthand(info)
 
-    def from_shorthand(
-        self, shorthand: str
-    ) -> tuple[PatternInfo | PatternIota, Fraction | int | str | None] | None:
+    def from_shorthand(self, shorthand: str) -> ShorthandPattern | None:
         # TODO: why doesn't this return a class?????
         shorthand = hexpattern_re.sub(lambda m: m.group(1), shorthand).lower().strip()
 
@@ -306,20 +350,14 @@ class Registry:
             (match := special_handler_pattern_re.match(shorthand))
             and (pattern := self._from_shorthand.get(match.group(1)))
             and isinstance(pattern, SpecialHandlerPatternInfo)
+            and pattern.handler
+            and (arg := pattern.handler.parse_argument(match.group(2))) is not None
         ):
-            match pattern.name:
-                case "number":
-                    if (arg := parse_rational(match.group(2))) is not None:
-                        return pattern, arg
-                case "mask":
-                    if (arg := parse_mask(match.group(2))) is not None:
-                        return pattern, arg
+            return pattern, arg
 
-        if (arg := parse_rational(shorthand)) is not None:
-            return self.from_name["number"], arg
-
-        if (arg := parse_mask(shorthand)) is not None:
-            return self.from_name["mask"], arg
+        for handler in self.special_handlers:
+            if (arg := handler.parse_shorthand(shorthand)) is not None:
+                return handler.info, arg
 
         if (match := raw_pattern_re.match(shorthand)) and (
             direction := Direction.from_shorthand(match.group(1))
@@ -331,14 +369,10 @@ class Registry:
     # FIXME: what the hell
     def from_shorthand_list(
         self, all_shorthand: str
-    ) -> tuple[
-        list[tuple[PatternInfo | PatternIota, Fraction | int | str | None]],
-        list[str],
-        str,
-    ]:
-        patterns: list[
-            tuple[PatternInfo | PatternIota, Fraction | int | str | None]
-        ] = []
+    ) -> tuple[list[ShorthandPattern], list[str], str]:
+        """Returns: patterns, unknown, pretty_shorthand"""
+
+        patterns: list[ShorthandPattern] = []
         unknown: list[str] = []
 
         split = [stripped for s in all_shorthand.split(",") if (stripped := s.strip())]
@@ -367,14 +401,11 @@ class Registry:
         if info := self.from_pattern_or_segments(direction, pattern):
             return info
 
-        for name, value in {
-            "mask": parse_bookkeeper(direction, pattern),
-            "number": parse_numerical_reflection(pattern),
-        }.items():
+        for handler in self.special_handlers:
+            value = handler.parse_pattern(direction, pattern)
             if value is not None:
-                info = self.from_name[name]
                 return dataclasses.replace(
-                    info,
+                    handler.info,
                     direction=direction,
                     pattern=pattern,
                     value=value,
