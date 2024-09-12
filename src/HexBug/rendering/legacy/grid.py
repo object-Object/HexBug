@@ -3,9 +3,9 @@ from __future__ import annotations
 import math
 from dataclasses import InitVar, dataclass
 
-from ..hex_interpreter.hex_draw import Palette, Theme, plot_intersect
-from ..hexdecode.hex_math import Angle, Coord, Direction
-from .generate_image import get_scale, get_xy_bounds, prepare_fig, save_close_crop
+from ...hexdecode.hex_math import Angle, Coord, Direction
+from .plot import Palette, Theme, plot_intersect
+from .single import get_scale, get_xy_bounds, prepare_fig, save_close_crop
 
 
 def _get_offset_col(coord: Coord) -> int:

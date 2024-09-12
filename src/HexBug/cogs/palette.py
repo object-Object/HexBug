@@ -7,11 +7,10 @@ import matplotlib.colors
 from discord import app_commands
 from discord.ext import commands
 
-from ..hex_interpreter.hex_draw import Palette, PaletteColor, Theme
 from ..hexdecode.hex_math import Direction
+from ..rendering import Palette, PaletteColor, Theme, draw_single_pattern
 from ..utils.buttons import build_show_or_delete_button
 from ..utils.commands import HexBugBot
-from ..utils.generate_image import draw_single_pattern
 from .pattern import DEFAULT_ARROW_SCALE, DEFAULT_LINE_SCALE, SCALE_RANGE
 
 

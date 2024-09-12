@@ -190,6 +190,10 @@ class Direction(Enum):  # numbers increase clockwise
         return self.angle_from(Direction.EAST).deg - 90
 
 
+Pattern = tuple[Direction, str]
+"""start_direction, signature"""
+
+
 @dataclass(frozen=True)
 class Segment:
     root: Coord

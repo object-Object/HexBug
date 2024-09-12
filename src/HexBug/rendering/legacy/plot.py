@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib import colormaps  # pyright: ignore[reportGeneralTypeIssues]
 
-from ..hexdecode.hex_math import Coord
+from ...hexdecode.hex_math import Coord
 
 
 class Theme(StrEnum):

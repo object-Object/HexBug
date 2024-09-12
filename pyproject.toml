@@ -48,6 +48,7 @@ runtime = [
     "semver~=3.0",
     "sty~=1.0",
     "typing_extensions~=4.7",
+    "hex-renderer-py~=0.1.2",
 ]
 target-any = [
     "hexnumgen @ git+https://github.com/object-Object/hexnumgen-rs.git@70d683ee9b",

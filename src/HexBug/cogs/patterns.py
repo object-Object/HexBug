@@ -12,11 +12,10 @@ from ..hexdecode.registry import (
     InvalidSpecialHandlerArgumentException,
     SpecialHandlerPatternInfo,
 )
+from ..rendering import Palette, Theme, draw_patterns_on_grid
 from ..utils.buttons import build_show_or_delete_button
 from ..utils.commands import HexBugBot
-from ..utils.draw_patterns_on_grid import draw_patterns_on_grid
 from ..utils.generate_decomposed_number import generate_decomposed_number
-from ..utils.generate_image import Palette, Theme
 from ..utils.parse_rational import parse_rational
 from .pattern import DEFAULT_ARROW_SCALE, DEFAULT_LINE_SCALE, SCALE_RANGE
 

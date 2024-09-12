@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from PIL import Image
 
-from ..hex_interpreter.hex_draw import Palette, Theme, plot_intersect, plot_monochrome
-from ..hexdecode.hex_math import Coord, Direction, get_pattern_points
+from ...hexdecode.hex_math import Coord, Direction, get_pattern_points
+from .plot import Palette, Theme, plot_intersect, plot_monochrome
 
 
 def get_xy_bounds(

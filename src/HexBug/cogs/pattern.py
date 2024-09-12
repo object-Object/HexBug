@@ -13,9 +13,9 @@ from ..hexdecode.registry import (
     PatternInfo,
     SpecialHandlerPatternInfo,
 )
+from ..rendering import Palette, Theme, draw_single_pattern
 from ..utils.buttons import build_show_or_delete_button
 from ..utils.commands import HexBugBot, build_autocomplete
-from ..utils.generate_image import Palette, Theme, draw_single_pattern
 from ..utils.mods import APIWithoutBookModInfo, ModTransformerHint
 from ..utils.patterns import align_horizontal, parse_mask
 
