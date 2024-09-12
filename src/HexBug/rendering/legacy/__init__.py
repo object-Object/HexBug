@@ -1,1 +1,0 @@
-"""Matplotlib-based rendering."""

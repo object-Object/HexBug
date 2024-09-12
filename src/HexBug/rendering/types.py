@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
 
 from hex_renderer_py import Color
@@ -12,6 +12,7 @@ from .colors import colormap_to_colors, hex_to_color, hex_to_colors
 class _PaletteData:
     line_colors: list[Color]
     collision_color: Color
+    per_world_color: Color = field(default_factory=lambda: hex_to_color("#a81ee3"))
 
 
 class Palette(_PaletteData, Enum):

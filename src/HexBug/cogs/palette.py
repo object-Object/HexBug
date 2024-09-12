@@ -3,15 +3,25 @@ from textwrap import dedent
 from typing import Any, Callable
 
 import discord
-import matplotlib.colors
 from discord import app_commands
 from discord.ext import commands
+from hex_renderer_py import Color
 
 from ..hexdecode.hex_math import Direction
-from ..rendering import Palette, PaletteColor, Theme, draw_single_pattern
+from ..rendering import (
+    DEFAULT_LINE_WIDTH,
+    DEFAULT_MAX_OVERLAPS,
+    DEFAULT_SCALE,
+    Palette,
+    Theme,
+    draw_patterns,
+    get_grid_options,
+    image_to_buffer,
+)
+from ..rendering.colors import color_to_hex, color_to_int, color_to_rgb
 from ..utils.buttons import build_show_or_delete_button
 from ..utils.commands import HexBugBot
-from .pattern import DEFAULT_ARROW_SCALE, DEFAULT_LINE_SCALE, SCALE_RANGE
+from .pattern import MAX_OVERLAPS_RANGE, SCALE_RANGE, WIDTH_RANGE
 
 
 def _make_palette_showcase(num_colors: int) -> tuple[Direction, str]:
@@ -24,32 +34,15 @@ def _make_palette_showcase(num_colors: int) -> tuple[Direction, str]:
     )
 
 
-# FIXME: type errors because of indeterminate tuple length
-def _color_to_rgb(color: PaletteColor) -> tuple[int, int, int]:
-    if isinstance(color, str):
-        color = matplotlib.colors.to_rgb(color)  # type: ignore
-
-    return tuple(math.floor(v * 255) for v in color)  # type: ignore
-
-
-def _color_to_int(color: PaletteColor) -> int:
-    r, g, b = _color_to_rgb(color)
-    return (r << 16) + (g << 8) + b
-
-
-def _color_to_hex(color: PaletteColor) -> str:
-    return matplotlib.colors.to_hex(color)
-
-
-def _format_colors(palette: Palette, transform: Callable[[PaletteColor], Any]) -> str:
-    colors = "\n".join(f"`{transform(c)}`" for c in palette.colors)
+def _format_colors(palette: Palette, transform: Callable[[Color], Any]) -> str:
+    colors = "\n".join(f"`{transform(c)}`" for c in palette.line_colors)
     return dedent(
         f"""\
         Colors:
         {colors}
 
         Overlap:
-        `{transform(palette.overlap_color)}`"""
+        `{transform(palette.collision_color)}`"""
     )
 
 
@@ -62,8 +55,6 @@ class PaletteCog(commands.Cog):
         palette="The color palette to show",
         show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
         theme="Whether the pattern should be rendered for light or dark theme",
-        line_scale="The scale of the lines and dots in the image",
-        arrow_scale="The scale of the arrows in the image",
     )
     async def palette(
         self,
@@ -71,39 +62,47 @@ class PaletteCog(commands.Cog):
         palette: Palette,
         show_to_everyone: bool = False,
         theme: Theme = Theme.Dark,
-        line_scale: SCALE_RANGE = DEFAULT_LINE_SCALE,
-        arrow_scale: SCALE_RANGE = DEFAULT_ARROW_SCALE,
+        line_width: WIDTH_RANGE = DEFAULT_LINE_WIDTH,
+        point_radius: WIDTH_RANGE | None = None,
+        arrow_radius: WIDTH_RANGE | None = None,
+        max_overlaps: MAX_OVERLAPS_RANGE = DEFAULT_MAX_OVERLAPS,
+        scale: SCALE_RANGE = DEFAULT_SCALE,
     ):
         """Show one of the bot's color palettes."""
 
         embed = (
             discord.Embed(
                 title=palette.name,
-                color=discord.Colour(_color_to_int(palette.colors[0])),
+                color=discord.Colour(color_to_int(palette.line_colors[0])),
             )
             .add_field(
-                name="RGB", value=_format_colors(palette, _color_to_rgb), inline=True
+                name="RGB", value=_format_colors(palette, color_to_rgb), inline=True
             )
             .add_field(
-                name="Hex", value=_format_colors(palette, _color_to_hex), inline=True
+                name="Hex", value=_format_colors(palette, color_to_hex), inline=True
             )
             .add_field(
                 name="Decimal",
-                value=_format_colors(palette, _color_to_int),
+                value=_format_colors(palette, color_to_int),
                 inline=True,
             )
             .set_image(url="attachment://pattern.png")
         )
 
-        image, _ = draw_single_pattern(
-            *_make_palette_showcase(len(palette.colors)),
-            is_great=False,
-            palette=palette,
-            theme=theme,
-            line_scale=line_scale,
-            arrow_scale=arrow_scale,
+        options = get_grid_options(
+            palette,
+            theme,
+            line_width=line_width,
+            point_radius=point_radius,
+            arrow_radius=arrow_radius,
+            max_overlaps=max_overlaps,
         )
-        file = discord.File(image, filename="pattern.png")
+        image = draw_patterns(
+            _make_palette_showcase(len(palette.line_colors)),
+            options,
+            scale=scale,
+        )
+        file = discord.File(image_to_buffer(image), filename="pattern.png")
 
         await interaction.response.send_message(
             embed=embed,

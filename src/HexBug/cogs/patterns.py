@@ -5,6 +5,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 from discord.utils import MISSING
+from hex_renderer_py import GridOptions
 
 from ..hexdecode.hex_math import Direction
 from ..hexdecode.hexast import PatternIota
@@ -12,14 +13,23 @@ from ..hexdecode.registry import (
     InvalidSpecialHandlerArgumentException,
     SpecialHandlerPatternInfo,
 )
-from ..rendering import Palette, Theme, draw_patterns_on_grid
+from ..rendering import (
+    DEFAULT_LINE_WIDTH,
+    DEFAULT_MAX_OVERLAPS,
+    DEFAULT_SCALE,
+    Palette,
+    Theme,
+    draw_patterns,
+    get_grid_options,
+    image_to_buffer,
+)
 from ..utils.buttons import build_show_or_delete_button
 from ..utils.commands import HexBugBot
 from ..utils.generate_decomposed_number import generate_decomposed_number
 from ..utils.parse_rational import parse_rational
-from .pattern import DEFAULT_ARROW_SCALE, DEFAULT_LINE_SCALE, SCALE_RANGE
+from .pattern import MAX_OVERLAPS_RANGE, SCALE_RANGE, WIDTH_RANGE
 
-WIDTH_RANGE = app_commands.Range[int, 1, 100]
+DOT_WIDTH_RANGE = app_commands.Range[int, 1]
 
 GLOOP_REGEX = re.compile(
     r"<\s*(?P<direction>[a-z_-]+)(?:\s*[, ]\s*(?P<pattern>[aqweds]+))?\s*>", re.I | re.M
@@ -42,12 +52,9 @@ async def send_hex(
     show_to_everyone: bool,
     do_button: bool,
     pretty_shorthand: str | None,
-    max_dot_width: WIDTH_RANGE,
-    max_pattern_width: WIDTH_RANGE,
-    palette: Palette,
-    theme: Theme,
-    line_scale: SCALE_RANGE,
-    arrow_scale: SCALE_RANGE,
+    scale: SCALE_RANGE,
+    max_dot_width: int,
+    options: GridOptions,
 ):
     send = (
         interaction.followup.send
@@ -65,31 +72,16 @@ async def send_hex(
             "❌ No patterns found.",
             ephemeral=True,
         )
-    elif len(patterns) > 64:
-        # this is why we can't have nice things
-        return await send(
-            "❌ Too many patterns (max of 64).",
-            ephemeral=True,
-        )
-    elif sum(len(pattern) for _, pattern in patterns) > 512:
-        # fine i'm taking away your toys since you can't play nice
-        return await send(
-            "❌ Too many angles (max of 512).",
-            ephemeral=True,
-        )
 
-    image, _ = draw_patterns_on_grid(
-        patterns=patterns,
+    image = draw_patterns(
+        patterns,
+        options,
+        scale=scale,
         max_dot_width=max_dot_width,
-        max_pattern_width=max_pattern_width,
-        palette=palette,
-        theme=theme,
-        line_scale=line_scale,
-        arrow_scale=arrow_scale,
     )
 
     embed = discord.Embed().set_image(url="attachment://patterns.png")
-    files = [discord.File(image, filename="patterns.png")]
+    files = [discord.File(image_to_buffer(image), filename="patterns.png")]
 
     description = f"```\n{pretty_shorthand}\n```" if pretty_shorthand else MISSING
     footer = ", ".join(f"{d.name} {p}" for d, p in patterns)
@@ -152,11 +144,8 @@ class PatternsCog(commands.GroupCog, name="patterns"):
         show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
         should_align_horizontal="Whether numerical patterns should be rotated to minimize height, or use the standard start orientation",
         max_dot_width="Maximum allowed width (in dots) of each row before wrapping",
-        max_pattern_width="Maximum allowed number of patterns in each row before wrapping",
         palette="The color palette to use for the lines (has no effect for great spells)",
         theme="Whether the pattern should be rendered for light or dark theme",
-        line_scale="The scale of the lines and dots in the image",
-        arrow_scale="The scale of the arrows in the image",
     )
     async def smart_number(
         self,
@@ -164,12 +153,14 @@ class PatternsCog(commands.GroupCog, name="patterns"):
         number: str,
         show_to_everyone: bool = False,
         should_align_horizontal: bool = False,
-        max_dot_width: WIDTH_RANGE = 16,
-        max_pattern_width: WIDTH_RANGE = 100,
+        max_dot_width: DOT_WIDTH_RANGE = 16,
         palette: Palette = Palette.Classic,
         theme: Theme = Theme.Dark,
-        line_scale: SCALE_RANGE = DEFAULT_LINE_SCALE,
-        arrow_scale: SCALE_RANGE = DEFAULT_ARROW_SCALE,
+        line_width: WIDTH_RANGE = DEFAULT_LINE_WIDTH,
+        point_radius: WIDTH_RANGE | None = None,
+        arrow_radius: WIDTH_RANGE | None = None,
+        max_overlaps: MAX_OVERLAPS_RANGE = DEFAULT_MAX_OVERLAPS,
+        scale: SCALE_RANGE = DEFAULT_SCALE,
     ) -> None:
         """Generate and display a pattern or list of patterns to put almost any number on the stack"""
         await interaction.response.defer(ephemeral=not show_to_everyone, thinking=True)
@@ -192,14 +183,19 @@ class PatternsCog(commands.GroupCog, name="patterns"):
 
         patterns, math_ops_str, _ = result
 
-        image, _ = draw_patterns_on_grid(
-            patterns=patterns,
+        options = get_grid_options(
+            palette,
+            theme,
+            line_width=line_width,
+            point_radius=point_radius,
+            arrow_radius=arrow_radius,
+            max_overlaps=max_overlaps,
+        )
+        image = draw_patterns(
+            patterns,
+            options,
+            scale=scale,
             max_dot_width=max_dot_width,
-            max_pattern_width=max_pattern_width,
-            palette=palette,
-            theme=theme,
-            line_scale=line_scale,
-            arrow_scale=arrow_scale,
         )
 
         title = (
@@ -219,7 +215,7 @@ class PatternsCog(commands.GroupCog, name="patterns"):
             .set_footer(text=", ".join(f"{d.name} {p}" for d, p in patterns))
         )
 
-        file = discord.File(image, filename="pattern.png")
+        file = discord.File(image_to_buffer(image), filename="pattern.png")
 
         await interaction.followup.send(
             embed=embed,
@@ -236,25 +232,24 @@ class PatternsCog(commands.GroupCog, name="patterns"):
         show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
         should_align_horizontal="Whether numerical patterns should be rotated to minimize height, or use the standard start orientation",
         max_dot_width="Maximum allowed width (in dots) of each row before wrapping",
-        max_pattern_width="Maximum allowed number of patterns in each row before wrapping",
         palette="The color palette to use for the lines (has no effect for great spells)",
         theme="Whether the pattern should be rendered for light or dark theme",
-        line_scale="The scale of the lines and dots in the image",
-        arrow_scale="The scale of the arrows in the image",
     )
     @app_commands.rename(all_shorthand="patterns")
     async def hex(
         self,
         interaction: discord.Interaction,
-        all_shorthand: app_commands.Range[str, 1, 2000],
+        all_shorthand: str,
         show_to_everyone: bool = False,
         should_align_horizontal: bool = False,
-        max_dot_width: WIDTH_RANGE = 16,
-        max_pattern_width: WIDTH_RANGE = 100,
+        max_dot_width: DOT_WIDTH_RANGE = 16,
         palette: Palette = Palette.Classic,
         theme: Theme = Theme.Dark,
-        line_scale: SCALE_RANGE = DEFAULT_LINE_SCALE,
-        arrow_scale: SCALE_RANGE = DEFAULT_ARROW_SCALE,
+        line_width: WIDTH_RANGE = DEFAULT_LINE_WIDTH,
+        point_radius: WIDTH_RANGE | None = None,
+        arrow_radius: WIDTH_RANGE | None = None,
+        max_overlaps: MAX_OVERLAPS_RANGE = DEFAULT_MAX_OVERLAPS,
+        scale: SCALE_RANGE = DEFAULT_SCALE,
     ) -> None:
         """Display a list of patterns on the staff grid"""
         await interaction.response.defer(ephemeral=not show_to_everyone, thinking=True)
@@ -300,12 +295,16 @@ class PatternsCog(commands.GroupCog, name="patterns"):
             show_to_everyone=show_to_everyone,
             do_button=True,
             pretty_shorthand=pretty_shorthand,
+            scale=scale,
             max_dot_width=max_dot_width,
-            max_pattern_width=max_pattern_width,
-            palette=palette,
-            theme=theme,
-            line_scale=line_scale,
-            arrow_scale=arrow_scale,
+            options=get_grid_options(
+                palette,
+                theme,
+                line_width=line_width,
+                point_radius=point_radius,
+                arrow_radius=arrow_radius,
+                max_overlaps=max_overlaps,
+            ),
         )
 
     async def show_patterns(
@@ -330,12 +329,9 @@ class PatternsCog(commands.GroupCog, name="patterns"):
             show_to_everyone=False,
             do_button=False,
             pretty_shorthand=None,
-            max_dot_width=16,
-            max_pattern_width=100,
-            palette=Palette.Classic,
-            theme=Theme.Dark,
-            line_scale=DEFAULT_LINE_SCALE,
-            arrow_scale=DEFAULT_ARROW_SCALE,
+            scale=DEFAULT_SCALE,
+            max_dot_width=50,
+            options=get_grid_options(Palette.Classic, Theme.Dark),
         )
 
 

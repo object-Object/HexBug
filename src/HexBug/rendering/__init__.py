@@ -1,14 +1,22 @@
 """Pattern rendering utils."""
 
 __all__ = [
+    "DEFAULT_LINE_WIDTH",
+    "DEFAULT_MAX_OVERLAPS",
+    "DEFAULT_SCALE",
     "Palette",
-    "PaletteColor",
     "Theme",
-    "draw_patterns_on_grid",
-    "draw_single_pattern",
+    "draw_patterns",
+    "get_grid_options",
+    "image_to_buffer",
 ]
 
-
-from .legacy.grid import draw_patterns_on_grid
-from .legacy.plot import Palette, PaletteColor, Theme
-from .legacy.single import draw_single_pattern
+from .draw import (
+    DEFAULT_LINE_WIDTH,
+    DEFAULT_MAX_OVERLAPS,
+    DEFAULT_SCALE,
+    draw_patterns,
+    get_grid_options,
+    image_to_buffer,
+)
+from .types import Palette, Theme

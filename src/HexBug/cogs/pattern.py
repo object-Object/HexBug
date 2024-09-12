@@ -1,9 +1,9 @@
 from collections import defaultdict
-from io import BytesIO
 
 import discord
 from discord import app_commands
 from discord.ext import commands
+from PIL import Image
 
 from ..hexdecode.hex_math import Direction
 from ..hexdecode.hexast import generate_bookkeeper
@@ -13,15 +13,24 @@ from ..hexdecode.registry import (
     PatternInfo,
     SpecialHandlerPatternInfo,
 )
-from ..rendering import Palette, Theme, draw_single_pattern
+from ..rendering import (
+    DEFAULT_LINE_WIDTH,
+    DEFAULT_MAX_OVERLAPS,
+    DEFAULT_SCALE,
+    Palette,
+    Theme,
+    draw_patterns,
+    get_grid_options,
+    image_to_buffer,
+)
 from ..utils.buttons import build_show_or_delete_button
 from ..utils.commands import HexBugBot, build_autocomplete
 from ..utils.mods import APIWithoutBookModInfo, ModTransformerHint
 from ..utils.patterns import align_horizontal, parse_mask
 
-DEFAULT_LINE_SCALE = 6
-DEFAULT_ARROW_SCALE = 2
-SCALE_RANGE = app_commands.Range[float, 0.1, 1000.0]
+WIDTH_RANGE = app_commands.Range[float, 0.01]
+SCALE_RANGE = app_commands.Range[float, 1.0]
+MAX_OVERLAPS_RANGE = app_commands.Range[int, 1]
 
 
 async def send_pattern(
@@ -30,7 +39,7 @@ async def send_pattern(
     translation: str,
     direction: Direction | None,
     pattern: str | None,
-    image: BytesIO,
+    image: Image.Image,
     show_to_everyone: bool,
 ):
     mod_info = info and info.mod.value
@@ -63,7 +72,7 @@ async def send_pattern(
     if direction is not None and pattern is not None:
         embed.set_footer(text=f"{direction.name} {pattern}")
 
-    file = discord.File(image, filename="pattern.png")
+    file = discord.File(image_to_buffer(image), filename="pattern.png")
 
     await interaction.response.send_message(
         embed=embed,
@@ -108,20 +117,21 @@ class PatternCog(commands.GroupCog, name="pattern"):
         hide_stroke_order="Whether or not to hide the stroke order (like with great spells)",
         palette="The color palette to use for the lines (has no effect if hide_stroke_order is True)",
         theme="Whether the pattern should be rendered for light or dark theme",
-        line_scale="The scale of the lines and dots in the image",
-        arrow_scale="The scale of the arrows in the image",
     )
     async def raw(
         self,
         interaction: discord.Interaction,
         direction: Direction,
-        pattern: app_commands.Range[str, 1, 128],
+        pattern: str,
         show_to_everyone: bool = False,
         hide_stroke_order: bool = False,
         palette: Palette = Palette.Classic,
         theme: Theme = Theme.Dark,
-        line_scale: SCALE_RANGE = DEFAULT_LINE_SCALE,
-        arrow_scale: SCALE_RANGE = DEFAULT_ARROW_SCALE,
+        line_width: WIDTH_RANGE = DEFAULT_LINE_WIDTH,
+        point_radius: WIDTH_RANGE | None = None,
+        arrow_radius: WIDTH_RANGE | None = None,
+        max_overlaps: MAX_OVERLAPS_RANGE = DEFAULT_MAX_OVERLAPS,
+        scale: SCALE_RANGE = DEFAULT_SCALE,
     ) -> None:
         """Display the stroke order of a pattern from its direction and angle signature"""
         if pattern in ["-", '"-"']:
@@ -141,14 +151,19 @@ class PatternCog(commands.GroupCog, name="pattern"):
         else:
             translation = info.print()
 
-        image, _ = draw_single_pattern(
-            direction=direction,
-            pattern=pattern,
-            is_great=hide_stroke_order,
-            palette=palette,
-            theme=theme,
-            line_scale=line_scale,
-            arrow_scale=arrow_scale,
+        options = get_grid_options(
+            palette,
+            theme,
+            per_world=hide_stroke_order,
+            line_width=line_width,
+            point_radius=point_radius,
+            arrow_radius=arrow_radius,
+            max_overlaps=max_overlaps,
+        )
+        image = draw_patterns(
+            (direction, pattern),
+            options,
+            scale=scale,
         )
 
         await send_pattern(
@@ -167,8 +182,6 @@ class PatternCog(commands.GroupCog, name="pattern"):
         show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
         palette="The color palette to use for the lines (has no effect for great spells)",
         theme="Whether the pattern should be rendered for light or dark theme",
-        line_scale="The scale of the lines and dots in the image",
-        arrow_scale="The scale of the arrows in the image",
     )
     @app_commands.rename(translation="name")
     async def name(
@@ -178,8 +191,11 @@ class PatternCog(commands.GroupCog, name="pattern"):
         show_to_everyone: bool = False,
         palette: Palette = Palette.Classic,
         theme: Theme = Theme.Dark,
-        line_scale: SCALE_RANGE = DEFAULT_LINE_SCALE,
-        arrow_scale: SCALE_RANGE = DEFAULT_ARROW_SCALE,
+        line_width: WIDTH_RANGE = DEFAULT_LINE_WIDTH,
+        point_radius: WIDTH_RANGE | None = None,
+        arrow_radius: WIDTH_RANGE | None = None,
+        max_overlaps: MAX_OVERLAPS_RANGE = DEFAULT_MAX_OVERLAPS,
+        scale: SCALE_RANGE = DEFAULT_SCALE,
     ) -> None:
         """Display the stroke order of a pattern from its name"""
         info = self.registry.from_display_name.get(translation)
@@ -192,14 +208,19 @@ class PatternCog(commands.GroupCog, name="pattern"):
                 "❌ Use `/pattern special`.", ephemeral=True
             )
 
-        image, _ = draw_single_pattern(
-            direction=info.direction,
-            pattern=info.pattern,
-            is_great=info.is_great,
-            palette=palette,
-            theme=theme,
-            line_scale=line_scale,
-            arrow_scale=arrow_scale,
+        options = get_grid_options(
+            palette,
+            theme,
+            per_world=info.is_great,
+            line_width=line_width,
+            point_radius=point_radius,
+            arrow_radius=arrow_radius,
+            max_overlaps=max_overlaps,
+        )
+        image = draw_patterns(
+            (info.direction, info.pattern),
+            options,
+            scale=scale,
         )
 
         await send_pattern(
@@ -224,8 +245,6 @@ class PatternCog(commands.GroupCog, name="pattern"):
         show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
         palette="The color palette to use for the lines (has no effect for great spells)",
         theme="Whether the pattern should be rendered for light or dark theme",
-        line_scale="The scale of the lines and dots in the image",
-        arrow_scale="The scale of the arrows in the image",
     )
     @app_commands.rename(translation="name")
     async def from_mod(
@@ -236,8 +255,11 @@ class PatternCog(commands.GroupCog, name="pattern"):
         show_to_everyone: bool = False,
         palette: Palette = Palette.Classic,
         theme: Theme = Theme.Dark,
-        line_scale: SCALE_RANGE = DEFAULT_LINE_SCALE,
-        arrow_scale: SCALE_RANGE = DEFAULT_ARROW_SCALE,
+        line_width: WIDTH_RANGE = DEFAULT_LINE_WIDTH,
+        point_radius: WIDTH_RANGE | None = None,
+        arrow_radius: WIDTH_RANGE | None = None,
+        max_overlaps: MAX_OVERLAPS_RANGE = DEFAULT_MAX_OVERLAPS,
+        scale: SCALE_RANGE = DEFAULT_SCALE,
     ) -> None:
         """Display the stroke order of a pattern from a particular mod given the pattern's name"""
         info = self.registry.from_display_name.get(translation)
@@ -250,14 +272,19 @@ class PatternCog(commands.GroupCog, name="pattern"):
                 "❌ Use `/pattern special`.", ephemeral=True
             )
 
-        image, _ = draw_single_pattern(
-            direction=info.direction,
-            pattern=info.pattern,
-            is_great=info.is_great,
-            palette=palette,
-            theme=theme,
-            line_scale=line_scale,
-            arrow_scale=arrow_scale,
+        options = get_grid_options(
+            palette,
+            theme,
+            per_world=info.is_great,
+            line_width=line_width,
+            point_radius=point_radius,
+            arrow_radius=arrow_radius,
+            max_overlaps=max_overlaps,
+        )
+        image = draw_patterns(
+            (info.direction, info.pattern),
+            options,
+            scale=scale,
         )
 
         await send_pattern(
@@ -291,8 +318,6 @@ class PatternCog(commands.GroupCog, name="pattern"):
         show_to_everyone="Whether the result should be visible to everyone, or just you (to avoid spamming)",
         palette="The color palette to use for the lines (has no effect for great spells)",
         theme="Whether the pattern should be rendered for light or dark theme",
-        line_scale="The scale of the lines and dots in the image",
-        arrow_scale="The scale of the arrows in the image",
     )
     async def bookkeepers_gambit(
         self,
@@ -301,8 +326,11 @@ class PatternCog(commands.GroupCog, name="pattern"):
         show_to_everyone: bool = False,
         palette: Palette = Palette.Classic,
         theme: Theme = Theme.Dark,
-        line_scale: SCALE_RANGE = DEFAULT_LINE_SCALE,
-        arrow_scale: SCALE_RANGE = DEFAULT_ARROW_SCALE,
+        line_width: WIDTH_RANGE = DEFAULT_LINE_WIDTH,
+        point_radius: WIDTH_RANGE | None = None,
+        arrow_radius: WIDTH_RANGE | None = None,
+        max_overlaps: MAX_OVERLAPS_RANGE = DEFAULT_MAX_OVERLAPS,
+        scale: SCALE_RANGE = DEFAULT_SCALE,
     ) -> None:
         """Generate and display a Bookkeeper's Gambit pattern"""
         mask = parse_mask(bookkeeper)
@@ -315,14 +343,19 @@ class PatternCog(commands.GroupCog, name="pattern"):
         info = self.registry.from_name["mask"]
         direction, pattern = generate_bookkeeper(mask)
 
-        image, _ = draw_single_pattern(
-            direction=direction,
-            pattern=pattern,
-            is_great=info.is_great,
-            palette=palette,
-            theme=theme,
-            line_scale=line_scale,
-            arrow_scale=arrow_scale,
+        options = get_grid_options(
+            palette,
+            theme,
+            per_world=info.is_great,
+            line_width=line_width,
+            point_radius=point_radius,
+            arrow_radius=arrow_radius,
+            max_overlaps=max_overlaps,
+        )
+        image = draw_patterns(
+            (direction, pattern),
+            options,
+            scale=scale,
         )
 
         await send_pattern(
@@ -342,8 +375,6 @@ class PatternCog(commands.GroupCog, name="pattern"):
         should_align_horizontal="Whether the result should be rotated to minimize height, or use the standard start orientation",
         palette="The color palette to use for the lines (has no effect for great spells)",
         theme="Whether the pattern should be rendered for light or dark theme",
-        line_scale="The scale of the lines and dots in the image",
-        arrow_scale="The scale of the arrows in the image",
     )
     @app_commands.rename(should_align_horizontal="align_horizontal")
     async def numerical_reflection(
@@ -354,8 +385,11 @@ class PatternCog(commands.GroupCog, name="pattern"):
         should_align_horizontal: bool = False,
         palette: Palette = Palette.Classic,
         theme: Theme = Theme.Dark,
-        line_scale: SCALE_RANGE = DEFAULT_LINE_SCALE,
-        arrow_scale: SCALE_RANGE = DEFAULT_ARROW_SCALE,
+        line_width: WIDTH_RANGE = DEFAULT_LINE_WIDTH,
+        point_radius: WIDTH_RANGE | None = None,
+        arrow_radius: WIDTH_RANGE | None = None,
+        max_overlaps: MAX_OVERLAPS_RANGE = DEFAULT_MAX_OVERLAPS,
+        scale: SCALE_RANGE = DEFAULT_SCALE,
     ) -> None:
         """Generate and display a Numerical Reflection pattern"""
         if not (gen := self.registry.pregen_numbers.get(number)):
@@ -369,14 +403,19 @@ class PatternCog(commands.GroupCog, name="pattern"):
         )
         info = self.registry.from_name["number"]
 
-        image, _ = draw_single_pattern(
-            direction=direction,
-            pattern=pattern,
-            is_great=info.is_great,
-            palette=palette,
-            theme=theme,
-            line_scale=line_scale,
-            arrow_scale=arrow_scale,
+        options = get_grid_options(
+            palette,
+            theme,
+            per_world=info.is_great,
+            line_width=line_width,
+            point_radius=point_radius,
+            arrow_radius=arrow_radius,
+            max_overlaps=max_overlaps,
+        )
+        image = draw_patterns(
+            (direction, pattern),
+            options,
+            scale=scale,
         )
 
         # nothing to see here, move along
@@ -407,7 +446,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
     async def check(
         self,
         interaction: discord.Interaction,
-        pattern: app_commands.Range[str, 1, 128],
+        pattern: str,
         is_great: bool,
         show_to_everyone: bool = False,
     ) -> None:

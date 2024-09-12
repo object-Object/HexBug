@@ -57,7 +57,7 @@ test = [
     "pytest~=8.1",
 ]
 dev = [
-    "HexBug[aws-cdk,codedeploy,runtime]",
+    "HexBug[aws-cdk,codedeploy,runtime,test]",
     "nox",
     "tqdm",
 ]

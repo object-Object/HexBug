@@ -3,12 +3,14 @@ import asyncio
 import json
 import logging
 import sys
+from pathlib import Path
 from typing import TypedDict
 
 from aiohttp import ClientSession
 from HexBug.hexdecode.buildpatterns import build_registry
 from HexBug.hexdecode.registry import SpecialHandlerPatternInfo
-from HexBug.rendering import Palette, Theme, draw_single_pattern
+from HexBug.rendering import Palette, Theme, draw_patterns, get_grid_options
+from tqdm import tqdm
 
 
 class ImageInfo(TypedDict):
@@ -40,8 +42,16 @@ if (registry := asyncio.run(_build_registry())) is None:
     logging.critical("Failed to build registry, exiting.")
     sys.exit(1)
 
+out_dir = Path("out")
+patterns_dir = out_dir / "patterns"
+
+out_dir.mkdir(parents=True, exist_ok=True)
+patterns_dir.mkdir(parents=True, exist_ok=True)
+for theme in Theme:
+    (patterns_dir / theme.name.lower()).mkdir(parents=True, exist_ok=True)
+
 output: dict[str, ExtensionPatternInfo] = {}  # translation: PatternJSON
-for info in registry.patterns:
+for info in tqdm(registry.patterns):
     if info.translation is None:
         continue
 
@@ -51,17 +61,14 @@ for info in registry.patterns:
         filename = info.name.replace("/", "_") + ".png"
         direction = info.direction.name
         for theme in Theme:
-            image, (width, height) = draw_single_pattern(
-                direction=info.direction,
-                pattern=info.pattern,
-                is_great=info.is_great,
+            options = get_grid_options(
                 palette=Palette.Classic,
                 theme=theme,
-                line_scale=6,
-                arrow_scale=2,
+                per_world=info.is_great,
             )
-            with open(f"out/patterns/{theme.name.lower()}/{filename}", "wb") as f:
-                f.write(image.getbuffer())
+            image = draw_patterns((info.direction, info.pattern), options)
+            width, height = image.size
+            image.save(patterns_dir / theme.name.lower() / filename)
 
     args = info.args and info.args.replace("**", "").replace("__", "")
 
@@ -88,5 +95,5 @@ for info in registry.patterns:
     output[info.translation] = data
 
 
-with open("out/registry.json", "w", encoding="utf-8") as f:
+with open(out_dir / "registry.json", "w", encoding="utf-8") as f:
     json.dump(output, f)
