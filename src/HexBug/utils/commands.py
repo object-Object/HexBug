@@ -1,8 +1,16 @@
+# pyright: reportPrivateUsage=none
+
 from collections import defaultdict
-from datetime import datetime
+from datetime import UTC, datetime
 
 from aiohttp import ClientSession
-from discord import Webhook, app_commands
+from discord import Color, Embed, Interaction, Webhook, app_commands
+from discord.app_commands import (
+    AppCommandError,
+    CommandTree,
+    Transformer,
+    TransformerError,
+)
 from discord.ext import commands
 
 from ..hexdecode.registry import Registry
@@ -26,6 +34,51 @@ def build_autocomplete(
     }
 
 
+class HexBugCommandTree(CommandTree):
+    async def on_error(self, interaction: Interaction, error: AppCommandError):
+        if interaction.response.is_done():
+            await super().on_error(interaction, error)
+            return
+
+        embed = Embed(
+            color=Color.red(),
+            timestamp=datetime.now(UTC),
+        )
+
+        match error:
+            case TransformerError(
+                value=value,
+                type=opt_type,
+                transformer=Transformer(_error_display_name=transformer_name),
+            ):
+                embed.title = "Invalid input!"
+                embed.description = f"Failed to convert value from `{opt_type.name}` to `{transformer_name}`."
+                embed.add_field(
+                    name="Value",
+                    value=str(value),
+                    inline=False,
+                )
+            case _:
+                await super().on_error(interaction, error)
+                embed.title = "Command failed!"
+                embed.description = str(error)
+
+        if cause := error.__cause__:
+            embed.add_field(
+                name="Reason",
+                value=str(cause),
+                inline=False,
+            ).set_footer(
+                text=f"{error.__class__.__name__} ({cause.__class__.__name__})",
+            )
+        else:
+            embed.set_footer(
+                text=error.__class__.__name__,
+            )
+
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+
+
 class HexBugBot(commands.Bot):
     def __init__(
         self,
@@ -35,7 +88,10 @@ class HexBugBot(commands.Bot):
         health_check_channel_id: int,
         **kwargs,
     ) -> None:
-        super().__init__(**kwargs)
+        super().__init__(
+            tree_cls=HexBugCommandTree,
+            **kwargs,
+        )
         self.registry = registry
         self.session = session
         self.log_webhook = Webhook.from_url(log_webhook_url, session=session)
