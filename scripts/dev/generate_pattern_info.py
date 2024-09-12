@@ -2,6 +2,7 @@
 import asyncio
 import json
 import logging
+import shutil
 import sys
 from pathlib import Path
 from typing import TypedDict
@@ -44,6 +45,8 @@ if (registry := asyncio.run(_build_registry())) is None:
 
 out_dir = Path("out")
 patterns_dir = out_dir / "patterns"
+
+shutil.rmtree(patterns_dir, ignore_errors=True)
 
 out_dir.mkdir(parents=True, exist_ok=True)
 patterns_dir.mkdir(parents=True, exist_ok=True)
