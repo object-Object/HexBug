@@ -85,20 +85,38 @@ def get_grid_options(
     if arrow_radius is None:
         arrow_radius = line_width * 2
 
-    start_point = EndPoint.BorderedMatch(
-        match_radius=point_radius,
-        border=Marker(
+    point = Point.Single(
+        marker=Marker(
             color=theme.marker_color,
-            radius=point_radius * 1.5,
+            radius=point_radius,
         ),
     )
 
     if per_world:
+        intersections = Intersections.UniformPoints(
+            point=point,
+        )
+
         lines = Lines.Monocolor(
             color=palette.per_world_color,
             bent=False,
         )
+
     else:
+        start_point = EndPoint.BorderedMatch(
+            match_radius=point_radius,
+            border=Marker(
+                color=theme.marker_color,
+                radius=point_radius * 1.5,
+            ),
+        )
+
+        intersections = Intersections.EndsAndMiddle(
+            start=start_point,
+            middle=point,
+            end=start_point,
+        )
+
         lines = Lines.SegmentColors(
             colors=palette.line_colors,
             triangles=Triangle.BorderStartMatch(
@@ -120,16 +138,7 @@ def get_grid_options(
     return GridOptions(
         line_thickness=line_width,
         pattern_options=GridPatternOptions.Uniform(
-            intersections=Intersections.EndsAndMiddle(
-                start=start_point,
-                middle=Point.Single(
-                    marker=Marker(
-                        color=theme.marker_color,
-                        radius=point_radius,
-                    ),
-                ),
-                end=start_point,
-            ),
+            intersections=intersections,
             lines=lines,
         ),
         center_dot=Point.None_(),
