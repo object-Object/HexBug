@@ -454,36 +454,27 @@ MoreIotas,Whisper Reflection,EAST,waqa,false,moreiotas,string/chat/caster,OpChat
 MoreIotas,Winnowing Distillation,EAST,aqwwaqwaad,false,moreiotas,string/sub,OpSubString,"str, num, num → str",#patterns/strings@moreiotas:string/sub
 MoreIotas,Write,WEST,dwewdweq,false,moreiotas,string/block/set,OpSetBlockString,"vec, str | [str] →",#patterns/strings@moreiotas:string/block/set
 MoreIotas,Zero Distillation,SOUTH_WEST,awwaeawwa,false,moreiotas,matrix/zero,OpZeroMatrix,"int ≥ 0, int ≥ 0 → mat",#patterns/matrices@moreiotas:matrix/zero
-Oneironaut,Apothecary's Prfn.,SOUTH_WEST,qqqqqedwd,false,oneironaut,getstatus,,entity → [status],#patterns/status_iotas@oneironaut:getstatus
-Oneironaut,Apothecary's Prfn. II,SOUTH_EAST,eeeeeqawa,false,oneironaut,getstatuscategory,,status → num,#patterns/status_iotas@oneironaut:getstatuscategory
 Oneironaut,Baton Reflection,SOUTH_EAST,qwqqqwqawa,false,oneironaut,getrodlook,,→ vector,#items/reverberation_rod@oneironaut:getrodlook
 Oneironaut,Baton Reflection II,SOUTH_EAST,qwqqqwqawaa,false,oneironaut,getrodpos,,→ vector,#items/reverberation_rod@oneironaut:getrodpos
 Oneironaut,Cellular Generation,SOUTH_WEST,qqwqwqwaqeee,false,oneironaut,advanceautomaton,,,
 Oneironaut,Circle,SOUTH_EAST,wwwwwwqwwwwwwqwwwwwwqwwwwwwqwwwwwwqwwwwww,false,oneironaut,circle,,,
-Oneironaut,Cleanse Status,SOUTH_WEST,eeeeedaqdewed,false,oneironaut,removestatus,,"entity, status →",#patterns/status_iotas@oneironaut:removestatus
 Oneironaut,Conduct Rod,EAST,eqqqqqawweqqqqqawweqqqqqawwdeqewwwwweqeeeqewwwwweqe,false,oneironaut,craftrod,,"entity, list of patterns →",#items/reverberation_rod@oneironaut:craftrod
-Oneironaut,Decorator's Gambit,SOUTH_WEST,wwawwqwwawwaqdq,false,oneironaut,setframerotation,,"item frame, number →",#patterns/misc_patterns@oneironaut:setframerotation
-Oneironaut,Decorator's Purification,SOUTH_WEST,wwawwqwwawwaeae,false,oneironaut,readframerotation,,item frame → number,#patterns/misc_patterns@oneironaut:readframerotation
+Oneironaut,Conductor's Reflection,SOUTH_EAST,qwqqqwqaeaqa,false,oneironaut,queryrod,,→ bool,#items/reverberation_rod@oneironaut:queryrod
 Oneironaut,Discern Shroud,SOUTH_EAST,qqqqqwwaawewaawdww,false,oneironaut,detectshroud,,"vector, number → [vector]",#patterns/spells/great/detection_shielding@oneironaut:detectshroud
 Oneironaut,Empower Mind Render,EAST,qweqadeqadeqadqqqwdaqedaqedaqeqaqdwawdwawdwaqawdwawdwawddwwwwwqdeddw,true,oneironaut,applymindrender,,entity →,#items/mindrender@oneironaut:applymindrender
 Oneironaut,Encore,SOUTH_EAST,deaqqwqqqw,false,oneironaut,resetrod,,number →,#items/reverberation_rod@oneironaut:resetrod
-Oneironaut,Entity Distillation: Status,EAST,eaeeeeeae,false,oneironaut,getbystatussingle,,"status, vector → entity | NULL",#patterns/status_iotas@oneironaut:getbystatussingle
-Oneironaut,Entropy Reflection II,NORTH_EAST,eeeeq,false,oneironaut,gaussianrand,,→ num,#patterns/misc_patterns@oneironaut:gaussianrand
-Oneironaut,Externalize Pigment,WEST,eqdweeqdwweeqddqdwwwdeww,false,oneironaut,paintconjured,,"Vector, itemtype →",#patterns/spells/paint_conjured@oneironaut:paintconjured
 Oneironaut,Finale,SOUTH_WEST,aqdeeweeew,false,oneironaut,haltrod,,,#items/reverberation_rod@oneironaut:haltrod
-Oneironaut,Hidden Sun's Zenith,SOUTH_WEST,qqqqqaewawaweqa,true,oneironaut,invisibility,,"entity, number →",#patterns/spells/great/detection_shielding@oneironaut:invisibility
+Oneironaut,Homeland Reflection,NORTH_EAST,wqwqwqwqwqwawedewdwedew,false,oneironaut,getdimoverworld,,→ Imprint,#patterns/dim_iotas@oneironaut:getdimoverworld
+Oneironaut,Inferno Reflection,NORTH_EAST,wqwqwqwqwqwaqaaqaw,false,oneironaut,getdimnether,,→ Imprint,#patterns/dim_iotas@oneironaut:getdimnether
 Oneironaut,Inscribe Idea,EAST,eweweweweweeewqaqwe,false,oneironaut,writeidea,,"key, any →",#patterns/idea_inscription@oneironaut:writeidea
+Oneironaut,Instill Psyche,NORTH_EAST,qeqwqqedeeeeeaqwqeqaqedqde,true,oneironaut,reviveflayed,,entity →,#greatwork/flayrevival@oneironaut:reviveflayed
 Oneironaut,Media Infusion,EAST,wwaqqqqqeqqqwwwqqeqqwwwqqweqadadadaqeqeqadadadaqe,true,oneironaut,infusemedia,,Vector →,#patterns/spells/great/infusemedia@oneironaut:infusemedia
 Oneironaut,Metadata Distillation,WEST,qwqwqwqwqwqaeqedeqe,false,oneironaut,readideawriter,,"key, player → bool",#patterns/idea_inscription@oneironaut:readideawriter
 Oneironaut,Metadata Purification,WEST,qwqwqwqwqwqqqeqaqeq,false,oneironaut,readideatime,,key → number | NULL,#patterns/idea_inscription@oneironaut:readideatime
 Oneironaut,Metronome Gambit,SOUTH_EAST,qwqqqwqaqddq,false,oneironaut,delayrod,,number →,#items/reverberation_rod@oneironaut:delayrod
 Oneironaut,Metronome Reflection,SOUTH_EAST,qwqqqwqawaaw,false,oneironaut,getrodstamp,,→ number,#items/reverberation_rod@oneironaut:getrodstamp
 Oneironaut,Noetic Gateway,NORTH_EAST,qeewwwweeqeqeewwwweeqdqqdwwwdqeqdwwwdqdadwwdqdwwddadaqadaawww,true,oneironaut,dimteleport,,"Entity, Imprint →",#patterns/spells/great/dim_teleport@oneironaut:dimteleport
-Oneironaut,Particle Burst,EAST,deeeewaaddwqqqqa,false,oneironaut,particleburst,,"vec, vec, num, num →",#patterns/spells/particle_burst@oneironaut:particleburst
-Oneironaut,Pharmacist's Dstln.,SOUTH_WEST,qqqqqedwdwd,false,oneironaut,getstatusduration,,"entity, status → num",#patterns/status_iotas@oneironaut:getstatusduration
-Oneironaut,Pharmacist's Dstln. II,SOUTH_EAST,eeeeeqawawa,false,oneironaut,getstatuslevel,,"entity, status → num",#patterns/status_iotas@oneironaut:getstatuslevel
 Oneironaut,Retrieve Idea,WEST,qwqwqwqwqwqqqwedewq,false,oneironaut,readidea,,key → any,#patterns/idea_inscription@oneironaut:readidea
-Oneironaut,Scout's Exaltation,EAST,wqded,false,oneironaut,filteredentityraycast,,"[type], vec, vec → entity | NULL",#patterns/misc_patterns@oneironaut:filteredentityraycast
 Oneironaut,Scrutinize Sentinel,EAST,waeawaeddwwd,false,oneironaut,readsentinel,,"vec, player → num | NULL",#greatwork/sentinel_detection@oneironaut:readsentinel
 Oneironaut,Sign Item,EAST,qqaqwedeea,false,oneironaut,signitem,,,#patterns/soulprints@oneironaut:signitem
 Oneironaut,Signature Purification,EAST,qqaqwedeed,false,oneironaut,checksignature,,soulprint → bool,#patterns/soulprints@oneironaut:checksignature
@@ -495,5 +486,3 @@ Oneironaut,Stealth Shroud,EAST,wawwwdwdwwaqqqqqe,true,oneironaut,resistdetection
 Oneironaut,Uplifting Resonance,SOUTH_WEST,qdaeqeawaeqeadqqdeed,true,oneironaut,applynotmissing,,entity →,#patterns/spells/great/glow_ambit@oneironaut:applynotmissing
 Oneironaut,Williams' Gambit,NORTH_WEST,eqqwqqqwaaw,false,oneironaut,writerodram,,non-list →,#items/reverberation_rod@oneironaut:writerodram
 Oneironaut,Williams' Reflection,NORTH_EAST,qeeweeewddw,false,oneironaut,readrodram,,→ non-list,#items/reverberation_rod@oneironaut:readrodram
-Oneironaut,Zone Exltn.: Not-Status,EAST,qweeeeewq,false,oneironaut,getbystatusinverse,,"status, vec, num → [entity]",#patterns/status_iotas@oneironaut:getbystatusinverse
-Oneironaut,Zone Exltn.: Status,EAST,ewqqqqqwe,false,oneironaut,getbystatus,,"status, vec, num → [entity]",#patterns/status_iotas@oneironaut:getbystatus
