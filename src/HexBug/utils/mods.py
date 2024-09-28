@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 from dataclasses import InitVar, dataclass, field
 from enum import Enum
 from itertools import chain
-from typing import AsyncIterator, Iterable
+from typing import AsyncIterator, Callable, Iterable
 
 import discord
 import jproperties
@@ -73,6 +73,7 @@ class _BaseModInfo(ABC):
     modloaders: list[str]
     version_regex: re.Pattern | None = None
     skipped_versions: set[str] = field(default_factory=set)
+    version_predicate: Callable[[str], bool] | None = None
 
     def __post_init__(self):
         if self.modrinth_slug:
@@ -99,8 +100,11 @@ class _BaseModInfo(ABC):
     async def get_latest_version(self, session: ClientSession) -> str | None:
         async for raw_version in self._get_raw_versions(session):
             version = self._parse_version(raw_version)
-            if version not in self.skipped_versions:
-                return version
+            if version in self.skipped_versions:
+                return
+            if self.version_predicate and not self.version_predicate(version):
+                return
+            return version
 
     async def _get_raw_versions(self, session: ClientSession) -> AsyncIterator[str]:
         """Fetches and returns the list of available versions for this mod, from newest
@@ -425,6 +429,7 @@ class RegistryMod(Enum):
         skipped_versions={
             "3.2.3",
         },
+        version_predicate=lambda v: v < "5",
     )
 
     HexKinetics = RegistryModInfo(
