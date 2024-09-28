@@ -30,4 +30,4 @@ def color_to_int(color: Color) -> int:
 
 
 def color_to_hex(color: Color) -> str:
-    return matplotlib.colors.to_hex((color.r, color.g, color.b))
+    return matplotlib.colors.to_hex((color.r / 255, color.g / 255, color.b / 255))
