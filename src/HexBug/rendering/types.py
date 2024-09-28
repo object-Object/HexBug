@@ -1,9 +1,21 @@
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any
 
 from hex_renderer_py import Color
 
 from .colors import colormap_to_colors, hex_to_color, hex_to_colors
+
+
+class DataEnum(Enum):
+    @classmethod
+    def _missing_(cls, value: object) -> Any:
+        if isinstance(value, str):
+            try:
+                return cls[value]
+            except KeyError:
+                return None
+
 
 # palette
 
@@ -15,7 +27,7 @@ class _PaletteData:
     per_world_color: Color = field(default_factory=lambda: hex_to_color("#a81ee3"))
 
 
-class Palette(_PaletteData, Enum):
+class Palette(_PaletteData, DataEnum):
     Classic = (
         hex_to_colors("#ff6bff", "#a81ee3", "#6490ed", "#b189c7"),
         hex_to_color("#dd0000"),
@@ -46,7 +58,7 @@ class _ThemeData:
     marker_color: Color
 
 
-class Theme(_ThemeData, Enum):
+class Theme(_ThemeData, DataEnum):
     Light = Color(0, 0, 0, 255)
     Dark = Color(255, 255, 255, 255)
 
