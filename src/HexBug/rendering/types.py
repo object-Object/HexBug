@@ -18,6 +18,7 @@ class DataEnum(Enum):
 
 
 # palette
+# colormaps: https://matplotlib.org/stable/gallery/color/colormap_reference.html
 
 
 @dataclass(frozen=True)
