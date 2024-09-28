@@ -264,7 +264,7 @@ HexKinetics,Rotate II,WEST,eeedaqqqa,false,hexkinetics,rotate_two/spell,OpRotate
 HexKinetics,Rotate: Block,SOUTH_EAST,qqqqqaqqqwadeeed,false,hexkinetics,rotate_block/spell,OpRotateBlockSpell,"vector, vector →",#patterns/spells/rotate_spells@hexkinetics:rotate_block/spell
 HexKinetics,Shooter Purification,EAST,aadedade,false,hexkinetics,get_shooter/const,OpSecretThree,entity → entity,#patterns/actions@hexkinetics:get_shooter/const
 HexKinetics,Sniper's Distillation,EAST,weqaqded,false,hexkinetics,pixel/raycast,OpPixelRaycast,"vector, vector → vector",#patterns/actions@hexkinetics:pixel/raycast
-HexKinetics,Span Distillation,WEST,qaqeeqaq,false,hexkinetics,get_vec_from/const,OpGetVectorsFrom,"vector, vector → list",#patterns/math_actions@hexkinetics:get_vec_from/const
+HexKinetics,Span Distillation,WEST,qaqeeqaq,false,hexkinetics,get_vec_from/const,OpGetVectorsFrom,list of vectors → list,#patterns/math_actions@hexkinetics:get_vec_from/const
 HexKinetics,Sphere Distillation,SOUTH_EAST,qqqqqeddedq,false,hexkinetics,get_vec/const,OpGetVectorsBy,"vec, num → list",#patterns/math_actions@hexkinetics:get_vec/const
 HexKinetics,Twokai's Ideal Condition,SOUTH_WEST,wwqqqwadaadawqqqww,true,hexkinetics,zero_g/spell,OpZeroG,"entity, number →",#patterns/great_spells/great_spells@hexkinetics:zero_g/spell
 HexKinetics,Vehicle Purification,SOUTH_EAST,qqdeewee,false,hexkinetics,get_vehicle/const,OpSecret,entity → entity,#patterns/actions@hexkinetics:get_vehicle/const
