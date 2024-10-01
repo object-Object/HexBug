@@ -409,6 +409,167 @@ Hexbound,Zone Distillation: Non-Construct,SOUTH_EAST,eeeeewaqaawedde,false,hexbo
 Hexcellular,Observation Purification,SOUTH_WEST,aawd,false,hexcellular,observe_property,,property → any,#properties@hexcellular:observe_property
 Hexcellular,Schrödinger's Gambit,SOUTH_WEST,aawq,false,hexcellular,set_property,,"property, any →",#properties@hexcellular:set_property
 Hexcellular,Schrödinger's Reflection,SOUTH_WEST,aawe,false,hexcellular,create_property,,→ property,#properties@hexcellular:create_property
+Hexical,,EAST,awddwqaeqqqeaeqqq,false,hexical,mimic_dye,,,
+Hexical,Accessory Purification,NORTH_WEST,edeeee,false,hexical,get_offhand_stack,,player entity → identifier,#patterns/scrying/identifiers@hexical:get_offhand_stack
+Hexical,Activate Archgenie,NORTH_EAST,qaqwddedadeaqq,false,hexical,activate_arch_lamp,,,#lamp/arch_lamps@hexical:activate_arch_lamp
+Hexical,Age Scroll,EAST,waeqqqqeqqqwqeaeaeaeq,false,hexical,age_scroll,,living scroll entity →,#items/living_scroll@hexical:age_scroll
+Hexical,Alter Speck,SOUTH_WEST,adeeaqa,false,hexical,iota_speck,,"speck entity, any →",#patterns/spells/specks@hexical:iota_speck
+Hexical,Alteration Purification,NORTH_WEST,wqaqwqaqw,false,hexical,can_prestidigitate,,entity/vector → boolean,#patterns/spells/prestidigitation@hexical:can_prestidigitate
+Hexical,Angle Purification,EAST,qaqqqqqwqqwqd,false,hexical,blockstate_turn,,vector → number/null,#patterns/scrying/blocks@hexical:blockstate_turn
+Hexical,Archgenie Gambit,NORTH_EAST,qaqwddedqedeeeee,false,hexical,set_arch_lamp_storage,,any →,#lamp/arch_lamp_storage@hexical:set_arch_lamp_storage
+Hexical,Archgenie Purification,NORTH_EAST,qaqwddedqeed,false,hexical,has_arch_lamp,,entity → boolean,#lamp/arch_lamps@hexical:has_arch_lamp
+Hexical,Archgenie Reflection,NORTH_EAST,qaqwddedqqaqqqqq,false,hexical,with_arch_lamp,,→ boolean,#lamp/arch_lamps@hexical:with_arch_lamp
+Hexical,Archgenie Reflection: Kinetic,NORTH_EAST,qaqwddedqew,false,hexical,get_arch_lamp_velocity,,→ vector,#lamp/arch_lamps@hexical:get_arch_lamp_velocity
+Hexical,Archgenie Reflection: Media,NORTH_EAST,qaqwddedaeeeee,false,hexical,get_arch_lamp_media,,→ number,#lamp/arch_lamps@hexical:get_arch_lamp_media
+Hexical,Archgenie Reflection: Memory,NORTH_EAST,qaqwddedqwaqqqqq,false,hexical,get_arch_lamp_storage,,→ any,#lamp/arch_lamp_storage@hexical:get_arch_lamp_storage
+Hexical,Archgenie Reflection: Rotational,NORTH_EAST,qaqwddedadw,false,hexical,get_arch_lamp_rotation,,→ vector,#lamp/arch_lamps@hexical:get_arch_lamp_rotation
+Hexical,Archgenie Reflection: Spatial,NORTH_EAST,qaqwddedqdd,false,hexical,get_arch_lamp_position,,→ vector,#lamp/arch_lamps@hexical:get_arch_lamp_position
+Hexical,Archgenie Reflection: Temporal,NORTH_EAST,qaqwddedqwddwa,false,hexical,get_arch_lamp_use_time,,→ number,#lamp/arch_lamps@hexical:get_arch_lamp_use_time
+Hexical,Archivist Reflection,SOUTH_EAST,aqaeaqwqa,false,hexical,index_grimoire,,→ [pattern],#items/grimoire@hexical:index_grimoire
+Hexical,Assimilate Food,WEST,aaqqadaa,false,hexical,ingest,,,#patterns/spells/wristpocket@hexical:ingest
+Hexical,Book Purification,EAST,qaqqqqqeawa,false,hexical,blockstate_book,,vector → boolean/null,#patterns/scrying/blocks@hexical:blockstate_book
+Hexical,Bunching Purification,EAST,qaqqqqqweeeeedeeqaqdeee,false,hexical,blockstate_bunch,,vector → number/null,#patterns/scrying/blocks@hexical:blockstate_bunch
+Hexical,Caliper's Purification,NORTH_WEST,dwe,false,hexical,entity_width,,entity → number,#patterns/simple_patterns@hexical:entity_width
+Hexical,Calorie Purification,WEST,adaqqqddqe,false,hexical,get_hunger,,identifier → number,#patterns/scrying/food@hexical:get_hunger
+Hexical,Charge Reflection,SOUTH_EAST,aqaddq,false,hexical,moving_up,,→ number,#patterns/telepathy@hexical:moving_up
+Hexical,Charm Distillation,WEST,waqwwqaweede,false,hexical,get_enchantment_strength,,"item entity, identifier → number",#patterns/scrying/enchantments@hexical:get_enchantment_strength
+Hexical,Chorus Blink,SOUTH_EAST,aawqqqq,false,hexical,chorus_blink,,vector →,#patterns/spells/simple_spells@hexical:chorus_blink
+Hexical,Chromatic Purification,NORTH_EAST,weedwa,false,hexical,get_dye,,vector/entity → dye/null,#patterns/spells/colors@hexical:get_dye
+Hexical,Clearance Distillation,SOUTH_WEST,wqqqaqwdd,false,hexical,get_effect_duration,,"entity, identifier → number",#patterns/scrying/status_effects@hexical:get_effect_duration
+Hexical,Concentration Distillation,SOUTH_WEST,wqqqaqwa,false,hexical,get_effect_amplifier,,"entity, identifier → number",#patterns/scrying/status_effects@hexical:get_effect_amplifier
+Hexical,Condition Purification,SOUTH_WEST,wqqqaawd,false,hexical,get_effect_category,,identifier → number,#patterns/scrying/status_effects@hexical:get_effect_category
+Hexical,Congruence Distillation,EAST,aaqd,false,hexical,congruent,,"pattern, pattern → boolean",#patterns/simple_patterns@hexical:congruent
+Hexical,Conjure Compass,SOUTH_WEST,aqwawqwqqwqwq,false,hexical,conjure_compass,,"vector, vector →",#patterns/spells/conjure_compass@hexical:conjure_compass
+Hexical,Conjure Firework,SOUTH_WEST,dedwaqwwawwqa,false,hexical,conjure_firework,,"vec, vec, num, num, [dye], [dye], bool, bool →",#patterns/spells/pyrotechnics@hexical:conjure_firework
+Hexical,Conjure Hexburst,EAST,aadaadqaq,false,hexical,conjure_hexburst,,"vector, any →",#patterns/spells/simple_spells@hexical:conjure_hexburst
+Hexical,Conjure Hextito,EAST,qaqdqaqdwawaw,false,hexical,conjure_hextito,,"vector, list of patterns →",#patterns/spells/simple_spells@hexical:conjure_hextito
+Hexical,Conjure Mage Block,NORTH_WEST,dee,false,hexical,conjure_mage_block,,vector →,#patterns/spells/mage_blocks@hexical:conjure_mage_block
+Hexical,Conjure Mesh,EAST,qaqqqqqwqqqdeeweweeaeewewee,true,hexical,conjure_mesh,,vector → entity,#patterns/great_spells/meshes@hexical:conjure_mesh
+Hexical,Conjure Speck,SOUTH_WEST,ade,false,hexical,conjure_speck,,"any, vector, vector → entity",#patterns/spells/specks@hexical:conjure_speck
+Hexical,Conjure Spike,NORTH_EAST,qdqdqdqdww,false,hexical,spike,,"vector, vector, number →",#patterns/spells/spike@hexical:spike
+Hexical,Conjure Staff,NORTH_EAST,wwwwwaqqqqqeaqeaeaeaeaeq,false,hexical,conjure_staff,,"vec, num, num, [pattern] →",#patterns/spells/conjured_staff@hexical:conjure_staff
+Hexical,Demoman's Purification,EAST,qaqqqqqewaaqddqa,false,hexical,block_blast_resistance,,identifier → number,#patterns/scrying/blocks@hexical:block_blast_resistance
+Hexical,Dessert Purification,WEST,adaqqqddaq,false,hexical,is_snack,,identifier → boolean,#patterns/scrying/food@hexical:is_snack
+Hexical,Detective's Purification,NORTH_EAST,qqqqqe,false,hexical,identify,,identifiable → identifier,#patterns/scrying/identifiers@hexical:identify
+Hexical,Deterioration Purification,NORTH_EAST,eeweeewdeq,false,hexical,damage_stack,,item entity → number,#patterns/scrying/item@hexical:damage_stack
+Hexical,Diagnosis Purification,SOUTH_WEST,wqqq,false,hexical,get_effects_entity,,entity → [identifier],#patterns/scrying/status_effects@hexical:get_effects_entity
+Hexical,Dioscuri Gambit II,EAST,waadadaa,false,hexical,dup_many,,"many, number → many",#patterns/simple_patterns@hexical:dup_many
+Hexical,Dismiss Speck,SOUTH_WEST,adeaqde,false,hexical,kill_specklike,,speck entity →,#patterns/spells/specks@hexical:kill_specklike
+Hexical,Displace,NORTH_EAST,qaqqqqeedaqqqa,false,hexical,displace,,"entity, vector →",#patterns/spells/circle_spells@hexical:displace
+Hexical,Dodge Reflection,SOUTH_EAST,edead,false,hexical,moving_left,,→ number,#patterns/telepathy@hexical:moving_left
+Hexical,Dye,NORTH_WEST,dwaqqw,false,hexical,dye,,"vector/entity, dye →",#patterns/spells/colors@hexical:dye
+Hexical,Dye Ink,EAST,waeqqqqewqqwqqeqeqqwqqeq,false,hexical,color_scroll,,"living scroll entity, vector →",#items/living_scroll@hexical:color_scroll
+Hexical,Edibility Purification,WEST,adaqqqdd,false,hexical,edible,,identifier → boolean,#patterns/scrying/food@hexical:edible
+Hexical,Educate Genie,NORTH_WEST,eweweweweweewedeaqqqd,false,hexical,educate_genie,,[pattern] →,#lamp/mysterious_lamp@hexical:educate_genie
+Hexical,Enderman's Purification,SOUTH_WEST,qqqqwaadq,false,hexical,is_wet,,entity → boolean,#patterns/scrying/entities@hexical:is_wet
+Hexical,Epiphany Purification,SOUTH_EAST,awqaqqq,false,hexical,am_enlightened,,player entity → boolean,#patterns/enlightened_patterns@hexical:am_enlightened
+Hexical,Erase Grimoire,WEST,aqwqaqded,false,hexical,erase_grimoire,,pattern →,#items/grimoire@hexical:erase_grimoire
+Hexical,Evade Reflection,SOUTH_WEST,qaqda,false,hexical,moving_right,,→ number,#patterns/telepathy@hexical:moving_right
+Hexical,Evoker Purification,EAST,wwaqqqqqeeaqawwewewwaqawwewew,false,hexical,is_evoking,,player entity → number,#patterns/spells/evocation@hexical:is_evoking
+Hexical,Evoker Reflection,EAST,waeqqqqedeqdqdqdqewee,false,hexical,with_evocation,,→ boolean,#patterns/spells/evocation@hexical:with_evocation
+Hexical,Farmer's Purification,EAST,qaqqqqqwaea,false,hexical,blockstate_crop,,vector → number/null,#patterns/scrying/blocks@hexical:blockstate_crop
+Hexical,Finale Reflection,EAST,aaddaddad,false,hexical,lamp_finale,,→ boolean,#lamp/arch_lamps@hexical:lamp_finale
+Hexical,Fitness Purification,SOUTH_EAST,wddwwawaeqwawq,false,hexical,get_max_health,,entity → number,#patterns/scrying/entities@hexical:get_max_health
+Hexical,Flesh Purification,WEST,adaqqqddaed,false,hexical,is_meat,,identifier → boolean,#patterns/scrying/food@hexical:is_meat
+Hexical,Fragility Purification,NORTH_WEST,qqwqqqwaqe,false,hexical,damage_max_stack,,identifier → number,#patterns/scrying/item@hexical:damage_max_stack
+Hexical,Gasp,NORTH_WEST,aweeeeewaweeeee,false,hexical,gasp,,entity →,#patterns/spells/simple_spells@hexical:gasp
+Hexical,Genie Gambit,SOUTH_WEST,qwddedqedeeeee,false,hexical,set_hand_lamp_storage,,any →,#lamp/new_possibilities@hexical:set_hand_lamp_storage
+Hexical,Genie Reflection,SOUTH_WEST,qwddedqqaqqqqq,false,hexical,with_hand_lamp,,→ boolean,#lamp/new_possibilities@hexical:with_hand_lamp
+Hexical,Genie Reflection: Kinetic,SOUTH_WEST,qwddedqew,false,hexical,get_hand_lamp_velocity,,→ vector,#lamp/new_possibilities@hexical:get_hand_lamp_velocity
+Hexical,Genie Reflection: Media,SOUTH_WEST,qwddedaeeeee,false,hexical,get_hand_lamp_media,,→ number,#lamp/new_possibilities@hexical:get_hand_lamp_media
+Hexical,Genie Reflection: Memory,SOUTH_WEST,qwddedqwaqqqqq,false,hexical,get_hand_lamp_storage,,→ any,#lamp/new_possibilities@hexical:get_hand_lamp_storage
+Hexical,Genie Reflection: Rotational,SOUTH_WEST,qwddedadw,false,hexical,get_hand_lamp_rotation,,→ vector,#lamp/new_possibilities@hexical:get_hand_lamp_rotation
+Hexical,Genie Reflection: Spatial,SOUTH_WEST,qwddedqdd,false,hexical,get_hand_lamp_position,,→ vector,#lamp/new_possibilities@hexical:get_hand_lamp_position
+Hexical,Genie Reflection: Temporal,SOUTH_WEST,qwddedqwddwa,false,hexical,get_hand_lamp_use_time,,→ number,#lamp/new_possibilities@hexical:get_hand_lamp_use_time
+Hexical,Geographical Purification,WEST,qwqwqawdqqaqqdwaqwqwq,false,hexical,get_biome,,→ identifier,#patterns/scrying/world@hexical:get_biome
+Hexical,Glyphmaker's Distillation,NORTH_EAST,aqqqdae,false,hexical,shuffle_pattern,,"pattern, number → pattern",#patterns/simple_patterns@hexical:shuffle_pattern
+Hexical,Greater Blink,SOUTH_WEST,wqawawaqwqwqawawaqw,true,hexical,greater_blink,,vector →,#patterns/great_spells/greater_blink@hexical:greater_blink
+Hexical,Hallucinate Click,NORTH_EAST,eqqadaq,false,hexical,click,,,#patterns/telepathy@hexical:click
+Hexical,Hallucinate Pling,NORTH_EAST,eqqqada,false,hexical,pling,,,#patterns/telepathy@hexical:pling
+Hexical,Hunger Purification,WEST,qqqadaddw,false,hexical,get_player_hunger,,player entity → number,#patterns/scrying/entities@hexical:get_player_hunger
+Hexical,Illuminate Ink,EAST,waeqqqqedeqdqdqdqeqdwwd,false,hexical,glow_scroll,,living scroll entity →,#items/living_scroll@hexical:glow_scroll
+Hexical,Inferno Purification,EAST,qqwaqda,false,hexical,is_burning,,entity → boolean,#patterns/scrying/entities@hexical:is_burning
+Hexical,Inferno Purification II,WEST,eewdead,false,hexical,burning_time,,entity → number,#patterns/scrying/entities@hexical:burning_time
+Hexical,Internalize Hex,EAST,wwaqqqqqeqdedwwqwqwwdedwwqwqw,false,hexical,internalize_hex,,list of patterns →,#patterns/spells/evocation@hexical:internalize_hex
+Hexical,Janus' Gambit,SOUTH_WEST,aadee,false,hexical,janus,,,#patterns/metaevals@hexical:janus
+Hexical,Laser Exaltation,EAST,weeaaeqeaae,false,hexical,piercing_surface_raycast,,"vec, vec, id → vec/null",#patterns/special_raycasts@hexical:piercing_surface_raycast
+Hexical,Leaping Reflection,SOUTH_WEST,qaqdaqqa,false,hexical,jumping,,→ number,#patterns/telepathy@hexical:jumping
+Hexical,Librarian's Gambit,SOUTH_WEST,edeeedad,false,hexical,write_shelf,,"vector, pattern, any →",#patterns/akashic_utils@hexical:write_shelf
+Hexical,Librarian's Purification,EAST,qaqqqada,false,hexical,read_shelf,,vector → any,#patterns/akashic_utils@hexical:read_shelf
+Hexical,Lilypad Distillation,EAST,weedewqaq,false,hexical,fluid_surface_raycast,,"vector, vector → vector/null",#patterns/special_raycasts@hexical:fluid_surface_raycast
+Hexical,Lock Purification,EAST,qaqqqeaqwdewd,false,hexical,blockstate_lock,,vector → boolean/null,#patterns/scrying/blocks@hexical:blockstate_lock
+Hexical,Luminance Purification (blockstate_glow),EAST,qaqqqqqwaeaeaeaeaea,false,hexical,blockstate_glow,,vector → boolean/null,#patterns/scrying/blocks@hexical:blockstate_glow
+Hexical,Luminance Purification (get_light),SOUTH_WEST,wqwqwqwqwqwaeqqqqaeqaeaeaeaw,false,hexical,get_light,,vector → number,#patterns/scrying/world@hexical:get_light
+Hexical,Lung Purification,EAST,wwaadee,false,hexical,get_max_air,,entity → number,#patterns/scrying/entities@hexical:get_max_air
+Hexical,Mage Hand,WEST,aaqqaeea,false,hexical,mage_hand,,entity/vector →,#patterns/spells/wristpocket@hexical:mage_hand
+Hexical,Magic Missile,WEST,qaqww,false,hexical,magic_missile,,"vector, vector →",#patterns/spells/magic_missile@hexical:magic_missile
+Hexical,Meterologist's Reflection,WEST,eweweweweweeeaedqdqde,false,hexical,get_weather,,→ number,#patterns/scrying/world@hexical:get_weather
+Hexical,Miner's Purification,EAST,qaqqqqqeeeeedq,false,hexical,block_hardness,,identifier → number,#patterns/scrying/blocks@hexical:block_hardness
+Hexical,Modify Block: Bouncy,NORTH_WEST,deeqa,false,hexical,modify_block_bouncy,,vector →,#patterns/spells/mage_blocks@hexical:modify_block_bouncy
+Hexical,Modify Block: Energized,NORTH_WEST,deewad,false,hexical,modify_block_energized,,"vector, number →",#patterns/spells/mage_blocks@hexical:modify_block_energized
+Hexical,Modify Block: Ephemeral,NORTH_WEST,deewwaawd,false,hexical,modify_block_ephemeral,,"vector, number →",#patterns/spells/mage_blocks@hexical:modify_block_ephemeral
+Hexical,Modify Block: Invisible,NORTH_WEST,deeqedeaqqqwqqq,false,hexical,modify_block_invisible,,vector →,#patterns/spells/mage_blocks@hexical:modify_block_invisible
+Hexical,Modify Block: Replaceable,NORTH_WEST,deewqaqqqqq,false,hexical,modify_block_replaceable,,vector →,#patterns/spells/mage_blocks@hexical:modify_block_replaceable
+Hexical,Modify Block: Semi-Permeable,NORTH_WEST,deeeqawde,false,hexical,modify_block_semipermeable,,vector →,#patterns/spells/mage_blocks@hexical:modify_block_semipermeable
+Hexical,Modify Block: Volatile,NORTH_WEST,deewedeeeee,false,hexical,modify_block_volatile,,vector →,#patterns/spells/mage_blocks@hexical:modify_block_volatile
+Hexical,Move Speck,SOUTH_WEST,adeqaa,false,hexical,move_specklike,,"speck entity, vector →",#patterns/spells/specks@hexical:move_specklike
+Hexical,Naval Distillation,EAST,wqqaqwede,false,hexical,fluid_raycast,,"vector, vector → vector/null",#patterns/special_raycasts@hexical:fluid_raycast
+Hexical,Nephthys' Gambit,,,false,hexical,nephthys,OpNephthys,pattern/[pattern] → varies,#patterns/metaevals@hexical:nephthys
+Hexical,Offer Mind,EAST,qaqwawqwqqwqwqwqwqwqq,false,hexical,offer_mind,,"villager entity, number →",#lamp/offerings@hexical:offer_mind
+Hexical,Orientation Purification,EAST,qaqqqqqwadeeed,false,hexical,blockstate_rotation,,vector → vector/null,#patterns/scrying/blocks@hexical:blockstate_rotation
+Hexical,Perlin Distillation,WEST,qawedqdq,false,hexical,perlin,,"vector, number → number",#patterns/perlin@hexical:perlin
+Hexical,Pigment Distillation,EAST,wawwddwwqwawwqwwawwq,false,hexical,sample_pigment,,"vector, number → vector",#patterns/spells/colors@hexical:sample_pigment
+Hexical,Plane Reflection,WEST,qwqwqwqwqwqqaedwaqd,false,hexical,get_dimension,,→ identifier,#patterns/scrying/world@hexical:get_dimension
+Hexical,Plumber's Purification,SOUTH_EAST,edeeeeeqwqqqqw,false,hexical,blockstate_waterlogged,,vector → boolean/null,#patterns/scrying/blocks@hexical:blockstate_waterlogged
+Hexical,Pocket Reflection,WEST,aaqqada,false,hexical,wristpocket_item,,→ identifier/null,#patterns/spells/wristpocket@hexical:wristpocket_item
+Hexical,Pocket Reflection II,WEST,aaqqaaw,false,hexical,wristpocket_count,,→ number,#patterns/spells/wristpocket@hexical:wristpocket_count
+Hexical,Prescription Purification,SOUTH_WEST,wqqqadee,false,hexical,get_effects_item,,item entity → [identifier],#patterns/scrying/status_effects@hexical:get_effects_item
+Hexical,Prestidigitation,NORTH_EAST,wedewedew,false,hexical,prestidigitation,,entity/vector →,#patterns/spells/prestidigitation@hexical:prestidigitation
+Hexical,Racer's Purification,WEST,eaq,false,hexical,is_sprinting,,player entity → boolean,#patterns/scrying/entities@hexical:is_sprinting
+Hexical,Railgun Exaltation,EAST,wqqddqeqddq,false,hexical,piercing_raycast,,"vec, vec, id → vec/null",#patterns/special_raycasts@hexical:piercing_raycast
+Hexical,Recognizer's Purification,WEST,eeeeeq,false,hexical,recognize,,entity → identifier,#patterns/scrying/identifiers@hexical:recognize
+Hexical,Reproduction Purification,EAST,awaaqdqaawa,false,hexical,breedable,,entity → boolean/null,#patterns/scrying/entities@hexical:breedable
+Hexical,Resize Speck,SOUTH_WEST,adeeqed,false,hexical,size_specklike,,"speck entity, number →",#patterns/spells/specks@hexical:size_specklike
+Hexical,Retreat Reflection,SOUTH_WEST,dedwdq,false,hexical,moving_down,,→ number,#patterns/telepathy@hexical:moving_down
+Hexical,Roll Speck,SOUTH_WEST,adeqqqqq,false,hexical,roll_specklike,,"speck entity, number →",#patterns/spells/specks@hexical:roll_specklike
+Hexical,Rotate Speck,SOUTH_WEST,adeaw,false,hexical,rotate_specklike,,"speck entity, vector →",#patterns/spells/specks@hexical:rotate_specklike
+Hexical,Satiation Purification,WEST,adaqqqddqw,false,hexical,get_saturation,,identifier → number,#patterns/scrying/food@hexical:get_saturation
+Hexical,Sekhmet's Gambit,,,false,hexical,sekhmet,OpSekhmet,→ varies,#patterns/metaevals@hexical:sekhmet
+Hexical,Send Thought,EAST,qqqqwaqa,false,hexical,send_telepathy,,any →,#patterns/telepathy@hexical:send_telepathy
+Hexical,Sentience Purification,SOUTH_EAST,qqqaqqq,false,hexical,is_brainswept,,entity → boolean,#patterns/enlightened_patterns@hexical:is_brainswept
+Hexical,Shout Thought,EAST,daqqqqwa,false,hexical,shout_telepathy,,any →,#patterns/telepathy@hexical:shout_telepathy
+Hexical,Similarity Distillation,NORTH_WEST,dew,false,hexical,similar,,"any, any → boolean",#patterns/simple_patterns@hexical:similar
+Hexical,Simulate Firework,SOUTH_WEST,dedwaqwqqwqa,false,hexical,simulate_firework,,"vector, vector, number →",#patterns/spells/pyrotechnics@hexical:simulate_firework
+Hexical,Sisyphus' Gambit,NORTH_EAST,qaqwede,false,hexical,sisyphus,,list →,#patterns/metaevals@hexical:sisyphus
+Hexical,Sloth's Purification,NORTH_WEST,aqaew,false,hexical,is_sleeping,,entity → boolean,#patterns/scrying/entities@hexical:is_sleeping
+Hexical,Soroban Gambit,NORTH_EAST,qdeeaae,false,hexical,soroban_reset,,,#patterns/soroban@hexical:soroban_reset
+Hexical,Soroban Reflection,NORTH_EAST,wdeaqq,false,hexical,soroban_increment,,→ number,#patterns/soroban@hexical:soroban_increment
+Hexical,Soroban Reflection II,SOUTH_EAST,waqdee,false,hexical,soroban_decrement,,→ number,#patterns/soroban@hexical:soroban_decrement
+Hexical,Staff Gambit,NORTH_EAST,waqqqqqedeqdqdqdqdqe,false,hexical,write_staff,,any →,#patterns/spells/conjured_staff@hexical:write_staff
+Hexical,Staff Reflection,NORTH_EAST,waqqqqqeaqeaeaeaeaeq,false,hexical,read_staff,,→ any,#patterns/spells/conjured_staff@hexical:read_staff
+Hexical,Stamina Purification,WEST,qqqadaddq,false,hexical,get_player_saturation,,entity entity → number,#patterns/scrying/entities@hexical:get_player_saturation
+Hexical,Storage Purification,EAST,qaqqwqqqw,false,hexical,count_stack,,item entity → number,#patterns/scrying/item@hexical:count_stack
+Hexical,Suffocation Purification,EAST,wwaade,false,hexical,get_air,,entity → number,#patterns/scrying/entities@hexical:get_air
+Hexical,Tangle Purification,SOUTH_WEST,edeeeeeweeeaqqwqwqq,false,hexical,read_mesh,,entity → list of vectors,#patterns/great_spells/meshes@hexical:read_mesh
+Hexical,Telepathic Reflection,EAST,wqqadaw,false,hexical,get_telepathy,,→ null/number,#patterns/telepathy@hexical:get_telepathy
+Hexical,Temporal Reflection,SOUTH_EAST,wddwaqqwqaddaqqwddwaqqwqaddaq,false,hexical,get_time,,→ number,#patterns/scrying/world@hexical:get_time
+Hexical,Terminate Archgenie,NORTH_EAST,qaqwddedwaqdee,false,hexical,terminate_arch_lamp,,,#lamp/arch_lamps@hexical:terminate_arch_lamp
+Hexical,Thaumaturgist's Purification,WEST,waqeaeqawqwawaw,false,hexical,get_enchantments,,item entity →,#patterns/scrying/enchantments@hexical:get_enchantments
+Hexical,Themis' Gambit,WEST,dwaad,false,hexical,themis,,"list, pattern/[pattern] → list",#patterns/metaevals@hexical:themis
+Hexical,Theodolite's Purification,EAST,wqaa,false,hexical,theodolite,,entity → vector,#patterns/simple_patterns@hexical:theodolite
+Hexical,Thicken Speck,SOUTH_WEST,adeeqw,false,hexical,thickness_specklike,,"speck entity, number →",#patterns/spells/specks@hexical:thickness_specklike
+Hexical,Time Speck,SOUTH_WEST,adeqqaawdd,false,hexical,lifetime_specklike,,"speck entity, number →",#patterns/spells/specks@hexical:lifetime_specklike
+Hexical,Tool Purification,NORTH_EAST,qaqqqq,false,hexical,get_mainhand_stack,,player entity → identifier,#patterns/scrying/identifiers@hexical:get_mainhand_stack
+Hexical,Vanish Scroll,EAST,waeqqqqedeqeeweeqewee,false,hexical,vanish_scroll,,living scroll entity →,#items/living_scroll@hexical:vanish_scroll
+Hexical,Vision Purification,EAST,wdwwaawwewdwwewwdwwe,false,hexical,translate_dye,,dye → vector,#patterns/spells/colors@hexical:translate_dye
+Hexical,Vitality Purification,SOUTH_EAST,wddwaqqwawq,false,hexical,get_health,,entity → number,#patterns/scrying/entities@hexical:get_health
+Hexical,Wand Reflection,NORTH_EAST,waqaeaqeaqeaeaeaeaeq,false,hexical,with_conjured_staff,,→ boolean,#patterns/spells/conjured_staff@hexical:with_conjured_staff
+Hexical,Warehouse Purification,WEST,edeeweeew,false,hexical,count_max_stack,,identifier → number,#patterns/scrying/item@hexical:count_max_stack
+Hexical,Weave Mesh,EAST,qaqqqqqwqqqdeewewee,false,hexical,weave_mesh,,"entity, list of vectors →",#patterns/great_spells/meshes@hexical:weave_mesh
+Hexical,Wristpocket,WEST,aaqqa,false,hexical,wristpocket,,,#patterns/spells/wristpocket@hexical:wristpocket
+Hexical,Write Grimoire,WEST,aqwqaeaqa,false,hexical,write_grimoire,,"pattern, [pattern] →",#items/grimoire@hexical:write_grimoire
+Hexical,Youth Purification,SOUTH_WEST,awaqdwaaw,false,hexical,is_baby,,entity → boolean,#patterns/scrying/entities@hexical:is_baby
+Hexical,Zone Distillation: Speck,SOUTH_EAST,qqqqqwdeddwqde,false,hexical,zone_specklike,,"vector, number → [entity]",#patterns/spells/specks@hexical:zone_specklike
 Mediaworks,Astral Gaze Reflection,NORTH_EAST,waawaq,false,mediaworks,astral_look,,→ vector,#patterns/astral_utils@mediaworks:astral_look
 Mediaworks,Astral Locale Reflection,NORTH_EAST,qaqqqqaq,false,mediaworks,astral_pos,,→ vector,#patterns/astral_utils@mediaworks:astral_pos
 Mediaworks,Astral Projection,NORTH_WEST,qdadwewewdadeadwddaaedqdeddew,true,mediaworks,astral_projection,,number →,#patterns/great_spells/astral_projection@mediaworks:astral_projection
