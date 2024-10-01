@@ -108,6 +108,8 @@ class SpecialHandler(ABC):
     def parse_shorthand(self, shorthand: str) -> SpecialHandlerArgument:
         """Attempts to parse a full shorthand pattern into an argument for this
         pattern.
+
+        Optional.
         """
         return None
 

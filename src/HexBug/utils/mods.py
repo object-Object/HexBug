@@ -566,6 +566,17 @@ class HexdocMod(Enum):
         modloaders=[FABRIC, QUILT],
     )
 
+    Hexical = HexdocModInfo(
+        name="Hexical",
+        modid="hexical",
+        book_id="hexical:hexicalbook",
+        description="A fun addon containing genie lamps, mage blocks, specks, world scrying, and more!",
+        curseforge_url=None,
+        modrinth_slug="hexical",
+        icon_url="https://raw.githubusercontent.com/miyucomics/hexical/8ad329395acfdaa30db01d5ce00d61dd446b2db4/src/main/resources/assets/hexical/icon.png",
+        modloaders=[FABRIC, QUILT],
+    )
+
 
 ModInfo = RegistryModInfo | APIModInfo | HexdocModInfo
 Mod = RegistryMod | APIMod | HexdocMod

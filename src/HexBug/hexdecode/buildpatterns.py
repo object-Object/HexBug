@@ -32,6 +32,8 @@ from ..utils.type_guards import is_typeddict_subtype
 from .hex_math import Direction
 from .registry import DuplicatePatternException, NormalPatternInfo, Registry
 
+logger = logging.getLogger(__name__)
+
 translation_regex = re.compile(r"hexcasting.spell.[a-z]+:(.+)")
 header_regex = re.compile(r"\s*\(.+\)")
 
@@ -196,9 +198,14 @@ def _build_hexdoc_urls(registry: Registry, categories: Iterable[Category], mod: 
                         page,
                         text,
                     ):
-                        pattern = registry.from_name[page.patterns[0].id.path]
-                        if pattern.translation:
-                            urls[pattern.translation] = value
+                        pattern_id = page.patterns[0].id
+                        if pattern := registry.from_name.get(pattern_id.path):
+                            if pattern.translation:
+                                urls[pattern.translation] = value
+                        else:
+                            logger.warning(
+                                f"Unknown pattern for {mod.name} in lookup page #{entry.id.path}@{page.anchor}: {pattern_id}"
+                            )
 
                     case PageWithPattern() if value := _build_hexdoc_pattern_urls(
                         registry,
@@ -271,12 +278,6 @@ async def build_registry(session: ClientSession) -> Registry | None:
                     classname_to_path, file_path.stem, mod, file_path.as_posix()
                 )
 
-        for info in build_extra_patterns(name_to_translation):
-            if info.classname and info.class_mod and info.path:
-                _insert_classname(
-                    classname_to_path, info.classname, info.class_mod, info.path
-                )
-
         for classname, path in mod_info.extra_classname_paths.items():
             _insert_classname(classname_to_path, classname, mod, path)
 
@@ -329,6 +330,13 @@ async def build_registry(session: ClientSession) -> Registry | None:
         )
 
         # TODO: load classnames
+
+    # do this last so all the translations are loaded
+    for info in build_extra_patterns(name_to_translation):
+        if info.classname and info.class_mod and info.path:
+            _insert_classname(
+                classname_to_path, info.classname, info.class_mod, info.path
+            )
 
     # patterns and books
 
@@ -438,6 +446,17 @@ async def build_registry(session: ClientSession) -> Registry | None:
 
         if isinstance(mod_info, APIWithBookModInfo):
             _build_urls(registry, categories, mod)
+
+    # FIXME: hack
+    if (
+        name_to_translation.get("get_light")
+        == name_to_translation.get("blockstate_glow")
+        == "Luminance Purification"
+    ):
+        name_to_translation |= {
+            "get_light": "Luminance Purification (get_light)",
+            "blockstate_glow": "Luminance Purification (blockstate_glow)",
+        }
 
     for mod in HexdocMod:
         mod_info = mod.value

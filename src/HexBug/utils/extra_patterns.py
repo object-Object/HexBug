@@ -4,8 +4,12 @@ from ..hexdecode.registry import (
     PatternInfo,
     SpecialHandlerPatternInfo,
 )
-from .mods import RegistryMod
-from .special_handlers import MaskSpecialHandler, NumberSpecialHandler
+from .mods import HexdocMod, RegistryMod
+from .special_handlers import (
+    MaskSpecialHandler,
+    NumberSpecialHandler,
+    TailDepthSpecialHandler,
+)
 
 _extra_patterns: list[PatternInfo] | None = None
 
@@ -73,6 +77,34 @@ def build_extra_patterns(name_to_translation: dict[str, str]) -> list[PatternInf
                 is_great=False,
                 shorthand_names=("book",),
                 handler=MaskSpecialHandler(),
+            ),
+            SpecialHandlerPatternInfo(
+                name="nephthys",
+                translation=name_to_translation.get("nephthys"),
+                mod=HexdocMod.Hexical,
+                path="src/main/java/miyucomics/hexical/casting/patterns/eval/OpNephthys.kt",
+                classname="OpNephthys",
+                class_mod=HexdocMod.Hexical,
+                is_great=False,
+                handler=TailDepthSpecialHandler(
+                    direction=Direction.SOUTH_EAST,
+                    prefix="deaqqd",
+                    initial_depth=1,
+                ),
+            ),
+            SpecialHandlerPatternInfo(
+                name="sekhmet",
+                translation=name_to_translation.get("sekhmet"),
+                mod=HexdocMod.Hexical,
+                path="src/main/java/miyucomics/hexical/casting/patterns/eval/OpSekhmet.kt",
+                classname="OpSekhmet",
+                class_mod=HexdocMod.Hexical,
+                is_great=False,
+                handler=TailDepthSpecialHandler(
+                    direction=Direction.SOUTH_WEST,
+                    prefix="qaqdd",
+                    initial_depth=0,
+                ),
             ),
         ]
     return _extra_patterns
