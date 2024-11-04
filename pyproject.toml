@@ -26,7 +26,7 @@ codedeploy = [
     "boto3-stubs-lite[s3,ssm]",
 ]
 runtime = [
-    "discord.py~=2.3.2",
+    "discord.py~=2.4.0",
     "hexdoc-hexgloop @ https://github.com/SamsTheNerd/HexGloop/raw/af72e6cc318d/docs/v/latest/main/dist/hexdoc_hexgloop-0.2.1.1.0.dev0-py3-none-any.whl",
     "hexdoc-hexal==0.2.19.1.0.dev0",
     "hexdoc-hexbound==0.1.4.1.19.2.1.0.dev2",

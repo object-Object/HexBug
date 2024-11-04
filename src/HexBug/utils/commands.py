@@ -6,7 +6,9 @@ from datetime import UTC, datetime
 from aiohttp import ClientSession
 from discord import Color, Embed, Interaction, Webhook, app_commands
 from discord.app_commands import (
+    AppCommandContext,
     AppCommandError,
+    AppInstallationType,
     CommandTree,
     Transformer,
     TransformerError,
@@ -90,6 +92,10 @@ class HexBugBot(commands.Bot):
     ) -> None:
         super().__init__(
             tree_cls=HexBugCommandTree,
+            allowed_installs=AppInstallationType(guild=True, user=True),
+            allowed_contexts=AppCommandContext(
+                guild=True, dm_channel=True, private_channel=True
+            ),
             **kwargs,
         )
         self.registry = registry
