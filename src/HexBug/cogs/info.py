@@ -181,16 +181,5 @@ class InfoCog(commands.Cog):
         )
 
 
-# TODO: remove this in a while when people are used to the new command
-class TagCog(commands.Cog):
-    @app_commands.command()
-    async def tag(self, interaction: discord.Interaction):
-        """This command has been renamed to /info."""
-        await interaction.response.send_message(
-            "This command has been renamed to `/info`.", ephemeral=True
-        )
-
-
 async def setup(bot: HexBugBot) -> None:
     await bot.add_cog(InfoCog(bot))
-    await bot.add_cog(TagCog())
