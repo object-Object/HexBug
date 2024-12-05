@@ -24,6 +24,7 @@ _list_item: _non_pattern_iota | pattern+
 
 pattern: "HexPattern" "(" DIRECTION ANGLES? ")"
        | "<" DIRECTION ","? ANGLES? ">"
+       | "HexPattern" "[" DIRECTION "," ANGLES? "]"
 
 vector: "(" NUMBER "," NUMBER "," NUMBER ")"
 

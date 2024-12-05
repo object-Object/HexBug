@@ -85,6 +85,10 @@ def test_matrix(text: str, want: Iota):
         ("<east,>", PatternIota(Direction.EAST)),
         ("<east,w>", PatternIota(Direction.EAST, "w")),
         ("<east w>", PatternIota(Direction.EAST, "w")),
+        # Hex 0.11.2
+        ("HexPattern[EAST, ]", PatternIota(Direction.EAST)),
+        ("HexPattern[EAST, w]", PatternIota(Direction.EAST, "w")),
+        ("HexPattern[EAST, aqweds]", PatternIota(Direction.EAST, "aqweds")),
     ],
 )
 def test_pattern(text: str, want: Iota):
@@ -131,6 +135,35 @@ def test_pattern(text: str, want: Iota):
                 PatternIota(Direction.EAST),
                 PatternIota(Direction.SOUTH_WEST, "w"),
                 0,
+            ],
+        ),
+        # latest.log (Hex 0.11.2)
+        (
+            "[HexPattern[EAST, ]HexPattern[SOUTH_WEST, w], 0.00]",
+            [
+                PatternIota(Direction.EAST),
+                PatternIota(Direction.SOUTH_WEST, "w"),
+                0,
+            ],
+        ),
+        (
+            "[HexPattern[EAST, ]HexPattern[EAST, w]HexPattern[NORTH_EAST, qaq]HexPattern[WEST, qqqaw]]",
+            [
+                PatternIota(Direction.EAST),
+                PatternIota(Direction.EAST, "w"),
+                PatternIota(Direction.NORTH_EAST, "qaq"),
+                PatternIota(Direction.WEST, "qqqaw"),
+            ],
+        ),
+        (
+            "[0.00, HexPattern[EAST, ], [HexPattern[NORTH_EAST, qaq]HexPattern[EAST, aa]]]",
+            [
+                0,
+                PatternIota(Direction.EAST),
+                [
+                    PatternIota(Direction.NORTH_EAST, "qaq"),
+                    PatternIota(Direction.EAST, "aa"),
+                ],
             ],
         ),
     ],
