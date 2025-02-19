@@ -53,6 +53,9 @@ class Angle(Enum):
         self.ordinal = ordinal
         self.letter = letter
 
+    def __neg__(self) -> Angle:
+        return Angle.from_number(-self.ordinal)
+
 
 # Uses axial coordinates as per https://www.redblobgames.com/grids/hexagons/ (same system as Hex)
 @dataclass(frozen=True)

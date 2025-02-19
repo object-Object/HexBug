@@ -1,4 +1,4 @@
-from typing import Callable, Sequence, TypedDict
+from typing import Callable, Sequence, TypedDict, overload
 
 import discord
 from discord import app_commands
@@ -38,7 +38,39 @@ def get_full_command(
         f"{name}: {str(value)[:100] + ' ... (truncated)' if truncate and len(str(value)) > 100 else value}"
         for name, value in interaction.namespace
     )
-    return f"/{command.qualified_name} {args}"
+    return f"/{command.qualified_name} {args}".rstrip()
+
+
+@overload
+def get_user_used_command_message(
+    interaction: discord.Interaction,
+    content: None = None,
+) -> str | None:
+    ...
+
+
+@overload
+def get_user_used_command_message(
+    interaction: discord.Interaction,
+    content: str,
+) -> str:
+    ...
+
+
+def get_user_used_command_message(
+    interaction: discord.Interaction,
+    content: str | None = None,
+) -> str | None:
+    command = interaction.command
+    if not isinstance(command, app_commands.Command):
+        return content
+
+    result = (
+        f"{interaction.user.mention} used `{get_full_command(interaction, command)}`"
+    )
+    if content is not None:
+        result += f"\n{content}"
+    return result
 
 
 class _BaseButton(discord.ui.View):
@@ -91,12 +123,7 @@ class ShowToEveryoneButton(_BaseButton):
         if orig_content is MISSING or orig_content == "...":
             orig_content = ""
 
-        if isinstance(command := self.interaction.command, app_commands.Command):
-            props[
-                "content"
-            ] = f"{interaction.user.mention} used `{get_full_command(self.interaction, command)}`\n{orig_content}"
-        else:
-            props["content"] = orig_content
+        props["content"] = get_user_used_command_message(self.interaction, orig_content)
 
         await interaction.response.send_message(
             **props,

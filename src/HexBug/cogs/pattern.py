@@ -1,16 +1,18 @@
 from collections import defaultdict
+from dataclasses import dataclass, field
 
 import discord
-from discord import app_commands
+from discord import Interaction, app_commands, ui
 from discord.ext import commands
 from PIL import Image
 
-from ..hexdecode.hex_math import Direction
+from ..hexdecode.hex_math import Angle, Direction
 from ..hexdecode.hexast import generate_bookkeeper
 from ..hexdecode.pregen_numbers import MAX_PREGEN_NUMBER
 from ..hexdecode.registry import (
     DuplicatePattern,
     PatternInfo,
+    Registry,
     SpecialHandlerPatternInfo,
 )
 from ..rendering import (
@@ -23,7 +25,11 @@ from ..rendering import (
     get_grid_options,
     image_to_buffer,
 )
-from ..utils.buttons import build_show_or_delete_button
+from ..utils.buttons import (
+    DeleteButton,
+    build_show_or_delete_button,
+    get_user_used_command_message,
+)
 from ..utils.commands import HexBugBot, build_autocomplete
 from ..utils.mods import APIWithoutBookModInfo, ModTransformerHint
 from ..utils.patterns import align_horizontal, parse_mask
@@ -32,15 +38,15 @@ WIDTH_RANGE = app_commands.Range[float, 0.01]
 SCALE_RANGE = app_commands.Range[float, 1.0]
 MAX_OVERLAPS_RANGE = app_commands.Range[int, 1]
 
+PATTERN_FILENAME = "pattern.png"
 
-async def send_pattern(
+
+def get_pattern_embed(
+    *,
     info: PatternInfo | None,
-    interaction: discord.Interaction,
     translation: str,
     direction: Direction | None,
     pattern: str | None,
-    image: Image.Image,
-    show_to_everyone: bool,
 ):
     mod_info = info and info.mod.value
 
@@ -62,7 +68,7 @@ async def send_pattern(
         title=translation,
         url=book_url,
         description=description,
-    ).set_image(url="attachment://pattern.png")
+    ).set_image(url=f"attachment://{PATTERN_FILENAME}")
     if mod_info:
         embed.set_author(
             name=mod_info.name,
@@ -72,7 +78,27 @@ async def send_pattern(
     if direction is not None and pattern is not None:
         embed.set_footer(text=f"{direction.name} {pattern}")
 
-    file = discord.File(image_to_buffer(image), filename="pattern.png")
+    return embed
+
+
+async def send_pattern(
+    *,
+    info: PatternInfo | None,
+    interaction: Interaction,
+    translation: str,
+    direction: Direction | None,
+    pattern: str | None,
+    image: Image.Image,
+    show_to_everyone: bool,
+):
+    embed = get_pattern_embed(
+        info=info,
+        translation=translation,
+        direction=direction,
+        pattern=pattern,
+    )
+
+    file = discord.File(image_to_buffer(image), filename=PATTERN_FILENAME)
 
     await interaction.response.send_message(
         embed=embed,
@@ -120,7 +146,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
     )
     async def raw(
         self,
-        interaction: discord.Interaction,
+        interaction: Interaction,
         direction: Direction,
         pattern: str,
         show_to_everyone: bool = False,
@@ -144,12 +170,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
 
         info = self.registry.parse_unknown_pattern(direction, pattern)
 
-        if info is None:
-            translation = "Unknown"
-        elif info.pattern == "dewdeqwwedaqedwadweqewwd":
-            translation = "Amogus"
-        else:
-            translation = info.print()
+        translation = translate_pattern(info)
 
         options = get_grid_options(
             palette,
@@ -186,7 +207,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
     @app_commands.rename(translation="name")
     async def name(
         self,
-        interaction: discord.Interaction,
+        interaction: Interaction,
         translation: str,
         show_to_everyone: bool = False,
         palette: Palette = Palette.Classic,
@@ -235,7 +256,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
 
     @name.autocomplete("translation")
     async def name_autocomplete(
-        self, interaction: discord.Interaction, current: str
+        self, interaction: Interaction, current: str
     ) -> list[app_commands.Choice]:
         return self.autocomplete.get(current.lower(), [])[:25]
 
@@ -249,7 +270,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
     @app_commands.rename(translation="name")
     async def from_mod(
         self,
-        interaction: discord.Interaction,
+        interaction: Interaction,
         mod: ModTransformerHint,
         translation: str,
         show_to_everyone: bool = False,
@@ -299,7 +320,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
 
     @from_mod.autocomplete("translation")
     async def from_mod_autocomplete(
-        self, interaction: discord.Interaction, current: str
+        self, interaction: Interaction, current: str
     ) -> list[app_commands.Choice]:
         return [
             c
@@ -321,7 +342,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
     )
     async def bookkeepers_gambit(
         self,
-        interaction: discord.Interaction,
+        interaction: Interaction,
         bookkeeper: str,
         show_to_everyone: bool = False,
         palette: Palette = Palette.Classic,
@@ -379,7 +400,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
     @app_commands.rename(should_align_horizontal="align_horizontal")
     async def numerical_reflection(
         self,
-        interaction: discord.Interaction,
+        interaction: Interaction,
         number: app_commands.Range[int, -MAX_PREGEN_NUMBER, MAX_PREGEN_NUMBER],
         show_to_everyone: bool = False,
         should_align_horizontal: bool = False,
@@ -445,7 +466,7 @@ class PatternCog(commands.GroupCog, name="pattern"):
     )
     async def check(
         self,
-        interaction: discord.Interaction,
+        interaction: Interaction,
         pattern: str,
         is_great: bool,
         show_to_everyone: bool = False,
@@ -499,6 +520,198 @@ class PatternCog(commands.GroupCog, name="pattern"):
             ),
             ephemeral=not show_to_everyone,
         )
+
+    @app_commands.command()
+    @app_commands.describe(
+        hide_stroke_order="Whether or not to hide the stroke order (like with great spells)",
+        palette="The color palette to use for the lines (has no effect if hide_stroke_order is True)",
+        theme="Whether the pattern should be rendered for light or dark theme",
+    )
+    async def build(
+        self,
+        interaction: Interaction,
+        hide_stroke_order: bool = False,
+        palette: Palette = Palette.Classic,
+        theme: Theme = Theme.Dark,
+        line_width: WIDTH_RANGE = DEFAULT_LINE_WIDTH,
+        point_radius: WIDTH_RANGE | None = None,
+        arrow_radius: WIDTH_RANGE | None = None,
+        max_overlaps: MAX_OVERLAPS_RANGE = DEFAULT_MAX_OVERLAPS,
+        scale: SCALE_RANGE = DEFAULT_SCALE,
+    ):
+        """Draw a pattern incrementally using directional buttons"""
+
+        await interaction.response.send_message(
+            view=PatternBuilderView(
+                registry=self.registry,
+                interaction=interaction,
+                hide_stroke_order=hide_stroke_order,
+                palette=palette,
+                theme=theme,
+                line_width=line_width,
+                point_radius=point_radius,
+                arrow_radius=arrow_radius,
+                max_overlaps=max_overlaps,
+                scale=scale,
+            ),
+            ephemeral=True,
+        )
+
+
+@dataclass(kw_only=True)
+class PatternBuilderView(ui.View):
+    registry: Registry
+    interaction: Interaction
+    hide_stroke_order: bool
+    palette: Palette
+    theme: Theme
+    line_width: float
+    point_radius: float | None
+    arrow_radius: float | None
+    max_overlaps: int
+    scale: float
+
+    start_direction: Direction | None = field(default=None, init=False)
+    current_direction: Direction = field(default=Direction.EAST, init=False)
+    pattern: str = field(default="", init=False)
+
+    def __post_init__(self):
+        super().__init__(timeout=60 * 5)
+
+    # buttons
+
+    @ui.button(emoji="↖️", row=0)
+    async def button_north_west(self, interaction: Interaction, button: ui.Button):
+        await self.append_direction(Direction.NORTH_WEST)
+        await interaction.response.defer()
+
+    @ui.button(emoji="↗️", row=0)
+    async def button_north_east(self, interaction: Interaction, button: ui.Button):
+        await self.append_direction(Direction.NORTH_EAST)
+        await interaction.response.defer()
+
+    @ui.button(emoji="✅", row=0, disabled=True)
+    async def button_done(self, interaction: Interaction, button: ui.Button):
+        embed = self.get_embed()
+        if embed is None:
+            await interaction.response.defer()
+            return
+
+        await interaction.response.send_message(
+            content=get_user_used_command_message(self.interaction),
+            embed=embed,
+            files=self.get_attachments(),
+            view=DeleteButton(interaction),
+            ephemeral=False,
+            allowed_mentions=discord.AllowedMentions.none(),
+        )
+        await self.interaction.delete_original_response()
+
+    @ui.button(emoji="⬅️", row=1)
+    async def button_west(self, interaction: Interaction, button: ui.Button):
+        await self.append_direction(Direction.WEST)
+        await interaction.response.defer()
+
+    @ui.button(emoji="➡️", row=1)
+    async def button_east(self, interaction: Interaction, button: ui.Button):
+        await self.append_direction(Direction.EAST)
+        await interaction.response.defer()
+
+    @ui.button(emoji="↩️", row=1, disabled=True)
+    async def button_undo(self, interaction: Interaction, button: ui.Button):
+        if self.pattern:
+            angle = Angle[self.pattern[-1]]
+            self.current_direction = self.current_direction.rotated(-angle)
+            self.pattern = self.pattern[:-1]
+            await self.refresh()
+        elif self.start_direction:
+            self.start_direction = None
+            await self.refresh()
+        await interaction.response.defer()
+
+    @ui.button(emoji="↙️", row=2)
+    async def button_south_west(self, interaction: Interaction, button: ui.Button):
+        await self.append_direction(Direction.SOUTH_WEST)
+        await interaction.response.defer()
+
+    @ui.button(emoji="↘️", row=2)
+    async def button_south_east(self, interaction: Interaction, button: ui.Button):
+        await self.append_direction(Direction.SOUTH_EAST)
+        await interaction.response.defer()
+
+    @ui.button(emoji="❌", row=2, disabled=True)
+    async def button_clear(self, interaction: Interaction, button: ui.Button):
+        if self.start_direction:
+            self.start_direction = None
+            self.pattern = ""
+            await self.refresh()
+        await interaction.response.defer()
+
+    # helper methods
+
+    async def append_direction(self, direction: Direction):
+        if self.start_direction is None:
+            self.start_direction = self.current_direction = direction
+        else:
+            angle = direction.angle_from(self.current_direction)
+            self.current_direction = direction
+            self.pattern += angle.letter
+        await self.refresh()
+
+    async def refresh(self):
+        disabled = self.start_direction is None
+        self.button_done.disabled = disabled
+        self.button_undo.disabled = disabled
+        self.button_clear.disabled = disabled
+
+        await self.interaction.edit_original_response(
+            embed=self.get_embed(),
+            attachments=self.get_attachments(),
+            view=self,
+        )
+
+    def get_embed(self) -> discord.Embed | None:
+        if self.start_direction is None:
+            return None
+
+        info = self.registry.parse_unknown_pattern(self.start_direction, self.pattern)
+        translation = translate_pattern(info)
+
+        return get_pattern_embed(
+            info=info,
+            translation=translation,
+            direction=self.start_direction,
+            pattern=self.pattern,
+        )
+
+    def get_attachments(self) -> list[discord.File]:
+        if self.start_direction is None:
+            return []
+
+        options = get_grid_options(
+            self.palette,
+            self.theme,
+            per_world=self.hide_stroke_order,
+            line_width=self.line_width,
+            point_radius=self.point_radius,
+            arrow_radius=self.arrow_radius,
+            max_overlaps=self.max_overlaps,
+        )
+        image = draw_patterns(
+            (self.start_direction, self.pattern),
+            options,
+            scale=self.scale,
+        )
+
+        return [discord.File(image_to_buffer(image), filename=PATTERN_FILENAME)]
+
+
+def translate_pattern(info: PatternInfo | None) -> str:
+    if info is None:
+        return "Unknown"
+    if info.pattern == "dewdeqwwedaqedwadweqewwd":
+        return "Amogus"
+    return info.print()
 
 
 async def setup(bot: HexBugBot) -> None:
