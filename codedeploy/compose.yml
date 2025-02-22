@@ -8,17 +8,12 @@ services:
       - source: env  # created in overrides to fix relative path issues
         target: /app/bot/.env
     environment:
-      AWS_REGION: us-east-1
-      # health check
       HEALTH_CHECK_DISPLAY_NAME: Docker
       HEALTH_CHECK_PORT: 40404
       HEALTH_CHECK_STARTUP_DELAY: 0
       HEALTH_CHECK_TIMEOUT: 15
       HEALTH_CHECK_ATTEMPTS: 1
       HEALTH_CHECK_INTERVAL: 0
-      # hexdoc
-      GITHUB_SHA: main
-      GITHUB_REPOSITORY: object-Object/HexBug
-      GITHUB_PAGES_URL: https://object-object.github.io/HexBug
+
 volumes:
   data:

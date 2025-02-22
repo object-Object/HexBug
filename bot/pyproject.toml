@@ -1,0 +1,25 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+dynamic = ["version"]
+name = "HexBug-bot"
+requires-python = ">=3.13"
+dependencies = [
+    "HexBug-common",
+]
+
+[tool.rye]
+managed = true
+dev-dependencies = []
+
+[tool.hatch.version]
+source = "regex"
+path = "../common/src/HexBug/common/__version__.py"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/HexBug"]

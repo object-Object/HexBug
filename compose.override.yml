@@ -2,12 +2,9 @@
 services:
   bot:
     build: .
-    volumes:
-      - type: bind
-        source: ~/.aws
-        target: /root/.aws
     environment:
       ENVIRONMENT: dev
+
 secrets:
   env:
     file: .env
