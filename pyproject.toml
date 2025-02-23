@@ -86,6 +86,9 @@ combine-as-imports = true
 known-first-party = [
     "HexBug",
 ]
+known-third-party = [
+    "discord",
+]
 
 # type checking
 
