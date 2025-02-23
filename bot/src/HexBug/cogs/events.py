@@ -3,7 +3,7 @@ import logging
 from discord import Interaction
 from discord.ext.commands import Cog
 
-from HexBug.discord.cog import HexBugCog
+from HexBug.core.cog import HexBugCog
 from HexBug.utils.commands import get_command, print_command
 from HexBug.utils.visibility import PermanentDeleteButton
 

@@ -2,8 +2,8 @@
 
 from discord.ext import commands
 
-from HexBug.discord.bot import HexBugContext
-from HexBug.discord.cog import HexBugCog
+from HexBug.core.bot import HexBugContext
+from HexBug.core.cog import HexBugCog
 
 
 class SyncCog(HexBugCog):

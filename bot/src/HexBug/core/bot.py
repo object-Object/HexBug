@@ -7,13 +7,13 @@ from discord.app_commands import AppCommandContext, AppInstallationType
 from discord.ext import commands
 from discord.ext.commands import Bot, Context, NoEntryPointError
 
+from HexBug import cogs
 from HexBug.common import VERSION
-from HexBug.core.env import HexBugEnv
 from HexBug.utils.imports import iter_modules
 
-from . import cogs
 from .emoji import CustomEmoji
-from .l10n import HexBugTranslator
+from .env import HexBugEnv
+from .translator import HexBugTranslator
 from .tree import HexBugCommandTree
 
 logger = logging.getLogger(__name__)

@@ -1,7 +1,7 @@
 import asyncio
 
+from HexBug.core.bot import HexBugBot
 from HexBug.core.env import HexBugEnv
-from HexBug.discord.bot import HexBugBot
 from HexBug.utils.logging import setup_logging
 
 

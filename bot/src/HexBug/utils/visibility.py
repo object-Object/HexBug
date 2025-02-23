@@ -8,8 +8,8 @@ from discord.app_commands import Command, ContextMenu
 from discord.ui import Button, DynamicItem, Item, View
 from discord.utils import MISSING
 
-from HexBug.discord.bot import HexBugBot
-from HexBug.discord.emoji import CustomEmoji
+from HexBug.core.bot import HexBugBot
+from HexBug.core.emoji import CustomEmoji
 
 from .commands import AnyCommand
 

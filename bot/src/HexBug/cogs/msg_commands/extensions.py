@@ -4,8 +4,8 @@ import logging
 
 from discord.ext import commands
 
-from HexBug.discord.bot import COGS_MODULE, HexBugContext
-from HexBug.discord.cog import HexBugCog
+from HexBug.core.bot import COGS_MODULE, HexBugContext
+from HexBug.core.cog import HexBugCog
 from HexBug.utils.collections import partition
 from HexBug.utils.commands import paginate
 

@@ -23,7 +23,7 @@ class HexBugTranslator(Translator):
     async def load(self) -> None:
         self.exit_stack = ExitStack()
 
-        path = self.exit_stack.enter_context(load_resource_dir("l10n"))
+        path = self.exit_stack.enter_context(load_resource_dir("lang"))
         loader = FluentResourceLoader(path.as_posix() + "/{locale}")
 
         self.l10n = {
