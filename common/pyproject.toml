@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 dynamic = ["version"]
 name = "HexBug-common"
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 dependencies = []
 
 [tool.rye]

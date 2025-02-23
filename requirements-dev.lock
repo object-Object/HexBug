@@ -27,7 +27,7 @@ attrs==25.1.0
     # via cattrs
     # via fluent-runtime
     # via jsii
-audioop-lts==0.2.1
+audioop-lts==0.2.1 ; python_full_version >= '3.13'
     # via discord-py
 aws-cdk-asset-awscli-v1==2.2.224
     # via aws-cdk-lib

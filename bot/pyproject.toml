@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 dynamic = ["version"]
 name = "HexBug-bot"
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 dependencies = [
     "HexBug-common",
     "discord-py>=2.5.0",

@@ -11,7 +11,7 @@ authors = [
 ]
 readme = "README.md"
 license = { file="LICENSE" }
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 
 # Rye workspace
 
@@ -93,7 +93,7 @@ known-third-party = [
 # type checking
 
 [tool.pyright]
-pythonVersion = "3.13"
+pythonVersion = "3.12"
 pythonPlatform = "All"
 
 include = [
