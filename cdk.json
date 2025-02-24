@@ -1,5 +1,5 @@
 {
-    "app": "rye run aws-cdk",
+    "app": "uv run poe aws-cdk",
     "watch": {
         "include": [
             "common/src/**",

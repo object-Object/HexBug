@@ -3,10 +3,10 @@ services:
   bot:
     stop_signal: SIGINT
     volumes:
-      - data:/app/bot/data
+      - data:/app/data
     secrets:
       - source: env  # created in overrides to fix relative path issues
-        target: /app/bot/.env
+        target: /app/.env
     environment:
       HEALTH_CHECK_DISPLAY_NAME: Docker
       HEALTH_CHECK_PORT: 40404

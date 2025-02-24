@@ -1,36 +1,33 @@
 FROM ghcr.io/astral-sh/uv:0.6.2 AS uv
-FROM python:3.12.8-slim
+FROM python:3.12.9-alpine
+
+ENV UV_PROJECT_ENVIRONMENT=/usr/local
+ENV UV_COMPILE_BYTECODE=1
+ENV UV_LINK_MODE=copy
 
 WORKDIR /app
 
-COPY requirements.lock ./
-
-# comment out editable requirements, since they're not permitted in constraint files
-RUN sed -ir 's/^-e /# -e /g' requirements.lock
+# dependencies
 
 COPY vendor/ vendor/
+COPY pyproject.toml ./
+COPY uv.lock ./
 
-COPY common/pyproject.toml common/
-COPY common/src/HexBug/common/__version__.py common/src/HexBug/common/
-RUN mkdir -p common/src/HexBug/common && touch common/src/HexBug/common/__init__.py
-
-COPY bot/pyproject.toml bot/
-RUN mkdir -p bot/src/HexBug && touch bot/src/HexBug/app.py
-
-# https://github.com/astral-sh/uv/blob/main/docs/docker.md
 RUN --mount=from=uv,source=/uv,target=/bin/uv \
     --mount=type=cache,target=/root/.cache/uv \
-    PYTHONDONTWRITEBYTECODE=1 \
-    uv pip install --system \
-    --constraint requirements.lock \
-    --find-links vendor \
-    -e bot -e common
+    uv sync --frozen --no-dev --package HexBug-bot --no-install-workspace
+
+# project code
 
 COPY common/ common/
 COPY bot/ bot/
 
+RUN --mount=from=uv,source=/uv,target=/bin/uv \
+    --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen --no-dev --package HexBug-bot
+
 # NOTE: this must be a list, otherwise signals (eg. SIGINT) are not forwarded to the bot
-CMD ["/bin/bash", "-c", "python -m HexBug.app"]
+CMD ["python", "-m", "HexBug.app"]
 
 HEALTHCHECK \
     --interval=15m \

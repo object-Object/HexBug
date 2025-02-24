@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-regex-commit"]
 build-backend = "hatchling.build"
 
 [project]
@@ -8,13 +8,11 @@ name = "HexBug-common"
 requires-python = ">=3.12"
 dependencies = []
 
-[tool.rye]
-managed = true
-dev-dependencies = []
-
 [tool.hatch.version]
-source = "regex"
+source = "regex_commit"
 path = "src/HexBug/common/__version__.py"
+commit_message = "Bump version to `{new_version}`"
+tag_message = "Bump version to `{new_version}`"
 
 [tool.hatch.metadata]
 allow-direct-references = true

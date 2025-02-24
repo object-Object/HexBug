@@ -13,9 +13,8 @@ dependencies = [
     "object-ci[aws-cdk] @ git+https://github.com/object-Object/ci@v0",
 ]
 
-[tool.rye]
-managed = true
-dev-dependencies = []
+[tool.uv.sources]
+HexBug-common = { workspace = true }
 
 [tool.hatch.version]
 source = "regex"

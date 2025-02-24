@@ -1,51 +1,32 @@
-[build-system]
-requires = ["hatchling", "hatch-regex-commit"]
-build-backend = "hatchling.build"
+# dependencies
 
-[project]
-dynamic = ["version"]
-name = "HexBug"
-description = "A Discord bot for Hex Casting."
-authors = [
-    { name="object-Object" },
-]
-readme = "README.md"
-license = { file="LICENSE" }
-requires-python = ">=3.12"
-
-# Rye workspace
-
-[tool.rye]
-managed = true
-virtual = true
-universal = true
-dev-dependencies = [
+[dependency-groups]
+dev = [
     "ruff>=0.9.7",
     "pre-commit",
+    "poethepoet>=0.32.2",
+    "hatch>=1.14.0",
 ]
 
-[tool.rye.workspace]
+# uv
+
+[tool.uv.workspace]
 members = [
     "bot",
     "common",
     "infrastructure",
 ]
 
-[tool.rye.scripts]
-bot = { call="HexBug.app" }
-aws-cdk = { call="HexBug.aws_cdk.app" }
+# poe
 
-setup = { chain=["setup:sync", "setup:pre-commit"] }
-"setup:sync" = "rye sync"
-"setup:pre-commit" = "pre-commit install"
+[tool.poe.tasks]
+bot = "python -m HexBug.app"
+aws-cdk = "python -m HexBug.aws_cdk.app"
+version = { cmd = "hatch version", cwd = "common" }
 
-# Hatch version plugin (so `hatch version` works)
-
-[tool.hatch.version]
-source = "regex_commit"
-path = "common/src/HexBug/common/__version__.py"
-commit_message = "Bump version to `{new_version}`"
-tag_message = "Bump version to `{new_version}`"
+setup = ["_setup_sync", "_setup_pre-commit"]
+_setup_sync = "uv sync"
+_setup_pre-commit = "pre-commit install"
 
 # pytest
 

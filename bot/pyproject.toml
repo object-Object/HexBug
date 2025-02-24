@@ -14,9 +14,8 @@ dependencies = [
     "fluent-runtime>=0.4.0",
 ]
 
-[tool.rye]
-managed = true
-dev-dependencies = []
+[tool.uv.sources]
+HexBug-common = { workspace = true }
 
 [tool.hatch.version]
 source = "regex"
