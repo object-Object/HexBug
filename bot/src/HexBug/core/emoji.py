@@ -7,6 +7,10 @@ from HexBug.resources import get_resource
 
 class CustomEmoji(Enum):
     apps_icon = "apps_icon.png"
+    fabric = "fabric.png"
+    forge = "forge.png"
+    neoforge = "neoforge.png"
+    quilt = "quilt.png"
 
     def __init__(self, filename: str):
         self.filename = filename
