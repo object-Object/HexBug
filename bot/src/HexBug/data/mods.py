@@ -26,8 +26,7 @@ class StaticModInfo(BaseModel):
     def curseforge_url(self) -> URL | None:
         if self.curseforge_slug:
             return (
-                URL("https://www.curseforge.com/minecraft/mc-mods")
-                / self.curseforge_slug
+                URL("https://curseforge.com/minecraft/mc-mods") / self.curseforge_slug
             )
 
     @property
@@ -39,6 +38,13 @@ class StaticModInfo(BaseModel):
 class DynamicModInfo(BaseModel):
     version: str
     book_url: PydanticURL
+    github_author: str
+    github_repo: str
+    github_commit: str
+
+    @property
+    def github_url(self) -> URL:
+        return URL("https://github.com") / self.github_author / self.github_repo
 
 
 class ModInfo(StaticModInfo, DynamicModInfo):

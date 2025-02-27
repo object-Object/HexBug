@@ -20,7 +20,8 @@ members = [
 # poe
 
 [tool.poe.tasks]
-bot = "python -m HexBug.app"
+bot = "python -m HexBug.app bot"
+build = "python -m HexBug.app build"
 aws-cdk = "python -m HexBug.aws_cdk.app"
 version = { cmd = "hatch version", cwd = "common" }
 

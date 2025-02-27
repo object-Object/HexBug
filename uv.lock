@@ -645,6 +645,7 @@ dependencies = [
     { name = "hexdoc-hexcasting" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
+    { name = "typer" },
 ]
 
 [package.metadata]
@@ -652,10 +653,11 @@ requires-dist = [
     { name = "discord-py", specifier = ">=2.5.0" },
     { name = "fluent-runtime", specifier = ">=0.4.0" },
     { name = "hexbug-common", editable = "common" },
-    { name = "hexdoc", specifier = ">=1!0.1.0a22" },
+    { name = "hexdoc", specifier = ">=1!0.1.0a23" },
     { name = "hexdoc-hexcasting", specifier = ">=0.11.2.1.0" },
     { name = "pydantic", specifier = ">=2.10.6" },
     { name = "pydantic-settings", specifier = ">=2.8.0" },
+    { name = "typer", specifier = ">=0.15.1" },
 ]
 
 [[package]]
@@ -682,7 +684,7 @@ requires-dist = [
 
 [[package]]
 name = "hexdoc"
-version = "1!0.1.0a22"
+version = "1!0.1.0a23"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "frozendict" },
@@ -710,9 +712,9 @@ dependencies = [
     { name = "typing-extensions" },
     { name = "yarl" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/20/a1/1f440113e1d854aabc19d5f5e065a44502bb30f74aa7e93cfc50836b59b1/hexdoc-1!0.1.0a22.tar.gz", hash = "sha256:bf9e17adb207db22cd4ed6457b071782b500d30346245b4bcd752f227f942dce", size = 150141 }
+sdist = { url = "https://files.pythonhosted.org/packages/7c/14/86273be9e5872352e996257af836545e737017c0c910a3678e8161100310/hexdoc-1!0.1.0a23.tar.gz", hash = "sha256:f2f51e2d0e2ffff319260d29ce6deb8f2ec12af21ef3bf9069ae9d06031c28b1", size = 150195 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d3/e9/b8303d5e1cf96ec74931eb07e6908c3f0e9e1364ebbd536dbb226ac81b68/hexdoc-1!0.1.0a22-py3-none-any.whl", hash = "sha256:18fc1afe75a1a4ef31e91f4a7a0a12d6d81dac8de3736f845a75bd69904bd057", size = 217168 },
+    { url = "https://files.pythonhosted.org/packages/0c/b1/2a4509cf22b777a1af76f6cf99769772077b574e7b21d79e06ba0eb50d0a/hexdoc-1!0.1.0a23-py3-none-any.whl", hash = "sha256:0d05e702aab28081c9aa88053ed6da8b38e52cc8452bbb2b2b4dd436f93a156e", size = 217289 },
 ]
 
 [[package]]
