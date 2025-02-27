@@ -1,7 +1,10 @@
+from __future__ import annotations
+
 from enum import Enum
 
 from typing_extensions import deprecated
 
+from HexBug.data.mods import Modloader
 from HexBug.resources import get_resource
 
 
@@ -14,6 +17,18 @@ class CustomEmoji(Enum):
 
     def __init__(self, filename: str):
         self.filename = filename
+
+    @classmethod
+    def from_modloader(cls, modloader: Modloader) -> CustomEmoji:
+        match modloader:
+            case Modloader.FABRIC:
+                return cls.fabric
+            case Modloader.FORGE:
+                return cls.forge
+            case Modloader.NEOFORGE:
+                return cls.neoforge
+            case Modloader.QUILT:
+                return cls.quilt
 
     @property
     @deprecated("Use name or filename instead", category=None)

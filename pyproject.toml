@@ -5,7 +5,7 @@ dev = [
     "ruff>=0.9.7",
     "pre-commit",
     "poethepoet>=0.32.2",
-    "hatch>=1.14.0",
+    "hatch>=1.13.0",
 ]
 
 # uv

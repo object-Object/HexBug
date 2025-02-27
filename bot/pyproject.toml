@@ -12,6 +12,8 @@ dependencies = [
     "pydantic>=2.10.6",
     "pydantic-settings>=2.8.0",
     "fluent-runtime>=0.4.0",
+    "hexdoc>=1!0.1.0a22",
+    "hexdoc-hexcasting>=0.11.2.1.0",
 ]
 
 [tool.uv.sources]
