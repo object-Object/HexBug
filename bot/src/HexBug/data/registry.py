@@ -17,12 +17,14 @@ logger = logging.getLogger(__name__)
 
 
 class HexBugRegistry(BaseModel):
-    mods: list[ModInfo]
+    mods: dict[str, ModInfo]
 
     @classmethod
     def build(cls) -> Self:
         # lazy import because hexdoc_hexcasting won't be available when the bot runs
         from hexdoc_hexcasting.metadata import PatternMetadata
+
+        registry = cls(mods={})
 
         for key in ["GITHUB_SHA", "GITHUB_REPOSITORY", "GITHUB_PAGES_URL"]:
             os.environ.setdefault(key, "")
@@ -85,34 +87,32 @@ class HexBugRegistry(BaseModel):
             book = book_plugin.validate_book(book_data, context=context)
             assert isinstance(book, Book)
 
-            mods = list[ModInfo]()
+        for mod in STATIC_MOD_INFO:
+            logger.info(f"Loading mod: {mod.id}")
 
-            for mod in STATIC_MOD_INFO:
-                logger.info(f"Loading mod: {mod.id}")
+            mod_plugin = pm.mod_plugin(mod.id, book=True)
+            hexdoc_metadata = hexdoc_metadatas[mod.id]
+            pattern_metadata = pattern_metadatas[mod.id]
 
-                mod_plugin = pm.mod_plugin(mod.id, book=True)
-                hexdoc_metadata = hexdoc_metadatas[mod.id]
-                pattern_metadata = pattern_metadatas[mod.id]
+            if hexdoc_metadata.book_url is None:
+                raise ValueError(f"Mod missing book url: {mod.id}")
 
-                if hexdoc_metadata.book_url is None:
-                    raise ValueError(f"Mod missing book url: {mod.id}")
+            _, author, repo, commit = hexdoc_metadata.asset_url.parts
 
-                _, author, repo, commit = hexdoc_metadata.asset_url.parts
-
-                mods.append(
-                    ModInfo.from_parts(
-                        mod,
-                        DynamicModInfo(
-                            version=mod_plugin.mod_version,
-                            book_url=hexdoc_metadata.book_url,
-                            github_author=author,
-                            github_repo=repo,
-                            github_commit=commit,
-                        ),
-                    )
+            registry._register_mod(
+                ModInfo.from_parts(
+                    mod,
+                    DynamicModInfo(
+                        version=mod_plugin.mod_version,
+                        book_url=hexdoc_metadata.book_url,
+                        github_author=author,
+                        github_repo=repo,
+                        github_commit=commit,
+                    ),
                 )
+            )
 
-        return cls(mods=mods)
+        return registry
 
     @classmethod
     def load(cls, path: Path) -> Self:
@@ -122,3 +122,8 @@ class HexBugRegistry(BaseModel):
     def save(self, path: Path):
         data = self.model_dump_json(round_trip=True)
         path.write_text(data, encoding="utf-8")
+
+    def _register_mod(self, mod: ModInfo):
+        if mod.id in self.mods:
+            raise ValueError(f"Mod is already registered: {mod.id}")
+        self.mods[mod.id] = mod
