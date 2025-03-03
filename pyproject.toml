@@ -6,6 +6,8 @@ dev = [
     "pre-commit",
     "poethepoet>=0.32.2",
     "hatch>=1.13.0",
+    "pytest>=8.3.5",
+    "pytest-describe>=2.2.0",
 ]
 
 # uv
@@ -32,8 +34,9 @@ _setup_pre-commit = "pre-commit install"
 # pytest
 
 [tool.pytest.ini_options]
-testpaths = ["test"]
-pythonpath = ["."]
+testpaths = [
+    "bot/test",
+]
 addopts = [
     "--import-mode=importlib",
 ]
@@ -138,3 +141,7 @@ reportUnusedVariable = "warning"
 
 reportMissingTypeStubs = "none"
 reportDuplicateImport = "none"
+
+[[tool.pyright.executionEnvironments]]
+root = "bot/test"
+reportUnusedFunction = "none"

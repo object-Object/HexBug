@@ -1,6 +1,7 @@
 import asyncio
 from typing import Annotated, Any, Coroutine
 
+from hexdoc.core import ResourceLocation
 from typer import Option, Typer
 
 from HexBug.core.bot import HexBugBot
@@ -33,7 +34,9 @@ def build(
 ):
     setup_logging(verbose)
     # TODO: implement
-    print(HexBugRegistry.build())
+    registry = HexBugRegistry.build()
+    pattern = registry.patterns[ResourceLocation("hexcasting", "add")]
+    print(pattern)
 
 
 def run_async(main: Coroutine[Any, Any, Any]):
