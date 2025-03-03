@@ -5,7 +5,7 @@ import os
 from collections import defaultdict
 from itertools import zip_longest
 from pathlib import Path
-from typing import TYPE_CHECKING, Self
+from typing import TYPE_CHECKING, Self, override
 
 from hexdoc.cli.utils import init_context
 from hexdoc.core import (
@@ -14,6 +14,7 @@ from hexdoc.core import (
     Properties,
     ResourceLocation,
 )
+from hexdoc.core.resource_dir import PathResourceDir
 from hexdoc.data import HexdocMetadata
 from hexdoc.jinja.render import create_jinja_env_with_loader
 from hexdoc.minecraft import I18n
@@ -22,6 +23,7 @@ from hexdoc.patchouli.page import TextPage
 from hexdoc.plugin import PluginManager
 from jinja2 import PackageLoader
 from pydantic import BaseModel
+from yarl import URL
 
 from .hex_math import HexDir
 from .mods import STATIC_MOD_INFO, DynamicModInfo, ModInfo
@@ -71,7 +73,7 @@ class HexBugRegistry(BaseModel):
         props = Properties.load_data(
             props_dir=Path.cwd(),
             data={
-                "modid": "hexcasting",
+                "modid": "hexbug",
                 "book": "hexcasting:thehexbook",
                 "resource_dirs": [
                     *({"modid": mod.id, "external": False} for mod in STATIC_MOD_INFO),
@@ -121,6 +123,11 @@ class HexBugRegistry(BaseModel):
                 i18n=i18n,
                 all_metadata=hexdoc_metadatas,
             )
+
+            # patch book context to force all links to include the book url
+            book_context = HexBugBookContext(**dict(BookContext.of(context)))
+            context[BookContext.context_key] = book_context
+
             book = book_plugin.validate_book(book_data, context=context)
             assert isinstance(book, Book)
 
@@ -133,7 +140,7 @@ class HexBugRegistry(BaseModel):
             {{- fmt.styled(text)|replace("\\n", "\n") if text else "" -}}
             """,
             globals={
-                "book_links": BookContext.of(context).book_links,
+                "book_links": book_context.book_links,
             },
         )
 
@@ -213,17 +220,29 @@ class HexBugRegistry(BaseModel):
                     else:
                         description = None
 
+                    url_key = page.book_link_key(entry.book_link_key)
+                    if url_key is None:
+                        raise ValueError(
+                            f"Page missing anchor for pattern {pattern.id} in entry {entry.id}: {page}"
+                        )
+
+                    book_url = book_context.book_links.get(url_key)
+                    if book_url is None:
+                        raise ValueError(
+                            f"Failed to get book_url of page for pattern {pattern.id} in entry {entry.id}: {page}"
+                        )
+
                     op = PatternOperator(
                         name=str(page.header),
                         description=description,
                         inputs=page.input,
                         outputs=page.output,
-                        book_url=None,  # TODO
+                        book_url=book_url,
                     )
 
                     if other := pattern.operators.get(op.inputs):
                         raise ValueError(
-                            f"Multiple operators found for pattern {pattern.id} with inputs {op.inputs}:\n  {op}\n  {other}"
+                            f"Multiple operators found for pattern {pattern.id} with inputs {op.inputs} (entry={entry.id}):\n  {op}\n  {other}"
                         )
 
                     pattern.operators[op.inputs] = op
@@ -258,3 +277,21 @@ class HexBugRegistry(BaseModel):
             raise ValueError(f"Pattern is already registered: {pattern.id}")
 
         self.patterns[pattern.id] = pattern
+
+
+class HexBugBookContext(BookContext):
+    """Subclass of BookContext to force all book links to include the book url."""
+
+    @override
+    def get_link_base(self, resource_dir: PathResourceDir) -> URL:
+        modid = resource_dir.modid
+        if modid is None:
+            raise RuntimeError(
+                f"Failed to get link base of resource dir with no modid (this should never happen): {resource_dir}"
+            )
+
+        book_url = self.all_metadata[modid].book_url
+        if book_url is None:
+            raise ValueError(f"Mod {modid} does not export a book url")
+
+        return book_url
