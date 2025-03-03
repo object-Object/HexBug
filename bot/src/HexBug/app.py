@@ -9,7 +9,7 @@ from HexBug.data.registry import HexBugRegistry
 from HexBug.utils.logging import setup_logging
 
 app = Typer(
-    pretty_exceptions_enable=False,
+    pretty_exceptions_show_locals=False,
 )
 
 
