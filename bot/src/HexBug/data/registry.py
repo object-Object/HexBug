@@ -206,9 +206,10 @@ class HexBugRegistry(BaseModel):
                     name=str(i18n.localize(f"hexcasting.action.{pattern_info.id}")),
                     direction=HexDir[pattern_info.startdir.name],
                     signature=pattern_info.signature,
-                    operators={},
+                    operators=[],
                 )
 
+                known_inputs = dict[str | None, PatternOperator]()
                 for entry, page, next_page in (
                     op_pattern_pages[pattern.id] + raw_pattern_pages[pattern.signature]
                 ):
@@ -242,12 +243,16 @@ class HexBugRegistry(BaseModel):
                         mod_id=entry.id.namespace,
                     )
 
-                    if other := pattern.operators.get(op.inputs):
+                    if other := known_inputs.get(op.inputs):
                         raise ValueError(
-                            f"Multiple operators found for pattern {pattern.id} with inputs {op.inputs} (entry={entry.id}):\n  {op}\n  {other}"
+                            f"Multiple operators found for pattern {pattern.id} with inputs {op.inputs}:\n  {op}\n  {other}"
                         )
 
-                    pattern.operators[op.inputs] = op
+                    known_inputs[op.inputs] = op
+                    pattern.operators.append(op)
+
+                if not pattern.operators:
+                    raise ValueError(f"No operators found for pattern: {pattern.id}")
 
                 registry._register_pattern(mod, pattern)
 

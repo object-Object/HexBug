@@ -17,11 +17,7 @@ class PatternInfo(BaseModel):
     """
     direction: HexDir
     signature: str
-    operators: dict[str | None, PatternOperator]
-    """Mapping from operator.inputs to operator.
-
-    TODO: does this really need to be a dict?
-    """
+    operators: list[PatternOperator]
 
 
 class PatternOperator(BaseModel):
