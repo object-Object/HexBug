@@ -30,6 +30,7 @@ class PatternOperator(BaseModel):
     inputs: str | None
     outputs: str | None
     book_url: PydanticURL | None
+    mod_id: str
 
     @property
     def args(self) -> str | None:

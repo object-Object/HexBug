@@ -202,7 +202,8 @@ class HexBugRegistry(BaseModel):
             for pattern_info in pattern_metadata.patterns:
                 pattern = PatternInfo(
                     id=pattern_info.id,
-                    name=str(i18n.localize_pattern(pattern_info.id)),
+                    # don't want to use the book-specific translation here
+                    name=str(i18n.localize(f"hexcasting.action.{pattern_info.id}")),
                     direction=HexDir[pattern_info.startdir.name],
                     signature=pattern_info.signature,
                     operators={},
@@ -238,6 +239,7 @@ class HexBugRegistry(BaseModel):
                         inputs=page.input,
                         outputs=page.output,
                         book_url=book_url,
+                        mod_id=entry.id.namespace,
                     )
 
                     if other := pattern.operators.get(op.inputs):
@@ -257,8 +259,8 @@ class HexBugRegistry(BaseModel):
         data = path.read_text(encoding="utf-8")
         return cls.model_validate_json(data)
 
-    def save(self, path: Path):
-        data = self.model_dump_json(round_trip=True)
+    def save(self, path: Path, *, indent: int | None = None):
+        data = self.model_dump_json(round_trip=True, indent=indent)
         path.write_text(data, encoding="utf-8")
 
     def _register_mod(self, mod: ModInfo):
