@@ -4,8 +4,8 @@ from discord import Interaction
 from discord.ext.commands import Cog
 
 from HexBug.core.cog import HexBugCog
-from HexBug.utils.commands import get_command, print_command
-from HexBug.utils.visibility import PermanentDeleteButton
+from HexBug.utils.discord.commands import get_command, print_command
+from HexBug.utils.discord.visibility import PermanentDeleteButton
 
 logger = logging.getLogger(__name__)
 

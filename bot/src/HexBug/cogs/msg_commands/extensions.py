@@ -7,7 +7,7 @@ from discord.ext import commands
 from HexBug.core.bot import COGS_MODULE, HexBugContext
 from HexBug.core.cog import HexBugCog
 from HexBug.utils.collections import partition
-from HexBug.utils.commands import paginate
+from HexBug.utils.discord.commands import paginate
 
 logger = logging.getLogger(__name__)
 
