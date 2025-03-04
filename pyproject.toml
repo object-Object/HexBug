@@ -2,6 +2,7 @@
 
 [dependency-groups]
 dev = [
+    "HexBug-bot[data]",
     "ruff>=0.9.7",
     "pre-commit",
     "poethepoet>=0.32.2",
@@ -18,6 +19,9 @@ members = [
     "common",
     "infrastructure",
 ]
+
+[tool.uv.sources]
+HexBug-bot = { workspace = true }
 
 # poe
 

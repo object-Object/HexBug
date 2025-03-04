@@ -16,6 +16,7 @@ members = [
 [manifest.dependency-groups]
 dev = [
     { name = "hatch", specifier = ">=1.13.0" },
+    { name = "hexbug-bot", extras = ["data"], editable = "bot" },
     { name = "poethepoet", specifier = ">=0.32.2" },
     { name = "pre-commit" },
     { name = "pytest", specifier = ">=8.3.5" },
@@ -644,10 +645,14 @@ dependencies = [
     { name = "fluent-runtime" },
     { name = "hexbug-common" },
     { name = "hexdoc" },
-    { name = "hexdoc-hexcasting" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
     { name = "typer" },
+]
+
+[package.optional-dependencies]
+data = [
+    { name = "hexdoc-hexcasting" },
 ]
 
 [package.metadata]
@@ -656,11 +661,12 @@ requires-dist = [
     { name = "fluent-runtime", specifier = ">=0.4.0" },
     { name = "hexbug-common", editable = "common" },
     { name = "hexdoc", specifier = ">=1!0.1.0a23" },
-    { name = "hexdoc-hexcasting", specifier = ">=0.11.2.1.0" },
+    { name = "hexdoc-hexcasting", marker = "extra == 'data'", specifier = "~=0.11.2.0" },
     { name = "pydantic", specifier = ">=2.10.6" },
     { name = "pydantic-settings", specifier = ">=2.8.0" },
     { name = "typer", specifier = ">=0.15.1" },
 ]
+provides-extras = ["data"]
 
 [[package]]
 name = "hexbug-common"
