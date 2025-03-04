@@ -5,7 +5,7 @@ import os
 from collections import defaultdict
 from itertools import zip_longest
 from pathlib import Path
-from typing import TYPE_CHECKING, Self, override
+from typing import TYPE_CHECKING, Self
 
 from hexdoc.cli.utils import init_context
 from hexdoc.core import (
@@ -14,7 +14,6 @@ from hexdoc.core import (
     Properties,
     ResourceLocation,
 )
-from hexdoc.core.resource_dir import PathResourceDir
 from hexdoc.data import HexdocMetadata
 from hexdoc.jinja.render import create_jinja_env_with_loader
 from hexdoc.minecraft import I18n
@@ -23,7 +22,8 @@ from hexdoc.patchouli.page import TextPage
 from hexdoc.plugin import PluginManager
 from jinja2 import PackageLoader
 from pydantic import BaseModel
-from yarl import URL
+
+from HexBug.utils.hexdoc import HexBugBookContext
 
 from .hex_math import HexDir
 from .mods import STATIC_MOD_INFO, DynamicModInfo, ModInfo
@@ -126,7 +126,7 @@ class HexBugRegistry(BaseModel):
 
             # patch book context to force all links to include the book url
             book_context = HexBugBookContext(**dict(BookContext.of(context)))
-            context[BookContext.context_key] = book_context
+            book_context.add_to_context(context, overwrite=True)
 
             book = book_plugin.validate_book(book_data, context=context)
             assert isinstance(book, Book)
@@ -284,21 +284,3 @@ class HexBugRegistry(BaseModel):
             raise ValueError(f"Pattern is already registered: {pattern.id}")
 
         self.patterns[pattern.id] = pattern
-
-
-class HexBugBookContext(BookContext):
-    """Subclass of BookContext to force all book links to include the book url."""
-
-    @override
-    def get_link_base(self, resource_dir: PathResourceDir) -> URL:
-        modid = resource_dir.modid
-        if modid is None:
-            raise RuntimeError(
-                f"Failed to get link base of resource dir with no modid (this should never happen): {resource_dir}"
-            )
-
-        book_url = self.all_metadata[modid].book_url
-        if book_url is None:
-            raise ValueError(f"Mod {modid} does not export a book url")
-
-        return book_url
