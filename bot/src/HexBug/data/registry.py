@@ -31,12 +31,12 @@ from .patterns import PatternInfo, PatternOperator
 
 if TYPE_CHECKING:
     from hexdoc_hexcasting.book.page import (
-        LookupPatternPage,
         ManualOpPatternPage,
         ManualRawPatternPage,
+        PageWithOpPattern,
     )
 
-    type PatternPage = LookupPatternPage | ManualOpPatternPage | ManualRawPatternPage
+    type PatternPage = PageWithOpPattern | ManualOpPatternPage | ManualRawPatternPage
 
     type _PatternBookInfo = tuple[Entry, PatternPage, TextPage | None]
     """entry, page, next_page"""
@@ -55,9 +55,9 @@ class HexBugRegistry(BaseModel):
 
         # lazy imports because hexdoc_hexcasting won't be available when the bot runs
         from hexdoc_hexcasting.book.page import (
-            LookupPatternPage,
             ManualOpPatternPage,
             ManualRawPatternPage,
+            PageWithOpPattern,
         )
         from hexdoc_hexcasting.metadata import PatternMetadata
 
@@ -158,20 +158,16 @@ class HexBugRegistry(BaseModel):
                     if not isinstance(next_page, TextPage):
                         next_page = None
 
-                    match page:
-                        case LookupPatternPage():
-                            op_pattern_pages[page.op_id].append(
+                    # use PageWithOpPattern instead of LookupPatternPage so we can find special handler pages
+                    # eg. Bookkeeper's Gambit (op_id=hexcasting:mask)
+                    if isinstance(page, PageWithOpPattern):
+                        op_pattern_pages[page.op_id].append((entry, page, next_page))
+
+                    if isinstance(page, (ManualOpPatternPage, ManualRawPatternPage)):
+                        for pattern in page.patterns:
+                            raw_pattern_pages[pattern.signature].append(
                                 (entry, page, next_page)
                             )
-
-                        case ManualOpPatternPage() | ManualRawPatternPage():
-                            for pattern in page.patterns:
-                                raw_pattern_pages[pattern.signature].append(
-                                    (entry, page, next_page)
-                                )
-
-                        case _:
-                            pass
 
         # load mods
 
