@@ -5,7 +5,7 @@ import os
 from collections import defaultdict
 from itertools import zip_longest
 from pathlib import Path
-from typing import TYPE_CHECKING, Self
+from typing import TYPE_CHECKING, Any, Self
 
 from hexdoc.cli.utils import init_context
 from hexdoc.core import (
@@ -21,7 +21,7 @@ from hexdoc.patchouli import Book, BookContext, Entry
 from hexdoc.patchouli.page import TextPage
 from hexdoc.plugin import PluginManager
 from jinja2 import PackageLoader
-from pydantic import BaseModel
+from pydantic import BaseModel, PrivateAttr, model_validator
 
 from HexBug.utils.hexdoc import HexBugBookContext
 
@@ -45,9 +45,34 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
+class DuplicatePatternError(ValueError):
+    def __init__(self, field: str, value: Any, *patterns: PatternInfo):
+        ids = ", ".join(str(pattern.id) for pattern in patterns)
+        super().__init__(f"Multiple patterns found with same {field} ({value}): {ids}")
+
+
+class PatternLookups:
+    def __init__(self):
+        self.name = dict[str, PatternInfo]()
+        self.signature = dict[str, PatternInfo]()
+
+    def add_pattern(self, pattern: PatternInfo):
+        # TODO: this feels nasty.
+
+        if (other := self.name.get(pattern.name)) and other is not pattern:
+            raise DuplicatePatternError("name", pattern.name, pattern, other)
+        self.name[pattern.name] = pattern
+
+        if (other := self.signature.get(pattern.signature)) and other is not pattern:
+            raise DuplicatePatternError("signature", pattern.signature, pattern, other)
+        self.signature[pattern.signature] = pattern
+
+
 class HexBugRegistry(BaseModel):
     mods: dict[str, ModInfo]
     patterns: dict[ResourceLocation, PatternInfo]
+
+    _lookups: PatternLookups = PrivateAttr(default_factory=PatternLookups)
 
     @classmethod
     def build(cls) -> Self:
@@ -247,7 +272,6 @@ class HexBugRegistry(BaseModel):
                     )
 
                 op = PatternOperator(
-                    name=str(page.header),
                     description=description,
                     inputs=page.input,
                     outputs=page.output,
@@ -280,14 +304,23 @@ class HexBugRegistry(BaseModel):
         data = self.model_dump_json(round_trip=True, indent=indent)
         path.write_text(data, encoding="utf-8")
 
+    @property
+    def lookups(self):
+        return self._lookups
+
     def _register_mod(self, mod: ModInfo):
         if mod.id in self.mods:
             raise ValueError(f"Mod is already registered: {mod.id}")
-
         self.mods[mod.id] = mod
 
     def _register_pattern(self, pattern: PatternInfo):
         if pattern.id in self.patterns:
             raise ValueError(f"Pattern is already registered: {pattern.id}")
-
         self.patterns[pattern.id] = pattern
+        self.lookups.add_pattern(pattern)
+
+    @model_validator(mode="after")
+    def _post_root_build_lookups(self):
+        for pattern in self.patterns.values():
+            self.lookups.add_pattern(pattern)
+        return self

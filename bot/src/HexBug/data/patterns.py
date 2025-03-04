@@ -12,10 +12,7 @@ from .hex_math import HexDir
 class PatternInfo(BaseModel):
     id: ResourceLocation
     name: Annotated[str, Field(max_length=256)]
-    """Canonical name.
-
-    Note that individual operators may have different names (eg. MoreIotas renames
-    Retrograde Purification to Transpose Purification when used on a matrix).
+    """Pattern name.
 
     Can be up to 256 characters, to fit in an embed title.
     """
@@ -26,16 +23,6 @@ class PatternInfo(BaseModel):
 
 
 class PatternOperator(BaseModel):
-    name: Annotated[str, Field(max_length=256)]
-    """Pattern name from the page header.
-
-    This may or may not be the name you want to use. For example, page headers use the
-    shortened version of pattern names (eg. Zone Dstl. instead of Zone Distillation),
-    and a few patterns (eg. Vector Reflection +X) don't use the pattern name for the
-    title at all.
-
-    Can be up to 256 characters, to fit in an embed title.
-    """
     description: Annotated[str | None, Field(max_length=4096)]
     """Description from the pattern page, or from the next page in some cases.
 

@@ -24,5 +24,11 @@ def describe_PatternOperator():
         ],
     )  # fmt: skip
     def test_args(inputs: str | None, outputs: str | None, want_args: str | None):
-        op = PatternOperator(name="", description=None, inputs=inputs, outputs=outputs)
+        op = PatternOperator(
+            description=None,
+            inputs=inputs,
+            outputs=outputs,
+            book_url=None,
+            mod_id="",
+        )
         assert op.args == want_args
