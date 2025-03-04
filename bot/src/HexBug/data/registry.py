@@ -177,25 +177,26 @@ class HexBugRegistry(BaseModel):
 
             mod_plugin = pm.mod_plugin(mod_id, book=True)
             hexdoc_metadata = hexdoc_metadatas[mod_id]
-            pattern_metadata = pattern_metadatas[mod_id]
 
             if hexdoc_metadata.book_url is None:
                 raise ValueError(f"Mod missing book url: {mod_id}")
 
             _, author, repo, commit = hexdoc_metadata.asset_url.parts
 
-            mod = ModInfo.from_parts(
-                static_info,
-                DynamicModInfo(
-                    version=mod_plugin.mod_version,
-                    book_url=hexdoc_metadata.book_url,
-                    github_author=author,
-                    github_repo=repo,
-                    github_commit=commit,
-                ),
+            registry._register_mod(
+                ModInfo.from_parts(
+                    static_info,
+                    DynamicModInfo(
+                        version=mod_plugin.mod_version,
+                        book_url=hexdoc_metadata.book_url,
+                        github_author=author,
+                        github_repo=repo,
+                        github_commit=commit,
+                    ),
+                )
             )
-            registry._register_mod(mod)
 
+        for pattern_metadata in pattern_metadatas.values():
             for pattern_info in pattern_metadata.patterns:
                 pattern = PatternInfo(
                     id=pattern_info.id,
@@ -210,6 +211,11 @@ class HexBugRegistry(BaseModel):
                 for entry, page, next_page in (
                     op_pattern_pages[pattern.id] + raw_pattern_pages[pattern.signature]
                 ):
+                    # use the mod that the entry came from, not the mod of the pattern
+                    # eg. MoreIotas adds operators for hexcasting:add
+                    # in that case, mod should be MoreIotas, not Hex Casting
+                    mod = registry.mods[entry.id.namespace]
+
                     text = page.text or (next_page and next_page.text)
                     if text:
                         description = styled_template.render(
@@ -237,7 +243,7 @@ class HexBugRegistry(BaseModel):
                         inputs=page.input,
                         outputs=page.output,
                         book_url=book_url,
-                        mod_id=entry.id.namespace,
+                        mod_id=mod.id,
                     )
 
                     if other := known_inputs.get(op.inputs):
@@ -251,7 +257,7 @@ class HexBugRegistry(BaseModel):
                 if not pattern.operators:
                     raise ValueError(f"No operators found for pattern: {pattern.id}")
 
-                registry._register_pattern(mod, pattern)
+                registry._register_pattern(pattern)
 
         logger.info("Done.")
         return registry
@@ -271,12 +277,7 @@ class HexBugRegistry(BaseModel):
 
         self.mods[mod.id] = mod
 
-    def _register_pattern(self, mod: ModInfo, pattern: PatternInfo):
-        if pattern.id.namespace != mod.id:
-            raise ValueError(
-                f"Namespace of pattern id ({pattern.id}) does not match mod id ({mod.id})"
-            )
-
+    def _register_pattern(self, pattern: PatternInfo):
         if pattern.id in self.patterns:
             raise ValueError(f"Pattern is already registered: {pattern.id}")
 
