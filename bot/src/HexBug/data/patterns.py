@@ -22,6 +22,13 @@ class PatternInfo(BaseModel):
 
 class PatternOperator(BaseModel):
     name: str
+    """Pattern name from the page header.
+
+    This may or may not be the name you want to use. For example, page headers use the
+    shortened version of pattern names (eg. Zone Dstl. instead of Zone Distillation),
+    and a few patterns (eg. Vector Reflection +X) don't use the pattern name for the
+    title at all.
+    """
     description: str | None
     inputs: str | None
     outputs: str | None
