@@ -134,6 +134,7 @@ class HexBugRegistry(BaseModel):
         # Jinja stuff
 
         jinja_env = create_jinja_env_with_loader(PackageLoader("hexdoc", "_templates"))
+        jinja_env.autoescape = False
         styled_template = jinja_env.from_string(
             r"""
             {%- import "macros/formatting.md.jinja" as fmt with context -%}
