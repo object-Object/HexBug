@@ -19,12 +19,14 @@ app = Typer(
 
 @app.command()
 def bot(
+    registry_path: Path = Path("registry.json"),
     verbose: Annotated[bool, Option("-v", "--verbose")] = False,
 ):
     async def bot():
         setup_logging(verbose)
         env = HexBugEnv.load()
-        async with HexBugBot(env) as bot:
+        registry = HexBugRegistry.load(registry_path)
+        async with HexBugBot(env, registry) as bot:
             await bot.load()
             await bot.start(env.token.get_secret_value())
 
@@ -38,9 +40,7 @@ def build(
     verbose: Annotated[bool, Option("-v", "--verbose")] = False,
 ):
     setup_logging(verbose)
-
     registry = HexBugRegistry.build()
-
     logger.info(f"Saving registry to file: {output_path}")
     registry.save(output_path, indent=indent)
 

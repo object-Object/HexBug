@@ -9,6 +9,7 @@ from discord.ext.commands import Bot, Context, NoEntryPointError
 
 from HexBug import cogs
 from HexBug.common import VERSION
+from HexBug.data.registry import HexBugRegistry
 from HexBug.utils.imports import iter_modules
 
 from .emoji import CustomEmoji
@@ -24,6 +25,7 @@ COGS_MODULE = cogs.__name__
 @dataclass
 class HexBugBot(Bot):
     env: HexBugEnv
+    registry: HexBugRegistry
 
     def __post_init__(self):
         super().__init__(
@@ -44,6 +46,10 @@ class HexBugBot(Bot):
         bot = interaction.client
         assert isinstance(bot, cls)
         return bot
+
+    @classmethod
+    def registry_of(cls, interaction: Interaction):
+        return cls.of(interaction).registry
 
     async def load(self):
         await self._load_translator()

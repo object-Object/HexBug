@@ -297,6 +297,7 @@ class HexBugRegistry(BaseModel):
 
     @classmethod
     def load(cls, path: Path) -> Self:
+        logger.info(f"Loading registry from file: {path}")
         data = path.read_text(encoding="utf-8")
         return cls.model_validate_json(data)
 
