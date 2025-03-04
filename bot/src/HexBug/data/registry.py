@@ -27,7 +27,7 @@ from HexBug.utils.hexdoc import HexBugBookContext
 
 from .hex_math import HexDir
 from .mods import STATIC_MOD_INFO, DynamicModInfo, ModInfo
-from .patterns import PatternInfo, PatternOperator
+from .patterns import EXTRA_PATTERNS, PatternInfo, PatternOperator
 
 if TYPE_CHECKING:
     from hexdoc_hexcasting.book.page import (
@@ -196,69 +196,77 @@ class HexBugRegistry(BaseModel):
                 )
             )
 
-        for pattern_metadata in pattern_metadatas.values():
-            for pattern_info in pattern_metadata.patterns:
-                pattern = PatternInfo(
-                    id=pattern_info.id,
-                    # don't want to use the book-specific translation here
-                    name=str(i18n.localize(f"hexcasting.action.{pattern_info.id}")),
-                    direction=HexDir[pattern_info.startdir.name],
-                    signature=pattern_info.signature,
-                    is_per_world=pattern_info.is_per_world,
-                    operators=[],
-                )
+        pattern_infos = [
+            pattern_info
+            for pattern_metadata in pattern_metadatas.values()
+            for pattern_info in pattern_metadata.patterns
+        ] + EXTRA_PATTERNS
 
-                known_inputs = dict[str | None, PatternOperator]()
-                for entry, page, next_page in (
-                    op_pattern_pages[pattern.id] + raw_pattern_pages[pattern.signature]
-                ):
-                    # use the mod that the entry came from, not the mod of the pattern
-                    # eg. MoreIotas adds operators for hexcasting:add
-                    # in that case, mod should be MoreIotas, not Hex Casting
-                    mod = registry.mods[entry.id.namespace]
+        for pattern_info in pattern_infos:
+            pattern = PatternInfo(
+                id=pattern_info.id,
+                # don't want to use the book-specific translation here
+                name=i18n.localize(
+                    f"hexcasting.action.{pattern_info.id}",
+                    f"hexcasting.rawhook.{pattern_info.id}",
+                ).value,
+                direction=HexDir[pattern_info.startdir.name],
+                signature=pattern_info.signature,
+                is_per_world=pattern_info.is_per_world,
+                operators=[],
+            )
 
-                    text = page.text or (next_page and next_page.text)
-                    if text:
-                        description = styled_template.render(
-                            text=text,
-                            page_url=str(mod.book_url),
-                        ).strip()
-                    else:
-                        description = None
+            known_inputs = dict[str | None, PatternOperator]()
+            for entry, page, next_page in (
+                op_pattern_pages[pattern.id] + raw_pattern_pages[pattern.signature]
+            ):
+                # use the mod that the entry came from, not the mod of the pattern
+                # eg. MoreIotas adds operators for hexcasting:add
+                # in that case, mod should be MoreIotas, not Hex Casting
+                mod = registry.mods[entry.id.namespace]
 
-                    url_key = page.book_link_key(entry.book_link_key)
-                    if url_key is None:
-                        raise ValueError(
-                            f"Page missing anchor for pattern {pattern.id} in entry {entry.id}: {page}"
-                        )
+                text = page.text or (next_page and next_page.text)
+                if text:
+                    description = styled_template.render(
+                        text=text,
+                        page_url=str(mod.book_url),
+                    ).strip()
+                else:
+                    description = None
 
-                    book_url = book_context.book_links.get(url_key)
-                    if book_url is None:
-                        raise ValueError(
-                            f"Failed to get book_url of page for pattern {pattern.id} in entry {entry.id}: {page}"
-                        )
-
-                    op = PatternOperator(
-                        name=str(page.header),
-                        description=description,
-                        inputs=page.input,
-                        outputs=page.output,
-                        book_url=book_url,
-                        mod_id=mod.id,
+                url_key = page.book_link_key(entry.book_link_key)
+                if url_key is None:
+                    raise ValueError(
+                        f"Page missing anchor for pattern {pattern.id} in entry {entry.id}: {page}"
                     )
 
-                    if other := known_inputs.get(op.inputs):
-                        raise ValueError(
-                            f"Multiple operators found for pattern {pattern.id} with inputs {op.inputs}:\n  {op}\n  {other}"
-                        )
+                book_url = book_context.book_links.get(url_key)
+                if book_url is None:
+                    raise ValueError(
+                        f"Failed to get book_url of page for pattern {pattern.id} in entry {entry.id}: {page}"
+                    )
 
-                    known_inputs[op.inputs] = op
-                    pattern.operators.append(op)
+                op = PatternOperator(
+                    name=str(page.header),
+                    description=description,
+                    inputs=page.input,
+                    outputs=page.output,
+                    book_url=book_url,
+                    mod_id=mod.id,
+                )
 
-                if not pattern.operators:
-                    raise ValueError(f"No operators found for pattern: {pattern.id}")
+                if other := known_inputs.get(op.inputs):
+                    raise ValueError(
+                        f"Multiple operators found for pattern {pattern.id} with inputs {op.inputs}:\n  {op}\n  {other}"
+                    )
 
-                registry._register_pattern(pattern)
+                known_inputs[op.inputs] = op
+                pattern.operators.append(op)
+
+            if not pattern.operators:
+                raise ValueError(f"No operators found for pattern: {pattern.id}")
+
+            registry._register_pattern(pattern)
 
         logger.info("Done.")
         return registry
