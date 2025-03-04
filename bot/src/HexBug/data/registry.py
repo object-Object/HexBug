@@ -204,6 +204,7 @@ class HexBugRegistry(BaseModel):
                     name=str(i18n.localize(f"hexcasting.action.{pattern_info.id}")),
                     direction=HexDir[pattern_info.startdir.name],
                     signature=pattern_info.signature,
+                    is_per_world=pattern_info.is_per_world,
                     operators=[],
                 )
 

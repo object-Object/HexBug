@@ -17,6 +17,7 @@ class PatternInfo(BaseModel):
     """
     direction: HexDir
     signature: str
+    is_per_world: bool
     operators: list[PatternOperator]
 
 
