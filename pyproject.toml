@@ -10,6 +10,9 @@ dev = [
     "pytest>=8.3.5",
     "pytest-describe>=2.2.0",
 ]
+notebooks = [
+    "ipykernel>=6.29.5",
+]
 
 # uv
 
