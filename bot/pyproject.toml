@@ -17,6 +17,9 @@ dependencies = [
     "pfzy>=0.3.4",
 ]
 
+[project.scripts]
+hexbug = "HexBug.app:app"
+
 [project.optional-dependencies]
 data = [
     "hexdoc-hexcasting~=0.11.2.0",
