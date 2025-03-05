@@ -41,6 +41,14 @@ class PatternOperator(BaseModel):
         outputs = f" __{self.outputs}__" if self.outputs else ""
         return f"**{inputs}→{outputs}**"
 
+    @property
+    def plain_args(self) -> str | None:
+        if self.inputs is None and self.outputs is None:
+            return None
+        inputs = f"{self.inputs} " if self.inputs else ""
+        outputs = f" {self.outputs}" if self.outputs else ""
+        return f"{inputs}→{outputs}"
+
     @field_validator("inputs", "outputs", mode="after")
     @classmethod
     def _strip_args(cls, value: str | None) -> str | None:
