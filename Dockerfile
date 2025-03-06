@@ -1,5 +1,5 @@
 FROM ghcr.io/astral-sh/uv:0.6.2 AS uv
-FROM python:3.12.9-alpine
+FROM python:3.12.9-slim
 
 ENV UV_PROJECT_ENVIRONMENT=/usr/local
 ENV UV_COMPILE_BYTECODE=1
