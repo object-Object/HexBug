@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from re import Match
-from typing import Any, Literal, Self
+from typing import Any, Awaitable, Callable, Literal
 
-from discord import Embed, Interaction, ui
+from discord import Embed, Interaction
 from discord.app_commands import Command, ContextMenu
 from discord.ui import Button, DynamicItem, Item, View
 from discord.utils import MISSING
@@ -40,64 +40,44 @@ class MessageContents:
         self,
         interaction: Interaction,
         visibility: MessageVisibility,
-        show_user: bool = False,
+        show_usage: bool = False,
     ):
         await interaction.response.send_message(
             content=self.content,
             embed=self.embed,
             ephemeral=visibility == "private",
-            view=self._get_view(interaction, visibility, show_user),
+            view=self._get_view(interaction, visibility, show_usage),
         )
 
     def _get_view(
         self,
         interaction: Interaction,
         visibility: MessageVisibility,
-        show_user: bool,
+        show_usage: bool,
     ):
-        if visibility == "private":
-            return PrivateView(interaction, self)
-
         view = View(timeout=None)
-
-        # we can't delete our own messages if the user is running this in a place where
-        # the bot hasn't been added
-        if interaction.is_guild_integration():
-            view.add_item(PermanentDeleteButton(interaction.user.id))
-        else:
-            view.add_item(TemporaryDeleteButton(interaction))
-            view.timeout = (interaction.expires_at - datetime.now(UTC)).total_seconds()
-
-        if show_user:
-            match self.command:
-                case Command(qualified_name=command_name):
-                    label = f"{interaction.user.name} used /{command_name}"
-                case _:
-                    label = f"Sent by {interaction.user.name}"
-            bot = HexBugBot.of(interaction)
-            view.add_item(
-                Button(
-                    emoji=bot.get_custom_emoji(CustomEmoji.apps_icon),
-                    label=label,
-                    disabled=True,
-                )
-            )
-
+        add_visibility_buttons(
+            view=view,
+            interaction=interaction,
+            command=self.command,
+            visibility=visibility,
+            show_usage=show_usage,
+            send_as_public=lambda i: self.send_response(i, "public", show_usage=True),
+        )
         return view
 
 
 @dataclass
-class PrivateView(View):
+class SendAsPublicButton(Button[Any]):
     original_interaction: Interaction
-    message_contents: MessageContents
+    send_as_public: Callable[[Interaction], Awaitable[Any]]
 
     def __post_init__(self):
-        super().__init__(timeout=None)
+        super().__init__(emoji="👁️")
 
-    @ui.button(emoji="👁️")
-    async def resend_as_public(self, interaction: Interaction, button: Button[Self]):
+    async def callback(self, interaction: Interaction):
         await self.original_interaction.delete_original_response()
-        await self.message_contents.send_response(interaction, "public", show_user=True)
+        await self.send_as_public(interaction)
 
 
 @dataclass
@@ -160,3 +140,48 @@ class TemporaryDeleteButton(Button[Any]):
         await interaction.response.defer()
         if interaction.user == self.original_interaction.user:
             await self.original_interaction.delete_original_response()
+
+
+def add_delete_button(view: View, interaction: Interaction):
+    # we can't delete our own messages if the user is running this in a place where
+    # the bot hasn't been added
+    if interaction.is_guild_integration():
+        view.add_item(PermanentDeleteButton(interaction.user.id))
+    else:
+        view.add_item(TemporaryDeleteButton(interaction))
+        view.timeout = (interaction.expires_at - datetime.now(UTC)).total_seconds()
+
+
+def get_command_usage_button(
+    interaction: Interaction,
+    command: AnyCommand | ContextMenu | None,
+) -> Button[Any]:
+    match command:
+        case Command(qualified_name=command_name):
+            label = f"{interaction.user.name} used /{command_name}"
+        case _:
+            label = f"Sent by {interaction.user.name}"
+    bot = HexBugBot.of(interaction)
+    return Button(
+        emoji=bot.get_custom_emoji(CustomEmoji.apps_icon),
+        label=label,
+        disabled=True,
+    )
+
+
+def add_visibility_buttons(
+    *,
+    view: View,
+    interaction: Interaction,
+    command: AnyCommand | ContextMenu | None,
+    visibility: MessageVisibility,
+    show_usage: bool,
+    send_as_public: Callable[[Interaction], Awaitable[Any]],
+):
+    match visibility:
+        case "private":
+            view.add_item(SendAsPublicButton(interaction, send_as_public))
+        case "public":
+            add_delete_button(view, interaction)
+            if show_usage:
+                view.add_item(get_command_usage_button(interaction, command))

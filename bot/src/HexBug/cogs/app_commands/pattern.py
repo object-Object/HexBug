@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import Any, override
 
 from discord import Embed, File, Interaction, SelectOption, app_commands, ui
+from discord.app_commands import ContextMenu
 from discord.ext.commands import GroupCog
 
 from HexBug.core.bot import HexBugBot
@@ -10,8 +11,9 @@ from HexBug.data.patterns import PatternInfo
 from HexBug.data.registry import HexBugRegistry
 from HexBug.rendering.draw import draw_patterns, get_grid_options, image_to_buffer
 from HexBug.rendering.types import Palette, Theme
+from HexBug.utils.discord.commands import AnyCommand
 from HexBug.utils.discord.transformers import PatternInfoOption
-from HexBug.utils.discord.visibility import MessageVisibility
+from HexBug.utils.discord.visibility import MessageVisibility, add_visibility_buttons
 
 PATTERN_FILENAME = "pattern.png"
 
@@ -25,7 +27,7 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
         pattern: PatternInfoOption,
         visibility: MessageVisibility = "private",
     ):
-        await PatternView(interaction, pattern).send()
+        await PatternView(interaction, pattern).send(visibility)
 
 
 @dataclass
@@ -36,17 +38,22 @@ class PatternView(ui.View):
     def __post_init__(self):
         super().__init__(timeout=60 * 5)
 
+        self.command: AnyCommand | ContextMenu | None = self.interaction.command
         self.registry: HexBugRegistry = HexBugBot.registry_of(self.interaction)
         self.op_index: int = 0
 
-        if len(self.pattern.operators) <= 1:
-            self.remove_item(self.select_operator)
-        else:
-            self.select_operator.options = [
-                SelectOption(label=op.plain_args or "→", value=str(i))
-                for i, op in enumerate(self.pattern.operators)
-            ]
-            self.select_operator.options[0].default = True
+        self.select_operator.options = [
+            SelectOption(
+                label=op.plain_args or "→",
+                value=str(i),
+                default=i == 0,
+            )
+            for i, op in enumerate(self.pattern.operators)
+        ]
+
+    @property
+    def should_show_select_menu(self):
+        return len(self.pattern.operators) > 1
 
     @property
     def operator(self):
@@ -68,12 +75,34 @@ class PatternView(ui.View):
         self.select_operator.options[self.op_index].default = True
         await self.refresh(interaction)
 
-    async def send(self):
+    async def send(
+        self,
+        visibility: MessageVisibility,
+        interaction: Interaction | None = None,
+        show_usage: bool = False,
+    ):
+        if interaction:
+            self.interaction = interaction
+
+        self.clear_items()
+
+        add_visibility_buttons(
+            view=self,
+            interaction=self.interaction,
+            command=self.command,
+            visibility=visibility,
+            show_usage=show_usage,
+            send_as_public=lambda i: self.send("public", i, show_usage=True),
+        )
+
+        if self.should_show_select_menu:
+            self.add_item(self.select_operator)
+
         await self.interaction.response.send_message(
             embed=self.get_embed(),
             file=self.get_image(),
             view=self,
-            ephemeral=True,
+            ephemeral=visibility == "private",
         )
 
     async def refresh(self, interaction: Interaction):
