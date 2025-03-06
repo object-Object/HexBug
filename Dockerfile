@@ -22,6 +22,16 @@ RUN --mount=from=uv,source=/uv,target=/bin/uv \
 COPY common/ common/
 COPY bot/ bot/
 
+# sync dependencies with data to build registry
+
+RUN --mount=from=uv,source=/uv,target=/bin/uv \
+    --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen --no-dev --package HexBug-bot --extra data
+
+RUN hexbug build
+
+# sync dependencies without data to reduce image size hopefully idk i didn't check
+
 RUN --mount=from=uv,source=/uv,target=/bin/uv \
     --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-dev --package HexBug-bot

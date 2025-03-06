@@ -1,11 +1,29 @@
 from __future__ import annotations
 
+from functools import cached_property
+from pathlib import Path
 from typing import override
 
+from hexdoc.core import Properties
 from hexdoc.core.resource_dir import PathResourceDir
 from hexdoc.patchouli import BookContext
 from hexdoc.utils import classproperty
 from yarl import URL
+
+
+class HexBugProperties(Properties):
+    """Subclass of Properties to prevent using git to get the cache dir."""
+
+    @classproperty
+    @classmethod
+    @override
+    def context_key(cls) -> str:
+        return Properties.context_key
+
+    @cached_property
+    @override
+    def repo_root(self):
+        return Path.cwd()
 
 
 class HexBugBookContext(BookContext):

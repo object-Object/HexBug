@@ -11,7 +11,6 @@ from hexdoc.cli.utils import init_context
 from hexdoc.core import (
     MinecraftVersion,
     ModResourceLoader,
-    Properties,
     ResourceLocation,
 )
 from hexdoc.data import HexdocMetadata
@@ -23,7 +22,7 @@ from hexdoc.plugin import PluginManager
 from jinja2 import PackageLoader
 from pydantic import BaseModel, PrivateAttr, model_validator
 
-from HexBug.utils.hexdoc import HexBugBookContext
+from HexBug.utils.hexdoc import HexBugBookContext, HexBugProperties
 
 from .hex_math import HexDir
 from .mods import STATIC_MOD_INFO, DynamicModInfo, ModInfo
@@ -95,7 +94,7 @@ class HexBugRegistry(BaseModel):
 
         logger.info("Initializing hexdoc.")
 
-        props = Properties.load_data(
+        props = HexBugProperties.load_data(
             props_dir=Path.cwd(),
             data={
                 "modid": "hexbug",
