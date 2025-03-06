@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Iterator, override
+from typing import Iterator, TypedDict, cast, override
 
 import pfzy
 from discord import Interaction
@@ -13,15 +13,23 @@ from HexBug.core.bot import HexBugBot
 from HexBug.data.patterns import PatternInfo
 
 
+class AutocompleteWord(TypedDict):
+    search_term: str
+    result: str
+
+
+class AutocompleteResult(AutocompleteWord):
+    indices: list[int]
+
+
 class PfzyAutocompleteTransformer(Transformer, ABC):
     # FIXME: this is probably not how this should work.
     def __init_subclass__(cls):
-        cls._words: list[str] = []
-        cls._synonyms: dict[str, str] = {}
+        cls._words: list[AutocompleteWord] = []
 
     @abstractmethod
     def _setup_autocomplete(self, interaction: Interaction):
-        """Adds values to self._words and self._synonyms."""
+        """Adds values to self._words."""
 
     @override
     async def autocomplete(  # pyright: ignore[reportIncompatibleMethodOverride]
@@ -34,28 +42,27 @@ class PfzyAutocompleteTransformer(Transformer, ABC):
 
         matches = await pfzy.fuzzy_match(
             value,
-            self._words,  # type: ignore
+            self._words,  # pyright: ignore[reportArgumentType]
             scorer=pfzy.fzy_scorer,
-            key="value",
+            key="search_term",
         )
 
-        return [
-            Choice(name=word, value=word) for word in self._process_matches(matches)
-        ]
+        return list(self._process_matches(cast(list[AutocompleteResult], matches)))
 
     def _preprocess_input(self, text: str) -> str:
         return text.lower().strip()
 
-    def _process_matches(self, matches: list[dict[str, Any]]) -> Iterator[str]:
+    def _process_matches(
+        self,
+        matches: list[AutocompleteResult],
+    ) -> Iterator[Choice[str]]:
         seen = set[str]()
         for match in matches[:25]:
-            word: str = match["value"]
-            if word in self._synonyms:
-                word = self._synonyms[word]
+            word = match["result"]
             if word in seen:
                 continue
             seen.add(word)
-            yield word
+            yield Choice(name=word, value=word)
 
 
 class PatternInfoTransformer(PfzyAutocompleteTransformer):
@@ -70,17 +77,15 @@ class PatternInfoTransformer(PfzyAutocompleteTransformer):
     @override
     def _setup_autocomplete(self, interaction: Interaction):
         self._words.clear()
-        self._synonyms.clear()
 
         registry = HexBugBot.registry_of(interaction)
         for pattern in registry.patterns.values():
             self._words += [
-                pattern.name,
-                str(pattern.id),
+                AutocompleteWord(search_term=pattern.name, result=pattern.name),
+                AutocompleteWord(search_term=str(pattern.id), result=pattern.name),
             ]
-            self._synonyms[str(pattern.id)] = pattern.name
 
-        self._words.sort(key=str.lower)
+        self._words.sort(key=lambda w: w["result"].lower())
 
 
 PatternInfoOption = Transform[PatternInfo, PatternInfoTransformer]
