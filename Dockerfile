@@ -27,7 +27,7 @@ RUN --mount=from=uv,source=/uv,target=/bin/uv \
     uv sync --frozen --no-dev --package HexBug-bot
 
 # NOTE: this must be a list, otherwise signals (eg. SIGINT) are not forwarded to the bot
-CMD ["python", "-m", "HexBug.app"]
+CMD ["hexbug", "bot"]
 
 HEALTHCHECK \
     --interval=15m \
