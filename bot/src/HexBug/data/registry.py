@@ -290,7 +290,7 @@ class HexBugRegistry(BaseModel):
             if not pattern.operators:
                 raise ValueError(f"No operators found for pattern: {pattern.id}")
 
-            pattern.operators.sort(key=lambda op: op.plain_args or "")
+            # pattern.operators.sort(key=lambda op: op.plain_args or "")
 
             registry._register_pattern(pattern)
 
