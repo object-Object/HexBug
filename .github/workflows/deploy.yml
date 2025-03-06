@@ -1,0 +1,137 @@
+name: Deploy
+
+on:
+  push:
+    tags: 'v[0-9]+.[0-9]+.[0-9]+*'
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: 18
+  REGISTRY: ghcr.io
+  IMAGE_NAME: object-object/hexbug
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+    secrets: inherit
+
+  push-image:
+    needs:
+      - build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    environment:
+      name: docker
+      url: https://${{ needs.build.outputs.image-tag }}
+    outputs:
+      digest: ${{ steps.digest.outputs.value }}
+    steps:
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image
+          path: /tmp
+
+      - name: Load image
+        run: docker load --input /tmp/image.tar
+
+      - name: Push image
+        run: docker image push --all-tags ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - name: Get image digest
+        id: digest
+        run: echo "value=$(docker inspect --format='{{index .RepoDigests 0}}' ${{ needs.build.outputs.image-tag }})" >> "$GITHUB_OUTPUT"
+
+  deploy-aws-cdk:
+    needs:
+      - build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    environment:
+      name: prod-aws-cdk
+    steps:
+      - uses: actions/checkout@v4
+      - uses: object-Object/ci/setup@v0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          npm-packages: aws-cdk
+          role-to-assume: repo
+
+      - name: Download synth artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: aws-cdk-synth
+          path: cdk.out
+
+      - name: Deploy stack
+        run: cdk deploy --ci --no-lookups --require-approval=never --app=cdk.out --outputs-file=outputs.json
+
+      - name: Upload outputs artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: aws-cdk-outputs
+          path: outputs.json
+
+  deploy-codedeploy:
+    needs:
+      - push-image
+      - deploy-aws-cdk
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    environment:
+      name: prod-codedeploy
+      url: ${{ steps.deploy.outputs.deployment-url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download outputs artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: aws-cdk-outputs
+
+      - name: Parse outputs
+        id: parse
+        uses: object-Object/ci/parse-cdk-outputs@v0
+        with:
+          file: outputs.json
+
+      - uses: object-Object/ci/setup@v0
+        with:
+          role-to-assume: ${{ steps.parse.outputs.ActionsCodeDeployRoleARN }}
+
+      - name: Create runtime files
+        working-directory: codedeploy
+        run: |
+          cat <<END_OF_FILE > .env
+          IMAGE="${{ needs.push-image.outputs.digest }}"
+          TOKEN="${{ secrets.DISCORD_TOKEN }}"
+          DEPLOYMENT="{}"
+          DEPLOYMENT__COMMIT_SHA="${{ github.sha }}"
+          DEPLOYMENT__COMMIT_TIMESTAMP="$(git show --no-patch --format=%at ${{ github.sha }})"
+          DEPLOYMENT__COMMIT_MESSAGE="$(git log --oneline --format=%B -n 1 ${{ github.sha }} | head -n 1)"
+          END_OF_FILE
+
+      - name: Deploy application
+        id: deploy
+        uses: object-Object/ci/deploy-codedeploy@v0
+        with:
+          path: codedeploy
+          stack: ${{ steps.parse.outputs.stack-name }}
+          application: ${{ steps.parse.outputs.ApplicationName }}
+          deployment-group: ${{ steps.parse.outputs.DeploymentGroupName }}
+          s3-bucket: ${{ steps.parse.outputs.ArtifactsBucketName }}
