@@ -3,9 +3,10 @@ from __future__ import annotations
 import logging
 import os
 from collections import defaultdict
+from dataclasses import dataclass
 from itertools import zip_longest
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Self
+from typing import TYPE_CHECKING, Any, Callable, Self
 
 from hexdoc.cli.utils import init_context
 from hexdoc.core import (
@@ -50,21 +51,26 @@ class DuplicatePatternError(ValueError):
         super().__init__(f"Multiple patterns found with same {field} ({value}): {ids}")
 
 
+@dataclass
+class PatternLookup[K](dict[K, PatternInfo]):
+    name: str
+    get_key: Callable[[PatternInfo], K]
+
+    def __post_init__(self):
+        super().__init__()
+
+
 class PatternLookups:
     def __init__(self):
-        self.name = dict[str, PatternInfo]()
-        self.signature = dict[str, PatternInfo]()
+        self.name = PatternLookup("name", lambda p: p.name)
+        self.signature = PatternLookup("signature", lambda p: p.signature)
 
     def add_pattern(self, pattern: PatternInfo):
-        # TODO: this feels nasty.
-
-        if (other := self.name.get(pattern.name)) and other is not pattern:
-            raise DuplicatePatternError("name", pattern.name, pattern, other)
-        self.name[pattern.name] = pattern
-
-        if (other := self.signature.get(pattern.signature)) and other is not pattern:
-            raise DuplicatePatternError("signature", pattern.signature, pattern, other)
-        self.signature[pattern.signature] = pattern
+        for lookup in [self.name, self.signature]:
+            key = lookup.get_key(pattern)
+            if (other := lookup.get(key)) and other is not pattern:
+                raise DuplicatePatternError(lookup.name, key, pattern, other)
+            lookup[key] = pattern
 
 
 class HexBugRegistry(BaseModel):
@@ -309,6 +315,17 @@ class HexBugRegistry(BaseModel):
     @property
     def lookups(self):
         return self._lookups
+
+    def match_pattern(self, direction: HexDir, signature: str) -> PatternInfo | None:
+        # https://github.com/FallingColors/HexMod/blob/ef2cd28b2a/Common/src/main/java/at/petrak/hexcasting/common/casting/PatternRegistryManifest.java#L93
+
+        if pattern := self.lookups.signature.get(signature):
+            return pattern
+
+        # TODO: check great spells
+        # TODO: check special handlers
+
+        return None
 
     def _register_mod(self, mod: ModInfo):
         if mod.id in self.mods:
