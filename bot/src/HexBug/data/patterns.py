@@ -9,6 +9,16 @@ from pydantic import BaseModel, Field, field_validator
 from .hex_math import HexDir
 
 
+class StaticPatternInfo(BaseModel):
+    """Similar interface to hexdoc_hexcasting.utils.pattern.PatternInfo, because we
+    don't have hexdoc_hexcasting at runtime."""
+
+    id: ResourceLocation
+    startdir: HexDir
+    signature: str
+    is_per_world: bool = False
+
+
 class PatternInfo(BaseModel):
     id: ResourceLocation
     name: Annotated[str, Field(max_length=256)]
@@ -56,13 +66,3 @@ class PatternOperator(BaseModel):
         if not value:
             return None
         return value
-
-
-class StaticPatternInfo(BaseModel):
-    """Similar interface to hexdoc_hexcasting.utils.pattern.PatternInfo, because we
-    don't have hexdoc_hexcasting at runtime."""
-
-    id: ResourceLocation
-    startdir: HexDir
-    signature: str
-    is_per_world: bool = False
