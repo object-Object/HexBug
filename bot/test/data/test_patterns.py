@@ -23,7 +23,7 @@ def describe_PatternOperator():
             ("a b",    "c d",     "**__a b__ → __c d__**"),
         ],
     )  # fmt: skip
-    def test_args(inputs: str | None, outputs: str | None, want_args: str | None):
+    def args(inputs: str | None, outputs: str | None, want_args: str | None):
         op = PatternOperator(
             description=None,
             inputs=inputs,
