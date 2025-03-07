@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import logging
 import os
-import re
 from collections import defaultdict
 from dataclasses import dataclass
 from itertools import zip_longest
@@ -26,7 +25,7 @@ from pydantic import BaseModel, PrivateAttr, model_validator
 
 from HexBug.utils.hexdoc import HexBugBookContext, HexBugProperties
 
-from .hex_math import HexDir
+from .hex_math import VALID_SIGNATURE_PATTERN, HexDir
 from .mods import DynamicModInfo, ModInfo
 from .patterns import PatternInfo, PatternOperator
 from .special_handlers import SpecialHandlerInfo, SpecialHandlerMatch
@@ -46,9 +45,6 @@ if TYPE_CHECKING:
 
 
 logger = logging.getLogger(__name__)
-
-
-VALID_SIGNATURE_PATTERN = re.compile(r"^[aqweds]+$")
 
 
 type PatternMatchResult = PatternInfo | SpecialHandlerMatch[Any]
@@ -328,7 +324,7 @@ class HexBugRegistry(BaseModel):
                 SpecialHandlerInfo(
                     id=special_handler.id,
                     raw_name=i18n.localize(
-                        f"hexcasting.special.{pattern_info.id}",
+                        f"hexcasting.special.{special_handler.id}",
                     ).value,
                     operator=op,
                 )

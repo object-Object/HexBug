@@ -1,12 +1,15 @@
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
-from typing import Iterator
+from typing import Any, Iterator
 
-from pydantic import Field
+from pydantic import Field, field_validator
 from pydantic.dataclasses import dataclass as pydantic_dataclass
 
 from HexBug.utils.enums import WrappingEnum, pydantic_enum
+
+VALID_SIGNATURE_PATTERN = re.compile(r"^[aqweds]*$")
 
 
 @pydantic_enum
@@ -90,11 +93,11 @@ class HexCoord:
 @pydantic_dataclass
 class HexPattern:
     direction: HexDir
-    signature: str = Field(pattern=r"[aqweds]*")
+    signature: str = Field(pattern=VALID_SIGNATURE_PATTERN)
 
     def iter_angles(self) -> Iterator[HexAngle]:
         for c in self.signature:
-            yield HexAngle[c.lower()]
+            yield HexAngle[c]
 
     def iter_directions(self) -> Iterator[HexDir]:
         compass = self.direction
@@ -102,3 +105,10 @@ class HexPattern:
         for angle in self.iter_angles():
             compass = compass.rotated_by(angle)
             yield compass
+
+    @field_validator("signature", mode="before")
+    @classmethod
+    def _preprocess_signature(cls, value: Any):
+        if isinstance(value, str):
+            return value.lower().strip()
+        return value

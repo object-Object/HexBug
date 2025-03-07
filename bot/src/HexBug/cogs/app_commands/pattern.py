@@ -2,13 +2,17 @@ from dataclasses import dataclass
 from typing import Any, override
 
 from discord import Embed, File, Interaction, SelectOption, app_commands, ui
-from discord.app_commands import ContextMenu
+from discord.app_commands import ContextMenu, Transform
+from discord.app_commands.transformers import EnumNameTransformer
 from discord.ext.commands import GroupCog
 
 from HexBug.core.bot import HexBugBot
 from HexBug.core.cog import HexBugCog
-from HexBug.data.patterns import PatternInfo
-from HexBug.data.registry import HexBugRegistry
+from HexBug.core.exceptions import InvalidInputError
+from HexBug.data.hex_math import VALID_SIGNATURE_PATTERN, HexDir, HexPattern
+from HexBug.data.patterns import PatternInfo, PatternOperator
+from HexBug.data.registry import HexBugRegistry, PatternMatchResult
+from HexBug.data.special_handlers import SpecialHandlerMatch
 from HexBug.rendering.draw import draw_patterns, get_grid_options, image_to_buffer
 from HexBug.rendering.types import Palette, Theme
 from HexBug.utils.discord.commands import AnyCommand
@@ -29,11 +33,40 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
     ):
         await PatternView(interaction, pattern).send(visibility)
 
+    @app_commands.command()
+    async def raw(
+        self,
+        interaction: Interaction,
+        direction: Transform[HexDir, EnumNameTransformer(HexDir)],
+        signature: str,
+        visibility: MessageVisibility = "private",
+        hide_stroke_order: bool = False,
+    ):
+        signature = signature.lower()
+        if signature in ["-", '"-"']:
+            signature = ""
+        elif not VALID_SIGNATURE_PATTERN.fullmatch(signature):
+            raise InvalidInputError(
+                value=signature,
+                message="Invalid signature, must only contain the characters `aqweds`.",
+            )
+
+        pattern = self.bot.registry.try_match_pattern(direction, signature)
+        if pattern is None:
+            pattern = HexPattern(direction, signature)
+
+        await PatternView(
+            interaction,
+            pattern,
+            hide_stroke_order=hide_stroke_order,
+        ).send(visibility)
+
 
 @dataclass
 class PatternView(ui.View):
     interaction: Interaction
-    pattern: PatternInfo
+    pattern: PatternMatchResult | HexPattern
+    hide_stroke_order: bool = False
 
     def __post_init__(self):
         super().__init__(timeout=60 * 5)
@@ -48,20 +81,50 @@ class PatternView(ui.View):
                 value=str(i),
                 default=i == 0,
             )
-            for i, op in enumerate(self.pattern.operators)
+            for i, op in enumerate(self.operators)
         ]
 
     @property
+    def operators(self) -> list[PatternOperator]:
+        match self.pattern:
+            case PatternInfo(operators=operators):
+                return operators
+            case SpecialHandlerMatch(info=info):
+                return [info.operator]
+            case HexPattern():
+                return []
+
+    @property
     def should_show_select_menu(self):
-        return len(self.pattern.operators) > 1
+        return len(self.operators) > 1
 
     @property
     def operator(self):
-        return self.pattern.operators[self.op_index]
+        if self.operators:
+            return self.operators[self.op_index]
 
     @property
     def mod(self):
-        return self.registry.mods[self.operator.mod_id]
+        if self.operator:
+            return self.registry.mods[self.operator.mod_id]
+
+    @property
+    def pattern_info(self):
+        match self.pattern:
+            case (PatternInfo() as info) | SpecialHandlerMatch(info=info):
+                return info
+            case HexPattern():
+                return None
+
+    @property
+    def title(self):
+        match self.pattern:
+            case HexPattern(signature="dewdeqwwedaqedwadweqewwd"):
+                return "Amogus"
+            case HexPattern():
+                return "Unknown"
+            case pattern:
+                return pattern.name
 
     @override
     async def interaction_check(self, interaction: Interaction):
@@ -113,37 +176,48 @@ class PatternView(ui.View):
         )
 
     def get_embed(self) -> Embed:
-        return (
+        if self.operator:
+            description_lines = [
+                self.operator.args,
+                self.operator.description,
+            ]
+            description = "\n\n".join(line for line in description_lines if line)
+        else:
+            description = None
+
+        footer = f"{self.pattern.direction.name} {self.pattern.signature}"
+        if self.pattern_info:
+            footer = f"{self.pattern_info.id}  •  {footer}"
+
+        embed = (
             Embed(
-                title=self.pattern.name,
-                url=self.operator.book_url,
-                description="\n\n".join(
-                    line
-                    for line in [
-                        self.operator.args,
-                        self.operator.description,
-                    ]
-                    if line
-                ),
+                title=self.title,
+                url=self.operator and self.operator.book_url,
+                description=description,
             )
             .set_image(
                 url=f"attachment://{PATTERN_FILENAME}",
             )
-            .set_author(
+            .set_footer(
+                text=footer,
+            )
+        )
+
+        if self.mod:
+            embed.set_author(
                 name=self.mod.name,
                 icon_url=self.mod.icon_url,
                 url=self.mod.book_url,
             )
-            .set_footer(
-                text=f"{self.pattern.id}  •  {self.pattern.direction.name} {self.pattern.signature}",
-            )
-        )
+
+        return embed
 
     def get_image(self) -> File:
         options = get_grid_options(
             palette=Palette.Classic,
             theme=Theme.Dark,
-            per_world=self.pattern.is_per_world,
+            per_world=self.hide_stroke_order
+            or (isinstance(self.pattern, PatternInfo) and self.pattern.is_per_world),
         )
         image = draw_patterns(
             (self.pattern.direction, self.pattern.signature),
