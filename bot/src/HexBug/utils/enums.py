@@ -1,8 +1,19 @@
 from enum import Enum
-from typing import Any
+from typing import Any, override
 
 from pydantic import GetCoreSchemaHandler
 from pydantic_core import core_schema
+
+
+class WrappingEnum(Enum):
+    """A numerical enum type which uses `value % len(cls)` when looking up values."""
+
+    @override
+    @classmethod
+    def _missing_(cls, value: Any):
+        if isinstance(value, int):
+            return cls(value % len(cls))
+        return None
 
 
 def pydantic_enum[E: Enum](enum_cls: type[E]) -> type[E]:

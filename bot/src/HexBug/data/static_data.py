@@ -1,9 +1,12 @@
+from typing import Any
+
 from hexdoc.core import ResourceLocation
 from yarl import URL
 
 from .hex_math import HexDir
 from .mods import Modloader, StaticModInfo
 from .patterns import StaticPatternInfo
+from .special_handlers import MaskSpecialHandler, NumberSpecialHandler, SpecialHandler
 
 MODS: list[StaticModInfo] = [
     StaticModInfo(
@@ -39,5 +42,14 @@ EXTRA_PATTERNS: list[StaticPatternInfo] = [
         id=ResourceLocation("hexcasting", "undo"),
         startdir=HexDir.WEST,
         signature="eeedw",
+    ),
+]
+
+SPECIAL_HANDLERS: list[SpecialHandler[Any]] = [
+    NumberSpecialHandler(
+        id=ResourceLocation("hexcasting", "number"),
+    ),
+    MaskSpecialHandler(
+        id=ResourceLocation("hexcasting", "mask"),
     ),
 ]

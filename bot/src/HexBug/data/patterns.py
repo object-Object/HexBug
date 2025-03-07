@@ -33,6 +33,9 @@ class PatternInfo(BaseModel):
 
 
 class PatternOperator(BaseModel):
+    """Information about a specific instance of a pattern, generated from a Patchouli
+    book page."""
+
     description: Annotated[str | None, Field(max_length=4096)]
     """Description from the pattern page, or from the next page in some cases.
 

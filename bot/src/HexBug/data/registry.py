@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 import os
+import re
 from collections import defaultdict
 from dataclasses import dataclass
 from itertools import zip_longest
@@ -28,7 +29,8 @@ from HexBug.utils.hexdoc import HexBugBookContext, HexBugProperties
 from .hex_math import HexDir
 from .mods import DynamicModInfo, ModInfo
 from .patterns import PatternInfo, PatternOperator
-from .static_data import EXTRA_PATTERNS, MODS
+from .special_handlers import SpecialHandlerInfo, SpecialHandlerMatch
+from .static_data import EXTRA_PATTERNS, MODS, SPECIAL_HANDLERS
 
 if TYPE_CHECKING:
     from hexdoc_hexcasting.book.page import (
@@ -44,6 +46,12 @@ if TYPE_CHECKING:
 
 
 logger = logging.getLogger(__name__)
+
+
+VALID_SIGNATURE_PATTERN = re.compile(r"^[aqweds]+$")
+
+
+type PatternMatchResult = PatternInfo | SpecialHandlerMatch[Any]
 
 
 class DuplicatePatternError(ValueError):
@@ -77,6 +85,7 @@ class PatternLookups:
 class HexBugRegistry(BaseModel):
     mods: dict[str, ModInfo]
     patterns: dict[ResourceLocation, PatternInfo]
+    special_handlers: dict[ResourceLocation, SpecialHandlerInfo]
 
     _lookups: PatternLookups = PrivateAttr(default_factory=PatternLookups)
 
@@ -89,10 +98,15 @@ class HexBugRegistry(BaseModel):
             ManualOpPatternPage,
             ManualRawPatternPage,
             PageWithOpPattern,
+            PageWithPattern,
         )
         from hexdoc_hexcasting.metadata import PatternMetadata
 
-        registry = cls(mods={}, patterns={})
+        registry = cls(
+            mods={},
+            patterns={},
+            special_handlers={},
+        )
 
         # load hexdoc data
 
@@ -176,30 +190,6 @@ class HexBugRegistry(BaseModel):
             },
         )
 
-        # get pattern book info
-
-        logger.info("Finding pattern pages.")
-
-        op_pattern_pages = defaultdict[ResourceLocation, list["_PatternBookInfo"]](list)
-        raw_pattern_pages = defaultdict[str, list["_PatternBookInfo"]](list)
-
-        for category in book.categories.values():
-            for entry in category.entries.values():
-                for page, next_page in zip_longest(entry.pages, entry.pages[1:]):
-                    if not isinstance(next_page, TextPage):
-                        next_page = None
-
-                    # use PageWithOpPattern instead of LookupPatternPage so we can find special handler pages
-                    # eg. Bookkeeper's Gambit (op_id=hexcasting:mask)
-                    if isinstance(page, PageWithOpPattern):
-                        op_pattern_pages[page.op_id].append((entry, page, next_page))
-
-                    if isinstance(page, (ManualOpPatternPage, ManualRawPatternPage)):
-                        for pattern in page.patterns:
-                            raw_pattern_pages[pattern.signature].append(
-                                (entry, page, next_page)
-                            )
-
         # load mods
 
         for static_info in MODS:
@@ -227,6 +217,58 @@ class HexBugRegistry(BaseModel):
                 )
             )
 
+        # get pattern book info
+
+        logger.info("Finding pattern pages.")
+
+        id_ops = defaultdict[ResourceLocation, list[PatternOperator]](list)
+        signature_ops = defaultdict[str, list[PatternOperator]](list)
+
+        for category in book.categories.values():
+            for entry in category.entries.values():
+                for page, next_page in zip_longest(entry.pages, entry.pages[1:]):
+                    if not isinstance(page, PageWithPattern):
+                        continue
+
+                    if not isinstance(next_page, TextPage):
+                        next_page = None
+
+                    # use the mod that the entry came from, not the mod of the pattern
+                    # eg. MoreIotas adds operators for hexcasting:add
+                    # in that case, mod should be MoreIotas, not Hex Casting
+                    mod = registry.mods[entry.id.namespace]
+
+                    text = page.text or (next_page and next_page.text)
+                    if text:
+                        description = styled_template.render(
+                            text=text,
+                            page_url=str(mod.book_url),
+                        ).strip()
+                    else:
+                        description = None
+
+                    url_key = page.book_link_key(entry.book_link_key)
+                    book_url = book_context.book_links.get(url_key) if url_key else None
+
+                    operator = PatternOperator(
+                        description=description,
+                        inputs=page.input,
+                        outputs=page.output,
+                        book_url=book_url,
+                        mod_id=mod.id,
+                    )
+
+                    # use PageWithOpPattern instead of LookupPatternPage so we can find special handler pages
+                    # eg. Bookkeeper's Gambit (op_id=hexcasting:mask)
+                    if isinstance(page, PageWithOpPattern):
+                        id_ops[page.op_id].append(operator)
+
+                    if isinstance(page, (ManualOpPatternPage, ManualRawPatternPage)):
+                        for pattern in page.patterns:
+                            signature_ops[pattern.signature].append(operator)
+
+        # load patterns
+
         pattern_infos = [
             pattern_info
             for pattern_metadata in pattern_metadatas.values()
@@ -248,46 +290,15 @@ class HexBugRegistry(BaseModel):
             )
 
             known_inputs = dict[str | None, PatternOperator]()
-            for entry, page, next_page in (
-                op_pattern_pages[pattern.id] + raw_pattern_pages[pattern.signature]
-            ):
-                # use the mod that the entry came from, not the mod of the pattern
-                # eg. MoreIotas adds operators for hexcasting:add
-                # in that case, mod should be MoreIotas, not Hex Casting
-                mod = registry.mods[entry.id.namespace]
-
-                text = page.text or (next_page and next_page.text)
-                if text:
-                    description = styled_template.render(
-                        text=text,
-                        page_url=str(mod.book_url),
-                    ).strip()
-                else:
-                    description = None
-
-                url_key = page.book_link_key(entry.book_link_key)
-                if url_key is None:
-                    raise ValueError(
-                        f"Page missing anchor for pattern {pattern.id} in entry {entry.id}: {page}"
-                    )
-
-                book_url = book_context.book_links.get(url_key)
-                if book_url is None:
-                    raise ValueError(
-                        f"Failed to get book_url of page for pattern {pattern.id} in entry {entry.id}: {page}"
-                    )
-
-                op = PatternOperator(
-                    description=description,
-                    inputs=page.input,
-                    outputs=page.output,
-                    book_url=book_url,
-                    mod_id=mod.id,
-                )
-
+            for op in id_ops[pattern.id] + signature_ops[pattern.signature]:
                 if other := known_inputs.get(op.inputs):
                     raise ValueError(
                         f"Multiple operators found for pattern {pattern.id} with inputs {op.inputs}:\n  {op}\n  {other}"
+                    )
+
+                if op.book_url is None:
+                    logger.warning(
+                        f"Failed to get book url for operator of pattern {pattern.id}: {op}"
                     )
 
                 known_inputs[op.inputs] = op
@@ -297,6 +308,31 @@ class HexBugRegistry(BaseModel):
                 raise ValueError(f"No operators found for pattern: {pattern.id}")
 
             registry._register_pattern(pattern)
+
+        for special_handler in SPECIAL_HANDLERS:
+            ops = id_ops.get(special_handler.id)
+            match ops:
+                case [op]:
+                    pass
+                case None | []:
+                    raise ValueError(
+                        f"Failed to get book info for special handler: {special_handler.id}"
+                    )
+                case _:
+                    raise ValueError(
+                        f"Too many book pages found for special handler {special_handler.id} (expected 1, got {len(ops)}):\n  "
+                        + "\n  ".join(str(op) for op in ops)
+                    )
+
+            registry._register_special_handler(
+                SpecialHandlerInfo(
+                    id=special_handler.id,
+                    raw_name=i18n.localize(
+                        f"hexcasting.special.{pattern_info.id}",
+                    ).value,
+                    operator=op,
+                )
+            )
 
         logger.info("Done.")
         return registry
@@ -315,14 +351,31 @@ class HexBugRegistry(BaseModel):
     def lookups(self):
         return self._lookups
 
-    def match_pattern(self, direction: HexDir, signature: str) -> PatternInfo | None:
+    def try_match_pattern(
+        self,
+        direction: HexDir,
+        signature: str,
+    ) -> PatternMatchResult | None:
         # https://github.com/FallingColors/HexMod/blob/ef2cd28b2a/Common/src/main/java/at/petrak/hexcasting/common/casting/PatternRegistryManifest.java#L93
+
+        signature = signature.lower()
+        if not VALID_SIGNATURE_PATTERN.fullmatch(signature):
+            return None
 
         if pattern := self.lookups.signature.get(signature):
             return pattern
 
         # TODO: check great spells
-        # TODO: check special handlers
+
+        for special_handler in SPECIAL_HANDLERS:
+            if (value := special_handler.try_match(direction, signature)) is not None:
+                return SpecialHandlerMatch(
+                    handler=special_handler,
+                    info=self.special_handlers[special_handler.id],
+                    direction=direction,
+                    signature=signature,
+                    value=value,
+                )
 
         return None
 
@@ -336,6 +389,11 @@ class HexBugRegistry(BaseModel):
             raise ValueError(f"Pattern is already registered: {pattern.id}")
         self.patterns[pattern.id] = pattern
         self.lookups.add_pattern(pattern)
+
+    def _register_special_handler(self, info: SpecialHandlerInfo):
+        if info.id in self.special_handlers:
+            raise ValueError(f"Special handler is already registered: {info.id}")
+        self.special_handlers[info.id] = info
 
     @model_validator(mode="after")
     def _post_root_build_lookups(self):
