@@ -66,27 +66,3 @@ class StaticPatternInfo(BaseModel):
     startdir: HexDir
     signature: str
     is_per_world: bool = False
-
-
-EXTRA_PATTERNS: list[StaticPatternInfo] = [
-    StaticPatternInfo(
-        id=ResourceLocation("hexcasting", "escape"),
-        startdir=HexDir.WEST,
-        signature="qqqaw",
-    ),
-    StaticPatternInfo(
-        id=ResourceLocation("hexcasting", "open_paren"),
-        startdir=HexDir.WEST,
-        signature="qqq",
-    ),
-    StaticPatternInfo(
-        id=ResourceLocation("hexcasting", "close_paren"),
-        startdir=HexDir.WEST,
-        signature="eee",
-    ),
-    StaticPatternInfo(
-        id=ResourceLocation("hexcasting", "undo"),
-        startdir=HexDir.WEST,
-        signature="eeedw",
-    ),
-]

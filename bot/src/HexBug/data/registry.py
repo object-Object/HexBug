@@ -26,8 +26,9 @@ from pydantic import BaseModel, PrivateAttr, model_validator
 from HexBug.utils.hexdoc import HexBugBookContext, HexBugProperties
 
 from .hex_math import HexDir
-from .mods import STATIC_MOD_INFO, DynamicModInfo, ModInfo
-from .patterns import EXTRA_PATTERNS, PatternInfo, PatternOperator
+from .mods import DynamicModInfo, ModInfo
+from .patterns import PatternInfo, PatternOperator
+from .static_data import EXTRA_PATTERNS, MODS
 
 if TYPE_CHECKING:
     from hexdoc_hexcasting.book.page import (
@@ -106,7 +107,7 @@ class HexBugRegistry(BaseModel):
                 "modid": "hexbug",
                 "book": "hexcasting:thehexbook",
                 "resource_dirs": [
-                    *({"modid": mod.id, "external": False} for mod in STATIC_MOD_INFO),
+                    *({"modid": mod.id, "external": False} for mod in MODS),
                     {"modid": "minecraft"},
                     {"modid": "hexdoc"},
                 ],
@@ -201,7 +202,7 @@ class HexBugRegistry(BaseModel):
 
         # load mods
 
-        for static_info in STATIC_MOD_INFO:
+        for static_info in MODS:
             mod_id = static_info.id
             logger.info(f"Loading mod: {mod_id}")
 

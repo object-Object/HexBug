@@ -51,18 +51,3 @@ class ModInfo(StaticModInfo, DynamicModInfo):
     @classmethod
     def from_parts(cls, static: StaticModInfo, dynamic: DynamicModInfo) -> Self:
         return cls(**dict(static), **dict(dynamic))
-
-
-STATIC_MOD_INFO: list[StaticModInfo] = [
-    StaticModInfo(
-        id="hexcasting",
-        name="Hex Casting",
-        description="A mod for Forge and Fabric adding stack-based programmable spellcasting, inspired by Psi.",
-        icon_url=URL(
-            "https://media.forgecdn.net/avatars/thumbnails/535/944/64/64/637857298951404372.png"
-        ),
-        curseforge_slug="hexcasting",
-        modrinth_slug="hex-casting",
-        modloaders=[Modloader.FABRIC, Modloader.FORGE, Modloader.QUILT],
-    ),
-]
