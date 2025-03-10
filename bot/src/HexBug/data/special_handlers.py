@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
 from typing import override
 
 from hexdoc.core import ResourceLocation
 from pydantic import BaseModel
+from pydantic.dataclasses import dataclass
 
-from .hex_math import HexAngle, HexDir, HexPattern
+from .hex_math import HexAngle, HexDir, HexPattern, PatternSignature
 from .patterns import PatternOperator
 
 
@@ -23,7 +23,7 @@ class SpecialHandlerMatch[T]:
     handler: SpecialHandler[T]
     info: SpecialHandlerInfo
     direction: HexDir
-    signature: str
+    signature: PatternSignature
     value: T
 
     @property

@@ -6,7 +6,7 @@ from hexdoc.core import ResourceLocation
 from hexdoc.utils import PydanticURL
 from pydantic import BaseModel, Field, field_validator
 
-from .hex_math import HexDir
+from .hex_math import HexDir, PatternSignature
 
 
 class StaticPatternInfo(BaseModel):
@@ -15,7 +15,7 @@ class StaticPatternInfo(BaseModel):
 
     id: ResourceLocation
     startdir: HexDir
-    signature: str
+    signature: PatternSignature
     is_per_world: bool = False
 
 
@@ -27,7 +27,7 @@ class PatternInfo(BaseModel):
     Can be up to 256 characters, to fit in an embed title.
     """
     direction: HexDir
-    signature: str
+    signature: PatternSignature
     is_per_world: bool
     operators: list[PatternOperator]
 

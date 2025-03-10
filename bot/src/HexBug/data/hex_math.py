@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
-from typing import Any, Iterator
+from typing import Annotated, Any, Iterator
 
-from pydantic import Field, field_validator
+from pydantic import BeforeValidator, Field
 from pydantic.dataclasses import dataclass as pydantic_dataclass
 
 from HexBug.utils.enums import WrappingEnum, pydantic_enum
@@ -90,10 +90,23 @@ class HexCoord:
         return -self.q - self.r
 
 
+def _before_validator_PatternSignature(value: Any):
+    if isinstance(value, str):
+        return value.strip().lower()
+    return value
+
+
+type PatternSignature = Annotated[
+    str,
+    BeforeValidator(_before_validator_PatternSignature),
+    Field(pattern=VALID_SIGNATURE_PATTERN),
+]
+
+
 @pydantic_dataclass
 class HexPattern:
     direction: HexDir
-    signature: str = Field(pattern=VALID_SIGNATURE_PATTERN)
+    signature: PatternSignature
 
     def iter_angles(self) -> Iterator[HexAngle]:
         for c in self.signature:
@@ -105,10 +118,3 @@ class HexPattern:
         for angle in self.iter_angles():
             compass = compass.rotated_by(angle)
             yield compass
-
-    @field_validator("signature", mode="before")
-    @classmethod
-    def _preprocess_signature(cls, value: Any):
-        if isinstance(value, str):
-            return value.lower().strip()
-        return value
