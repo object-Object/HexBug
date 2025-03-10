@@ -48,13 +48,16 @@ class SpecialHandler[T](ABC):
         """Attempts to match the given pattern against this special handler."""
 
     @abstractmethod
-    def try_parse_value(
+    def parse_value(
         self,
         registry: HexBugRegistry,
         value: str,
-    ) -> tuple[T, HexPattern] | None:
+    ) -> tuple[T, HexPattern]:
         """Attempts to generate a valid pattern for this special handler from the given
-        value."""
+        value.
+
+        Raises ValueError on failure.
+        """
 
     def get_name(self, raw_name: str, value: T | None) -> str:
         """Given the raw name from the lang file and a value, returns a formatted
@@ -94,14 +97,14 @@ class NumberSpecialHandler(SpecialHandler[float]):
         return sign * accumulator
 
     @override
-    def try_parse_value(self, registry: HexBugRegistry, value: str):
+    def parse_value(self, registry: HexBugRegistry, value: str):
         value = value.strip()
         if not value.removeprefix("-").isnumeric():
-            return None
+            raise ValueError(f"Invalid integer: {value}")
 
         n = int(value)
         if n not in registry.pregenerated_numbers:
-            return None
+            raise ValueError(f"No pregenerated number found for {n}.")
 
         return n, registry.pregenerated_numbers[n]
 
@@ -132,10 +135,10 @@ class MaskSpecialHandler(SpecialHandler[str]):
         return result
 
     @override
-    def try_parse_value(self, registry: HexBugRegistry, value: str):
+    def parse_value(self, registry: HexBugRegistry, value: str):
         value = value.lower().strip()
         if not VALID_MASK_PATTERN.fullmatch(value):
-            return None
+            raise ValueError(f"Invalid mask (expected only - and v): {value}")
 
         if value[0] == "v":
             direction = HexDir.SOUTH_EAST

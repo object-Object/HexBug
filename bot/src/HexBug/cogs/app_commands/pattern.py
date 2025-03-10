@@ -53,10 +53,12 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
         visibility: MessageVisibility = "private",
     ):
         handler = SPECIAL_HANDLERS[info.id]
-        result = handler.try_parse_value(self.bot.registry, value)
-        if result is None:
-            raise InvalidInputError(value, f"Invalid value for {info.base_name}")
-        parsed_value, pattern = result
+        try:
+            parsed_value, pattern = handler.parse_value(self.bot.registry, value)
+        except ValueError as e:
+            raise InvalidInputError(
+                value, f"Failed to parse value for {info.base_name}."
+            ) from e
 
         await PatternView(
             interaction=interaction,
