@@ -356,7 +356,7 @@ class HexBugRegistry(BaseModel):
 
         signature = signature.lower()
         if not VALID_SIGNATURE_PATTERN.fullmatch(signature):
-            return None
+            raise ValueError(f"Invalid pattern signature: {signature}")
 
         if pattern := self.lookups.signature.get(signature):
             return pattern
