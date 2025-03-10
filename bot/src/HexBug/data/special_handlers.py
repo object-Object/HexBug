@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
 from typing import override
 
 from hexdoc.core import ResourceLocation
 from pydantic import BaseModel
-from pydantic.dataclasses import dataclass
 
 from .hex_math import HexAngle, HexDir, HexPattern, PatternSignature
 from .patterns import PatternOperator
