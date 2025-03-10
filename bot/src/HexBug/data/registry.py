@@ -25,7 +25,7 @@ from pydantic import BaseModel, PrivateAttr, model_validator
 from HexBug.data.lookups import PatternLookups
 from HexBug.utils.hexdoc import HexBugBookContext, HexBugProperties
 
-from .hex_math import VALID_SIGNATURE_PATTERN, HexDir
+from .hex_math import VALID_SIGNATURE_PATTERN, HexDir, HexPattern
 from .mods import DynamicModInfo, ModInfo
 from .patterns import PatternInfo, PatternOperator
 from .special_handlers import SpecialHandlerInfo, SpecialHandlerMatch
@@ -317,11 +317,17 @@ class HexBugRegistry(BaseModel):
         if not VALID_SIGNATURE_PATTERN.fullmatch(signature):
             raise ValueError(f"Invalid pattern signature: {signature}")
 
+        # normal patterns
         if pattern := self.lookups.signature.get(signature):
             return pattern
 
-        # TODO: check great spells
+        # per world patterns (eg. Create Lava)
+        if pattern := self.lookups.per_world_segments.get(
+            HexPattern(direction, signature).get_aligned_segments()
+        ):
+            return pattern
 
+        # special handlers (eg. Numerical Reflection)
         for special_handler in SPECIAL_HANDLERS:
             if (value := special_handler.try_match(direction, signature)) is not None:
                 return SpecialHandlerMatch(

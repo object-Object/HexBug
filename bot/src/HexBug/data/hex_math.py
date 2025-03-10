@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
-from typing import Annotated, Any, Iterator
+from typing import Annotated, Any, Iterable, Iterator
 
 from pydantic import BeforeValidator, Field
 from pydantic.dataclasses import dataclass as pydantic_dataclass
@@ -43,6 +43,9 @@ class HexDir(WrappingEnum):
     def angle_from(self, other: HexDir) -> HexAngle:
         return HexAngle(self.value - other.value)
 
+    def __neg__(self) -> HexDir:
+        return self.rotated_by(HexAngle.BACK)
+
 
 @pydantic_enum
 class HexAngle(WrappingEnum):
@@ -79,15 +82,72 @@ class HexAngle(WrappingEnum):
     def rotated_by(self, other: HexAngle) -> HexAngle:
         return HexAngle(self.value + other.value)
 
+    def __neg__(self) -> HexAngle:
+        return HexAngle(-self.value)
 
-@dataclass
+
+@dataclass(frozen=True)
 class HexCoord:
     q: int
     r: int
 
+    @classmethod
+    def origin(cls) -> HexCoord:
+        return HexCoord(0, 0)
+
     @property
     def s(self):
         return -self.q - self.r
+
+    def shifted_by(self, other: HexCoord | HexDir) -> HexCoord:
+        if isinstance(other, HexDir):
+            other = other.delta
+        return HexCoord(self.q + other.q, self.r + other.r)
+
+    def rotated_by(self, angle: HexAngle) -> HexCoord:
+        result = self
+        for _ in range(angle.value):
+            result = HexCoord(-result.r, -result.s)
+        return result
+
+    def delta(self, other: HexCoord) -> HexCoord:
+        return HexCoord(self.q - other.q, self.r - other.r)
+
+    def __add__(self, other: HexCoord | HexDir) -> HexCoord:
+        return self.shifted_by(other)
+
+    def __sub__(self, other: HexCoord) -> HexCoord:
+        return self.delta(other)
+
+
+@dataclass(frozen=True, eq=False)
+class HexSegment:
+    root: HexCoord
+    direction: HexDir
+
+    @property
+    def end(self):
+        return self.root.shifted_by(self.direction)
+
+    @property
+    def _canonical_values(self) -> tuple[HexCoord, HexDir]:
+        if "EAST" in self.direction.name:
+            return (self.root, self.direction)
+        return (self.end, -self.direction)
+
+    def shifted_by(self, other: HexCoord | HexDir) -> HexSegment:
+        return HexSegment(self.root.shifted_by(other), self.direction)
+
+    def rotated_by(self, angle: HexAngle) -> HexSegment:
+        return HexSegment(self.root.rotated_by(angle), self.direction.rotated_by(angle))
+
+    def __hash__(self) -> int:
+        return hash(self._canonical_values)
+
+    def __eq__(self, other: Any) -> bool:
+        if not isinstance(other, HexSegment):
+            return False
+        return self._canonical_values == other._canonical_values
 
 
 def _before_validator_PatternSignature(value: Any):
@@ -103,7 +163,7 @@ type PatternSignature = Annotated[
 ]
 
 
-@pydantic_dataclass
+@pydantic_dataclass(frozen=True)
 class HexPattern:
     direction: HexDir
     signature: PatternSignature
@@ -118,3 +178,28 @@ class HexPattern:
         for angle in self.iter_angles():
             compass = compass.rotated_by(angle)
             yield compass
+
+    def iter_segments(self) -> Iterator[HexSegment]:
+        cursor = HexCoord.origin()
+        compass = self.direction
+        yield HexSegment(cursor, compass)
+
+        for angle in self.iter_angles():
+            cursor = cursor.shifted_by(compass)
+            compass = compass.rotated_by(angle)
+            yield HexSegment(cursor, compass)
+
+    def get_aligned_segments(self) -> frozenset[HexSegment]:
+        return align_segments_to_origin(self.iter_segments())
+
+
+def align_segments_to_origin(segments: Iterable[HexSegment]) -> frozenset[HexSegment]:
+    segments = list(segments)
+
+    min_q = min(q for segment in segments for q in [segment.root.q, segment.end.q])
+    min_r = min(r for segment in segments for r in [segment.root.r, segment.end.r])
+
+    top_left = HexCoord(min_q, min_r)
+    offset = HexCoord.origin() - top_left
+
+    return frozenset(segment.shifted_by(offset) for segment in segments)
