@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import itertools
+import re
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import override
+from typing import TYPE_CHECKING, override
 
 from hexdoc.core import ResourceLocation
 from pydantic import BaseModel
@@ -10,11 +12,18 @@ from pydantic import BaseModel
 from .hex_math import HexAngle, HexDir, HexPattern
 from .patterns import PatternOperator
 
+if TYPE_CHECKING:
+    from .registry import HexBugRegistry
+
+VALID_MASK_PATTERN = re.compile(r"[-v]+")
+
 
 class SpecialHandlerInfo(BaseModel):
     id: ResourceLocation
     raw_name: str
     """Raw special handler name, including the `: %s` at the end."""
+    base_name: str
+    """Pattern name, not including a specific value or any placeholders."""
     operator: PatternOperator
 
 
@@ -38,9 +47,20 @@ class SpecialHandler[T](ABC):
     def try_match(self, direction: HexDir, signature: str) -> T | None:
         """Attempts to match the given pattern against this special handler."""
 
-    def get_name(self, raw_name: str, value: T) -> str:
+    @abstractmethod
+    def try_parse_value(
+        self,
+        registry: HexBugRegistry,
+        value: str,
+    ) -> tuple[T, HexPattern] | None:
+        """Attempts to generate a valid pattern for this special handler from the given
+        value."""
+
+    def get_name(self, raw_name: str, value: T | None) -> str:
         """Given the raw name from the lang file and a value, returns a formatted
         pattern name."""
+        if value is None:
+            return raw_name.removesuffix(": %s")
         return raw_name % str(value)
 
 
@@ -73,6 +93,18 @@ class NumberSpecialHandler(SpecialHandler[float]):
 
         return sign * accumulator
 
+    @override
+    def try_parse_value(self, registry: HexBugRegistry, value: str):
+        value = value.strip()
+        if not value.removeprefix("-").isnumeric():
+            return None
+
+        n = int(value)
+        if n not in registry.pregenerated_numbers:
+            return None
+
+        return n, registry.pregenerated_numbers[n]
+
 
 class MaskSpecialHandler(SpecialHandler[str]):
     @override
@@ -98,3 +130,31 @@ class MaskSpecialHandler(SpecialHandler[str]):
                     return None
 
         return result
+
+    @override
+    def try_parse_value(self, registry: HexBugRegistry, value: str):
+        value = value.lower().strip()
+        if not VALID_MASK_PATTERN.fullmatch(value):
+            return None
+
+        if value[0] == "v":
+            direction = HexDir.SOUTH_EAST
+            signature = "a"
+        else:
+            direction = HexDir.EAST
+            signature = ""
+
+        for previous, current in itertools.pairwise(value):
+            match previous, current:
+                case "-", "-":
+                    signature += "w"
+                case "-", "v":
+                    signature += "ea"
+                case "v", "-":
+                    signature += "e"
+                case "v", "v":
+                    signature += "da"
+                case _:
+                    raise RuntimeError("unreachable")
+
+        return value, HexPattern(direction, signature)

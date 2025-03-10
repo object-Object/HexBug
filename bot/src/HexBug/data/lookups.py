@@ -6,12 +6,22 @@ from HexBug.core.exceptions import DuplicatePatternError
 
 from .hex_math import HexAngle, HexPattern, HexSegment, align_segments_to_origin
 from .patterns import PatternInfo
+from .special_handlers import SpecialHandlerInfo
 
 
 @dataclass
 class PatternLookup[K](dict[K, PatternInfo]):
     name: str
     get_key: Callable[[PatternInfo], K]
+
+    def __post_init__(self):
+        super().__init__()
+
+
+@dataclass
+class SpecialHandlerLookup[K](dict[K, SpecialHandlerInfo]):
+    name: str
+    get_key: Callable[[SpecialHandlerInfo], K]
 
     def __post_init__(self):
         super().__init__()
@@ -25,6 +35,8 @@ class PatternLookups:
         self.segments = defaultdict[frozenset[HexSegment], list[PatternInfo]](list)
         self.per_world_segments = dict[frozenset[HexSegment], PatternInfo]()
 
+        self.special_handler_name = SpecialHandlerLookup("name", lambda i: i.base_name)
+
     def add_pattern(self, pattern: PatternInfo):
         for lookup in [
             self.name,
@@ -32,7 +44,7 @@ class PatternLookups:
         ]:
             key = lookup.get_key(pattern)
             if (other := lookup.get(key)) and other is not pattern:
-                raise DuplicatePatternError(lookup.name, key, pattern, other)
+                raise DuplicatePatternError(lookup.name, key, pattern.id, other.id)
             lookup[key] = pattern
 
         segments = list(
@@ -51,7 +63,7 @@ class PatternLookups:
                 ]:
                     # TODO: not a great error message
                     raise DuplicatePatternError(
-                        "shape", "per world pattern", pattern, others[0]
+                        "shape", "per world pattern", pattern.id, others[0].id
                     )
                 self.per_world_segments[segments] = pattern
             else:
@@ -61,7 +73,16 @@ class PatternLookups:
                     other := self.per_world_segments.get(segments)
                 ) and other is not pattern:
                     raise DuplicatePatternError(
-                        "shape", "per world pattern", pattern, other
+                        "shape", "per world pattern", pattern.id, other.id
                     )
 
             self.segments[segments].append(pattern)
+
+    def add_special_handler(self, info: SpecialHandlerInfo):
+        for lookup in [
+            self.special_handler_name,
+        ]:
+            key = lookup.get_key(info)
+            if (other := lookup.get(key)) and other is not info:
+                raise DuplicatePatternError(lookup.name, key, info.id, other.id)
+            lookup[key] = info

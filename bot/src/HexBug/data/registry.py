@@ -20,12 +20,13 @@ from hexdoc.patchouli import Book, BookContext
 from hexdoc.patchouli.page import TextPage
 from hexdoc.plugin import PluginManager
 from jinja2 import PackageLoader
-from pydantic import BaseModel, PrivateAttr, model_validator
+from pydantic import BaseModel, PrivateAttr, TypeAdapter, model_validator
 
 from HexBug.data.lookups import PatternLookups
+from HexBug.resources import load_resource
 from HexBug.utils.hexdoc import HexBugBookContext, HexBugProperties
 
-from .hex_math import VALID_SIGNATURE_PATTERN, HexDir, HexPattern
+from .hex_math import VALID_SIGNATURE_PATTERN, HexDir, HexPattern, PatternSignature
 from .mods import DynamicModInfo, ModInfo
 from .patterns import PatternInfo, PatternOperator
 from .special_handlers import SpecialHandlerInfo, SpecialHandlerMatch
@@ -43,6 +44,7 @@ class HexBugRegistry(BaseModel):
     special_handlers: dict[ResourceLocation, SpecialHandlerInfo]
 
     _lookups: PatternLookups = PrivateAttr(default_factory=PatternLookups)
+    _pregenerated_numbers: dict[int, HexPattern] = PrivateAttr(default_factory=dict)
 
     @classmethod
     def build(cls) -> Self:
@@ -264,7 +266,7 @@ class HexBugRegistry(BaseModel):
 
             registry._register_pattern(pattern)
 
-        for special_handler in SPECIAL_HANDLERS:
+        for special_handler in SPECIAL_HANDLERS.values():
             ops = id_ops.get(special_handler.id)
             match ops:
                 case [op]:
@@ -279,12 +281,13 @@ class HexBugRegistry(BaseModel):
                         + "\n  ".join(str(op) for op in ops)
                     )
 
+            raw_name = i18n.localize(f"hexcasting.special.{special_handler.id}").value
+
             registry._register_special_handler(
                 SpecialHandlerInfo(
                     id=special_handler.id,
-                    raw_name=i18n.localize(
-                        f"hexcasting.special.{special_handler.id}",
-                    ).value,
+                    raw_name=raw_name,
+                    base_name=special_handler.get_name(raw_name, value=None),
                     operator=op,
                 )
             )
@@ -305,6 +308,10 @@ class HexBugRegistry(BaseModel):
     @property
     def lookups(self):
         return self._lookups
+
+    @property
+    def pregenerated_numbers(self):
+        return self._pregenerated_numbers
 
     def try_match_pattern(
         self,
@@ -328,7 +335,7 @@ class HexBugRegistry(BaseModel):
             return pattern
 
         # special handlers (eg. Numerical Reflection)
-        for special_handler in SPECIAL_HANDLERS:
+        for special_handler in SPECIAL_HANDLERS.values():
             if (value := special_handler.try_match(direction, signature)) is not None:
                 return SpecialHandlerMatch(
                     handler=special_handler,
@@ -353,9 +360,18 @@ class HexBugRegistry(BaseModel):
         if info.id in self.special_handlers:
             raise ValueError(f"Special handler is already registered: {info.id}")
         self.special_handlers[info.id] = info
+        self.lookups.add_special_handler(info)
 
     @model_validator(mode="after")
-    def _post_root_build_lookups(self):
+    def _post_root(self):
         for pattern in self.patterns.values():
             self.lookups.add_pattern(pattern)
+        for info in self.special_handlers.values():
+            self.lookups.add_special_handler(info)
+
+        ta = TypeAdapter(dict[int, tuple[HexDir, PatternSignature]])
+        data = ta.validate_json(load_resource("numbers_2000.json"))
+        for n, (direction, signature) in data.items():
+            self.pregenerated_numbers[n] = HexPattern(direction, signature)
+
         return self

@@ -13,10 +13,14 @@ from HexBug.data.hex_math import VALID_SIGNATURE_PATTERN, HexDir
 from HexBug.data.patterns import PatternInfo, PatternOperator
 from HexBug.data.registry import HexBugRegistry, PatternMatchResult
 from HexBug.data.special_handlers import SpecialHandlerMatch
+from HexBug.data.static_data import SPECIAL_HANDLERS
 from HexBug.rendering.draw import draw_patterns, get_grid_options, image_to_buffer
 from HexBug.rendering.types import Palette, Theme
 from HexBug.utils.discord.commands import AnyCommand
-from HexBug.utils.discord.transformers import PatternInfoOption
+from HexBug.utils.discord.transformers import (
+    PatternInfoOption,
+    SpecialHandlerInfoOption,
+)
 from HexBug.utils.discord.visibility import MessageVisibility, add_visibility_buttons
 
 PATTERN_FILENAME = "pattern.png"
@@ -37,6 +41,33 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
             direction=pattern.direction,
             signature=pattern.signature,
             hide_stroke_order=pattern.is_per_world,
+        ).send(visibility)
+
+    @app_commands.command()
+    @app_commands.rename(info="name")
+    async def special(
+        self,
+        interaction: Interaction,
+        info: SpecialHandlerInfoOption,
+        value: str,
+        visibility: MessageVisibility = "private",
+    ):
+        handler = SPECIAL_HANDLERS[info.id]
+        result = handler.try_parse_value(self.bot.registry, value)
+        if result is None:
+            raise InvalidInputError(value, f"Invalid value for {info.base_name}")
+        parsed_value, pattern = result
+
+        await PatternView(
+            interaction=interaction,
+            pattern=SpecialHandlerMatch(
+                handler=handler,
+                info=info,
+                value=parsed_value,
+            ),
+            direction=pattern.direction,
+            signature=pattern.signature,
+            hide_stroke_order=False,
         ).send(visibility)
 
     @app_commands.command()

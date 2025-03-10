@@ -45,11 +45,14 @@ EXTRA_PATTERNS: list[StaticPatternInfo] = [
     ),
 ]
 
-SPECIAL_HANDLERS: list[SpecialHandler[Any]] = [
-    NumberSpecialHandler(
-        id=ResourceLocation("hexcasting", "number"),
-    ),
-    MaskSpecialHandler(
-        id=ResourceLocation("hexcasting", "mask"),
-    ),
-]
+SPECIAL_HANDLERS: dict[ResourceLocation, SpecialHandler[Any]] = {
+    handler.id: handler
+    for handler in [
+        NumberSpecialHandler(
+            id=ResourceLocation("hexcasting", "number"),
+        ),
+        MaskSpecialHandler(
+            id=ResourceLocation("hexcasting", "mask"),
+        ),
+    ]
+}

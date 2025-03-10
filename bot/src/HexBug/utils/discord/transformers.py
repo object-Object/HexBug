@@ -11,6 +11,7 @@ from discord.app_commands.models import Choice
 
 from HexBug.core.bot import HexBugBot
 from HexBug.data.patterns import PatternInfo
+from HexBug.data.special_handlers import SpecialHandlerInfo
 
 
 class AutocompleteWord(TypedDict):
@@ -88,4 +89,33 @@ class PatternInfoTransformer(PfzyAutocompleteTransformer):
         self._words.sort(key=lambda w: w["result"].lower())
 
 
+class SpecialHandlerInfoTransformer(PfzyAutocompleteTransformer):
+    @override
+    async def transform(
+        self,
+        interaction: Interaction,
+        value: str,
+    ) -> SpecialHandlerInfo:
+        registry = HexBugBot.registry_of(interaction)
+        info = registry.lookups.special_handler_name.get(value)
+        if info is None:
+            raise ValueError("Unknown special handler.")
+        return info
+
+    @override
+    def _setup_autocomplete(self, interaction: Interaction):
+        self._words.clear()
+
+        registry = HexBugBot.registry_of(interaction)
+        for info in registry.special_handlers.values():
+            self._words += [
+                AutocompleteWord(search_term=info.base_name, result=info.base_name),
+                AutocompleteWord(search_term=str(info.id), result=info.base_name),
+            ]
+
+        self._words.sort(key=lambda w: w["result"].lower())
+
+
 PatternInfoOption = Transform[PatternInfo, PatternInfoTransformer]
+
+SpecialHandlerInfoOption = Transform[SpecialHandlerInfo, SpecialHandlerInfoTransformer]

@@ -1,8 +1,7 @@
 from typing import Any
 
 from discord.app_commands import AppCommandError
-
-from HexBug.data.patterns import PatternInfo
+from hexdoc.core import ResourceLocation
 
 
 class SilentError(AppCommandError):
@@ -22,6 +21,6 @@ class InvalidInputError(AppCommandError):
 
 
 class DuplicatePatternError(ValueError):
-    def __init__(self, field: str, value: Any, *patterns: PatternInfo):
-        ids = ", ".join(str(pattern.id) for pattern in patterns)
+    def __init__(self, field: str, value: Any, *pattern_ids: ResourceLocation):
+        ids = ", ".join(str(pattern_id) for pattern_id in pattern_ids)
         super().__init__(f"Multiple patterns found with same {field} ({value}): {ids}")
