@@ -7,7 +7,7 @@ from typing import override
 from hexdoc.core import ResourceLocation
 from pydantic import BaseModel
 
-from .hex_math import HexAngle, HexDir, HexPattern, PatternSignature
+from .hex_math import HexAngle, HexDir, HexPattern
 from .patterns import PatternOperator
 
 
@@ -22,8 +22,6 @@ class SpecialHandlerInfo(BaseModel):
 class SpecialHandlerMatch[T]:
     handler: SpecialHandler[T]
     info: SpecialHandlerInfo
-    direction: HexDir
-    signature: PatternSignature
     value: T
 
     @property

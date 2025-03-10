@@ -9,7 +9,7 @@ from discord.ext.commands import GroupCog
 from HexBug.core.bot import HexBugBot
 from HexBug.core.cog import HexBugCog
 from HexBug.core.exceptions import InvalidInputError
-from HexBug.data.hex_math import VALID_SIGNATURE_PATTERN, HexDir, HexPattern
+from HexBug.data.hex_math import VALID_SIGNATURE_PATTERN, HexDir
 from HexBug.data.patterns import PatternInfo, PatternOperator
 from HexBug.data.registry import HexBugRegistry, PatternMatchResult
 from HexBug.data.special_handlers import SpecialHandlerMatch
@@ -31,7 +31,13 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
         pattern: PatternInfoOption,
         visibility: MessageVisibility = "private",
     ):
-        await PatternView(interaction, pattern).send(visibility)
+        await PatternView(
+            interaction=interaction,
+            pattern=pattern,
+            direction=pattern.direction,
+            signature=pattern.signature,
+            hide_stroke_order=pattern.is_per_world,
+        ).send(visibility)
 
     @app_commands.command()
     async def raw(
@@ -52,21 +58,23 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
             )
 
         pattern = self.bot.registry.try_match_pattern(direction, signature)
-        if pattern is None:
-            pattern = HexPattern(direction, signature)
 
         await PatternView(
-            interaction,
-            pattern,
+            interaction=interaction,
+            pattern=pattern,
+            direction=direction,
+            signature=signature,
             hide_stroke_order=hide_stroke_order,
         ).send(visibility)
 
 
-@dataclass
+@dataclass(kw_only=True)
 class PatternView(ui.View):
     interaction: Interaction
-    pattern: PatternMatchResult | HexPattern
-    hide_stroke_order: bool = False
+    pattern: PatternMatchResult | None
+    direction: HexDir
+    signature: str
+    hide_stroke_order: bool
 
     def __post_init__(self):
         super().__init__(timeout=60 * 5)
@@ -91,7 +99,7 @@ class PatternView(ui.View):
                 return operators
             case SpecialHandlerMatch(info=info):
                 return [info.operator]
-            case HexPattern():
+            case None:
                 return []
 
     @property
@@ -113,18 +121,16 @@ class PatternView(ui.View):
         match self.pattern:
             case (PatternInfo() as info) | SpecialHandlerMatch(info=info):
                 return info
-            case HexPattern():
+            case None:
                 return None
 
     @property
     def title(self):
-        match self.pattern:
-            case HexPattern(signature="dewdeqwwedaqedwadweqewwd"):
-                return "Amogus"
-            case HexPattern():
-                return "Unknown"
-            case pattern:
-                return pattern.name
+        if self.pattern:
+            return self.pattern.name
+        if self.signature == "dewdeqwwedaqedwadweqewwd":
+            return "Amogus"
+        return "Unknown"
 
     @override
     async def interaction_check(self, interaction: Interaction):
@@ -185,7 +191,7 @@ class PatternView(ui.View):
         else:
             description = None
 
-        footer = f"{self.pattern.direction.name} {self.pattern.signature}"
+        footer = f"{self.direction.name} {self.signature}"
         if self.pattern_info:
             footer = f"{self.pattern_info.id}  •  {footer}"
 
@@ -216,11 +222,10 @@ class PatternView(ui.View):
         options = get_grid_options(
             palette=Palette.Classic,
             theme=Theme.Dark,
-            per_world=self.hide_stroke_order
-            or (isinstance(self.pattern, PatternInfo) and self.pattern.is_per_world),
+            per_world=self.hide_stroke_order,
         )
         image = draw_patterns(
-            (self.pattern.direction, self.pattern.signature),
+            (self.direction, self.signature),
             options,
         )
         return File(image_to_buffer(image), PATTERN_FILENAME)

@@ -333,8 +333,6 @@ class HexBugRegistry(BaseModel):
                 return SpecialHandlerMatch(
                     handler=special_handler,
                     info=self.special_handlers[special_handler.id],
-                    direction=direction,
-                    signature=signature,
                     value=value,
                 )
 
