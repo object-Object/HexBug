@@ -5,7 +5,7 @@ import os
 from collections import defaultdict
 from itertools import zip_longest
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Self
+from typing import Any, Self
 
 from hexdoc.cli.utils import init_context
 from hexdoc.core import (
@@ -16,7 +16,7 @@ from hexdoc.core import (
 from hexdoc.data import HexdocMetadata
 from hexdoc.jinja.render import create_jinja_env_with_loader
 from hexdoc.minecraft import I18n
-from hexdoc.patchouli import Book, BookContext, Entry
+from hexdoc.patchouli import Book, BookContext
 from hexdoc.patchouli.page import TextPage
 from hexdoc.plugin import PluginManager
 from jinja2 import PackageLoader
@@ -30,19 +30,6 @@ from .mods import DynamicModInfo, ModInfo
 from .patterns import PatternInfo, PatternOperator
 from .special_handlers import SpecialHandlerInfo, SpecialHandlerMatch
 from .static_data import EXTRA_PATTERNS, MODS, SPECIAL_HANDLERS
-
-if TYPE_CHECKING:
-    from hexdoc_hexcasting.book.page import (
-        ManualOpPatternPage,
-        ManualRawPatternPage,
-        PageWithOpPattern,
-    )
-
-    type PatternPage = PageWithOpPattern | ManualOpPatternPage | ManualRawPatternPage
-
-    type _PatternBookInfo = tuple[Entry, PatternPage, TextPage | None]
-    """entry, page, next_page"""
-
 
 logger = logging.getLogger(__name__)
 
