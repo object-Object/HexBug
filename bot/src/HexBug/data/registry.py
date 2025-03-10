@@ -3,10 +3,9 @@ from __future__ import annotations
 import logging
 import os
 from collections import defaultdict
-from dataclasses import dataclass
 from itertools import zip_longest
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Callable, Self
+from typing import TYPE_CHECKING, Any, Self
 
 from hexdoc.cli.utils import init_context
 from hexdoc.core import (
@@ -23,6 +22,7 @@ from hexdoc.plugin import PluginManager
 from jinja2 import PackageLoader
 from pydantic import BaseModel, PrivateAttr, model_validator
 
+from HexBug.data.lookups import PatternLookups
 from HexBug.utils.hexdoc import HexBugBookContext, HexBugProperties
 
 from .hex_math import VALID_SIGNATURE_PATTERN, HexDir
@@ -48,34 +48,6 @@ logger = logging.getLogger(__name__)
 
 
 type PatternMatchResult = PatternInfo | SpecialHandlerMatch[Any]
-
-
-class DuplicatePatternError(ValueError):
-    def __init__(self, field: str, value: Any, *patterns: PatternInfo):
-        ids = ", ".join(str(pattern.id) for pattern in patterns)
-        super().__init__(f"Multiple patterns found with same {field} ({value}): {ids}")
-
-
-@dataclass
-class PatternLookup[K](dict[K, PatternInfo]):
-    name: str
-    get_key: Callable[[PatternInfo], K]
-
-    def __post_init__(self):
-        super().__init__()
-
-
-class PatternLookups:
-    def __init__(self):
-        self.name = PatternLookup("name", lambda p: p.name)
-        self.signature = PatternLookup("signature", lambda p: p.signature)
-
-    def add_pattern(self, pattern: PatternInfo):
-        for lookup in [self.name, self.signature]:
-            key = lookup.get_key(pattern)
-            if (other := lookup.get(key)) and other is not pattern:
-                raise DuplicatePatternError(lookup.name, key, pattern, other)
-            lookup[key] = pattern
 
 
 class HexBugRegistry(BaseModel):
