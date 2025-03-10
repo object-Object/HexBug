@@ -193,7 +193,8 @@ class HexBugRegistry(BaseModel):
                     # use the mod that the entry came from, not the mod of the pattern
                     # eg. MoreIotas adds operators for hexcasting:add
                     # in that case, mod should be MoreIotas, not Hex Casting
-                    mod = registry.mods[entry.id.namespace]
+                    assert entry.resource_dir.modid is not None
+                    mod = registry.mods[entry.resource_dir.modid]
 
                     text = page.text or (next_page and next_page.text)
                     if text:
