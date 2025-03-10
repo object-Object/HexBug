@@ -30,7 +30,7 @@ from .hex_math import VALID_SIGNATURE_PATTERN, HexDir, HexPattern, PatternSignat
 from .mods import DynamicModInfo, ModInfo
 from .patterns import PatternInfo, PatternOperator
 from .special_handlers import SpecialHandlerInfo, SpecialHandlerMatch
-from .static_data import EXTRA_PATTERNS, MODS, SPECIAL_HANDLERS
+from .static_data import DISABLED_PATTERNS, EXTRA_PATTERNS, MODS, SPECIAL_HANDLERS
 
 logger = logging.getLogger(__name__)
 
@@ -234,6 +234,9 @@ class HexBugRegistry(BaseModel):
         ] + EXTRA_PATTERNS
 
         for pattern_info in pattern_infos:
+            if pattern_info.id in DISABLED_PATTERNS:
+                continue
+
             pattern = PatternInfo(
                 id=pattern_info.id,
                 # don't want to use the book-specific translation here

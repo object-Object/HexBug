@@ -20,6 +20,17 @@ MODS: list[StaticModInfo] = [
         modrinth_slug="hex-casting",
         modloaders=[Modloader.FABRIC, Modloader.FORGE, Modloader.QUILT],
     ),
+    StaticModInfo(
+        id="hexal",
+        name="Hexal",
+        description="Adds complex numbers, quaternions, BIT displays, and bubbles.",
+        icon_url=URL(
+            "https://cdn.modrinth.com/data/aBVJ6Q36/e2bfd87a5e333a972c39d12a1c4e55add7616785.jpeg"
+        ),
+        curseforge_slug="hexal",
+        modrinth_slug="hexal",
+        modloaders=[Modloader.FORGE, Modloader.FABRIC, Modloader.QUILT],
+    ),
 ]
 
 EXTRA_PATTERNS: list[StaticPatternInfo] = [
@@ -44,6 +55,14 @@ EXTRA_PATTERNS: list[StaticPatternInfo] = [
         signature="eeedw",
     ),
 ]
+
+DISABLED_PATTERNS: set[ResourceLocation] = {
+    # commented out, but the regex doesn't account for that
+    # https://github.com/vgskye/Hexal/blob/efe2b7df1e/Common/src/main/java/ram/talia/hexal/common/lib/hex/HexalActions.kt#L210
+    ResourceLocation("hexal", "gate/mark/num/get"),
+    ResourceLocation("hexal", "mote/count/get"),
+    ResourceLocation("hexal", "mote/combine"),
+}
 
 SPECIAL_HANDLERS: dict[ResourceLocation, SpecialHandler[Any]] = {
     handler.id: handler

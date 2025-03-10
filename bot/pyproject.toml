@@ -25,6 +25,7 @@ hexbug = "HexBug.app:app"
 [project.optional-dependencies]
 data = [
     "hexdoc-hexcasting~=0.11.2.0",
+    "hexdoc-hexal~=0.3.0.0",
 ]
 
 [tool.uv.sources]

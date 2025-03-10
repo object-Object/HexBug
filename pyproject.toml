@@ -16,6 +16,14 @@ notebooks = [
 
 # uv
 
+[tool.uv]
+find-links = [
+    "./vendor",
+]
+override-dependencies = [
+    "hexdoc-hexcasting~=0.11.2.0",
+]
+
 [tool.uv.workspace]
 members = [
     "bot",
