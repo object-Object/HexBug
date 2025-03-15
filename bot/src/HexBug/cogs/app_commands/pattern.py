@@ -1,7 +1,20 @@
-from dataclasses import dataclass
-from typing import Any, override
+from __future__ import annotations
 
-from discord import Embed, File, Interaction, SelectOption, app_commands, ui
+from dataclasses import dataclass
+from typing import Any, Awaitable, Callable, Self, override
+
+from discord import (
+    ButtonStyle,
+    DiscordException,
+    Embed,
+    File,
+    Interaction,
+    Member,
+    SelectOption,
+    User,
+    app_commands,
+    ui,
+)
 from discord.app_commands import ContextMenu, Transform
 from discord.app_commands.transformers import EnumNameTransformer
 from discord.ext.commands import GroupCog
@@ -14,9 +27,15 @@ from HexBug.data.patterns import PatternInfo, PatternOperator
 from HexBug.data.registry import HexBugRegistry, PatternMatchResult
 from HexBug.data.special_handlers import SpecialHandlerMatch
 from HexBug.data.static_data import SPECIAL_HANDLERS
-from HexBug.rendering.draw import draw_patterns, get_grid_options, image_to_buffer
+from HexBug.rendering.draw import PatternRenderingOptions
 from HexBug.rendering.types import Palette, Theme
 from HexBug.utils.discord.commands import AnyCommand
+from HexBug.utils.discord.components import update_indexed_select_menu
+from HexBug.utils.discord.editable_button import (
+    EditableButton,
+    EditableButtonView,
+    editable_button,
+)
 from HexBug.utils.discord.transformers import (
     PatternInfoOption,
     SpecialHandlerInfoOption,
@@ -110,13 +129,15 @@ class PatternView(ui.View):
     hide_stroke_order: bool
 
     def __post_init__(self):
-        super().__init__(timeout=60 * 5)
+        super().__init__(timeout=60 * 15)
 
         self.command: AnyCommand | ContextMenu | None = self.interaction.command
         self.registry: HexBugRegistry = HexBugBot.registry_of(self.interaction)
         self.op_index: int = 0
+        self.options: PatternRenderingOptions = PatternRenderingOptions()
+        self.options_interaction: Interaction | None = None
 
-        self.select_operator.options = [
+        self.operator_select.options = [
             SelectOption(
                 label=op.plain_args or "→",
                 value=str(i),
@@ -169,12 +190,27 @@ class PatternView(ui.View):
     async def interaction_check(self, interaction: Interaction):
         return interaction.user == self.interaction.user
 
+    @ui.button(emoji="⚙️")
+    async def options_button(self, interaction: Interaction, button: ui.Button[Self]):
+        if self.options_interaction:
+            try:
+                await self.options_interaction.delete_original_response()
+            except DiscordException:
+                pass
+
+        self.options_interaction = interaction
+        await interaction.response.send_message(
+            view=PatternRenderingOptionsView(
+                on_change=self.refresh,
+                user=self.interaction.user,
+                options=self.options,
+            ),
+            ephemeral=True,
+        )
+
     @ui.select(cls=ui.Select[Any], min_values=1, max_values=1)
-    async def select_operator(self, interaction: Interaction, select: ui.Select[Any]):
-        # TODO: why do we need to do this???
-        self.select_operator.options[self.op_index].default = False
-        self.op_index = int(select.values[0])
-        self.select_operator.options[self.op_index].default = True
+    async def operator_select(self, interaction: Interaction, select: ui.Select[Self]):
+        self.op_index = update_indexed_select_menu(select)[0]
         await self.refresh(interaction)
 
     async def send(
@@ -188,6 +224,8 @@ class PatternView(ui.View):
 
         self.clear_items()
 
+        self.add_item(self.options_button)
+
         add_visibility_buttons(
             view=self,
             interaction=self.interaction,
@@ -198,7 +236,7 @@ class PatternView(ui.View):
         )
 
         if self.should_show_select_menu:
-            self.add_item(self.select_operator)
+            self.add_item(self.operator_select)
 
         await self.interaction.response.send_message(
             embed=self.get_embed(),
@@ -207,12 +245,19 @@ class PatternView(ui.View):
             ephemeral=visibility == "private",
         )
 
-    async def refresh(self, interaction: Interaction):
-        await interaction.response.edit_message(
-            embed=self.get_embed(),
-            attachments=[self.get_image()],
-            view=self,
-        )
+    async def refresh(self, interaction: Interaction | None = None):
+        if interaction:
+            await interaction.response.edit_message(
+                embed=self.get_embed(),
+                attachments=[self.get_image()],
+                view=self,
+            )
+        else:
+            await self.interaction.edit_original_response(
+                embed=self.get_embed(),
+                attachments=[self.get_image()],
+                view=self,
+            )
 
     def get_embed(self) -> Embed:
         if self.operator:
@@ -252,13 +297,163 @@ class PatternView(ui.View):
         return embed
 
     def get_image(self) -> File:
-        options = get_grid_options(
-            palette=Palette.Classic,
-            theme=Theme.Dark,
-            per_world=self.hide_stroke_order,
+        return self.options.render_discord_file(
+            direction=self.direction,
+            signature=self.signature,
+            hide_stroke_order=self.hide_stroke_order,
+            filename=PATTERN_FILENAME,
         )
-        image = draw_patterns(
-            (self.direction, self.signature),
-            options,
+
+
+class PatternRenderingOptionsView(EditableButtonView):
+    def __init__(
+        self,
+        *,
+        on_change: Callable[[], Awaitable[Any]],
+        user: User | Member,
+        options: PatternRenderingOptions,
+        defaults: PatternRenderingOptions | None = None,
+    ):
+        self.user = user
+        self.options = options
+        self.defaults = defaults or PatternRenderingOptions()
+
+        super().__init__(on_change=on_change, timeout=60 * 15)
+
+        self.refresh_selects()
+
+    def refresh_selects(self):
+        for option in self.palette_select.options:
+            option.default = self.options.palette.name == option.label
+
+        for option in self.theme_select.options:
+            option.default = self.options.theme.name == option.label
+
+    @override
+    async def interaction_check(self, interaction: Interaction):
+        return interaction.user == self.user
+
+    @ui.select(
+        cls=ui.Select[Any],
+        options=[
+            SelectOption(label=palette.name, value=str(i))
+            for i, palette in enumerate(Palette)
+        ],
+        row=0,
+    )
+    async def palette_select(self, interaction: Interaction, select: ui.Select[Any]):
+        i = update_indexed_select_menu(select)[0]
+        old_value = self.options.palette
+        self.options.palette = Palette(select.options[i].label)
+        await self.on_editable_button_success(
+            interaction,
+            changed=old_value != self.options.palette,
         )
-        return File(image_to_buffer(image), PATTERN_FILENAME)
+
+    @ui.select(
+        cls=ui.Select[Any],
+        options=[
+            SelectOption(label=theme.name, value=str(i))
+            for i, theme in enumerate(Theme)
+        ],
+        row=1,
+    )
+    async def theme_select(self, interaction: Interaction, select: ui.Select[Any]):
+        i = update_indexed_select_menu(select)[0]
+        old_value = self.options.theme
+        self.options.theme = Theme(select.options[i].label)
+        await self.on_editable_button_success(
+            interaction,
+            changed=old_value != self.options.theme,
+        )
+
+    @editable_button(
+        name="Line width",
+        required=True,
+        row=2,
+    )
+    def line_width_button(self):
+        return self.options.line_width
+
+    @line_width_button.setter
+    def _set_line_width(self, value: Any):
+        self.options.line_width = value
+
+    @editable_button(
+        name="Point radius",
+        required=False,
+        row=2,
+    )
+    def point_radius_button(self):
+        return self.options.point_radius
+
+    @point_radius_button.setter
+    def _set_point_radius(self, value: Any):
+        self.options.point_radius = value or None
+
+    @editable_button(
+        name="Arrow radius",
+        required=False,
+        row=2,
+    )
+    def arrow_radius_button(self):
+        return self.options.arrow_radius
+
+    @arrow_radius_button.setter
+    def _set_arrow_radius(self, value: Any):
+        self.options.arrow_radius = value or None
+
+    @editable_button(
+        name="Maximum overlaps",
+        required=True,
+        row=3,
+    )
+    def max_overlaps_button(self):
+        return self.options.max_overlaps
+
+    @max_overlaps_button.setter
+    def _set_max_overlaps(self, value: Any):
+        self.options.max_overlaps = value
+
+    @editable_button(
+        name="Scale",
+        required=True,
+        row=3,
+    )
+    def scale_button(self):
+        return self.options.scale
+
+    @scale_button.setter
+    def _set_scale(self, value: Any):
+        self.options.scale = value
+
+    @editable_button(
+        name="Maximum grid width",
+        required=True,
+        row=3,
+    )
+    def max_grid_width_button(self):
+        return self.options.max_grid_width
+
+    @max_grid_width_button.setter
+    def _set_max_grid_width(self, value: Any):
+        self.options.max_grid_width = value
+
+    @ui.button(
+        label="Reset to defaults",
+        style=ButtonStyle.danger,
+        row=4,
+    )
+    async def reset_button(self, interaction: Interaction, button: ui.Button[Self]):
+        changed = False
+        for name, value in self.defaults:
+            if value != getattr(self.options, name):
+                changed = True
+                setattr(self.options, name, value)
+
+        self.refresh_selects()
+        for item in self.children:
+            if isinstance(item, EditableButton):
+                item.refresh_label()
+
+        await self.on_editable_button_success(interaction, changed)

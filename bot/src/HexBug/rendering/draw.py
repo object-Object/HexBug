@@ -1,6 +1,7 @@
 from io import BytesIO
 from typing import Iterable
 
+from discord import File
 from hex_renderer_py import (
     CollisionOption,
     EndPoint,
@@ -16,6 +17,7 @@ from hex_renderer_py import (
     Triangle,
 )
 from PIL import Image
+from pydantic import BaseModel
 
 from HexBug.data.hex_math import HexDir
 
@@ -24,6 +26,7 @@ from .types import Palette, Theme
 DEFAULT_SCALE = 128.0
 DEFAULT_LINE_WIDTH = 0.08
 DEFAULT_MAX_OVERLAPS = 3
+DEFAULT_MAX_GRID_WIDTH = 50
 
 
 type Pattern = tuple[HexDir, str]
@@ -35,7 +38,7 @@ def draw_patterns(
     *,
     scale: float | None = DEFAULT_SCALE,
     max_size: int | tuple[int, int] = 4096,
-    max_dot_width: int = 50,
+    max_grid_width: int = DEFAULT_MAX_GRID_WIDTH,
     trim_padding: bool = True,
 ) -> Image.Image:
     match patterns:
@@ -46,7 +49,7 @@ def draw_patterns(
 
     grid = HexGrid(
         [PatternVariant(direction.name, sig) for direction, sig in patterns],
-        max_dot_width,
+        max_grid_width,
     )
 
     if isinstance(max_size, int):
@@ -76,7 +79,7 @@ def get_grid_options(
     *,
     palette: Palette,
     theme: Theme,
-    per_world: bool = False,
+    hide_stroke_order: bool = False,
     line_width: float = DEFAULT_LINE_WIDTH,
     point_radius: float | None = None,
     arrow_radius: float | None = None,
@@ -95,7 +98,7 @@ def get_grid_options(
         ),
     )
 
-    if per_world:
+    if hide_stroke_order:
         intersections = Intersections.UniformPoints(
             point=point,
         )
@@ -146,3 +149,45 @@ def get_grid_options(
         ),
         center_dot=Point.None_(),
     )
+
+
+class PatternRenderingOptions(BaseModel):
+    model_config = {
+        "validate_assignment": True,
+    }
+
+    palette: Palette = Palette.Classic
+    theme: Theme = Theme.Dark
+    line_width: float = DEFAULT_LINE_WIDTH
+    point_radius: float | None = None
+    arrow_radius: float | None = None
+    max_overlaps: int = DEFAULT_MAX_OVERLAPS
+    scale: float = DEFAULT_SCALE
+    max_grid_width: int = DEFAULT_MAX_GRID_WIDTH
+
+    def render_discord_file(
+        self,
+        direction: HexDir,
+        signature: str,
+        hide_stroke_order: bool,
+        filename: str,
+    ):
+        image = self.render_image(direction, signature, hide_stroke_order)
+        return File(image_to_buffer(image), filename)
+
+    def render_image(self, direction: HexDir, signature: str, hide_stroke_order: bool):
+        options = get_grid_options(
+            hide_stroke_order=hide_stroke_order,
+            palette=self.palette,
+            theme=self.theme,
+            line_width=self.line_width,
+            point_radius=self.point_radius,
+            arrow_radius=self.arrow_radius,
+            max_overlaps=self.max_overlaps,
+        )
+        return draw_patterns(
+            (direction, signature),
+            options,
+            scale=self.scale,
+            max_grid_width=self.max_grid_width,
+        )
