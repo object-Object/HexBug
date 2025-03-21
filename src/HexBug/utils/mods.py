@@ -577,6 +577,17 @@ class HexdocMod(Enum):
         modloaders=[FABRIC, QUILT],
     )
 
+    Hexcassettes = HexdocModInfo(
+        name="Hexcassettes",
+        modid="hexcassettes",
+        book_id="hexcassettes:hexcassettesbook",
+        description="A Hexcasting addon for all your delaying, async, and daemon needs!",
+        curseforge_url=None,
+        modrinth_slug="hexcassettes",
+        icon_url="https://raw.githubusercontent.com/miyucomics/hexcassettes/129138324b3c5304597e35db2fb3e7e62bbddbca/src/main/resources/assets/hexcassettes/icon.png",
+        modloaders=[FABRIC, QUILT],
+    )
+
 
 ModInfo = RegistryModInfo | APIModInfo | HexdocModInfo
 Mod = RegistryMod | APIMod | HexdocMod
