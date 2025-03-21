@@ -406,6 +406,13 @@ Hexbound,Unstable Hex Shield,NORTH_EAST,eqdweeqdw,false,hexbound,create_shield/g
 Hexbound,Winding Purification,WEST,qeeee,false,hexbound,pattern/start_dir,,pattern → num,#patterns/pattern_editing@hexbound:pattern/start_dir
 Hexbound,Zone Distillation: Construct,SOUTH_EAST,qqqqqwdeddwedde,false,hexbound,zone_entity/construct,,"vector, number → list",#patterns/constructs/selecting_constructs@hexbound:zone_entity/construct
 Hexbound,Zone Distillation: Non-Construct,SOUTH_EAST,eeeeewaqaawedde,false,hexbound,zone_entity/not_construct,,"vector, number → list",#patterns/constructs/selecting_constructs@hexbound:zone_entity/not_construct
+Hexcassettes,Dequeue,WEST,eqeweweweweqedwqeeeeewwqqwqwqqweawwqwqwwqwwqwqww,false,hexcassettes,dequeue,,any →,#async@hexcassettes:dequeue
+Hexcassettes,Disqueue,WEST,eqeweweweweqedwqeeeeewwqqwqwqqw,false,hexcassettes,killall,,,#async@hexcassettes:killall
+Hexcassettes,Enqueue,EAST,qeqwqwqwqwqeqaweqqqqqwweeweweewqdwwewewwewweweww,false,hexcassettes,enqueue,,"list, number, any →",#async@hexcassettes:enqueue
+Hexcassettes,Program Purification,WEST,eqeweweweweqedwqeeeee,false,hexcassettes,inspect,,any → null/list of patterns,#async@hexcassettes:inspect
+Hexcassettes,Program Purification II,WEST,eqeweweweweqedwqeeeeedww,false,hexcassettes,foretell,,any → null/number,#async@hexcassettes:foretell
+Hexcassettes,Threading Reflection,EAST,qeqwqwqwqwqeqaweqqqqq,false,hexcassettes,specs,,→ number,#async@hexcassettes:specs
+Hexcassettes,Threading Reflection II,EAST,qeqwqwqwqwqeqaweqqqqqwweeweweew,false,hexcassettes,free,,→ number,#async@hexcassettes:free
 Hexcellular,Observation Purification,SOUTH_WEST,aawd,false,hexcellular,observe_property,,property → any,#properties@hexcellular:observe_property
 Hexcellular,Schrödinger's Gambit,SOUTH_WEST,aawq,false,hexcellular,set_property,,"property, any →",#properties@hexcellular:set_property
 Hexcellular,Schrödinger's Reflection,SOUTH_WEST,aawe,false,hexcellular,create_property,,→ property,#properties@hexcellular:create_property
