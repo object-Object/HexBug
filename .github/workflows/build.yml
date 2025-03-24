@@ -39,20 +39,25 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
       - name: Build Docker image
-        id: build
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          load: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:tmp
+      
+      - name: Extract registry from image
+        run: |
+          id=$(docker create ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:tmp)
+          docker cp $id:/app/registry.json - > registry.json
+          docker rm -v $id
+      
+      - name: Export Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           outputs: type=docker,dest=/tmp/image.tar
-      
-      - name: Extract registry from image
-        run: |
-          docker load --input /tmp/image.tar
-          id=$(docker create ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }})
-          docker cp $id:/app/registry.json - > registry.json
-          docker rm -v $id
 
       - name: Upload image artifact
         uses: actions/upload-artifact@v4
