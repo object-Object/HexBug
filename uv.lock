@@ -26,10 +26,6 @@ dev = [
 notebooks = [{ name = "ipykernel", specifier = ">=6.29.5" }]
 
 [[manifest.dependency-metadata]]
-name = "hexdoc-complexhex"
-version = "0.1.3.1.0.dev0"
-
-[[manifest.dependency-metadata]]
 name = "hexdoc-hexal"
 version = "0.3.0.1.0rc3.dev0"
 
@@ -942,6 +938,9 @@ wheels = [
 name = "hexdoc-complexhex"
 version = "0.1.3.1.0.dev0"
 source = { registry = "vendor" }
+dependencies = [
+    { name = "hexdoc-hexcasting" },
+]
 wheels = [
     { path = "hexdoc_complexhex-0.1.3.1.0.dev0-py3-none-any.whl" },
 ]
