@@ -165,6 +165,17 @@ MODS: list[StaticModInfo] = [
         modloaders=[Modloader.FABRIC, Modloader.FORGE],
     ),
     StaticModInfo(
+        id="moreiotas",
+        name="MoreIotas",
+        description="Adds iotas for strings, matrices, types, and items.",
+        icon_url=URL(
+            "https://raw.githubusercontent.com/object-Object/MoreIotas/9d053970db7cc4d4c29b12632521bf532612adf3/Common/src/main/resources/logo.png"
+        ),
+        curseforge_slug="moreiotas",
+        modrinth_slug="moreiotas",
+        modloaders=[Modloader.FABRIC, Modloader.FORGE],
+    ),
+    StaticModInfo(
         id="oneironaut",
         name="Oneironaut",
         description="An addon for Hex Casting centered around exploration and use of the Noosphere.",
@@ -233,6 +244,8 @@ DISABLED_PATTERNS: set[ResourceLocation] = {
     ResourceLocation("oneironaut", "lichify"),
     ResourceLocation("oneironaut", "getislich"),
     ResourceLocation("oneironaut", "setlichtickhex"),
+    # unused
+    ResourceLocation("moreiotas", "altadd"),
     # undocumented
     ResourceLocation("complexhex", "chloe/copy"),
     ResourceLocation("complexhex", "chloe/make"),
@@ -246,6 +259,11 @@ DISABLED_PATTERNS: set[ResourceLocation] = {
     # lmao what
     ResourceLocation("ephemera", "no"),
     ResourceLocation("oneironaut", "circle"),
+}
+
+PATTERN_NAME_OVERRIDES: dict[ResourceLocation, str] = {
+    ResourceLocation("moreiotas", "type/iota"): "Classifier's Purification (MoreIotas)",
+    ResourceLocation("hexical", "classify"): "Classifier's Purification (Hexical)",
 }
 
 DISABLED_PAGES: set[str] = {

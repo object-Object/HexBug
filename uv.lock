@@ -843,6 +843,7 @@ data = [
     { name = "hexdoc-hexmapping" },
     { name = "hexdoc-hextrogen" },
     { name = "hexdoc-hexweb" },
+    { name = "hexdoc-moreiotas" },
     { name = "hexdoc-net" },
     { name = "hexdoc-oneironaut" },
     { name = "hexdoc-overevaluate" },
@@ -868,6 +869,7 @@ requires-dist = [
     { name = "hexdoc-hexmapping", marker = "extra == 'data'", specifier = "~=0.0.3.0" },
     { name = "hexdoc-hextrogen", marker = "extra == 'data'", specifier = "~=1.0.0.0" },
     { name = "hexdoc-hexweb", marker = "extra == 'data'", specifier = "~=1.0.4.0" },
+    { name = "hexdoc-moreiotas", marker = "extra == 'data'", specifier = "~=0.1.0.0" },
     { name = "hexdoc-net", marker = "extra == 'data'", specifier = "~=0.1.2.0" },
     { name = "hexdoc-oneironaut", marker = "extra == 'data'", specifier = "~=0.5.0.0" },
     { name = "hexdoc-overevaluate", marker = "extra == 'data'", specifier = "~=1.0.0.0" },
@@ -1090,6 +1092,17 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/b4/e4/7d1738d8fef93d53ea6c1c46954f8079c44a7c64311bf97e2c16bda457aa/hexdoc_minecraft-1.20.1.1.0.dev1.tar.gz", hash = "sha256:bbcec07bcd5391345b7542057bbe5443d7acd4481bb559e623354cc860ba53c6", size = 828566 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/9e/92/ddbc0a7ad0248d44412c344c15c6365a54b92b4ae1d567a86e560749fc17/hexdoc_minecraft-1.20.1.1.0.dev1-py3-none-any.whl", hash = "sha256:d5bf87f5b4f736dddb96531568b8596b550fa29c8da503f2e6a872967241aaf7", size = 2442814 },
+]
+
+[[package]]
+name = "hexdoc-moreiotas"
+version = "0.1.0.1.0rc6.dev0"
+source = { registry = "vendor" }
+dependencies = [
+    { name = "hexdoc-hexcasting" },
+]
+wheels = [
+    { path = "hexdoc_moreiotas-0.1.0.1.0rc6.dev0-py3-none-any.whl" },
 ]
 
 [[package]]

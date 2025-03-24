@@ -38,6 +38,7 @@ data = [
     "hexdoc-hexmapping~=0.0.3.0",
     "hexdoc-hextrogen~=1.0.0.0",
     "hexdoc-hexweb~=1.0.4.0",
+    "hexdoc-moreiotas~=0.1.0.0",
     "hexdoc-net~=0.1.2.0", # Complex Hex
     "hexdoc-oneironaut~=0.5.0.0",
     "hexdoc-overevaluate~=1.0.0.0",

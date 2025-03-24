@@ -39,6 +39,7 @@ from .static_data import (
     DISABLED_PATTERNS,
     EXTRA_PATTERNS,
     MODS,
+    PATTERN_NAME_OVERRIDES,
     SPECIAL_HANDLERS,
 )
 
@@ -255,13 +256,20 @@ class HexBugRegistry(BaseModel):
                 logger.warning(f"Skipping disabled pattern: {pattern_info.id}")
                 continue
 
+            name = i18n.localize(
+                f"hexcasting.action.{pattern_info.id}",
+                f"hexcasting.rawhook.{pattern_info.id}",
+            ).value
+            if override_name := PATTERN_NAME_OVERRIDES.get(pattern_info.id):
+                logger.warning(
+                    f"Renaming pattern from {name} to {override_name}: {pattern_info.id}"
+                )
+                name = override_name
+
             pattern = PatternInfo(
                 id=pattern_info.id,
                 # don't want to use the book-specific translation here
-                name=i18n.localize(
-                    f"hexcasting.action.{pattern_info.id}",
-                    f"hexcasting.rawhook.{pattern_info.id}",
-                ).value,
+                name=name,
                 direction=HexDir[pattern_info.startdir.name],
                 signature=pattern_info.signature,
                 is_per_world=pattern_info.is_per_world,
