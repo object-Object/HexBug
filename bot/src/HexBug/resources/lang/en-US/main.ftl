@@ -45,7 +45,7 @@ status_text_uptime =
     Uptime
 
 status_text_installs =
-    Install count
+    Installs
 
 status_text_installs_value =
     { $servers ->
@@ -57,14 +57,8 @@ status_text_installs_value =
         *[other] { $users } individual users
     }
 
-status_text_commands =
-    Commands
-
 status_text_mods =
     Mods
 
 status_text_patterns =
     Patterns
-
-status_text_special-handlers =
-    Special handlers

@@ -2,7 +2,6 @@ import textwrap
 from datetime import datetime
 
 from discord import Color, Embed, Interaction, app_commands
-from more_itertools import ilen
 
 from HexBug.common.__version__ import VERSION
 from HexBug.core.cog import HexBugCog
@@ -68,20 +67,13 @@ class StatusCog(HexBugCog):
                 ),
             )
             .add_field(
-                name=await translate_text(interaction, "commands"),
-                value=f"{ilen(self.bot.tree.walk_commands())}",
-            )
-            .add_field(
                 name=await translate_text(interaction, "mods"),
-                value=f"{len(self.bot.registry.mods)}",
+                value=len(self.bot.registry.mods),
             )
             .add_field(
                 name=await translate_text(interaction, "patterns"),
-                value=f"{len(self.bot.registry.patterns)}",
-            )
-            .add_field(
-                name=await translate_text(interaction, "special-handlers"),
-                value=f"{len(self.bot.registry.special_handlers)}",
+                value=len(self.bot.registry.patterns)
+                + len(self.bot.registry.special_handlers),
             )
         )
 
