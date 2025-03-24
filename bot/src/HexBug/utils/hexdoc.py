@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from functools import cached_property
 from pathlib import Path
 from typing import override
@@ -7,8 +8,10 @@ from typing import override
 from hexdoc.core import Properties
 from hexdoc.core.resource_dir import PathResourceDir
 from hexdoc.patchouli import BookContext
-from hexdoc.utils import classproperty
+from hexdoc.utils import TRACE, classproperty
 from yarl import URL
+
+logger = logging.getLogger(__name__)
 
 
 class HexBugProperties(Properties):
@@ -48,3 +51,27 @@ class HexBugBookContext(BookContext):
             raise ValueError(f"Mod {modid} does not export a book url")
 
         return book_url
+
+
+# FIXME: hack
+def monkeypatch_hexdoc_hexcasting():
+    from hexdoc_hexcasting.metadata import HexContext
+    from hexdoc_hexcasting.utils.pattern import PatternInfo
+
+    def _add_pattern_patched(
+        self: HexContext,
+        pattern: PatternInfo,
+        signatures: dict[str, PatternInfo],
+    ):
+        logger.log(TRACE, f"Load pattern: {pattern.id}")
+
+        if duplicate := self.patterns.get(pattern.id):
+            raise ValueError(f"Duplicate pattern {pattern.id}\n{pattern}\n{duplicate}")
+
+        if duplicate := signatures.get(pattern.signature):
+            logger.warning(f"Duplicate pattern {pattern.id}\n{pattern}\n{duplicate}")
+
+        self.patterns[pattern.id] = pattern
+        signatures[pattern.signature] = pattern
+
+    HexContext._add_pattern = _add_pattern_patched  # pyright: ignore[reportPrivateUsage]

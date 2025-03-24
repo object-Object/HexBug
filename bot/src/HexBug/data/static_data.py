@@ -18,20 +18,176 @@ MODS: list[StaticModInfo] = [
         ),
         curseforge_slug="hexcasting",
         modrinth_slug="hex-casting",
-        modloaders=[Modloader.FABRIC, Modloader.FORGE, Modloader.QUILT],
+        modloaders=[Modloader.FABRIC, Modloader.FORGE],
+    ),
+    StaticModInfo(
+        id="complexhex",
+        name="Complex Hex",
+        description="Adds complex numbers, quaternions, BIT displays, and bubbles.",
+        icon_url=URL(
+            "https://raw.githubusercontent.com/kineticneticat/ComplexHex/7b5e4b402cbcefbf37891b4714abeb37da9419be/common/src/main/resources/icon.png"
+        ),
+        curseforge_slug=None,
+        modrinth_slug="complex-hex",
+        modloaders=[Modloader.FABRIC],
+    ),
+    StaticModInfo(
+        id="dthexcasting",
+        name="Dynamic Trees - Hexcasting",
+        description="Makes Hex Casting compatible with Dynamic Trees, adding dynamically growing versions of the all edified trees.",
+        icon_url=URL(
+            "https://media.forgecdn.net/avatars/thumbnails/1185/235/64/64/638759222267068311.png"
+        ),
+        curseforge_slug="dynamic-trees-hexcasting",
+        modrinth_slug="dynamic-trees-hexcasting",
+        modloaders=[Modloader.FORGE],
+    ),
+    StaticModInfo(
+        id="ephemera",
+        name="Ephemera",
+        description="An addon for Hex Casting with no particular theme.",
+        icon_url=URL(
+            "https://raw.githubusercontent.com/beholderface/Ephemera/bb4af6c760c0f0d7c4fe258e9459fbb609dcaa2c/fabric/src/main/resources/icon.png"
+        ),
+        curseforge_slug="ephemera",
+        modrinth_slug="ephemera",
+        modloaders=[Modloader.FABRIC, Modloader.FORGE],
     ),
     StaticModInfo(
         id="hexal",
         name="Hexal",
-        description="Adds complex numbers, quaternions, BIT displays, and bubbles.",
+        description="Adds many utility patterns/spells (eg. entity health, item smelting), autonomous casting with wisps, and powerful item manipulation/storage.",
         icon_url=URL(
             "https://cdn.modrinth.com/data/aBVJ6Q36/e2bfd87a5e333a972c39d12a1c4e55add7616785.jpeg"
         ),
         curseforge_slug="hexal",
         modrinth_slug="hexal",
-        modloaders=[Modloader.FORGE, Modloader.FABRIC, Modloader.QUILT],
+        modloaders=[Modloader.FABRIC, Modloader.FORGE],
+    ),
+    StaticModInfo(
+        id="hexcassettes",
+        name="Hexcassettes",
+        description="Adds a method to delay hexes into the future, with a touch of playfulness and whimsy!",
+        icon_url=URL(
+            "https://raw.githubusercontent.com/miyucomics/hexcassettes/87fcc6422b5a995f7a70f3dae207ef420d55ebc7/src/main/resources/assets/hexcassettes/icon.png"
+        ),
+        curseforge_slug=None,
+        modrinth_slug="hexcassettes",
+        modloaders=[Modloader.FABRIC],
+    ),
+    StaticModInfo(
+        id="hexcellular",
+        name="Hexcellular",
+        description="Adds property iota to Hexcasting for easy syncing, storage, and communication of iota.",
+        icon_url=URL(
+            "https://raw.githubusercontent.com/miyucomics/hexcellular/d1b0b04332d01d05ecaab41617e36972d292069d/src/main/resources/assets/hexcellular/icon.png"
+        ),
+        curseforge_slug=None,
+        modrinth_slug="hexcellular",
+        modloaders=[Modloader.FABRIC],
+    ),
+    StaticModInfo(
+        id="hexdebug",
+        name="HexDebug",
+        description="Adds items and patterns to allow debugging hexes in VSCode, and a block to make editing hexes ingame much easier.",
+        icon_url=URL(
+            "https://raw.githubusercontent.com/object-Object/HexDebug/fa871595c3e5e8bc21e32170d6607bc172e2b951/Common/src/main/resources/icon.png"
+        ),
+        curseforge_slug="hexdebug",
+        modrinth_slug="hexdebug",
+        modloaders=[Modloader.FABRIC, Modloader.FORGE],
+    ),
+    StaticModInfo(
+        id="hexdim",
+        name="Hexxy Dimensions",
+        description="Adds pocket dimensions.",
+        icon_url=URL(
+            "https://raw.githubusercontent.com/walksanatora/hexxy-dimensions/513e2f89c1bb88dff743f165a8e3e040a8596f5d/doc/icon.png"
+        ),
+        curseforge_slug=None,
+        modrinth_slug="hexdim",
+        modloaders=[Modloader.FABRIC],
+    ),
+    StaticModInfo(
+        id="hexgender",
+        name="HexGender",
+        description="Adds patterns for changing your gender via Wildfire's Female Gender Mod.",
+        icon_url=URL(
+            # TODO: idk if webp will actually work on Discord
+            "https://media.forgecdn.net/avatars/1184/151/638757987531288199.webp"
+        ),
+        curseforge_slug="hexgender",
+        modrinth_slug="hexgender",
+        modloaders=[Modloader.FABRIC, Modloader.FORGE],
+    ),
+    StaticModInfo(
+        id="hexical",
+        name="Hexical",
+        description="A fun addon containing genie lamps, mage blocks, specks, world scrying, and more!",
+        icon_url=URL(
+            "https://raw.githubusercontent.com/miyucomics/hexical/09f8dc140b0075454fc4dbe7a4d6dbeac30354cc/src/main/resources/assets/hexical/icon.png"
+        ),
+        curseforge_slug=None,
+        modrinth_slug="hexical",
+        modloaders=[Modloader.FABRIC],
+    ),
+    StaticModInfo(
+        id="hexmapping",
+        name="HexMapping",
+        description="Adds patterns to put markers on various web maps.",
+        icon_url=URL(
+            "https://media.forgecdn.net/avatars/thumbnails/1183/716/64/64/638757456658646386.png"
+        ),
+        curseforge_slug="hexmapping",
+        modrinth_slug="hexmapping",
+        modloaders=[Modloader.FABRIC, Modloader.FORGE],
+    ),
+    StaticModInfo(
+        id="hextrogen",
+        name="Hextrogen",
+        description="Adds interop with Create: Estrogen.",
+        icon_url=URL(
+            "https://raw.githubusercontent.com/miyucomics/hextrogen/da935ed8dbe3958180e45fe031c9aa42a9fbd901/src/main/resources/assets/hextrogen/icon.png"
+        ),
+        curseforge_slug=None,
+        modrinth_slug=None,
+        modloaders=[Modloader.FABRIC],
+    ),
+    StaticModInfo(
+        id="hexweb",
+        name="HexWeb",
+        description="Adds patterns for making HTTP requests via OkHTTP, as well as creating and manipulating JSON objects.",
+        icon_url=URL(
+            "https://media.forgecdn.net/avatars/thumbnails/1184/119/64/64/638757930272038947.png"
+        ),
+        curseforge_slug="hexweb",
+        modrinth_slug="hexweb",
+        modloaders=[Modloader.FABRIC, Modloader.FORGE],
+    ),
+    StaticModInfo(
+        id="oneironaut",
+        name="Oneironaut",
+        description="An addon for Hex Casting centered around exploration and use of the Noosphere.",
+        icon_url=URL(
+            "https://raw.githubusercontent.com/beholderface/oneironaut/e3768da4faf3ea50e889178d26fa6d003f40a28b/fabric/src/main/resources/icon.png"
+        ),
+        curseforge_slug="oneironaut",
+        modrinth_slug="oneironaut",
+        modloaders=[Modloader.FABRIC],
+    ),
+    StaticModInfo(
+        id="overevaluate",
+        name="Overevaluate",
+        description="Adds sets and patterns for advanced metaevals and stack manipulation.",
+        icon_url=URL(
+            "https://raw.githubusercontent.com/miyucomics/overevaluate/d81fcc6e28558800b185df8c0d4b2c23844a09b6/src/main/resources/assets/overevaluate/icon.png"
+        ),
+        curseforge_slug=None,
+        modrinth_slug=None,
+        modloaders=[Modloader.FABRIC],
     ),
 ]
+MODS[1:] = sorted(MODS[1:], key=lambda m: m.name)
 
 EXTRA_PATTERNS: list[StaticPatternInfo] = [
     StaticPatternInfo(
@@ -62,6 +218,24 @@ DISABLED_PATTERNS: set[ResourceLocation] = {
     ResourceLocation("hexal", "gate/mark/num/get"),
     ResourceLocation("hexal", "mote/count/get"),
     ResourceLocation("hexal", "mote/combine"),
+    ResourceLocation("oneironaut", "lichify"),
+    ResourceLocation("oneironaut", "getislich"),
+    ResourceLocation("oneironaut", "setlichtickhex"),
+    # undocumented
+    ResourceLocation("complexhex", "cnarg"),
+    ResourceLocation("ephemera", "hashbits"),
+    ResourceLocation("hexdebug", "block_read"),
+    ResourceLocation("hexdebug", "block_read_indexed"),
+    ResourceLocation("hexdebug", "block_write"),
+    ResourceLocation("hexdebug", "block_write_indexed"),
+    ResourceLocation("oneironaut", "advanceautomaton"),
+    # lmao what
+    ResourceLocation("ephemera", "no"),
+    ResourceLocation("oneironaut", "circle"),
+}
+
+DISABLED_PAGES: set[str] = {
+    "lamp/arch_lamps@hexical:lamp_finale",
 }
 
 SPECIAL_HANDLERS: dict[ResourceLocation, SpecialHandler[Any]] = {

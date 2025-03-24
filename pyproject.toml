@@ -20,8 +20,11 @@ notebooks = [
 find-links = [
     "./vendor",
 ]
-override-dependencies = [
-    "hexdoc-hexcasting~=0.11.2.0",
+dependency-metadata = [
+    { name = "hexdoc-hexal", version = "0.3.0.1.0rc3.dev0", requires-dist = [] },
+    { name = "hexdoc-hexdim", version = "1.2.1.1.20.0", requires-dist = [] },
+    { name = "hexdoc-hexweb", version = "1.0.4.1.1", requires-dist = [] },
+    { name = "hexdoc-net", version = "0.1.2.1.0.dev0", requires-dist = [] },
 ]
 
 [tool.uv.workspace]

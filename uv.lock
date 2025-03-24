@@ -12,7 +12,6 @@ members = [
     "hexbug-common",
     "hexbug-infrastructure",
 ]
-overrides = [{ name = "hexdoc-hexcasting", specifier = "~=0.11.2.0" }]
 
 [manifest.dependency-groups]
 dev = [
@@ -25,6 +24,22 @@ dev = [
     { name = "ruff", specifier = ">=0.9.7" },
 ]
 notebooks = [{ name = "ipykernel", specifier = ">=6.29.5" }]
+
+[[manifest.dependency-metadata]]
+name = "hexdoc-hexal"
+version = "0.3.0.1.0rc3.dev0"
+
+[[manifest.dependency-metadata]]
+name = "hexdoc-hexdim"
+version = "1.2.1.1.20.0"
+
+[[manifest.dependency-metadata]]
+name = "hexdoc-hexweb"
+version = "1.0.4.1.1"
+
+[[manifest.dependency-metadata]]
+name = "hexdoc-net"
+version = "0.1.2.1.0.dev0"
 
 [[package]]
 name = "aiohappyeyeballs"
@@ -815,8 +830,22 @@ dependencies = [
 
 [package.optional-dependencies]
 data = [
+    { name = "hexdoc-dthexcasting" },
+    { name = "hexdoc-ephemera" },
     { name = "hexdoc-hexal" },
+    { name = "hexdoc-hexcassettes" },
     { name = "hexdoc-hexcasting" },
+    { name = "hexdoc-hexcellular" },
+    { name = "hexdoc-hexdebug" },
+    { name = "hexdoc-hexdim" },
+    { name = "hexdoc-hexgender" },
+    { name = "hexdoc-hexical" },
+    { name = "hexdoc-hexmapping" },
+    { name = "hexdoc-hextrogen" },
+    { name = "hexdoc-hexweb" },
+    { name = "hexdoc-net" },
+    { name = "hexdoc-oneironaut" },
+    { name = "hexdoc-overevaluate" },
 ]
 
 [package.metadata]
@@ -826,8 +855,22 @@ requires-dist = [
     { name = "hex-renderer-py", specifier = ">=0.1.3" },
     { name = "hexbug-common", editable = "common" },
     { name = "hexdoc", specifier = ">=1!0.1.0a23" },
+    { name = "hexdoc-dthexcasting", marker = "extra == 'data'", specifier = "~=1.0.1.0" },
+    { name = "hexdoc-ephemera", marker = "extra == 'data'", specifier = "~=0.3.0.0" },
     { name = "hexdoc-hexal", marker = "extra == 'data'", specifier = "~=0.3.0.0" },
+    { name = "hexdoc-hexcassettes", marker = "extra == 'data'", specifier = "~=1.1.4.0" },
     { name = "hexdoc-hexcasting", marker = "extra == 'data'", specifier = "~=0.11.2.0" },
+    { name = "hexdoc-hexcellular", marker = "extra == 'data'", specifier = "~=1.0.4.0" },
+    { name = "hexdoc-hexdebug", marker = "extra == 'data'", specifier = "~=0.3.0.1.20.1.0" },
+    { name = "hexdoc-hexdim", marker = "extra == 'data'", specifier = "~=1.2.1.1.20.0" },
+    { name = "hexdoc-hexgender", marker = "extra == 'data'", specifier = "~=1.0.4.0" },
+    { name = "hexdoc-hexical", marker = "extra == 'data'", specifier = "~=2.0.0.0" },
+    { name = "hexdoc-hexmapping", marker = "extra == 'data'", specifier = "~=0.0.3.0" },
+    { name = "hexdoc-hextrogen", marker = "extra == 'data'", specifier = "~=1.0.0.0" },
+    { name = "hexdoc-hexweb", marker = "extra == 'data'", specifier = "~=1.0.4.0" },
+    { name = "hexdoc-net", marker = "extra == 'data'", specifier = "~=0.1.2.0" },
+    { name = "hexdoc-oneironaut", marker = "extra == 'data'", specifier = "~=0.5.0.0" },
+    { name = "hexdoc-overevaluate", marker = "extra == 'data'", specifier = "~=1.0.0.0" },
     { name = "matplotlib", specifier = ">=3.10.1" },
     { name = "pfzy", specifier = ">=0.3.4" },
     { name = "pydantic", specifier = ">=2.10.6" },
@@ -894,14 +937,46 @@ wheels = [
 ]
 
 [[package]]
-name = "hexdoc-hexal"
-version = "0.3.0.1.0rc3.dev0"
+name = "hexdoc-dthexcasting"
+version = "1.0.1.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "hexdoc-hexcasting" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/c1/b3/da772c5268c62d7a9d9e871553147f1dd89f72676e2bbaf24f3dfa8bf4fc/hexdoc_dthexcasting-1.0.1.1.0.tar.gz", hash = "sha256:f329cfdf3b51aa488a3e246ecb35a6deb2a80ad7eaf379a5136fa26738de6ccf", size = 10817 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/f4/24/600eee087dc8e11d1ba3ce7be91b55c9e41db4c4b64d8c2e0bfad34c5dc5/hexdoc_dthexcasting-1.0.1.1.0-py3-none-any.whl", hash = "sha256:f561362f5408095b1a0c5aa0b475ae7483789701ab425b9814da482e67630d36", size = 18114 },
+]
+
+[[package]]
+name = "hexdoc-ephemera"
+version = "0.3.0.1.0.dev0"
 source = { registry = "vendor" }
 dependencies = [
     { name = "hexdoc-hexcasting" },
 ]
 wheels = [
+    { path = "hexdoc_ephemera-0.3.0.1.0.dev0-py3-none-any.whl" },
+]
+
+[[package]]
+name = "hexdoc-hexal"
+version = "0.3.0.1.0rc3.dev0"
+source = { registry = "vendor" }
+wheels = [
     { path = "hexdoc_hexal-0.3.0.1.0rc3.dev0-py3-none-any.whl" },
+]
+
+[[package]]
+name = "hexdoc-hexcassettes"
+version = "1.1.4.1.0.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "hexdoc-hexcasting" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/5b/9e/a8111dcc610e9848b8168e5c2ff9c6795cd42abee1279f02ddb791779c38/hexdoc_hexcassettes-1.1.4.1.0.0.tar.gz", hash = "sha256:1fbed8efc71d30620c1a52780f3cc7d6706274285d07a8340f872974f3fcddaf", size = 12266 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/94/45/4ff0dcf3a640990692c8b6e14b363774b027fd5f85632517aa275d32be23/hexdoc_hexcassettes-1.1.4.1.0.0-py3-none-any.whl", hash = "sha256:8e0fbdb799d80c73336d08e854175cb951b4f7175a35cf0b5c0d5a26e805eb19", size = 15439 },
 ]
 
 [[package]]
@@ -918,6 +993,94 @@ wheels = [
 ]
 
 [[package]]
+name = "hexdoc-hexcellular"
+version = "1.0.4.1.0.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "hexdoc-hexcasting" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/93/da/7c900e80570e53f5388356203444ebd978b13003067559f347305d0c6cdc/hexdoc_hexcellular-1.0.4.1.0.0.tar.gz", hash = "sha256:8354128620ac60799dfe0d26b6ef48fe7c367811b8717f40c457a4f3337d64b6", size = 8381 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/64/5d/a61f2a3dd4c25c0dc525f0c7f47b79853b0fd27745b1c574c497cc340535/hexdoc_hexcellular-1.0.4.1.0.0-py3-none-any.whl", hash = "sha256:4cae160a321ceed6ffa8f7c84b9778cb4e41ca3e66416b99e40cfca5848ab770", size = 10856 },
+]
+
+[[package]]
+name = "hexdoc-hexdebug"
+version = "0.3.0.1.20.1.1.0"
+source = { registry = "vendor" }
+dependencies = [
+    { name = "hexdoc" },
+    { name = "hexdoc-hexcasting" },
+]
+wheels = [
+    { path = "hexdoc_hexdebug-0.3.0.1.20.1.1.0-py3-none-any.whl" },
+]
+
+[[package]]
+name = "hexdoc-hexdim"
+version = "1.2.1.1.20.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/f3/73/8e92562190b4c0b4c32038a0dcfa9e83c4b11a4a6cf0f79855e7ff0775c1/hexdoc_hexdim-1.2.1.1.20.0.tar.gz", hash = "sha256:68795a8aec5e22aa2b2d1f32c2b2e0d08484432e378e552aa80a69656360344d", size = 13451 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/50/2a/26dc1bf81b5d6957817eacabb13fe225420e57eb1919a957fd51ec5875ca/hexdoc_hexdim-1.2.1.1.20.0-py3-none-any.whl", hash = "sha256:c6fdf8e335b573e75b6598d20536efe771be7d4c75e2ab44f3656184de7c6a5e", size = 15844 },
+]
+
+[[package]]
+name = "hexdoc-hexgender"
+version = "1.0.4.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "hexdoc-hexcasting" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/44/55/bf0f502de470df0a1fed30cf6b01ecc59c8d0aa20dd5a188c3116cb7669d/hexdoc_hexgender-1.0.4.1.0.tar.gz", hash = "sha256:36e381778817532dfd2e737baea385f41608cdbcf6f8412b95e8ccced5a59572", size = 7651 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c0/32/aaf0fe9f749e565b802939d1da1dcc4b082b2cf1905d871fa89d273189bd/hexdoc_hexgender-1.0.4.1.0-py3-none-any.whl", hash = "sha256:bc32f632b55e61fc08dcad004f5880f446e6a279475a2134c79bf07589098283", size = 10065 },
+]
+
+[[package]]
+name = "hexdoc-hexical"
+version = "2.0.0.1.0.0"
+source = { registry = "vendor" }
+dependencies = [
+    { name = "hexdoc-hexcasting" },
+]
+wheels = [
+    { path = "hexdoc_hexical-2.0.0.1.0.0-py3-none-any.whl" },
+]
+
+[[package]]
+name = "hexdoc-hexmapping"
+version = "0.0.3.1.0.dev0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "hexdoc-hexcasting" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/8e/03/1e96ad9b7aa8ddd70b0ac6754c9fad858d06373a49eca91f3ae1e712c1f7/hexdoc_hexmapping-0.0.3.1.0.dev0.tar.gz", hash = "sha256:4e7488a20d61fa47eb2eb97dbfbb0f6c1f55d36e8119e2bbb42faa361b5459ea", size = 12079 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/8c/05/2fab2141d974a7bacb7107b80f41cf7a88c67bec6eb720eb7fe53b53d4bc/hexdoc_hexmapping-0.0.3.1.0.dev0-py3-none-any.whl", hash = "sha256:cc04fe16a13eca9b82326d8aba842e26f4c7c53c3534cf58c23ef2bee5cecc9a", size = 17414 },
+]
+
+[[package]]
+name = "hexdoc-hextrogen"
+version = "1.0.0.1.0.0"
+source = { registry = "vendor" }
+dependencies = [
+    { name = "hexdoc-hexcasting" },
+]
+wheels = [
+    { path = "hexdoc_hextrogen-1.0.0.1.0.0-py3-none-any.whl" },
+]
+
+[[package]]
+name = "hexdoc-hexweb"
+version = "1.0.4.1.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/57/71/ffefa6d85be341673810da1e19562582b994c45c5223391b11e687d80985/hexdoc_hexweb-1.0.4.1.1.tar.gz", hash = "sha256:b8ee8b908c14e72aaba2c2c7ec805cdc9c0c81ecc6f203e0f51c6ae31f72a4b1", size = 8501 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d2/b8/67012b495c14ddc2cc74d355e70b645b8485789254288a65c575f4ba2e26/hexdoc_hexweb-1.0.4.1.1-py3-none-any.whl", hash = "sha256:53ef341faa8ffc280fe80a0b1635e66f32c94b58c5f6f9ec15e3dc0677dd916e", size = 11082 },
+]
+
+[[package]]
 name = "hexdoc-minecraft"
 version = "1.20.1.1.0.dev1"
 source = { registry = "https://pypi.org/simple" }
@@ -927,6 +1090,36 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/b4/e4/7d1738d8fef93d53ea6c1c46954f8079c44a7c64311bf97e2c16bda457aa/hexdoc_minecraft-1.20.1.1.0.dev1.tar.gz", hash = "sha256:bbcec07bcd5391345b7542057bbe5443d7acd4481bb559e623354cc860ba53c6", size = 828566 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/9e/92/ddbc0a7ad0248d44412c344c15c6365a54b92b4ae1d567a86e560749fc17/hexdoc_minecraft-1.20.1.1.0.dev1-py3-none-any.whl", hash = "sha256:d5bf87f5b4f736dddb96531568b8596b550fa29c8da503f2e6a872967241aaf7", size = 2442814 },
+]
+
+[[package]]
+name = "hexdoc-net"
+version = "0.1.2.1.0.dev0"
+source = { registry = "vendor" }
+wheels = [
+    { path = "hexdoc_net-0.1.2.1.0.dev0-py3-none-any.whl" },
+]
+
+[[package]]
+name = "hexdoc-oneironaut"
+version = "0.5.0.1.0"
+source = { registry = "vendor" }
+dependencies = [
+    { name = "hexdoc-hexcasting" },
+]
+wheels = [
+    { path = "hexdoc_oneironaut-0.5.0.1.0-py3-none-any.whl" },
+]
+
+[[package]]
+name = "hexdoc-overevaluate"
+version = "1.0.0.1.0.0"
+source = { registry = "vendor" }
+dependencies = [
+    { name = "hexdoc-hexcasting" },
+]
+wheels = [
+    { path = "hexdoc_overevaluate-1.0.0.1.0.0-py3-none-any.whl" },
 ]
 
 [[package]]

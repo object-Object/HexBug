@@ -24,13 +24,23 @@ from pydantic import BaseModel, PrivateAttr, TypeAdapter, model_validator
 
 from HexBug.data.lookups import PatternLookups
 from HexBug.resources import load_resource
-from HexBug.utils.hexdoc import HexBugBookContext, HexBugProperties
+from HexBug.utils.hexdoc import (
+    HexBugBookContext,
+    HexBugProperties,
+    monkeypatch_hexdoc_hexcasting,
+)
 
 from .hex_math import VALID_SIGNATURE_PATTERN, HexDir, HexPattern, PatternSignature
 from .mods import DynamicModInfo, ModInfo
 from .patterns import PatternInfo, PatternOperator
 from .special_handlers import SpecialHandlerInfo, SpecialHandlerMatch
-from .static_data import DISABLED_PATTERNS, EXTRA_PATTERNS, MODS, SPECIAL_HANDLERS
+from .static_data import (
+    DISABLED_PAGES,
+    DISABLED_PATTERNS,
+    EXTRA_PATTERNS,
+    MODS,
+    SPECIAL_HANDLERS,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -49,6 +59,8 @@ class HexBugRegistry(BaseModel):
     @classmethod
     def build(cls) -> Self:
         logger.info("Building HexBug registry.")
+
+        monkeypatch_hexdoc_hexcasting()
 
         # lazy imports because hexdoc_hexcasting won't be available when the bot runs
         from hexdoc_hexcasting.book.page import (
@@ -88,6 +100,7 @@ class HexBugRegistry(BaseModel):
                         "minecraft:chest",
                         "minecraft:shield",
                         "emi:*",
+                        "dynamictrees:*",
                     ]
                 },
             },
@@ -187,6 +200,10 @@ class HexBugRegistry(BaseModel):
                     if not isinstance(page, PageWithPattern):
                         continue
 
+                    if (fragment := page.fragment(entry.fragment)) in DISABLED_PAGES:
+                        logger.warning(f"Skipping disabled page: {fragment}")
+                        continue
+
                     if not isinstance(next_page, TextPage):
                         next_page = None
 
@@ -235,6 +252,7 @@ class HexBugRegistry(BaseModel):
 
         for pattern_info in pattern_infos:
             if pattern_info.id in DISABLED_PATTERNS:
+                logger.warning(f"Skipping disabled pattern: {pattern_info.id}")
                 continue
 
             pattern = PatternInfo(
