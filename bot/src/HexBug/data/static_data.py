@@ -234,6 +234,8 @@ DISABLED_PATTERNS: set[ResourceLocation] = {
     ResourceLocation("oneironaut", "getislich"),
     ResourceLocation("oneironaut", "setlichtickhex"),
     # undocumented
+    ResourceLocation("complexhex", "chloe/copy"),
+    ResourceLocation("complexhex", "chloe/make"),
     ResourceLocation("complexhex", "cnarg"),
     ResourceLocation("ephemera", "hashbits"),
     ResourceLocation("hexdebug", "block_read"),
