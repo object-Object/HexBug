@@ -212,6 +212,18 @@ EXTRA_PATTERNS: list[StaticPatternInfo] = [
     ),
 ]
 
+SPECIAL_HANDLERS: dict[ResourceLocation, SpecialHandler[Any]] = {
+    handler.id: handler
+    for handler in [
+        NumberSpecialHandler(
+            id=ResourceLocation("hexcasting", "number"),
+        ),
+        MaskSpecialHandler(
+            id=ResourceLocation("hexcasting", "mask"),
+        ),
+    ]
+}
+
 DISABLED_PATTERNS: set[ResourceLocation] = {
     # commented out, but the regex doesn't account for that
     # https://github.com/vgskye/Hexal/blob/efe2b7df1e/Common/src/main/java/ram/talia/hexal/common/lib/hex/HexalActions.kt#L210
@@ -236,16 +248,4 @@ DISABLED_PATTERNS: set[ResourceLocation] = {
 
 DISABLED_PAGES: set[str] = {
     "lamp/arch_lamps@hexical:lamp_finale",
-}
-
-SPECIAL_HANDLERS: dict[ResourceLocation, SpecialHandler[Any]] = {
-    handler.id: handler
-    for handler in [
-        NumberSpecialHandler(
-            id=ResourceLocation("hexcasting", "number"),
-        ),
-        MaskSpecialHandler(
-            id=ResourceLocation("hexcasting", "mask"),
-        ),
-    ]
 }
