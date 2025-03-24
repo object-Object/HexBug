@@ -1,7 +1,7 @@
 import pytest
 from hexdoc.core import ResourceLocation
 
-from HexBug.data.hex_math import HexDir
+from HexBug.data.hex_math import HexDir, HexPattern
 from HexBug.data.special_handlers import MaskSpecialHandler
 
 
@@ -46,4 +46,5 @@ def describe_MaskSpecialHandler():
         signature: str,
         want_value: str | None,
     ):
-        assert special_handler.try_match(direction, signature) == want_value
+        pattern = HexPattern(direction, signature)
+        assert special_handler.try_match(pattern) == want_value

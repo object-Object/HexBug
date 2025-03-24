@@ -34,6 +34,10 @@ class SpecialHandlerMatch[T]:
     value: T
 
     @property
+    def id(self) -> ResourceLocation:
+        return self.info.id
+
+    @property
     def name(self) -> str:
         return self.handler.get_name(self.info.raw_name, self.value)
 
@@ -44,7 +48,7 @@ class SpecialHandler[T](ABC):
         self.id = id
 
     @abstractmethod
-    def try_match(self, direction: HexDir, signature: str) -> T | None:
+    def try_match(self, pattern: HexPattern) -> T | None:
         """Attempts to match the given pattern against this special handler."""
 
     @abstractmethod
@@ -69,8 +73,8 @@ class SpecialHandler[T](ABC):
 
 class NumberSpecialHandler(SpecialHandler[float]):
     @override
-    def try_match(self, direction: HexDir, signature: str) -> float | None:
-        match signature[:4]:
+    def try_match(self, pattern: HexPattern) -> float | None:
+        match pattern.signature[:4]:
             case "aqaa":
                 sign = 1
             case "dedd":
@@ -79,7 +83,7 @@ class NumberSpecialHandler(SpecialHandler[float]):
                 return None
 
         accumulator = 0
-        for c in signature[4:]:
+        for c in pattern.signature[4:]:
             match c:
                 case "w":
                     accumulator += 1
@@ -111,16 +115,16 @@ class NumberSpecialHandler(SpecialHandler[float]):
 
 class MaskSpecialHandler(SpecialHandler[str]):
     @override
-    def try_match(self, direction: HexDir, signature: str) -> str | None:
-        if signature.startswith(HexAngle.LEFT_BACK.letter):
-            flat_dir = direction.rotated_by(HexAngle.LEFT)
+    def try_match(self, pattern: HexPattern) -> str | None:
+        if pattern.signature.startswith(HexAngle.LEFT_BACK.letter):
+            flat_dir = pattern.direction.rotated_by(HexAngle.LEFT)
         else:
-            flat_dir = direction
+            flat_dir = pattern.direction
 
         result = ""
         is_on_baseline = True
 
-        for direction in HexPattern(direction, signature).iter_directions():
+        for direction in pattern.iter_directions():
             match direction.angle_from(flat_dir):
                 case HexAngle.FORWARD if is_on_baseline:
                     result += "-"

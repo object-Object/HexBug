@@ -5,6 +5,7 @@ from typing import Any, Awaitable, Callable, Self, override
 
 from discord import (
     ButtonStyle,
+    Color,
     DiscordException,
     Embed,
     File,
@@ -18,11 +19,13 @@ from discord import (
 from discord.app_commands import ContextMenu, Transform
 from discord.app_commands.transformers import EnumNameTransformer
 from discord.ext.commands import GroupCog
+from hexdoc.core import ResourceLocation
 
 from HexBug.core.bot import HexBugBot
 from HexBug.core.cog import HexBugCog
 from HexBug.core.exceptions import InvalidInputError
-from HexBug.data.hex_math import VALID_SIGNATURE_PATTERN, HexDir
+from HexBug.core.translator import translate_text
+from HexBug.data.hex_math import VALID_SIGNATURE_PATTERN, HexDir, HexPattern
 from HexBug.data.patterns import PatternInfo, PatternOperator
 from HexBug.data.registry import HexBugRegistry, PatternMatchResult
 from HexBug.data.special_handlers import SpecialHandlerMatch
@@ -40,7 +43,11 @@ from HexBug.utils.discord.transformers import (
     PatternInfoOption,
     SpecialHandlerInfoOption,
 )
-from HexBug.utils.discord.visibility import MessageVisibility, add_visibility_buttons
+from HexBug.utils.discord.visibility import (
+    MessageVisibility,
+    add_visibility_buttons,
+    respond_with_visibility,
+)
 
 PATTERN_FILENAME = "pattern.png"
 
@@ -100,14 +107,7 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
         visibility: MessageVisibility = "private",
         hide_stroke_order: bool = False,
     ):
-        signature = signature.lower()
-        if signature in ["-", '"-"']:
-            signature = ""
-        elif not VALID_SIGNATURE_PATTERN.fullmatch(signature):
-            raise InvalidInputError(
-                value=signature,
-                message="Invalid signature, must only contain the characters `aqweds`.",
-            )
+        signature = validate_signature(signature)
 
         pattern = self.bot.registry.try_match_pattern(direction, signature)
 
@@ -118,6 +118,58 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
             signature=signature,
             hide_stroke_order=hide_stroke_order,
         ).send(visibility)
+
+    @app_commands.command()
+    async def check(
+        self,
+        interaction: Interaction,
+        signature: str,
+        is_per_world: bool,
+        visibility: MessageVisibility = "private",
+    ):
+        signature = validate_signature(signature)
+        pattern = HexPattern(HexDir.EAST, signature)
+
+        conflicts = dict[ResourceLocation, PatternMatchResult]()
+
+        if conflict := self.bot.registry.try_match_pattern(pattern):
+            conflicts[conflict.id] = conflict
+
+        if is_per_world:
+            segments = pattern.get_aligned_segments()
+            for conflict in self.bot.registry.lookups.segments.get(segments, []):
+                conflicts[conflict.id] = conflict
+
+        title = await translate_text(interaction, "title", conflicts=len(conflicts))
+
+        if conflicts:
+            embed = Embed(
+                title=title,
+                description="\n".join(
+                    f"- {conflict.name} (`{conflict.id}`)"
+                    for conflict in conflicts.values()
+                ),
+                color=Color.red(),
+            )
+        else:
+            embed = Embed(
+                description=title,
+                color=Color.green(),
+            )
+
+        await respond_with_visibility(interaction, visibility, embed=embed)
+
+
+def validate_signature(signature: str) -> str:
+    signature = signature.lower()
+    if signature in ["-", '"-"']:
+        signature = ""
+    elif not VALID_SIGNATURE_PATTERN.fullmatch(signature):
+        raise InvalidInputError(
+            value=signature,
+            message="Invalid signature, must only contain the characters `aqweds`.",
+        )
+    return signature
 
 
 @dataclass(kw_only=True)

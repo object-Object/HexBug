@@ -5,7 +5,7 @@ import os
 from collections import defaultdict
 from itertools import zip_longest
 from pathlib import Path
-from typing import Any, Self
+from typing import Any, Self, overload
 
 from hexdoc.cli.utils import init_context
 from hexdoc.core import (
@@ -30,7 +30,7 @@ from HexBug.utils.hexdoc import (
     monkeypatch_hexdoc_hexcasting,
 )
 
-from .hex_math import VALID_SIGNATURE_PATTERN, HexDir, HexPattern, PatternSignature
+from .hex_math import HexDir, HexPattern, PatternSignature
 from .mods import DynamicModInfo, ModInfo
 from .patterns import PatternInfo, PatternOperator
 from .special_handlers import SpecialHandlerInfo, SpecialHandlerMatch
@@ -343,30 +343,47 @@ class HexBugRegistry(BaseModel):
     def pregenerated_numbers(self):
         return self._pregenerated_numbers
 
+    @overload
+    def try_match_pattern(
+        self,
+        pattern: HexPattern,
+        /,
+    ) -> PatternMatchResult | None: ...
+
+    @overload
     def try_match_pattern(
         self,
         direction: HexDir,
         signature: str,
+        /,
+    ) -> PatternMatchResult | None: ...
+
+    def try_match_pattern(
+        self,
+        direction_or_pattern: HexDir | HexPattern,
+        signature: str | None = None,
+        /,
     ) -> PatternMatchResult | None:
         # https://github.com/FallingColors/HexMod/blob/ef2cd28b2a/Common/src/main/java/at/petrak/hexcasting/common/casting/PatternRegistryManifest.java#L93
 
-        signature = signature.lower()
-        if not VALID_SIGNATURE_PATTERN.fullmatch(signature):
-            raise ValueError(f"Invalid pattern signature: {signature}")
+        match direction_or_pattern:
+            case HexPattern() as pattern:
+                pass
+            case HexDir() as direction:
+                assert signature is not None
+                pattern = HexPattern(direction, signature)
 
         # normal patterns
-        if pattern := self.lookups.signature.get(signature):
-            return pattern
+        if info := self.lookups.signature.get(pattern.signature):
+            return info
 
         # per world patterns (eg. Create Lava)
-        if pattern := self.lookups.per_world_segments.get(
-            HexPattern(direction, signature).get_aligned_segments()
-        ):
-            return pattern
+        if info := self.lookups.per_world_segments.get(pattern.get_aligned_segments()):
+            return info
 
         # special handlers (eg. Numerical Reflection)
         for special_handler in SPECIAL_HANDLERS.values():
-            if (value := special_handler.try_match(direction, signature)) is not None:
+            if (value := special_handler.try_match(pattern)) is not None:
                 return SpecialHandlerMatch(
                     handler=special_handler,
                     info=self.special_handlers[special_handler.id],
