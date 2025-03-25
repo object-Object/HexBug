@@ -1784,7 +1784,7 @@ wheels = [
 [[package]]
 name = "object-ci"
 version = "0.1.0"
-source = { git = "https://github.com/object-Object/ci?rev=v0#6c2cba42668b4c632a1368adb5034e733cb6cc0a" }
+source = { git = "https://github.com/object-Object/ci?rev=v0#ff3bc4f4204b3ba7153c247c1a73af649e5d27ad" }
 
 [package.optional-dependencies]
 aws-cdk = [

@@ -14,7 +14,19 @@ def main():
     logger.info("Ready.")
     app = cdk.App()
 
-    CodeDeployStack.default_prod_stack(app)
+    CodeDeployStack.default_prod_stack(
+        app,
+        stage="beta",
+        codedeploy_environment="beta-codedeploy",
+        application_name="beta-HexBug",
+    )
+
+    CodeDeployStack.default_prod_stack(
+        app,
+        stage="prod",
+        codedeploy_environment="prod-codedeploy",
+        application_name="prod-HexBug",
+    )
 
     logger.info("Synthesizing.")
     app.synth()

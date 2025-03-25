@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /var/lib/codedeploy-apps/HexBug
+    destination: /var/lib/codedeploy-apps/$APPLICATION_NAME
 file_exists_behavior: OVERWRITE
 hooks:
   ApplicationStop:

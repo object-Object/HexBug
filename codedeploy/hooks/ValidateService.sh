@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euox pipefail
 
-cd /var/lib/codedeploy-apps/HexBug
+cd "/var/lib/codedeploy-apps/$APPLICATION_NAME"
 
 if ! docker compose exec \
     --env HEALTH_CHECK_DISPLAY_NAME=CodeDeploy \
