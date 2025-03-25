@@ -44,13 +44,13 @@ jobs:
           context: .
           load: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:tmp
-      
+
       - name: Extract registry from image
         run: |
           id=$(docker create ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:tmp)
           docker cp $id:/app/registry.json registry.json
           docker rm -v $id
-      
+
       - name: Export Docker image
         uses: docker/build-push-action@v5
         with:
