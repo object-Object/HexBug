@@ -48,6 +48,7 @@ from HexBug.utils.discord.visibility import (
     add_visibility_buttons,
     respond_with_visibility,
 )
+from HexBug.utils.strings import join_truthy
 
 PATTERN_FILENAME = "pattern.png"
 
@@ -223,14 +224,6 @@ class PatternView(ui.View):
             return self.registry.mods[self.operator.mod_id]
 
     @property
-    def pattern_info(self):
-        match self.pattern:
-            case (PatternInfo() as info) | SpecialHandlerMatch(info=info):
-                return info
-            case None:
-                return None
-
-    @property
     def title(self):
         if self.pattern:
             return self.pattern.name
@@ -312,32 +305,31 @@ class PatternView(ui.View):
             )
 
     def get_embed(self) -> Embed:
-        if self.operator:
-            description_lines = [
-                self.operator.args,
-                self.operator.description,
-            ]
-            description = "\n\n".join(line for line in description_lines if line)
-        else:
-            description = None
-
-        footer = f"{self.direction.name} {self.signature}"
-        if self.pattern_info:
-            footer = f"{self.pattern_info.id}  •  {footer}"
-
         embed = (
             Embed(
                 title=self.title,
-                url=self.operator and self.operator.book_url,
-                description=description,
             )
             .set_image(
                 url=f"attachment://{PATTERN_FILENAME}",
             )
             .set_footer(
-                text=footer,
+                text=join_truthy(
+                    "  •  ",
+                    self.pattern and self.pattern.id,
+                    not self.hide_stroke_order
+                    and f"{self.direction.name} {self.signature}",
+                ),
             )
         )
+
+        if self.operator:
+            embed.description = join_truthy(
+                "\n\n",
+                self.operator.args,
+                self.operator.description,
+            )
+            if self.operator.book_url:
+                embed.url = str(self.operator.book_url)
 
         if self.mod:
             embed.set_author(
