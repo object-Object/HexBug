@@ -6,7 +6,7 @@ from hexdoc.core import ResourceLocation
 from hexdoc.utils import PydanticURL
 from pydantic import BaseModel, Field, field_validator
 
-from .hex_math import HexDir, PatternSignature
+from .hex_math import HexDir, HexPattern, PatternSignature
 
 
 class StaticPatternInfo(BaseModel):
@@ -30,6 +30,10 @@ class PatternInfo(BaseModel):
     signature: PatternSignature
     is_per_world: bool
     operators: list[PatternOperator]
+
+    @property
+    def pattern(self):
+        return HexPattern(self.direction, self.signature)
 
 
 class PatternOperator(BaseModel):

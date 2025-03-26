@@ -168,6 +168,9 @@ class HexPattern:
     direction: HexDir
     signature: PatternSignature
 
+    def display(self) -> str:
+        return f"{self.direction.name} {self.signature}".rstrip()
+
     def iter_angles(self) -> Iterator[HexAngle]:
         for c in self.signature:
             yield HexAngle[c]

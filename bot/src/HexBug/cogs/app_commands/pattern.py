@@ -55,19 +55,18 @@ PATTERN_FILENAME = "pattern.png"
 
 class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
     @app_commands.command()
-    @app_commands.rename(pattern="name")
+    @app_commands.rename(info="name")
     async def name(
         self,
         interaction: Interaction,
-        pattern: PatternInfoOption,
+        info: PatternInfoOption,
         visibility: MessageVisibility = "private",
     ):
         await PatternView(
             interaction=interaction,
-            pattern=pattern,
-            direction=pattern.direction,
-            signature=pattern.signature,
-            hide_stroke_order=pattern.is_per_world,
+            pattern=info.pattern,
+            info=info,
+            hide_stroke_order=info.is_per_world,
         ).send(visibility)
 
     @app_commands.command()
@@ -89,13 +88,12 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
 
         await PatternView(
             interaction=interaction,
-            pattern=SpecialHandlerMatch(
+            pattern=pattern,
+            info=SpecialHandlerMatch(
                 handler=handler,
                 info=info,
                 value=parsed_value,
             ),
-            direction=pattern.direction,
-            signature=pattern.signature,
             hide_stroke_order=False,
         ).send(visibility)
 
@@ -109,14 +107,14 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
         hide_stroke_order: bool = False,
     ):
         signature = validate_signature(signature)
+        pattern = HexPattern(direction, signature)
 
-        pattern = self.bot.registry.try_match_pattern(direction, signature)
+        info = self.bot.registry.try_match_pattern(pattern)
 
         await PatternView(
             interaction=interaction,
             pattern=pattern,
-            direction=direction,
-            signature=signature,
+            info=info,
             hide_stroke_order=hide_stroke_order,
         ).send(visibility)
 
@@ -176,9 +174,8 @@ def validate_signature(signature: str) -> str:
 @dataclass(kw_only=True)
 class PatternView(ui.View):
     interaction: Interaction
-    pattern: PatternMatchResult | None
-    direction: HexDir
-    signature: str
+    pattern: HexPattern
+    info: PatternMatchResult | None
     hide_stroke_order: bool
 
     def __post_init__(self):
@@ -201,7 +198,7 @@ class PatternView(ui.View):
 
     @property
     def operators(self) -> list[PatternOperator]:
-        match self.pattern:
+        match self.info:
             case PatternInfo(operators=operators):
                 return operators
             case SpecialHandlerMatch(info=info):
@@ -225,10 +222,10 @@ class PatternView(ui.View):
 
     @property
     def title(self):
-        if self.pattern:
-            return self.pattern.name
-        if self.signature == "dewdeqwwedaqedwadweqewwd":
+        if self.pattern.signature == "dewdeqwwedaqedwadweqewwd":
             return "Amogus"
+        if self.info:
+            return self.info.name
         return "Unknown"
 
     @override
@@ -315,9 +312,8 @@ class PatternView(ui.View):
             .set_footer(
                 text=join_truthy(
                     "  •  ",
-                    self.pattern and self.pattern.id,
-                    not self.hide_stroke_order
-                    and f"{self.direction.name} {self.signature}",
+                    self.info and self.info.id,
+                    not self.hide_stroke_order and self.pattern.display(),
                 ),
             )
         )
@@ -342,8 +338,8 @@ class PatternView(ui.View):
 
     def get_image(self) -> File:
         return self.options.render_discord_file(
-            direction=self.direction,
-            signature=self.signature,
+            direction=self.pattern.direction,
+            signature=self.pattern.signature,
             hide_stroke_order=self.hide_stroke_order,
             filename=PATTERN_FILENAME,
         )
