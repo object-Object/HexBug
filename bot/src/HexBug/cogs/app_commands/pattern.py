@@ -338,8 +338,7 @@ class PatternView(ui.View):
 
     def get_image(self) -> File:
         return self.options.render_discord_file(
-            direction=self.pattern.direction,
-            signature=self.pattern.signature,
+            self.pattern,
             hide_stroke_order=self.hide_stroke_order,
             filename=PATTERN_FILENAME,
         )
