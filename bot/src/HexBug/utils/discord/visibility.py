@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from datetime import UTC, datetime
 from re import Match
 from typing import Any, Awaitable, Callable, Literal
 
@@ -81,16 +80,11 @@ class SendAsPublicButton(Button[Any]):
 
 
 @dataclass
-class PermanentDeleteButton(
+class DeleteButton(
     DynamicItem[Button[Any]],
     template=r"DeleteButton:user:(?P<id>[0-9]+)",
 ):
-    """A button that deletes its message when pressed by the user who created it.
-
-    Only works in guilds where the bot has been installed! Otherwise we get an error
-    (`403 Forbidden (error code: 50001): Missing Access`) when trying to delete the
-    message.
-    """
+    """A button that deletes its message when pressed by the user who created it."""
 
     user_id: int
 
@@ -112,44 +106,15 @@ class PermanentDeleteButton(
         return cls(user_id=int(match["id"]))
 
     async def callback(self, interaction: Interaction):
-        if (
-            interaction.user.id == self.user_id
-            and interaction.message is not None
-            and interaction.message.author == interaction.client.user
-        ):
-            await interaction.message.delete()
-        else:
+        if interaction.user.id != self.user_id:
             await interaction.response.defer()
+            return
 
-
-@dataclass
-class TemporaryDeleteButton(Button[Any]):
-    """A button that deletes the original interaction's message when pressed by the user
-    who created it.
-
-    Will stop working after 15 minutes (ie. when the interaction expires), or when the
-    bot restarts.
-    """
-
-    original_interaction: Interaction
-
-    def __post_init__(self):
-        super().__init__(emoji="🗑️")
-
-    async def callback(self, interaction: Interaction):
-        await interaction.response.defer()
-        if interaction.user == self.original_interaction.user:
-            await self.original_interaction.delete_original_response()
-
-
-def add_delete_button(view: View, interaction: Interaction):
-    # we can't delete our own messages if the user is running this in a place where
-    # the bot hasn't been added
-    if interaction.is_guild_integration():
-        view.add_item(PermanentDeleteButton(interaction.user.id))
-    else:
-        view.add_item(TemporaryDeleteButton(interaction))
-        view.timeout = (interaction.expires_at - datetime.now(UTC)).total_seconds()
+        # if the bot is in DMs, delete_original_response fails with this error:
+        # 404 Not Found (error code: 10015): Unknown Webhook
+        # but it works if we first "edit" the message that the component is on
+        await interaction.response.edit_message()
+        await interaction.delete_original_response()
 
 
 def get_command_usage_button(
@@ -182,6 +147,6 @@ def add_visibility_buttons(
         case "private":
             view.add_item(SendAsPublicButton(interaction, send_as_public))
         case "public":
-            add_delete_button(view, interaction)
+            view.add_item(DeleteButton(user_id=interaction.user.id))
             if show_usage:
                 view.add_item(get_command_usage_button(interaction, command))
