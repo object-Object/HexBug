@@ -174,11 +174,13 @@ class OverevaluateTailDepthSpecialHandler(SpecialHandler[int]):
         direction: HexDir,
         prefix: str,
         initial_depth: int,
+        tail_chars: str,
     ):
         super().__init__(id)
         self.direction = direction
         self.prefix = prefix
         self.initial_depth = initial_depth
+        self.tail_chars = tail_chars
 
     @override
     def try_match(self, pattern: HexPattern) -> int | None:
@@ -188,7 +190,7 @@ class OverevaluateTailDepthSpecialHandler(SpecialHandler[int]):
 
         depth = self.initial_depth
         for index, char in enumerate(tail):
-            if char != "qe"[index % 2]:
+            if char != self.get_tail_char(index):
                 return None
             depth += 1
 
@@ -212,7 +214,10 @@ class OverevaluateTailDepthSpecialHandler(SpecialHandler[int]):
             )
 
         signature = self.prefix + "".join(
-            "qe"[index % 2] for index in range(depth - self.initial_depth)
+            self.get_tail_char(index) for index in range(depth - self.initial_depth)
         )
 
         return depth, HexPattern(self.direction, signature)
+
+    def get_tail_char(self, index: int):
+        return self.tail_chars[index % len(self.tail_chars)]

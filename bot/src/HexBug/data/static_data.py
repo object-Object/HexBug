@@ -251,12 +251,28 @@ SPECIAL_HANDLERS: dict[ResourceLocation, SpecialHandler[Any]] = {
             direction=HexDir.SOUTH_EAST,
             prefix="deaqqd",
             initial_depth=1,
+            tail_chars="qe",
         ),
         OverevaluateTailDepthSpecialHandler(
             id=ResourceLocation("overevaluate", "sekhmet"),
             direction=HexDir.SOUTH_WEST,
             prefix="qaqdd",
             initial_depth=0,
+            tail_chars="qe",
+        ),
+        OverevaluateTailDepthSpecialHandler(
+            id=ResourceLocation("overevaluate", "geb"),
+            direction=HexDir.WEST,
+            prefix="aaeaad",
+            initial_depth=1,
+            tail_chars="w",
+        ),
+        OverevaluateTailDepthSpecialHandler(
+            id=ResourceLocation("overevaluate", "nut"),
+            direction=HexDir.EAST,
+            prefix="aawdde",
+            initial_depth=1,
+            tail_chars="w",
         ),
     ]
 }
