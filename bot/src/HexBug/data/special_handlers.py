@@ -136,6 +136,9 @@ class MaskSpecialHandler(SpecialHandler[str]):
                 case _:
                     return None
 
+        if not is_on_baseline:
+            return None
+
         return result
 
     @override

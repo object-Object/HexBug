@@ -37,6 +37,7 @@ def describe_MaskSpecialHandler():
             ("eaa", None),
             ("q", None),
             ("d", None),
+            ("e", None),
         ],
         ids=lambda v: f"'{v}'",
     )
