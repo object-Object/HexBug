@@ -1072,12 +1072,13 @@ wheels = [
 [[package]]
 name = "hexdoc-hextrogen"
 version = "1.0.0.1.0.0"
-source = { registry = "vendor" }
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "hexdoc-hexcasting" },
 ]
+sdist = { url = "https://files.pythonhosted.org/packages/b6/aa/0c86ceabaa266a9d431dac7bbc1627df933b590832b778f38737f41855a6/hexdoc_hextrogen-1.0.0.1.0.0.tar.gz", hash = "sha256:81549f9a26f0e2fc5c687bbff6bddd948dc8215d9f7b3db97679aa1a0358315f", size = 8481 }
 wheels = [
-    { path = "hexdoc_hextrogen-1.0.0.1.0.0-py3-none-any.whl" },
+    { url = "https://files.pythonhosted.org/packages/ea/34/842669d6c76851a904c7d8b10ddbcc6a6eac3e6d8752bf607e5c30001e5e/hexdoc_hextrogen-1.0.0.1.0.0-py3-none-any.whl", hash = "sha256:585b2ec3bebbe0f5263e827e56edaf8ffe25e14039a891b44379931abbcff304", size = 10822 },
 ]
 
 [[package]]
