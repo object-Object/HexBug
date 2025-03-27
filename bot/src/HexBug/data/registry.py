@@ -245,6 +245,8 @@ class HexBugRegistry(BaseModel):
 
         # load patterns
 
+        logger.info("Loading patterns.")
+
         pattern_infos = [
             pattern_info
             for pattern_metadata in pattern_metadatas.values()
@@ -295,6 +297,8 @@ class HexBugRegistry(BaseModel):
                 raise ValueError(f"No operators found for pattern: {pattern.id}")
 
             registry._register_pattern(pattern)
+
+        logger.info("Loading special handlers.")
 
         for special_handler in SPECIAL_HANDLERS.values():
             ops = id_ops.get(special_handler.id)
