@@ -833,6 +833,7 @@ data = [
     { name = "hexdoc-hexcassettes" },
     { name = "hexdoc-hexcasting" },
     { name = "hexdoc-hexcellular" },
+    { name = "hexdoc-hexchanting" },
     { name = "hexdoc-hexdebug" },
     { name = "hexdoc-hexdim" },
     { name = "hexdoc-hexgender" },
@@ -859,6 +860,7 @@ requires-dist = [
     { name = "hexdoc-hexcassettes", marker = "extra == 'data'", specifier = "~=1.1.4.0" },
     { name = "hexdoc-hexcasting", marker = "extra == 'data'", specifier = "~=0.11.2.0" },
     { name = "hexdoc-hexcellular", marker = "extra == 'data'", specifier = "~=1.0.4.0" },
+    { name = "hexdoc-hexchanting", marker = "extra == 'data'", specifier = "~=1.0.1.0" },
     { name = "hexdoc-hexdebug", marker = "extra == 'data'", url = "https://github.com/object-Object/HexDebug/raw/39db79beaf8b7172eec9db165b58dcb97b8c427c/docs/v/latest/main/dist/hexdoc_hexdebug-0.3.0.1.20.1.1.0-py3-none-any.whl" },
     { name = "hexdoc-hexdim", marker = "extra == 'data'", specifier = "~=1.2.1.1.20.0" },
     { name = "hexdoc-hexgender", marker = "extra == 'data'", specifier = "~=1.0.4.0" },
@@ -1025,6 +1027,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/93/da/7c900e80570e53f5388356203444ebd978b13003067559f347305d0c6cdc/hexdoc_hexcellular-1.0.4.1.0.0.tar.gz", hash = "sha256:8354128620ac60799dfe0d26b6ef48fe7c367811b8717f40c457a4f3337d64b6", size = 8381 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/64/5d/a61f2a3dd4c25c0dc525f0c7f47b79853b0fd27745b1c574c497cc340535/hexdoc_hexcellular-1.0.4.1.0.0-py3-none-any.whl", hash = "sha256:4cae160a321ceed6ffa8f7c84b9778cb4e41ca3e66416b99e40cfca5848ab770", size = 10856 },
+]
+
+[[package]]
+name = "hexdoc-hexchanting"
+version = "1.0.1.1.0.dev0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "hexdoc-hexcasting" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/13/a8/fb3d819bdbf1cd54a83c97454c51f3c21c635cc715763c943a0801bb9ad5/hexdoc_hexchanting-1.0.1.1.0.dev0.tar.gz", hash = "sha256:16510bd3dbc731bb7a99ba337e66dc36beebd9ba82d934935f93759dd6ab825b", size = 15646 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/a3/9d/5203c2b996841e6c97d730d2384287f789121f5a4338fce609f6477388af/hexdoc_hexchanting-1.0.1.1.0.dev0-py3-none-any.whl", hash = "sha256:695d6841885300d6945f02bef7d8133b72caabdebc74c426049b77008c243090", size = 24536 },
 ]
 
 [[package]]

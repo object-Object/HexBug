@@ -87,6 +87,15 @@ MODS: list[StaticModInfo] = [
         modloaders=[Modloader.FABRIC],
     ),
     StaticModInfo(
+        id="hexchanting",
+        name="Hexchanting",
+        description="Imbue your equipment with the power of Hex Casting.",
+        icon_url=None,
+        curseforge_slug=None,
+        modrinth_slug=None,
+        modloaders=[Modloader.FABRIC],
+    ),
+    StaticModInfo(
         id="hexdebug",
         name="HexDebug",
         description="Adds items and patterns to allow debugging hexes in VSCode, and a block to make editing hexes ingame much easier.",

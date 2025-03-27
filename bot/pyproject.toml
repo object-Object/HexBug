@@ -32,6 +32,7 @@ data = [
     "hexdoc-hexal~=0.3.0.0",
     "hexdoc-hexcassettes~=1.1.4.0",
     "hexdoc-hexcellular~=1.0.4.0",
+    "hexdoc-hexchanting~=1.0.1.0",
     "hexdoc-hexdebug~=0.3.0.1.20.1.0",
     "hexdoc-hexdim~=1.2.1.1.20.0",
     "hexdoc-hexgender~=1.0.4.0",

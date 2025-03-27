@@ -17,7 +17,7 @@ class StaticModInfo(BaseModel):
     id: str
     name: str
     description: str
-    icon_url: PydanticURL
+    icon_url: PydanticURL | None
     curseforge_slug: str | None
     modrinth_slug: str | None
     modloaders: list[Modloader]
