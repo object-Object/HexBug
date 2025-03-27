@@ -159,7 +159,7 @@ MODS: list[StaticModInfo] = [
             "https://raw.githubusercontent.com/miyucomics/hextrogen/da935ed8dbe3958180e45fe031c9aa42a9fbd901/src/main/resources/assets/hextrogen/icon.png"
         ),
         curseforge_slug=None,
-        modrinth_slug=None,
+        modrinth_slug="hextrogen",
         modloaders=[Modloader.FABRIC],
     ),
     StaticModInfo(
