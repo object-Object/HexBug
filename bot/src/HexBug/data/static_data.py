@@ -6,7 +6,12 @@ from yarl import URL
 from .hex_math import HexDir
 from .mods import Modloader, StaticModInfo
 from .patterns import StaticPatternInfo
-from .special_handlers import MaskSpecialHandler, NumberSpecialHandler, SpecialHandler
+from .special_handlers import (
+    MaskSpecialHandler,
+    NumberSpecialHandler,
+    OverevaluateTailDepthSpecialHandler,
+    SpecialHandler,
+)
 
 MODS: list[StaticModInfo] = [
     StaticModInfo(
@@ -240,6 +245,18 @@ SPECIAL_HANDLERS: dict[ResourceLocation, SpecialHandler[Any]] = {
         ),
         MaskSpecialHandler(
             id=ResourceLocation("hexcasting", "mask"),
+        ),
+        OverevaluateTailDepthSpecialHandler(
+            id=ResourceLocation("overevaluate", "nephthys"),
+            direction=HexDir.SOUTH_EAST,
+            prefix="deaqqd",
+            initial_depth=1,
+        ),
+        OverevaluateTailDepthSpecialHandler(
+            id=ResourceLocation("overevaluate", "sekhmet"),
+            direction=HexDir.SOUTH_WEST,
+            prefix="qaqdd",
+            initial_depth=0,
         ),
     ]
 }

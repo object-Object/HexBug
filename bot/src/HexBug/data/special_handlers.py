@@ -165,3 +165,54 @@ class MaskSpecialHandler(SpecialHandler[str]):
                     raise RuntimeError("unreachable")
 
         return value, HexPattern(direction, signature)
+
+
+class OverevaluateTailDepthSpecialHandler(SpecialHandler[int]):
+    def __init__(
+        self,
+        id: ResourceLocation,
+        direction: HexDir,
+        prefix: str,
+        initial_depth: int,
+    ):
+        super().__init__(id)
+        self.direction = direction
+        self.prefix = prefix
+        self.initial_depth = initial_depth
+
+    @override
+    def try_match(self, pattern: HexPattern) -> int | None:
+        tail = pattern.signature.removeprefix(self.prefix)
+        if tail == pattern.signature:
+            return None
+
+        depth = self.initial_depth
+        for index, char in enumerate(tail):
+            if char != "qe"[index % 2]:
+                return None
+            depth += 1
+
+        return depth
+
+    @override
+    def parse_value(self, registry: HexBugRegistry, value: str):
+        value = value.strip()
+        if value.isnumeric():
+            depth = int(value)
+        elif all(c == "-" for c in value):
+            depth = len(value)
+        else:
+            raise ValueError(
+                f"Invalid tail depth (expected an integer or dashes): {value}"
+            )
+
+        if depth < self.initial_depth:
+            raise ValueError(
+                f"Invalid tail depth (expected at least {self.initial_depth}): {depth}"
+            )
+
+        signature = self.prefix + "".join(
+            "qe"[index % 2] for index in range(depth - self.initial_depth)
+        )
+
+        return depth, HexPattern(self.direction, signature)
