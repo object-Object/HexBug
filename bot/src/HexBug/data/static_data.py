@@ -303,10 +303,7 @@ DISABLED_PATTERNS: set[ResourceLocation] = {
     ResourceLocation("oneironaut", "circle"),
 }
 
-PATTERN_NAME_OVERRIDES: dict[ResourceLocation, str] = {
-    ResourceLocation("moreiotas", "type/iota"): "Classifier's Purification (MoreIotas)",
-    ResourceLocation("hexical", "classify"): "Classifier's Purification (Hexical)",
-}
+PATTERN_NAME_OVERRIDES: dict[ResourceLocation, str] = {}
 
 DISABLED_PAGES: set[str] = {
     "lamp/arch_lamps@hexical:lamp_finale",
