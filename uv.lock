@@ -852,23 +852,23 @@ requires-dist = [
     { name = "hex-renderer-py", specifier = ">=0.1.3" },
     { name = "hexbug-common", editable = "common" },
     { name = "hexdoc", specifier = ">=1!0.1.0a23" },
-    { name = "hexdoc-complexhex", marker = "extra == 'data'", specifier = "~=0.1.3.0" },
+    { name = "hexdoc-complexhex", marker = "extra == 'data'", url = "https://github.com/kineticneticat/ComplexHex/raw/2b0592408b09d14e1acb74a15ccd3b1dd7c211d4/docs/v/latest/0.1.x/dist/hexdoc_complexhex-0.1.3.1.0.dev0-py3-none-any.whl" },
     { name = "hexdoc-dthexcasting", marker = "extra == 'data'", specifier = "~=1.0.1.0" },
-    { name = "hexdoc-ephemera", marker = "extra == 'data'", specifier = "~=0.3.0.0" },
+    { name = "hexdoc-ephemera", marker = "extra == 'data'", url = "https://github.com/beholderface/Ephemera/raw/77628c3c484f5754e9b714164a787baea1ec4e5d/docs/v/latest/1.20.1/dist/hexdoc_ephemera-0.3.0.1.0.dev0-py3-none-any.whl" },
     { name = "hexdoc-hexal", marker = "extra == 'data'", specifier = "~=0.3.0.0" },
     { name = "hexdoc-hexcassettes", marker = "extra == 'data'", specifier = "~=1.1.4.0" },
     { name = "hexdoc-hexcasting", marker = "extra == 'data'", specifier = "~=0.11.2.0" },
     { name = "hexdoc-hexcellular", marker = "extra == 'data'", specifier = "~=1.0.4.0" },
-    { name = "hexdoc-hexdebug", marker = "extra == 'data'", specifier = "~=0.3.0.1.20.1.0" },
+    { name = "hexdoc-hexdebug", marker = "extra == 'data'", url = "https://github.com/object-Object/HexDebug/raw/39db79beaf8b7172eec9db165b58dcb97b8c427c/docs/v/latest/main/dist/hexdoc_hexdebug-0.3.0.1.20.1.1.0-py3-none-any.whl" },
     { name = "hexdoc-hexdim", marker = "extra == 'data'", specifier = "~=1.2.1.1.20.0" },
     { name = "hexdoc-hexgender", marker = "extra == 'data'", specifier = "~=1.0.4.0" },
-    { name = "hexdoc-hexical", marker = "extra == 'data'", specifier = "~=2.0.0.0" },
+    { name = "hexdoc-hexical", marker = "extra == 'data'", url = "https://github.com/miyucomics/hexical/raw/b0f25f7d0782bd25470b7790ad60af6f20609eb1/docs/v/latest/main/dist/hexdoc_hexical-2.0.0.1.0.0-py3-none-any.whl" },
     { name = "hexdoc-hexmapping", marker = "extra == 'data'", specifier = "~=0.0.3.0" },
     { name = "hexdoc-hextrogen", marker = "extra == 'data'", specifier = "~=1.0.0.0" },
     { name = "hexdoc-hexweb", marker = "extra == 'data'", specifier = "~=1.0.4.0" },
-    { name = "hexdoc-moreiotas", marker = "extra == 'data'", specifier = "~=0.1.0.0" },
-    { name = "hexdoc-oneironaut", marker = "extra == 'data'", specifier = "~=0.5.0.0" },
-    { name = "hexdoc-overevaluate", marker = "extra == 'data'", specifier = "~=1.0.0.0" },
+    { name = "hexdoc-moreiotas", marker = "extra == 'data'", url = "https://github.com/object-Object/MoreIotas/raw/91915ee8768d8fc17c8b86d4d888b7df5f536082/docs/v/latest/1.20.1/dist/hexdoc_moreiotas-0.1.0.1.0rc6.dev0-py3-none-any.whl" },
+    { name = "hexdoc-oneironaut", marker = "extra == 'data'", url = "https://github.com/beholderface/oneironaut/raw/70817097a2d1df2aedb36051479b36f6db5d38cc/docs/v/latest/1.20.1/dist/hexdoc_oneironaut-0.5.0.1.0-py3-none-any.whl" },
+    { name = "hexdoc-overevaluate", marker = "extra == 'data'", url = "https://github.com/miyucomics/overevaluate/raw/2aee5bdca57a9882c5851a1d70413a8aa8c5ef9e/docs/v/latest/main/dist/hexdoc_overevaluate-1.0.0.1.0.0-py3-none-any.whl" },
     { name = "matplotlib", specifier = ">=3.10.1" },
     { name = "pfzy", specifier = ">=0.3.4" },
     { name = "pydantic", specifier = ">=2.10.6" },
@@ -937,13 +937,20 @@ wheels = [
 [[package]]
 name = "hexdoc-complexhex"
 version = "0.1.3.1.0.dev0"
-source = { registry = "vendor" }
+source = { url = "https://github.com/kineticneticat/ComplexHex/raw/2b0592408b09d14e1acb74a15ccd3b1dd7c211d4/docs/v/latest/0.1.x/dist/hexdoc_complexhex-0.1.3.1.0.dev0-py3-none-any.whl" }
 dependencies = [
     { name = "hexdoc-hexcasting" },
 ]
 wheels = [
-    { path = "hexdoc_complexhex-0.1.3.1.0.dev0-py3-none-any.whl" },
+    { url = "https://github.com/kineticneticat/ComplexHex/raw/2b0592408b09d14e1acb74a15ccd3b1dd7c211d4/docs/v/latest/0.1.x/dist/hexdoc_complexhex-0.1.3.1.0.dev0-py3-none-any.whl", hash = "sha256:d2c5512035692d7d7f0b4744900f9d0edf7b5c0e75efa8fe8228d591bab7b2e5" },
 ]
+
+[package.metadata]
+requires-dist = [
+    { name = "hexdoc-hexcasting", specifier = "~=0.11.2.1.0.dev20" },
+    { name = "ruff", marker = "extra == 'dev'", specifier = "~=0.1.4" },
+]
+provides-extras = ["dev"]
 
 [[package]]
 name = "hexdoc-dthexcasting"
@@ -960,13 +967,20 @@ wheels = [
 [[package]]
 name = "hexdoc-ephemera"
 version = "0.3.0.1.0.dev0"
-source = { registry = "vendor" }
+source = { url = "https://github.com/beholderface/Ephemera/raw/77628c3c484f5754e9b714164a787baea1ec4e5d/docs/v/latest/1.20.1/dist/hexdoc_ephemera-0.3.0.1.0.dev0-py3-none-any.whl" }
 dependencies = [
     { name = "hexdoc-hexcasting" },
 ]
 wheels = [
-    { path = "hexdoc_ephemera-0.3.0.1.0.dev0-py3-none-any.whl" },
+    { url = "https://github.com/beholderface/Ephemera/raw/77628c3c484f5754e9b714164a787baea1ec4e5d/docs/v/latest/1.20.1/dist/hexdoc_ephemera-0.3.0.1.0.dev0-py3-none-any.whl", hash = "sha256:6980326c35b78db4bc76bbbcb51bc025a6ec2c14e4aa3b18ec1679b1b35d63b2" },
 ]
+
+[package.metadata]
+requires-dist = [
+    { name = "hexdoc-hexcasting", specifier = "~=0.11.2.1.0" },
+    { name = "ruff", marker = "extra == 'dev'", specifier = "~=0.1.4" },
+]
+provides-extras = ["dev"]
 
 [[package]]
 name = "hexdoc-hexal"
@@ -1016,14 +1030,22 @@ wheels = [
 [[package]]
 name = "hexdoc-hexdebug"
 version = "0.3.0.1.20.1.1.0"
-source = { registry = "vendor" }
+source = { url = "https://github.com/object-Object/HexDebug/raw/39db79beaf8b7172eec9db165b58dcb97b8c427c/docs/v/latest/main/dist/hexdoc_hexdebug-0.3.0.1.20.1.1.0-py3-none-any.whl" }
 dependencies = [
     { name = "hexdoc" },
     { name = "hexdoc-hexcasting" },
 ]
 wheels = [
-    { path = "hexdoc_hexdebug-0.3.0.1.20.1.1.0-py3-none-any.whl" },
+    { url = "https://github.com/object-Object/HexDebug/raw/39db79beaf8b7172eec9db165b58dcb97b8c427c/docs/v/latest/main/dist/hexdoc_hexdebug-0.3.0.1.20.1.1.0-py3-none-any.whl", hash = "sha256:7157b9fd2e9254169758c74bc9a236f8d9cf8d39b6e65d6cccfa1ff9a737b446" },
 ]
+
+[package.metadata]
+requires-dist = [
+    { name = "hexdoc", specifier = ">=1!0.1.0a16" },
+    { name = "hexdoc-hexcasting", specifier = "~=0.11.2.1.0" },
+    { name = "ruff", marker = "extra == 'dev'", specifier = "~=0.3.7" },
+]
+provides-extras = ["dev"]
 
 [[package]]
 name = "hexdoc-hexdim"
@@ -1049,13 +1071,20 @@ wheels = [
 [[package]]
 name = "hexdoc-hexical"
 version = "2.0.0.1.0.0"
-source = { registry = "vendor" }
+source = { url = "https://github.com/miyucomics/hexical/raw/b0f25f7d0782bd25470b7790ad60af6f20609eb1/docs/v/latest/main/dist/hexdoc_hexical-2.0.0.1.0.0-py3-none-any.whl" }
 dependencies = [
     { name = "hexdoc-hexcasting" },
 ]
 wheels = [
-    { path = "hexdoc_hexical-2.0.0.1.0.0-py3-none-any.whl" },
+    { url = "https://github.com/miyucomics/hexical/raw/b0f25f7d0782bd25470b7790ad60af6f20609eb1/docs/v/latest/main/dist/hexdoc_hexical-2.0.0.1.0.0-py3-none-any.whl", hash = "sha256:59f8599bc2847b7b5fc904fc171dfc5c47f8cac7d3986f71627b4a5b2149bcdb" },
 ]
+
+[package.metadata]
+requires-dist = [
+    { name = "hexdoc-hexcasting", specifier = "~=0.11.2.1.0.dev20" },
+    { name = "ruff", marker = "extra == 'dev'", specifier = "~=0.1.4" },
+]
+provides-extras = ["dev"]
 
 [[package]]
 name = "hexdoc-hexmapping"
@@ -1105,35 +1134,56 @@ wheels = [
 [[package]]
 name = "hexdoc-moreiotas"
 version = "0.1.0.1.0rc6.dev0"
-source = { registry = "vendor" }
+source = { url = "https://github.com/object-Object/MoreIotas/raw/91915ee8768d8fc17c8b86d4d888b7df5f536082/docs/v/latest/1.20.1/dist/hexdoc_moreiotas-0.1.0.1.0rc6.dev0-py3-none-any.whl" }
 dependencies = [
     { name = "hexdoc-hexcasting" },
 ]
 wheels = [
-    { path = "hexdoc_moreiotas-0.1.0.1.0rc6.dev0-py3-none-any.whl" },
+    { url = "https://github.com/object-Object/MoreIotas/raw/91915ee8768d8fc17c8b86d4d888b7df5f536082/docs/v/latest/1.20.1/dist/hexdoc_moreiotas-0.1.0.1.0rc6.dev0-py3-none-any.whl", hash = "sha256:8550188330d6b2a8c5a8ff00263e556564b55030cbe155112b9528fbb249ee42" },
 ]
+
+[package.metadata]
+requires-dist = [
+    { name = "hexdoc-hexcasting", specifier = "~=0.11.2.1.0" },
+    { name = "ruff", marker = "extra == 'dev'", specifier = "~=0.11.2" },
+]
+provides-extras = ["dev"]
 
 [[package]]
 name = "hexdoc-oneironaut"
 version = "0.5.0.1.0"
-source = { registry = "vendor" }
+source = { url = "https://github.com/beholderface/oneironaut/raw/70817097a2d1df2aedb36051479b36f6db5d38cc/docs/v/latest/1.20.1/dist/hexdoc_oneironaut-0.5.0.1.0-py3-none-any.whl" }
 dependencies = [
     { name = "hexdoc-hexcasting" },
 ]
 wheels = [
-    { path = "hexdoc_oneironaut-0.5.0.1.0-py3-none-any.whl" },
+    { url = "https://github.com/beholderface/oneironaut/raw/70817097a2d1df2aedb36051479b36f6db5d38cc/docs/v/latest/1.20.1/dist/hexdoc_oneironaut-0.5.0.1.0-py3-none-any.whl", hash = "sha256:0548843721092f4a0b119bcb9e6d9c2471d2af47e1cc6f1601343249a96d7bd1" },
 ]
+
+[package.metadata]
+requires-dist = [
+    { name = "hexdoc-hexcasting", specifier = "~=0.11.2.1.0" },
+    { name = "ruff", marker = "extra == 'dev'", specifier = "~=0.1.4" },
+]
+provides-extras = ["dev"]
 
 [[package]]
 name = "hexdoc-overevaluate"
 version = "1.0.0.1.0.0"
-source = { registry = "vendor" }
+source = { url = "https://github.com/miyucomics/overevaluate/raw/2aee5bdca57a9882c5851a1d70413a8aa8c5ef9e/docs/v/latest/main/dist/hexdoc_overevaluate-1.0.0.1.0.0-py3-none-any.whl" }
 dependencies = [
     { name = "hexdoc-hexcasting" },
 ]
 wheels = [
-    { path = "hexdoc_overevaluate-1.0.0.1.0.0-py3-none-any.whl" },
+    { url = "https://github.com/miyucomics/overevaluate/raw/2aee5bdca57a9882c5851a1d70413a8aa8c5ef9e/docs/v/latest/main/dist/hexdoc_overevaluate-1.0.0.1.0.0-py3-none-any.whl", hash = "sha256:318898613996bb72dd6398bbec748565a7d20d65b49b3e51b1407398191e5b2a" },
 ]
+
+[package.metadata]
+requires-dist = [
+    { name = "hexdoc-hexcasting", specifier = "~=0.11.2.1.0.dev20" },
+    { name = "ruff", marker = "extra == 'dev'", specifier = "~=0.1.4" },
+]
+provides-extras = ["dev"]
 
 [[package]]
 name = "httpcore"

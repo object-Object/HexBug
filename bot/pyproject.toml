@@ -46,6 +46,15 @@ data = [
 
 [tool.uv.sources]
 HexBug-common = { workspace = true }
+hexdoc-complexhex = { url = "https://github.com/kineticneticat/ComplexHex/raw/2b0592408b09d14e1acb74a15ccd3b1dd7c211d4/docs/v/latest/0.1.x/dist/hexdoc_complexhex-0.1.3.1.0.dev0-py3-none-any.whl" }
+hexdoc-ephemera = { url = "https://github.com/beholderface/Ephemera/raw/77628c3c484f5754e9b714164a787baea1ec4e5d/docs/v/latest/1.20.1/dist/hexdoc_ephemera-0.3.0.1.0.dev0-py3-none-any.whl" }
+# see: https://github.com/astral-sh/uv/issues/12512
+# hexdoc-hexal = { url = "https://github.com/vgskye/Hexal/raw/6a8700ec078ec716e368f8e17e32191a0e27bd46/docs/v/latest/remaint/dist/hexdoc_hexal-0.3.0.1.0rc3.dev0-py3-none-any.whl" }
+hexdoc-hexdebug = { url = "https://github.com/object-Object/HexDebug/raw/39db79beaf8b7172eec9db165b58dcb97b8c427c/docs/v/latest/main/dist/hexdoc_hexdebug-0.3.0.1.20.1.1.0-py3-none-any.whl" }
+hexdoc-hexical = { url = "https://github.com/miyucomics/hexical/raw/b0f25f7d0782bd25470b7790ad60af6f20609eb1/docs/v/latest/main/dist/hexdoc_hexical-2.0.0.1.0.0-py3-none-any.whl" }
+hexdoc-moreiotas = { url = "https://github.com/object-Object/MoreIotas/raw/91915ee8768d8fc17c8b86d4d888b7df5f536082/docs/v/latest/1.20.1/dist/hexdoc_moreiotas-0.1.0.1.0rc6.dev0-py3-none-any.whl" }
+hexdoc-oneironaut = { url = "https://github.com/beholderface/oneironaut/raw/70817097a2d1df2aedb36051479b36f6db5d38cc/docs/v/latest/1.20.1/dist/hexdoc_oneironaut-0.5.0.1.0-py3-none-any.whl" }
+hexdoc-overevaluate = { url = "https://github.com/miyucomics/overevaluate/raw/2aee5bdca57a9882c5851a1d70413a8aa8c5ef9e/docs/v/latest/main/dist/hexdoc_overevaluate-1.0.0.1.0.0-py3-none-any.whl" }
 
 [tool.hatch.version]
 source = "regex"
