@@ -27,6 +27,9 @@ class HexBugEnv(BaseSettings):
     environment: Literal["dev", "prod"]
     token: SecretStr
 
+    api_port: int
+    api_root_path: str
+
     deployment: DeploymentSettings | None = None
 
     @classmethod

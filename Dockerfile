@@ -40,9 +40,9 @@ RUN --mount=from=uv,source=/uv,target=/bin/uv \
 CMD ["hexbug", "bot"]
 
 HEALTHCHECK \
-    --interval=15m \
+    --interval=1m \
     --timeout=30s \
     --start-period=2m \
-    --start-interval=1m \
-    --retries=1 \
-    CMD ["python", "-m", "HexBug.health_check"]
+    --start-interval=15s \
+    --retries=3 \
+    CMD ["hexbug", "health-check"]

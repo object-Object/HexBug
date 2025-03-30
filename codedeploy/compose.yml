@@ -8,12 +8,9 @@ services:
       - source: env  # created in overrides to fix relative path issues
         target: /app/.env
     environment:
-      HEALTH_CHECK_DISPLAY_NAME: Docker
-      HEALTH_CHECK_PORT: 40404
-      HEALTH_CHECK_STARTUP_DELAY: 0
-      HEALTH_CHECK_TIMEOUT: 15
-      HEALTH_CHECK_ATTEMPTS: 1
-      HEALTH_CHECK_INTERVAL: 0
+      API_PORT: 5000
+      API_ROOT_PATH:
+      HEALTH_CHECK_URL: http://localhost:5000/health
 
 volumes:
   data:

@@ -3,6 +3,7 @@ import logging
 from pathlib import Path
 from typing import Annotated, Any, Coroutine
 
+import httpx
 from typer import Option, Typer
 
 from HexBug.core.bot import HexBugBot
@@ -43,6 +44,17 @@ def build(
     registry = HexBugRegistry.build()
     logger.info(f"Saving registry to file: {output_path}")
     registry.save(output_path, indent=indent)
+
+
+@app.command()
+def health_check(
+    url: Annotated[str, Option("--url", envvar="HEALTH_CHECK_URL")],
+    verbose: Annotated[bool, Option("-v", "--verbose")] = False,
+):
+    setup_logging(verbose)
+    logger.info(f"Sending request to health check url: {url}")
+    resp = httpx.get(url).raise_for_status()
+    logger.info(f"Response: {resp.text}")
 
 
 def run_async(main: Coroutine[Any, Any, Any]):
