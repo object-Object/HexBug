@@ -2,6 +2,7 @@ name: Deploy
 
 on:
   push:
+    branches: v2
     tags: 'v[0-9]+.[0-9]+.[0-9]+*'
   workflow_dispatch:
     inputs:
@@ -32,7 +33,7 @@ jobs:
         run: |
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             STAGE="${{ inputs.stage }}"
-          elif [[ "${{ github.ref_name }}" =~ ^v[0-9]+(\.[0-9]+)+$ ]]; then
+          elif [[ "${{ github.ref }}" =~ ^refs/tags/v[0-9]+(\.[0-9]+)+$ ]]; then
             STAGE="prod"
           else
             STAGE="beta"
