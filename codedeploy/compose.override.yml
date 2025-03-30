@@ -3,8 +3,6 @@ services:
   bot:
     restart: unless-stopped
     image: "${IMAGE}"
-    environment:
-      ENVIRONMENT: prod
 
 secrets:
   env:

@@ -149,6 +149,7 @@ jobs:
 
           cat <<END_OF_FILE > .env
           IMAGE="${{ needs.push-image.outputs.digest }}"
+          ENVIRONMENT="${{ needs.setup.outputs.stage }}"
           TOKEN="${{ secrets.DISCORD_TOKEN }}"
           DEPLOYMENT="{}"
           DEPLOYMENT__COMMIT_SHA="${{ github.sha }}"

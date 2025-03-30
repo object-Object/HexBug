@@ -24,7 +24,7 @@ class BaseSettings(PydanticBaseSettings):
 
 
 class HexBugEnv(BaseSettings):
-    environment: Literal["dev", "prod"]
+    environment: Literal["dev", "beta", "prod"]
     token: SecretStr
 
     api_port: int
