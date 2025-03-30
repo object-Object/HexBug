@@ -9,7 +9,7 @@ services:
         target: /app/.env
     environment:
       API_PORT: 5000
-      API_ROOT_PATH:
+      API_ROOT_PATH: ''
       HEALTH_CHECK_URL: http://localhost:5000/health
 
 volumes:
