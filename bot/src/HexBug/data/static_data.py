@@ -95,7 +95,9 @@ MODS: list[StaticModInfo] = [
         id="hexchanting",
         name="Hexchanting",
         description="Imbue your equipment with the power of Hex Casting.",
-        icon_url=None,
+        icon_url=URL(
+            "https://raw.githubusercontent.com/arconyx/hexchanting/b737ba89641663ed83fc543d67a5fe447f2dac2a/src/main/resources/assets/hexchanting/icon.png",
+        ),
         curseforge_slug=None,
         modrinth_slug=None,
         modloaders=[Modloader.FABRIC],
