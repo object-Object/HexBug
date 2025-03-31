@@ -857,6 +857,7 @@ data = [
     { name = "hexdoc-hexical" },
     { name = "hexdoc-hexmapping" },
     { name = "hexdoc-hextrogen" },
+    { name = "hexdoc-hextweaks" },
     { name = "hexdoc-hexweb" },
     { name = "hexdoc-moreiotas" },
     { name = "hexdoc-oneironaut" },
@@ -885,6 +886,7 @@ requires-dist = [
     { name = "hexdoc-hexical", marker = "extra == 'data'", url = "https://github.com/miyucomics/hexical/raw/b0f25f7d0782bd25470b7790ad60af6f20609eb1/docs/v/latest/main/dist/hexdoc_hexical-2.0.0.1.0.0-py3-none-any.whl" },
     { name = "hexdoc-hexmapping", marker = "extra == 'data'", specifier = "~=0.0.3.0" },
     { name = "hexdoc-hextrogen", marker = "extra == 'data'", specifier = "~=1.0.0.0" },
+    { name = "hexdoc-hextweaks", marker = "extra == 'data'", url = "https://github.com/walksanatora/HexTweaks/raw/e592652ed282d847234d5a938502c5fe1676464e/docs/v/5.3.2/1.0.dev0/dist/hexdoc_hextweaks-5.3.2.1.0.dev0-py3-none-any.whl" },
     { name = "hexdoc-hexweb", marker = "extra == 'data'", specifier = "~=1.0.4.0" },
     { name = "hexdoc-moreiotas", marker = "extra == 'data'", url = "https://github.com/object-Object/MoreIotas/raw/91915ee8768d8fc17c8b86d4d888b7df5f536082/docs/v/latest/1.20.1/dist/hexdoc_moreiotas-0.1.0.1.0rc6.dev0-py3-none-any.whl" },
     { name = "hexdoc-oneironaut", marker = "extra == 'data'", url = "https://github.com/beholderface/oneironaut/raw/70817097a2d1df2aedb36051479b36f6db5d38cc/docs/v/latest/1.20.1/dist/hexdoc_oneironaut-0.5.0.1.0-py3-none-any.whl" },
@@ -923,7 +925,7 @@ requires-dist = [
 
 [[package]]
 name = "hexdoc"
-version = "1!0.1.0a23"
+version = "1!0.1.0a24"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "frozendict" },
@@ -951,9 +953,9 @@ dependencies = [
     { name = "typing-extensions" },
     { name = "yarl" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/7c/14/86273be9e5872352e996257af836545e737017c0c910a3678e8161100310/hexdoc-1!0.1.0a23.tar.gz", hash = "sha256:f2f51e2d0e2ffff319260d29ce6deb8f2ec12af21ef3bf9069ae9d06031c28b1", size = 150195 }
+sdist = { url = "https://files.pythonhosted.org/packages/1f/5c/3c898076bb05ec5ed86daf5950f9efbe9748eaafd67b22f30d6d8aaf0a41/hexdoc-1!0.1.0a24.tar.gz", hash = "sha256:fc2c85f6ae7b5c2397fc7b47b6d53b0ead374368c6a658becea75a9d3a44874b", size = 150188 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/0c/b1/2a4509cf22b777a1af76f6cf99769772077b574e7b21d79e06ba0eb50d0a/hexdoc-1!0.1.0a23-py3-none-any.whl", hash = "sha256:0d05e702aab28081c9aa88053ed6da8b38e52cc8452bbb2b2b4dd436f93a156e", size = 217289 },
+    { url = "https://files.pythonhosted.org/packages/13/5b/a1f71d95fd13125f9e8357254958984c48a356b08aad2853342fa65934b9/hexdoc-1!0.1.0a24-py3-none-any.whl", hash = "sha256:a275cf5ac0c21664ea114345fdf4996ae6fbe24c73225967d33a6604dd6241ee", size = 217277 },
 ]
 
 [[package]]
@@ -1143,6 +1145,26 @@ sdist = { url = "https://files.pythonhosted.org/packages/b6/aa/0c86ceabaa266a9d4
 wheels = [
     { url = "https://files.pythonhosted.org/packages/ea/34/842669d6c76851a904c7d8b10ddbcc6a6eac3e6d8752bf607e5c30001e5e/hexdoc_hextrogen-1.0.0.1.0.0-py3-none-any.whl", hash = "sha256:585b2ec3bebbe0f5263e827e56edaf8ffe25e14039a891b44379931abbcff304", size = 10822 },
 ]
+
+[[package]]
+name = "hexdoc-hextweaks"
+version = "5.3.2.1.0.dev0"
+source = { url = "https://github.com/walksanatora/HexTweaks/raw/e592652ed282d847234d5a938502c5fe1676464e/docs/v/5.3.2/1.0.dev0/dist/hexdoc_hextweaks-5.3.2.1.0.dev0-py3-none-any.whl" }
+dependencies = [
+    { name = "hexdoc" },
+    { name = "hexdoc-hexcasting" },
+]
+wheels = [
+    { url = "https://github.com/walksanatora/HexTweaks/raw/e592652ed282d847234d5a938502c5fe1676464e/docs/v/5.3.2/1.0.dev0/dist/hexdoc_hextweaks-5.3.2.1.0.dev0-py3-none-any.whl", hash = "sha256:07786debc8b8020889b30a4c6f25c74eff51f83057fb2d7b54e6fd91bf3bed6c" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "hexdoc", specifier = ">=1!0.1.0a24" },
+    { name = "hexdoc-hexcasting", specifier = "~=0.11.2.1.0.dev20" },
+    { name = "ruff", marker = "extra == 'dev'", specifier = "~=0.1.4" },
+]
+provides-extras = ["dev"]
 
 [[package]]
 name = "hexdoc-hexweb"

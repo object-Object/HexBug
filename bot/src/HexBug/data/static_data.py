@@ -170,6 +170,17 @@ MODS: list[StaticModInfo] = [
         modloaders=[Modloader.FABRIC],
     ),
     StaticModInfo(
+        id="hextweaks",
+        name="HexTweaks",
+        description="Adds grand spells, rituals, and turtle casting.",
+        icon_url=URL(
+            "https://cdn.modrinth.com/data/pim6pG9O/0f36451e826a46c00d337d7ef65e62c87bc40eba.png"
+        ),
+        curseforge_slug=None,
+        modrinth_slug="hextweaks",
+        modloaders=[Modloader.FABRIC, Modloader.FORGE],
+    ),
+    StaticModInfo(
         id="hexweb",
         name="HexWeb",
         description="Adds patterns for making HTTP requests via OkHTTP, as well as creating and manipulating JSON objects.",
@@ -299,9 +310,11 @@ DISABLED_PATTERNS: set[ResourceLocation] = {
     ResourceLocation("hexdebug", "block_read_indexed"),
     ResourceLocation("hexdebug", "block_write"),
     ResourceLocation("hexdebug", "block_write_indexed"),
+    ResourceLocation("hextweaks", "you_like_drinking_potions"),
     ResourceLocation("oneironaut", "advanceautomaton"),
     # lmao what
     ResourceLocation("ephemera", "no"),
+    ResourceLocation("hextweaks", "suicide"),
     ResourceLocation("oneironaut", "circle"),
 }
 
