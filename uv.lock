@@ -878,7 +878,7 @@ requires-dist = [
     { name = "hexdoc-hexcassettes", marker = "extra == 'data'", specifier = "~=1.1.4.0" },
     { name = "hexdoc-hexcasting", marker = "extra == 'data'", specifier = "~=0.11.2.0" },
     { name = "hexdoc-hexcellular", marker = "extra == 'data'", specifier = "~=1.0.4.0" },
-    { name = "hexdoc-hexchanting", marker = "extra == 'data'", specifier = "~=1.0.1.0" },
+    { name = "hexdoc-hexchanting", marker = "extra == 'data'", specifier = "~=1.1.0.0" },
     { name = "hexdoc-hexdebug", marker = "extra == 'data'", url = "https://github.com/object-Object/HexDebug/raw/39db79beaf8b7172eec9db165b58dcb97b8c427c/docs/v/latest/main/dist/hexdoc_hexdebug-0.3.0.1.20.1.1.0-py3-none-any.whl" },
     { name = "hexdoc-hexdim", marker = "extra == 'data'", specifier = "~=1.2.1.1.20.0" },
     { name = "hexdoc-hexgender", marker = "extra == 'data'", specifier = "~=1.0.4.0" },
@@ -1051,14 +1051,14 @@ wheels = [
 
 [[package]]
 name = "hexdoc-hexchanting"
-version = "1.0.1.1.0.dev0"
+version = "1.1.0.1.0.dev0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "hexdoc-hexcasting" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/13/a8/fb3d819bdbf1cd54a83c97454c51f3c21c635cc715763c943a0801bb9ad5/hexdoc_hexchanting-1.0.1.1.0.dev0.tar.gz", hash = "sha256:16510bd3dbc731bb7a99ba337e66dc36beebd9ba82d934935f93759dd6ab825b", size = 15646 }
+sdist = { url = "https://files.pythonhosted.org/packages/7e/9b/51b1e22192095180949e42bcb6e27a0fa2c9515ed3bb7afe02682fcca7fd/hexdoc_hexchanting-1.1.0.1.0.dev0.tar.gz", hash = "sha256:9bd86b65f4636ce6db96b7b167f9a12639edab7c4c7fb0a4d24032efaab6ab71", size = 19269 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a3/9d/5203c2b996841e6c97d730d2384287f789121f5a4338fce609f6477388af/hexdoc_hexchanting-1.0.1.1.0.dev0-py3-none-any.whl", hash = "sha256:695d6841885300d6945f02bef7d8133b72caabdebc74c426049b77008c243090", size = 24536 },
+    { url = "https://files.pythonhosted.org/packages/3a/7a/9f1736efc588137466b5af03f0c0fcbf0fc1a085f355471a8353eef598b2/hexdoc_hexchanting-1.1.0.1.0.dev0-py3-none-any.whl", hash = "sha256:855a03f089d9fac807992c55377926ba8b03770f52a3115a6d79bcf3b73ab381", size = 49077 },
 ]
 
 [[package]]
