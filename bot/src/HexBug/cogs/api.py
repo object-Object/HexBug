@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from asyncio import Task
 from dataclasses import dataclass, field
 from typing import Annotated
 
@@ -48,6 +49,7 @@ async def get_health(
 @dataclass(eq=False)
 class APICog(HexBugCog):
     server: Server | None = field(default=None, init=False)
+    server_task: Task[None] | None = field(default=None, init=False)
 
     async def cog_load(self):
         await super().cog_load()
@@ -60,9 +62,13 @@ class APICog(HexBugCog):
                 root_path=self.env.api_root_path,
             )
         )
-        self.bot.loop.create_task(self.server.serve())
+        # use _serve to prevent the server from trying to capture signals
+        self.server_task = self.bot.loop.create_task(self.server._serve())  # pyright: ignore[reportPrivateUsage]
 
     async def cog_unload(self):
-        if self.server:
-            await self.server.shutdown()
+        if server := self.server:
             self.server = None
+            server.should_exit = True
+        if task := self.server_task:
+            self.server_task = None
+            await task
