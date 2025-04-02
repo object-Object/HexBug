@@ -46,7 +46,7 @@ class PatternRenderingOptions(BaseModel):
     """Units: percentage of line length"""
     max_overlaps: int = Field(default=DEFAULT_MAX_OVERLAPS, ge=0, le=100)
     scale: float = Field(default=DEFAULT_SCALE, ge=1, le=MAX_IMAGE_SIZE)
-    """Units: pixels (percentage of line length)"""
+    """Units: pixels (line length)"""
     max_grid_width: int = Field(default=DEFAULT_MAX_GRID_WIDTH, ge=1, le=MAX_IMAGE_SIZE)
 
     def render_discord_file(
