@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-import asyncio
 import copy
+from abc import ABC, abstractmethod
 from datetime import UTC, datetime
-from typing import Any, Awaitable, Callable, Self
+from typing import Any, Callable, Self
 
 from discord import (
-    AllowedMentions,
     ButtonStyle,
     Color,
     Embed,
@@ -104,8 +103,7 @@ def editable_button(
     return decorator
 
 
-# TODO: fix the component order being wonky
-class EditableButtonView(ui.View):
+class EditableButtonView(ui.View, ABC):
     def __init_subclass__(cls) -> None:
         super().__init_subclass__()
         cls.__editable_buttons__ = dict[str, EditableButton[Self, Any]]()
@@ -114,42 +112,34 @@ class EditableButtonView(ui.View):
                 if isinstance(member, EditableButton):
                     cls.__editable_buttons__[name] = member
 
-    def _init_editable_buttons(self):
+    def __init__(self, *, timeout: float | None = 180):
+        super().__init__(timeout=timeout)
+
         for name, item in self.__editable_buttons__.items():
             item = copy.deepcopy(item)
             setattr(self, name, item)
             self.add_item(item)
             item.refresh_label()
 
-    def __init__(
-        self,
-        *,
-        on_change: Callable[[], Awaitable[Any]],
-        timeout: float | None = 180,
-    ):
-        super().__init__(timeout=timeout)
-        self.on_change = on_change
-        self._init_editable_buttons()
+    @abstractmethod
+    async def on_change(self, interaction: Interaction): ...
 
     async def on_editable_button_success(
         self,
         interaction: Interaction,
         changed: bool,
     ):
-        await asyncio.gather(
-            interaction.response.edit_message(
-                embed=None,
-                view=self,
-            ),
-            self.on_change() if changed else asyncio.sleep(0),
-        )
+        if changed:
+            await self.on_change(interaction)
+        else:
+            await interaction.response.defer()
 
     async def on_editable_button_error(
         self,
         interaction: Interaction,
         error: ValueError,
     ):
-        await interaction.response.edit_message(
+        await interaction.response.send_message(
             embed=Embed(
                 title="Invalid input!",
                 description=f"```\n{error}\n```",
@@ -158,6 +148,5 @@ class EditableButtonView(ui.View):
             ).set_footer(
                 text=error.__class__.__name__,
             ),
-            view=self,
-            allowed_mentions=AllowedMentions.none(),
+            ephemeral=True,
         )

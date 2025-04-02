@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Any, Awaitable, Callable, Self, override
+from dataclasses import InitVar, dataclass, field
+from typing import Any, Self, override
 
 from discord import (
     ButtonStyle,
     Color,
-    DiscordException,
     Embed,
     File,
     Interaction,
@@ -16,7 +15,7 @@ from discord import (
     app_commands,
     ui,
 )
-from discord.app_commands import ContextMenu, Transform
+from discord.app_commands import Command, Transform
 from discord.app_commands.transformers import EnumNameTransformer
 from discord.ext.commands import GroupCog
 from hexdoc.core import ResourceLocation
@@ -67,7 +66,7 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
             pattern=info.pattern,
             info=info,
             hide_stroke_order=info.is_per_world,
-        ).send(visibility)
+        ).send(interaction, visibility)
 
     @app_commands.command()
     @app_commands.rename(info="name")
@@ -95,7 +94,7 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
                 value=parsed_value,
             ),
             hide_stroke_order=False,
-        ).send(visibility)
+        ).send(interaction, visibility)
 
     @app_commands.command()
     async def raw(
@@ -116,7 +115,7 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
             pattern=pattern,
             info=info,
             hide_stroke_order=hide_stroke_order,
-        ).send(visibility)
+        ).send(interaction, visibility)
 
     @app_commands.command()
     async def check(
@@ -173,19 +172,31 @@ def validate_signature(signature: str) -> str:
 
 @dataclass(kw_only=True)
 class PatternView(ui.View):
-    interaction: Interaction
+    interaction: InitVar[Interaction]
+
     pattern: HexPattern
     info: PatternMatchResult | None
     hide_stroke_order: bool
 
-    def __post_init__(self):
-        super().__init__(timeout=60 * 15)
+    options: PatternRenderingOptions = field(default_factory=PatternRenderingOptions)
+    default_options: PatternRenderingOptions = field(
+        default_factory=PatternRenderingOptions
+    )
 
-        self.command: AnyCommand | ContextMenu | None = self.interaction.command
-        self.registry: HexBugRegistry = HexBugBot.registry_of(self.interaction)
-        self.op_index: int = 0
-        self.options: PatternRenderingOptions = PatternRenderingOptions()
-        self.options_interaction: Interaction | None = None
+    registry: HexBugRegistry = field(init=False)
+    user: User | Member = field(init=False)
+
+    command: AnyCommand | None = field(default=None, init=False)
+    op_index: int = field(default=0, init=False)
+
+    def __post_init__(self, interaction: Interaction):
+        super().__init__(timeout=None)
+
+        self.registry = HexBugBot.registry_of(interaction)
+        self.user = interaction.user
+
+        if isinstance(interaction.command, Command):
+            self.command = interaction.command
 
         self.operator_select.options = [
             SelectOption(
@@ -230,24 +241,12 @@ class PatternView(ui.View):
 
     @override
     async def interaction_check(self, interaction: Interaction):
-        return interaction.user == self.interaction.user
+        return interaction.user == self.user
 
     @ui.button(emoji="⚙️")
     async def options_button(self, interaction: Interaction, button: ui.Button[Self]):
-        if self.options_interaction:
-            try:
-                await self.options_interaction.delete_original_response()
-            except DiscordException:
-                pass
-
-        self.options_interaction = interaction
-        await interaction.response.send_message(
-            view=PatternRenderingOptionsView(
-                on_change=self.refresh,
-                user=self.interaction.user,
-                options=self.options,
-            ),
-            ephemeral=True,
+        await interaction.response.edit_message(
+            view=PatternRenderingOptionsView(parent=self),
         )
 
     @ui.select(cls=ui.Select[Any], min_values=1, max_values=1)
@@ -257,49 +256,39 @@ class PatternView(ui.View):
 
     async def send(
         self,
+        interaction: Interaction,
         visibility: MessageVisibility,
-        interaction: Interaction | None = None,
         show_usage: bool = False,
     ):
-        if interaction:
-            self.interaction = interaction
-
         self.clear_items()
 
         self.add_item(self.options_button)
 
         add_visibility_buttons(
             view=self,
-            interaction=self.interaction,
+            interaction=interaction,
             command=self.command,
             visibility=visibility,
             show_usage=show_usage,
-            send_as_public=lambda i: self.send("public", i, show_usage=True),
+            send_as_public=lambda i: self.send(i, "public", show_usage=True),
         )
 
         if self.should_show_select_menu:
             self.add_item(self.operator_select)
 
-        await self.interaction.response.send_message(
+        await interaction.response.send_message(
             embed=self.get_embed(),
             file=self.get_image(),
             view=self,
             ephemeral=visibility == "private",
         )
 
-    async def refresh(self, interaction: Interaction | None = None):
-        if interaction:
-            await interaction.response.edit_message(
-                embed=self.get_embed(),
-                attachments=[self.get_image()],
-                view=self,
-            )
-        else:
-            await self.interaction.edit_original_response(
-                embed=self.get_embed(),
-                attachments=[self.get_image()],
-                view=self,
-            )
+    async def refresh(self, interaction: Interaction, *, view: ui.View | None = None):
+        await interaction.response.edit_message(
+            embed=self.get_embed(),
+            attachments=[self.get_image()],
+            view=view or self,
+        )
 
     def get_embed(self) -> Embed:
         embed = (
@@ -345,21 +334,20 @@ class PatternView(ui.View):
 
 
 class PatternRenderingOptionsView(EditableButtonView):
-    def __init__(
-        self,
-        *,
-        on_change: Callable[[], Awaitable[Any]],
-        user: User | Member,
-        options: PatternRenderingOptions,
-        defaults: PatternRenderingOptions | None = None,
-    ):
-        self.user = user
-        self.options = options
-        self.defaults = defaults or PatternRenderingOptions()
+    def __init__(self, *, parent: PatternView):
+        self.parent: PatternView = parent
 
-        super().__init__(on_change=on_change, timeout=60 * 15)
+        super().__init__(timeout=None)
 
         self.refresh_selects()
+
+    @property
+    def options(self):
+        return self.parent.options
+
+    @options.setter
+    def options(self, options: PatternRenderingOptions):
+        self.parent.options = options
 
     def refresh_selects(self):
         for option in self.palette_select.options:
@@ -370,7 +358,11 @@ class PatternRenderingOptionsView(EditableButtonView):
 
     @override
     async def interaction_check(self, interaction: Interaction):
-        return interaction.user == self.user
+        return interaction.user == self.parent.user
+
+    @override
+    async def on_change(self, interaction: Interaction):
+        await self.parent.refresh(interaction, view=self)
 
     @ui.select(
         cls=ui.Select[Any],
@@ -479,16 +471,25 @@ class PatternRenderingOptionsView(EditableButtonView):
         self.options.max_grid_width = value
 
     @ui.button(
+        label="Done",
+        style=ButtonStyle.primary,
+        row=4,
+    )
+    async def done_button(self, interaction: Interaction, button: ui.Button[Self]):
+        await interaction.response.edit_message(
+            view=self.parent,
+        )
+        self.stop()
+
+    @ui.button(
         label="Reset to defaults",
         style=ButtonStyle.danger,
         row=4,
     )
     async def reset_button(self, interaction: Interaction, button: ui.Button[Self]):
-        changed = False
-        for name, value in self.defaults:
-            if value != getattr(self.options, name):
-                changed = True
-                setattr(self.options, name, value)
+        changed = self.options != self.parent.default_options
+
+        self.options = self.parent.default_options.model_copy(deep=True)
 
         self.refresh_selects()
         for item in self.children:
