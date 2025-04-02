@@ -23,7 +23,9 @@ from HexBug.data.hex_math import HexPattern
 
 from .types import Palette, Theme
 
-DEFAULT_SCALE = 100.0
+MAX_IMAGE_SIZE = 4096
+
+DEFAULT_SCALE = 128.0
 DEFAULT_LINE_WIDTH = 0.08
 DEFAULT_MAX_OVERLAPS = 3
 DEFAULT_MAX_GRID_WIDTH = 50
@@ -36,12 +38,16 @@ class PatternRenderingOptions(BaseModel):
 
     palette: Palette = Palette.Classic
     theme: Theme = Theme.Dark
-    line_width: float = Field(default=DEFAULT_LINE_WIDTH, ge=0, le=10)
-    point_radius: float | None = Field(default=None, ge=0, le=10)
-    arrow_radius: float | None = Field(default=None, ge=0, le=10)
+    line_width: float = Field(default=DEFAULT_LINE_WIDTH, ge=0, le=1)
+    """Units: percentage of line length"""
+    point_radius: float | None = Field(default=None, ge=0, le=1)
+    """Units: percentage of line length"""
+    arrow_radius: float | None = Field(default=None, ge=0, le=1)
+    """Units: percentage of line length"""
     max_overlaps: int = Field(default=DEFAULT_MAX_OVERLAPS, ge=0, le=100)
-    scale: float = Field(default=DEFAULT_SCALE, ge=1, le=100)
-    max_grid_width: int = Field(default=DEFAULT_MAX_GRID_WIDTH, ge=1, le=4096)
+    scale: float = Field(default=DEFAULT_SCALE, ge=1, le=MAX_IMAGE_SIZE)
+    """Units: pixels (percentage of line length)"""
+    max_grid_width: int = Field(default=DEFAULT_MAX_GRID_WIDTH, ge=1, le=MAX_IMAGE_SIZE)
 
     def render_discord_file(
         self,
@@ -136,7 +142,7 @@ def draw_patterns(
     options: GridOptions,
     *,
     scale: float | None = DEFAULT_SCALE,
-    max_size: int | tuple[int, int] = 4096,
+    max_size: int | tuple[int, int] = MAX_IMAGE_SIZE,
     max_grid_width: int = DEFAULT_MAX_GRID_WIDTH,
     trim_padding: bool = True,
 ) -> Image.Image:
