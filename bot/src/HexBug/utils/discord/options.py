@@ -3,7 +3,7 @@ from __future__ import annotations
 import copy
 from abc import ABC, abstractmethod
 from datetime import UTC, datetime
-from typing import Any, Callable, Self
+from typing import Any, Callable, Self, override
 
 from discord import (
     ButtonStyle,
@@ -18,47 +18,16 @@ from discord import (
 from typing_extensions import TypeIs
 
 
-class OptionButtonModal(ui.Modal):
-    value_input = ui.TextInput[Self](label="Value")
+class OptionItemMixin[ViewT: OptionsView, ValueT](ABC):
+    _fget: Callable[[ViewT], ValueT]
+    _fset: Callable[[ViewT, str], None] | None
 
-    def __init__(self, button: OptionButton[Any, Any]):
-        super().__init__(title=button.name)
-        self.button = button
-        if button.value is not None:
-            self.value_input.default = str(button.value)
-        self.value_input.required = button.required
+    @property
+    @abstractmethod
+    def view(self) -> ViewT | None: ...
 
-    async def on_submit(self, interaction: Interaction):
-        await self.button.set_value(interaction, self.value_input.value)
-
-
-class OptionButton[ViewT: OptionsView, ValueT](ui.Button[ViewT]):
-    def __init__(
-        self,
-        *,
-        name: str,
-        required: bool,
-        fget: Callable[[ViewT], ValueT],
-        fset: Callable[[ViewT, str], None] | None = None,
-        style: ButtonStyle = ButtonStyle.secondary,
-        emoji: str | Emoji | PartialEmoji | None = None,
-        row: int | None = None,
-    ):
-        super().__init__(
-            style=style,
-            emoji=emoji,
-            row=row,
-        )
-        self.name: str = name
-        self.required: bool = required
-        self._fget: Callable[[ViewT], ValueT] = fget
-        self._fset: Callable[[ViewT, str], None] | None = fset
-
-    async def callback(self, interaction: Interaction):
-        await interaction.response.send_modal(OptionButtonModal(self))
-
-    def refresh(self):
-        self.label = f"{self.name} ({self.value})"
+    @abstractmethod
+    def refresh(self): ...
 
     @property
     def value(self) -> ValueT:
@@ -84,6 +53,54 @@ class OptionButton[ViewT: OptionsView, ValueT](ui.Button[ViewT]):
         return fset
 
 
+class OptionButtonModal(ui.Modal):
+    value_input = ui.TextInput[Self](label="Value")
+
+    def __init__(self, button: OptionButton[Any, Any]):
+        super().__init__(title=button.name)
+        self.button = button
+        if button.value is not None:
+            self.value_input.default = str(button.value)
+        self.value_input.required = button.required
+
+    async def on_submit(self, interaction: Interaction):
+        await self.button.set_value(interaction, self.value_input.value)
+
+
+class OptionButton[ViewT: OptionsView, ValueT](
+    ui.Button[ViewT],
+    OptionItemMixin[ViewT, ValueT],
+):
+    def __init__(
+        self,
+        *,
+        name: str,
+        required: bool,
+        fget: Callable[[ViewT], ValueT],
+        fset: Callable[[ViewT, str], None] | None = None,
+        style: ButtonStyle = ButtonStyle.secondary,
+        emoji: str | Emoji | PartialEmoji | None = None,
+        row: int | None = None,
+    ):
+        super().__init__(
+            style=style,
+            emoji=emoji,
+            row=row,
+        )
+        self.name: str = name
+        self.required: bool = required
+        self._fget = fget
+        self._fset = fset
+
+    @override
+    async def callback(self, interaction: Interaction):
+        await interaction.response.send_modal(OptionButtonModal(self))
+
+    @override
+    def refresh(self):
+        self.label = f"{self.name} ({self.value})"
+
+
 def option_button(
     *,
     name: str,
@@ -105,7 +122,7 @@ def option_button(
     return decorator
 
 
-class OptionSelect[ViewT: OptionsView](ui.Select[ViewT]):
+class OptionSelect[ViewT: OptionsView](ui.Select[ViewT], OptionItemMixin[ViewT, str]):
     def __init__(
         self,
         *,
@@ -121,40 +138,19 @@ class OptionSelect[ViewT: OptionsView](ui.Select[ViewT]):
             ],
             row=row,
         )
-        self._fget: Callable[[ViewT], str] = fget
-        self._fset: Callable[[ViewT, str], None] | None = fset
+        self._fget = fget
+        self._fset = fset
 
+    @override
     async def callback(self, interaction: Interaction):
         assert len(self.values) == 1, "Invalid state, expected 1 selected value"
         i = int(self.values[0])
         await self.set_value(interaction, self.options[i].label)
 
+    @override
     def refresh(self):
         for option in self.options:
             option.default = self.value == option.label
-
-    @property
-    def value(self) -> str:
-        if not self.view:
-            raise AttributeError
-        return self._fget(self.view)
-
-    async def set_value(self, interaction: Interaction, value: str):
-        if not (self.view and self._fset):
-            raise AttributeError
-        old_value = self.value
-        try:
-            self._fset(self.view, value)
-        except ValueError as e:
-            await self.view.on_option_item_error(interaction, e)
-        else:
-            if changed := (old_value != self.value):
-                self.refresh()
-            await self.view.on_option_item_success(interaction, changed)
-
-    def setter(self, fset: Callable[[ViewT, str], None]):
-        self._fset = fset
-        return fset
 
 
 def option_select(
