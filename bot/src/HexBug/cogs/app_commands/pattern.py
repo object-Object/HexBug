@@ -33,11 +33,7 @@ from HexBug.rendering.draw import PatternRenderingOptions
 from HexBug.rendering.types import Palette, Theme
 from HexBug.utils.discord.commands import AnyCommand
 from HexBug.utils.discord.components import update_indexed_select_menu
-from HexBug.utils.discord.editable_button import (
-    EditableButton,
-    EditableButtonView,
-    editable_button,
-)
+from HexBug.utils.discord.options import OptionsView, option_button, option_select
 from HexBug.utils.discord.transformers import (
     PatternInfoOption,
     SpecialHandlerInfoOption,
@@ -333,13 +329,11 @@ class PatternView(ui.View):
         )
 
 
-class PatternRenderingOptionsView(EditableButtonView):
+class PatternRenderingOptionsView(OptionsView):
     def __init__(self, *, parent: PatternView):
         self.parent: PatternView = parent
 
         super().__init__(timeout=None)
-
-        self.refresh_selects()
 
     @property
     def options(self):
@@ -349,13 +343,6 @@ class PatternRenderingOptionsView(EditableButtonView):
     def options(self, options: PatternRenderingOptions):
         self.parent.options = options
 
-    def refresh_selects(self):
-        for option in self.palette_select.options:
-            option.default = self.options.palette.name == option.label
-
-        for option in self.theme_select.options:
-            option.default = self.options.theme.name == option.label
-
     @override
     async def interaction_check(self, interaction: Interaction):
         return interaction.user == self.parent.user
@@ -364,41 +351,29 @@ class PatternRenderingOptionsView(EditableButtonView):
     async def on_change(self, interaction: Interaction):
         await self.parent.refresh(interaction, view=self)
 
-    @ui.select(
-        cls=ui.Select[Any],
-        options=[
-            SelectOption(label=palette.name, value=str(i))
-            for i, palette in enumerate(Palette)
-        ],
+    @option_select(
+        labels=[palette.name for palette in Palette],
         row=0,
     )
-    async def palette_select(self, interaction: Interaction, select: ui.Select[Any]):
-        i = update_indexed_select_menu(select)[0]
-        old_value = self.options.palette
-        self.options.palette = Palette(select.options[i].label)
-        await self.on_editable_button_success(
-            interaction,
-            changed=old_value != self.options.palette,
-        )
+    def palette_select(self):
+        return self.options.palette.name
 
-    @ui.select(
-        cls=ui.Select[Any],
-        options=[
-            SelectOption(label=theme.name, value=str(i))
-            for i, theme in enumerate(Theme)
-        ],
+    @palette_select.setter
+    def _set_palette(self, label: str):
+        self.options.palette = Palette(label)
+
+    @option_select(
+        labels=[theme.name for theme in Theme],
         row=1,
     )
-    async def theme_select(self, interaction: Interaction, select: ui.Select[Any]):
-        i = update_indexed_select_menu(select)[0]
-        old_value = self.options.theme
-        self.options.theme = Theme(select.options[i].label)
-        await self.on_editable_button_success(
-            interaction,
-            changed=old_value != self.options.theme,
-        )
+    def theme_select(self):
+        return self.options.theme.name
 
-    @editable_button(
+    @theme_select.setter
+    def _set_theme(self, label: str):
+        self.options.theme = Theme(label)
+
+    @option_button(
         name="Line width",
         required=True,
         row=2,
@@ -410,7 +385,7 @@ class PatternRenderingOptionsView(EditableButtonView):
     def _set_line_width(self, value: Any):
         self.options.line_width = value
 
-    @editable_button(
+    @option_button(
         name="Point radius",
         required=False,
         row=2,
@@ -422,7 +397,7 @@ class PatternRenderingOptionsView(EditableButtonView):
     def _set_point_radius(self, value: Any):
         self.options.point_radius = value or None
 
-    @editable_button(
+    @option_button(
         name="Arrow radius",
         required=False,
         row=2,
@@ -434,7 +409,7 @@ class PatternRenderingOptionsView(EditableButtonView):
     def _set_arrow_radius(self, value: Any):
         self.options.arrow_radius = value or None
 
-    @editable_button(
+    @option_button(
         name="Maximum overlaps",
         required=True,
         row=3,
@@ -446,7 +421,7 @@ class PatternRenderingOptionsView(EditableButtonView):
     def _set_max_overlaps(self, value: Any):
         self.options.max_overlaps = value
 
-    @editable_button(
+    @option_button(
         name="Scale",
         required=True,
         row=3,
@@ -458,7 +433,7 @@ class PatternRenderingOptionsView(EditableButtonView):
     def _set_scale(self, value: Any):
         self.options.scale = value
 
-    @editable_button(
+    @option_button(
         name="Maximum grid width",
         required=True,
         row=3,
@@ -476,9 +451,7 @@ class PatternRenderingOptionsView(EditableButtonView):
         row=4,
     )
     async def done_button(self, interaction: Interaction, button: ui.Button[Self]):
-        await interaction.response.edit_message(
-            view=self.parent,
-        )
+        await interaction.response.edit_message(view=self.parent)
         self.stop()
 
     @ui.button(
@@ -488,12 +461,6 @@ class PatternRenderingOptionsView(EditableButtonView):
     )
     async def reset_button(self, interaction: Interaction, button: ui.Button[Self]):
         changed = self.options != self.parent.default_options
-
         self.options = self.parent.default_options.model_copy(deep=True)
-
-        self.refresh_selects()
-        for item in self.children:
-            if isinstance(item, EditableButton):
-                item.refresh_label()
-
-        await self.on_editable_button_success(interaction, changed)
+        self.refresh_option_items()
+        await self.on_option_item_success(interaction, changed)
