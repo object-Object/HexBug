@@ -112,9 +112,9 @@ class PatternRenderingOptions(BaseModel):
                         radius=arrow_radius * 1.5,
                     ),
                 ),
-                # TODO: it draws dashes when there are 3 overlaps???
                 collisions=CollisionOption.OverloadedParallel(
-                    max_line=self.max_overlaps,
+                    # apparently it uses the overload when there are >= max_line overlaps
+                    max_line=self.max_overlaps + 1,
                     overload=OverloadOptions.Dashes(
                         color=self.palette.collision_color,
                     ),
