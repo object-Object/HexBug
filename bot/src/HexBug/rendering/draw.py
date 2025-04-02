@@ -17,7 +17,7 @@ from hex_renderer_py import (
     Triangle,
 )
 from PIL import Image
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from HexBug.data.hex_math import HexPattern
 
@@ -36,12 +36,12 @@ class PatternRenderingOptions(BaseModel):
 
     palette: Palette = Palette.Classic
     theme: Theme = Theme.Dark
-    line_width: float = DEFAULT_LINE_WIDTH
-    point_radius: float | None = None
-    arrow_radius: float | None = None
-    max_overlaps: int = DEFAULT_MAX_OVERLAPS
-    scale: float = DEFAULT_SCALE
-    max_grid_width: int = DEFAULT_MAX_GRID_WIDTH
+    line_width: float = Field(default=DEFAULT_LINE_WIDTH, ge=0)
+    point_radius: float | None = Field(default=None, ge=0)
+    arrow_radius: float | None = Field(default=None, ge=0)
+    max_overlaps: int = Field(default=DEFAULT_MAX_OVERLAPS, ge=0)
+    scale: float = Field(default=DEFAULT_SCALE, ge=1)
+    max_grid_width: int = Field(default=DEFAULT_MAX_GRID_WIDTH, ge=1)
 
     def render_discord_file(
         self,
