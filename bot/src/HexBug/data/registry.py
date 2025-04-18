@@ -296,6 +296,14 @@ class HexBugRegistry(BaseModel):
             if not pattern.operators:
                 raise ValueError(f"No operators found for pattern: {pattern.id}")
 
+            pattern.operators.sort(
+                key=lambda op: (
+                    # using pattern instead of pattern_info causes a type error here???
+                    0 if op.mod_id == pattern_info.id.namespace else 1,
+                    op.inputs,
+                ),
+            )
+
             registry._register_pattern(pattern)
 
         logger.info("Loading special handlers.")
