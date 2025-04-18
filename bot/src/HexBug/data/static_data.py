@@ -192,6 +192,17 @@ MODS: list[StaticModInfo] = [
         modloaders=[Modloader.FABRIC, Modloader.FORGE],
     ),
     StaticModInfo(
+        id="ioticblocks",
+        name="IoticBlocks",
+        description="Adds patterns for reading and writing iotas to/from blocks, and an API for addon developers to easily add iota reading/writing support to their blocks.",
+        icon_url=URL(
+            "https://raw.githubusercontent.com/object-Object/IoticBlocks/99a2c20a1e91b8fc0319dce133aac7766a34e024/common/src/main/resources/assets/ioticblocks/icon.png"
+        ),
+        curseforge_slug="ioticblocks",
+        modrinth_slug="ioticblocks",
+        modloaders=[Modloader.FABRIC, Modloader.FORGE],
+    ),
+    StaticModInfo(
         id="moreiotas",
         name="MoreIotas",
         description="Adds iotas for strings, matrices, types, and items.",
@@ -306,10 +317,6 @@ DISABLED_PATTERNS: set[ResourceLocation] = {
     ResourceLocation("complexhex", "chloe/make"),
     ResourceLocation("complexhex", "cnarg"),
     ResourceLocation("ephemera", "hashbits"),
-    ResourceLocation("hexdebug", "block_read"),
-    ResourceLocation("hexdebug", "block_read_indexed"),
-    ResourceLocation("hexdebug", "block_write"),
-    ResourceLocation("hexdebug", "block_write_indexed"),
     ResourceLocation("hextweaks", "you_like_drinking_potions"),
     ResourceLocation("oneironaut", "advanceautomaton"),
     # lmao what

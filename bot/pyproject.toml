@@ -44,6 +44,7 @@ data = [
     "hexdoc-hextrogen~=1.0.0.0",
     "hexdoc-hextweaks~=5.3.2.0",
     "hexdoc-hexweb~=1.0.4.0",
+    "hexdoc-ioticblocks~=1.0.0.1.20.1.0",
     "hexdoc-moreiotas~=0.1.0.0",
     "hexdoc-oneironaut~=0.5.0.0",
     "hexdoc-overevaluate~=1.0.0.0",
@@ -55,7 +56,7 @@ hexdoc-complexhex = { url = "https://github.com/kineticneticat/ComplexHex/raw/2b
 hexdoc-ephemera = { url = "https://github.com/beholderface/Ephemera/raw/77628c3c484f5754e9b714164a787baea1ec4e5d/docs/v/latest/1.20.1/dist/hexdoc_ephemera-0.3.0.1.0.dev0-py3-none-any.whl" }
 # see: https://github.com/astral-sh/uv/issues/12512
 # hexdoc-hexal = { url = "https://github.com/vgskye/Hexal/raw/6a8700ec078ec716e368f8e17e32191a0e27bd46/docs/v/latest/remaint/dist/hexdoc_hexal-0.3.0.1.0rc3.dev0-py3-none-any.whl" }
-hexdoc-hexdebug = { url = "https://github.com/object-Object/HexDebug/raw/39db79beaf8b7172eec9db165b58dcb97b8c427c/docs/v/latest/main/dist/hexdoc_hexdebug-0.3.0.1.20.1.1.0-py3-none-any.whl" }
+hexdoc-hexdebug = { url = "https://github.com/object-Object/HexDebug/raw/436552fc9df990a7962c51d05afd163ea4640f73/docs/v/latest/main/dist/hexdoc_hexdebug-0.3.0.1.20.1.1.0-py3-none-any.whl" }
 hexdoc-hexical = { url = "https://github.com/miyucomics/hexical/raw/b0f25f7d0782bd25470b7790ad60af6f20609eb1/docs/v/latest/main/dist/hexdoc_hexical-2.0.0.1.0.0-py3-none-any.whl" }
 hexdoc-hextweaks = { url = "https://github.com/walksanatora/HexTweaks/raw/e592652ed282d847234d5a938502c5fe1676464e/docs/v/5.3.2/1.0.dev0/dist/hexdoc_hextweaks-5.3.2.1.0.dev0-py3-none-any.whl" }
 hexdoc-moreiotas = { url = "https://github.com/object-Object/MoreIotas/raw/91915ee8768d8fc17c8b86d4d888b7df5f536082/docs/v/latest/1.20.1/dist/hexdoc_moreiotas-0.1.0.1.0rc6.dev0-py3-none-any.whl" }
