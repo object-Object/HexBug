@@ -159,6 +159,17 @@ MODS: list[StaticModInfo] = [
         modloaders=[Modloader.FABRIC, Modloader.FORGE],
     ),
     StaticModInfo(
+        id="hexposition",
+        name="Hexposition",
+        description="A Hexcasting addon all about getting information about the world!",
+        icon_url=URL(
+            "https://raw.githubusercontent.com/miyucomics/hexposition/f46447b6783c299f8de5de80950adb82f2e469e0/src/main/resources/assets/hexposition/icon.png"
+        ),
+        curseforge_slug=None,
+        modrinth_slug=None,
+        modloaders=[Modloader.FABRIC],
+    ),
+    StaticModInfo(
         id="hextrogen",
         name="Hextrogen",
         description="Adds interop with Create: Estrogen.",
@@ -319,13 +330,24 @@ DISABLED_PATTERNS: set[ResourceLocation] = {
     ResourceLocation("ephemera", "hashbits"),
     ResourceLocation("hextweaks", "you_like_drinking_potions"),
     ResourceLocation("oneironaut", "advanceautomaton"),
+    # conflicts
+    ResourceLocation("hexical", "periwinkle"),  # signature: hexal:mote/storage/bind
+    ResourceLocation("hexical", "effect_clouding"),  # shape: ephemera:invisibility
+    # ResourceLocation("hexical", "theodolite"),  # moved to hexposition
     # lmao what
     ResourceLocation("ephemera", "no"),
     ResourceLocation("hextweaks", "suicide"),
     ResourceLocation("oneironaut", "circle"),
 }
 
+# replace the pattern's name entirely
 PATTERN_NAME_OVERRIDES: dict[ResourceLocation, str] = {}
+
+# append the mod's name to the pattern's name
+DISAMBIGUATED_PATTERNS: set[ResourceLocation] = {
+    ResourceLocation("hexical", "wristpocket_item"),
+    ResourceLocation("hexposition", "get_ender_chest"),
+}
 
 DISABLED_PAGES: set[str] = {
     "lamp/arch_lamps@hexical:lamp_finale",

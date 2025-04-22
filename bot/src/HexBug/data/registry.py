@@ -37,6 +37,7 @@ from .special_handlers import SpecialHandlerInfo, SpecialHandlerMatch
 from .static_data import (
     DISABLED_PAGES,
     DISABLED_PATTERNS,
+    DISAMBIGUATED_PATTERNS,
     EXTRA_PATTERNS,
     MODS,
     PATTERN_NAME_OVERRIDES,
@@ -267,6 +268,12 @@ class HexBugRegistry(BaseModel):
                     f"Renaming pattern from {name} to {override_name}: {pattern_info.id}"
                 )
                 name = override_name
+            elif pattern_info.id in DISAMBIGUATED_PATTERNS:
+                mod = registry.mods[pattern_info.id.namespace]
+                logger.warning(
+                    f"Appending mod name ({mod.name}) to pattern name ({name}): {pattern_info.id}"
+                )
+                name += f" ({mod.name})"
 
             pattern = PatternInfo(
                 id=pattern_info.id,
