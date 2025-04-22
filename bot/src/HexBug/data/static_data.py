@@ -99,7 +99,7 @@ MODS: list[StaticModInfo] = [
             "https://raw.githubusercontent.com/arconyx/hexchanting/b737ba89641663ed83fc543d67a5fe447f2dac2a/src/main/resources/assets/hexchanting/icon.png",
         ),
         curseforge_slug=None,
-        modrinth_slug=None,
+        modrinth_slug="hexchanting",
         modloaders=[Modloader.FABRIC],
     ),
     StaticModInfo(
