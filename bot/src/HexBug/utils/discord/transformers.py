@@ -8,15 +8,18 @@ from discord.app_commands import (
     Transformer,
 )
 from discord.app_commands.models import Choice
+from hexdoc.core import ResourceLocation
 
 from HexBug.core.bot import HexBugBot
+from HexBug.data.mods import ModInfo
 from HexBug.data.patterns import PatternInfo
 from HexBug.data.special_handlers import SpecialHandlerInfo
 
 
 class AutocompleteWord(TypedDict):
     search_term: str
-    result: str
+    name: str
+    value: str
 
 
 class AutocompleteResult(AutocompleteWord):
@@ -58,19 +61,52 @@ class PfzyAutocompleteTransformer(Transformer, ABC):
         matches: list[AutocompleteResult],
     ) -> Iterator[Choice[str]]:
         seen = set[str]()
-        for match in matches[:25]:
-            word = match["result"]
-            if word in seen:
+        for match in matches:
+            if match["name"] in seen:
                 continue
-            seen.add(word)
-            yield Choice(name=word, value=word)
+            seen.add(match["name"])
+            yield Choice(name=match["name"], value=match["value"])
+            if len(seen) >= 25:
+                break
+
+
+class ModInfoTransformer(PfzyAutocompleteTransformer):
+    _mod_name_to_id = dict[str, str]()
+
+    @override
+    async def transform(self, interaction: Interaction, value: str) -> ModInfo:
+        registry = HexBugBot.registry_of(interaction)
+        mod = registry.mods.get(value)
+        if mod is None:
+            raise ValueError("Unknown mod.")
+        return mod
+
+    @override
+    def _setup_autocomplete(self, interaction: Interaction):
+        self._words.clear()
+
+        registry = HexBugBot.registry_of(interaction)
+        for mod in registry.mods.values():
+            for search_term in [
+                mod.name,
+                mod.id,
+                f"{mod.github_author}/{mod.github_repo}",
+            ]:
+                self._words.append(
+                    AutocompleteWord(
+                        search_term=search_term,
+                        name=mod.name,
+                        value=mod.id,
+                    )
+                )
 
 
 class PatternInfoTransformer(PfzyAutocompleteTransformer):
     @override
     async def transform(self, interaction: Interaction, value: str) -> PatternInfo:
+        pattern_id = ResourceLocation.from_str(value)
         registry = HexBugBot.registry_of(interaction)
-        pattern = registry.lookups.name.get(value)
+        pattern = registry.patterns.get(pattern_id)
         if pattern is None:
             raise ValueError("Unknown pattern.")
         return pattern
@@ -81,12 +117,19 @@ class PatternInfoTransformer(PfzyAutocompleteTransformer):
 
         registry = HexBugBot.registry_of(interaction)
         for pattern in registry.patterns.values():
-            self._words += [
-                AutocompleteWord(search_term=pattern.name, result=pattern.name),
-                AutocompleteWord(search_term=str(pattern.id), result=pattern.name),
-            ]
+            for search_term in [
+                pattern.name,
+                str(pattern.id),
+            ]:
+                self._words.append(
+                    AutocompleteWord(
+                        search_term=search_term,
+                        name=pattern.name,
+                        value=str(pattern.id),
+                    )
+                )
 
-        self._words.sort(key=lambda w: w["result"].lower())
+        self._words.sort(key=lambda w: w["name"].lower())
 
 
 class SpecialHandlerInfoTransformer(PfzyAutocompleteTransformer):
@@ -96,8 +139,9 @@ class SpecialHandlerInfoTransformer(PfzyAutocompleteTransformer):
         interaction: Interaction,
         value: str,
     ) -> SpecialHandlerInfo:
+        handler_id = ResourceLocation.from_str(value)
         registry = HexBugBot.registry_of(interaction)
-        info = registry.lookups.special_handler_name.get(value)
+        info = registry.special_handlers.get(handler_id)
         if info is None:
             raise ValueError("Unknown special handler.")
         return info
@@ -108,13 +152,22 @@ class SpecialHandlerInfoTransformer(PfzyAutocompleteTransformer):
 
         registry = HexBugBot.registry_of(interaction)
         for info in registry.special_handlers.values():
-            self._words += [
-                AutocompleteWord(search_term=info.base_name, result=info.base_name),
-                AutocompleteWord(search_term=str(info.id), result=info.base_name),
-            ]
+            for search_term in [
+                info.base_name,
+                str(info.id),
+            ]:
+                self._words.append(
+                    AutocompleteWord(
+                        search_term=search_term,
+                        name=info.base_name,
+                        value=str(info.id),
+                    )
+                )
 
-        self._words.sort(key=lambda w: w["result"].lower())
+        self._words.sort(key=lambda w: w["name"].lower())
 
+
+ModInfoOption = Transform[ModInfo, ModInfoTransformer]
 
 PatternInfoOption = Transform[PatternInfo, PatternInfoTransformer]
 

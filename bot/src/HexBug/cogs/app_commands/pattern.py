@@ -33,6 +33,7 @@ from HexBug.rendering.draw import PatternRenderingOptions
 from HexBug.rendering.types import Palette, Theme
 from HexBug.utils.discord.commands import AnyCommand
 from HexBug.utils.discord.components import update_indexed_select_menu
+from HexBug.utils.discord.embeds import FOOTER_SEPARATOR
 from HexBug.utils.discord.options import OptionsView, option_button, option_select
 from HexBug.utils.discord.transformers import (
     PatternInfoOption,
@@ -296,7 +297,7 @@ class PatternView(ui.View):
             )
             .set_footer(
                 text=join_truthy(
-                    "  •  ",
+                    FOOTER_SEPARATOR,
                     self.info and self.info.id,
                     not self.hide_stroke_order and self.pattern.display(),
                 ),

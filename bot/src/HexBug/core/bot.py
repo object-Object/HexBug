@@ -9,6 +9,7 @@ from discord.ext.commands import Bot, Context, NoEntryPointError
 
 from HexBug import cogs
 from HexBug.common import VERSION
+from HexBug.data.mods import Modloader
 from HexBug.data.registry import HexBugRegistry
 from HexBug.utils.imports import iter_modules
 
@@ -103,6 +104,9 @@ class HexBugBot(Bot):
         if emoji is None:
             raise ValueError(f"Failed to find custom emoji: {custom_emoji.name}")
         return emoji
+
+    def get_modloader_emoji(self, modloader: Modloader) -> Emoji:
+        return self.get_custom_emoji(CustomEmoji.from_modloader(modloader))
 
 
 type HexBugContext = Context[HexBugBot]
