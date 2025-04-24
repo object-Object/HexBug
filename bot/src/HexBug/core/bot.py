@@ -32,7 +32,7 @@ class HexBugBot(Bot):
         super().__init__(
             command_prefix=commands.when_mentioned,
             intents=Intents.default(),
-            activity=CustomActivity(f"v{VERSION}"),
+            activity=self._get_activity(),
             allowed_installs=AppInstallationType(guild=True, user=True),
             allowed_contexts=AppCommandContext(
                 guild=True, dm_channel=True, private_channel=True
@@ -68,6 +68,20 @@ class HexBugBot(Bot):
             except NoEntryPointError:
                 logger.warning(f"No entry point found: {cog}")
         logger.info("Loaded cogs: " + ", ".join(self.cogs.keys()))
+
+    def _get_activity(self):
+        text = f"v{VERSION}"
+        match self.env.environment:
+            case "dev":
+                text += " (local development)"
+            case "beta":
+                if self.env.deployment:
+                    text += f" @ {self.env.deployment.commit_sha[:8]}"
+                else:
+                    text += " @ (unknown)"
+            case "prod":
+                pass
+        return CustomActivity(text)
 
     async def fetch_custom_emojis(self):
         logger.info("Fetching custom emojis")
