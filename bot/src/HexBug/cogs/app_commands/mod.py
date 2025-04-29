@@ -69,10 +69,6 @@ class ModCog(HexBugCog):
                 value=mod.pattern_count,
             ),
             EmbedField(
-                name="Special Handlers",
-                value=mod.special_handler_count,
-            ),
-            EmbedField(
                 name="Operators",
                 value=textwrap.dedent(
                     f"""\
@@ -80,6 +76,10 @@ class ModCog(HexBugCog):
                     {mod.third_party_operator_count} third-party
                     """
                 ),
+            ),
+            EmbedField(
+                name="Special Handlers",
+                value=mod.special_handler_count,
             ),
             skip_falsy=False,
             default_inline=True,
