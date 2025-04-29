@@ -69,10 +69,10 @@ class ModCog(HexBugCog):
                 value=mod.pattern_count,
             ),
             EmbedField(
-                name="Operators",
+                name="Overloads",
                 value=textwrap.dedent(
                     f"""\
-                    {mod.first_party_operator_count} first-party
+                    {mod.first_party_operator_count - mod.pattern_count} first-party
                     {mod.third_party_operator_count} third-party
                     """
                 ),
