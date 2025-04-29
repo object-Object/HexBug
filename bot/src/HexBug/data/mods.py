@@ -42,6 +42,13 @@ class DynamicModInfo(BaseModel):
     github_repo: str
     github_commit: str
 
+    pattern_count: int = 0
+    special_handler_count: int = 0
+    first_party_operator_count: int = 0
+    """Number of operators added to this mod's patterns by this mod."""
+    third_party_operator_count: int = 0
+    """Number of operators added to other mods' patterns by this mod."""
+
     @property
     def github_url(self) -> URL:
         return URL("https://github.com") / self.github_author / self.github_repo

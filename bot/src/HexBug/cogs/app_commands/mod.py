@@ -1,3 +1,5 @@
+import textwrap
+
 from discord import Embed, Interaction, app_commands
 
 from HexBug.core.cog import HexBugCog
@@ -59,6 +61,28 @@ class ModCog(HexBugCog):
             ),
             skip_falsy=True,
             default_inline=False,
+        )
+        add_fields(
+            embed,
+            EmbedField(
+                name="Patterns",
+                value=mod.pattern_count,
+            ),
+            EmbedField(
+                name="Special Handlers",
+                value=mod.special_handler_count,
+            ),
+            EmbedField(
+                name="Operators",
+                value=textwrap.dedent(
+                    f"""\
+                    {mod.first_party_operator_count} first-party
+                    {mod.third_party_operator_count} third-party
+                    """
+                ),
+            ),
+            skip_falsy=False,
+            default_inline=True,
         )
 
         await respond_with_visibility(interaction, visibility, embed=embed)

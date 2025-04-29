@@ -26,6 +26,10 @@ class SpecialHandlerInfo(BaseModel):
     """Pattern name, not including a specific value or any placeholders."""
     operator: PatternOperator
 
+    @property
+    def mod_id(self):
+        return self.id.namespace
+
 
 @dataclass(kw_only=True)
 class SpecialHandlerMatch[T]:

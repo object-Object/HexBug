@@ -349,6 +349,20 @@ class HexBugRegistry(BaseModel):
                 )
             )
 
+        logger.info("Calculating registry stats.")
+
+        for pattern in registry.patterns.values():
+            registry.mods[pattern.mod_id].pattern_count += 1
+            for operator in pattern.operators:
+                op_mod = registry.mods[operator.mod_id]
+                if pattern.mod_id == operator.mod_id:
+                    op_mod.first_party_operator_count += 1
+                else:
+                    op_mod.third_party_operator_count += 1
+
+        for info in registry.special_handlers.values():
+            registry.mods[info.mod_id].special_handler_count += 1
+
         logger.info("Done.")
         return registry
 

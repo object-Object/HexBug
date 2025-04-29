@@ -32,6 +32,10 @@ class PatternInfo(BaseModel):
     operators: list[PatternOperator]
 
     @property
+    def mod_id(self):
+        return self.id.namespace
+
+    @property
     def pattern(self):
         return HexPattern(self.direction, self.signature)
 
