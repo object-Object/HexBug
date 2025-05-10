@@ -29,14 +29,11 @@ class ModCog(HexBugCog):
                 text=FOOTER_SEPARATOR.join(
                     [
                         mod.id,
-                        mod.version,
+                        mod.pretty_version,
                     ]
                 ),
             )
         )
-
-        github_commit = mod.github_commit[:8]
-        github_commit_url = mod.github_url / "tree" / mod.github_commit
 
         add_fields(
             embed,
@@ -57,7 +54,7 @@ class ModCog(HexBugCog):
             ),
             EmbedField(
                 name="GitHub",
-                value=f"{mod.github_url} ([{github_commit}]({github_commit_url}))",
+                value=f"{mod.github_url} ([{mod.github_commit[:8]}]({mod.github_permalink}))",
             ),
             skip_falsy=True,
             default_inline=False,

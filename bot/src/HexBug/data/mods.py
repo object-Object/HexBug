@@ -53,6 +53,28 @@ class DynamicModInfo(BaseModel):
     def github_url(self) -> URL:
         return URL("https://github.com") / self.github_author / self.github_repo
 
+    @property
+    def github_permalink(self) -> URL:
+        return self.github_url / "tree" / self.github_commit
+
+    @property
+    def is_versioned(self) -> bool:
+        """Returns True if the hexdoc plugin was built from a static book version.
+
+        For example:
+        - `https://hexcasting.hexxy.media/v/0.11.2/1.0/en_us`: True
+        - `https://hexcasting.hexxy.media/v/latest/main/en_us`: False
+        """
+        return "/v/latest/" not in self.book_url.path
+
+    @property
+    def pretty_version(self) -> str:
+        """Returns `version` if `is_versioned` is True, otherwise appends the GitHub
+        commit hash."""
+        if self.is_versioned:
+            return self.version
+        return f"{self.version} @ {self.github_commit[:8]}"
+
 
 class ModInfo(StaticModInfo, DynamicModInfo):
     @classmethod

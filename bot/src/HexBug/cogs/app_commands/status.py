@@ -84,7 +84,7 @@ class StatusCog(HexBugCog):
                 embed = Embed(
                     title="Loaded Mods",
                     description="\n".join(
-                        f"* [{mod.name}]({mod.book_url}) ({mod.version})"
+                        f"* **[{mod.name}]({mod.book_url})** ({mod.pretty_version})"
                         for mod in self.bot.registry.mods.values()
                     ),
                 ).set_footer(
