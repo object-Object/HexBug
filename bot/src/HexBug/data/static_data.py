@@ -262,12 +262,12 @@ EXTRA_PATTERNS: list[StaticPatternInfo] = [
     ),
     StaticPatternInfo(
         id=ResourceLocation("hexcasting", "close_paren"),
-        startdir=HexDir.WEST,
+        startdir=HexDir.EAST,
         signature="eee",
     ),
     StaticPatternInfo(
         id=ResourceLocation("hexcasting", "undo"),
-        startdir=HexDir.WEST,
+        startdir=HexDir.EAST,
         signature="eeedw",
     ),
 ]
