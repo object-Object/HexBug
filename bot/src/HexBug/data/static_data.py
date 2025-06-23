@@ -26,6 +26,17 @@ MODS: list[StaticModInfo] = [
         modloaders=[Modloader.FABRIC, Modloader.FORGE],
     ),
     StaticModInfo(
+        id="caduceus",
+        name="Caduceus",
+        description="A Clojure-based addon for advanced meta-evaluation related to jump iotas.",
+        icon_url=URL(
+            "https://raw.githubusercontent.com/object-Object/Caduceus/9737367b932ee5241615ea6d96fe6897ff8ea704/common/src/main/resources/assets/caduceus/icon.png"
+        ),
+        curseforge_slug="caduceus",
+        modrinth_slug="caduceus",
+        modloaders=[Modloader.FABRIC, Modloader.FORGE],
+    ),
+    StaticModInfo(
         id="complexhex",
         name="Complex Hex",
         description="Adds complex numbers, quaternions, BIT displays, and bubbles.",
