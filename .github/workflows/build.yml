@@ -121,6 +121,12 @@ jobs:
       - name: Generate hexdoc.toml
         run: hexbug web build-props
 
+      # HACK
+      - name: Prevent hexdoc from running hatch build
+        run: |
+          echo "#!/bin/sh" > $(realpath hatch)
+          chmod +x $(realpath hatch)
+
       - name: Build hexdoc book
         id: build
         uses: hexdoc-dev/actions/build@v1
