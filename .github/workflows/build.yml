@@ -109,10 +109,11 @@ jobs:
         with:
           python-version-file: .python-version
 
+      # https://github.com/astral-sh/uv/issues/8085#issuecomment-2406665798
       - name: Sync dependencies
-        env:
-          UV_PROJECT_ENVIRONMENT: /usr/local
-        run: uv sync --frozen --no-dev --package HexBug-web --extra data
+        run: |
+          export UV_PROJECT_ENVIRONMENT="${pythonLocation}"
+          uv sync --frozen --no-dev --package HexBug-web --extra data
 
       - name: Build registry
         run: hexbug build

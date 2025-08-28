@@ -185,9 +185,9 @@ jobs:
           python-version-file: .python-version
 
       - name: Sync dependencies
-        env:
-          UV_PROJECT_ENVIRONMENT: /usr/local
-        run: uv sync --frozen --no-dev --package HexBug-web
+        run: |
+          export UV_PROJECT_ENVIRONMENT="${pythonLocation}"
+          uv sync --frozen --no-dev --package HexBug-web
 
       - name: Merge and deploy to Pages
         uses: hexdoc-dev/actions/deploy-pages@v1
