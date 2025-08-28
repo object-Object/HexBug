@@ -36,6 +36,10 @@ def build_props(
             f"{web}/resources",
             *HEXDOC_PROPS["resource_dirs"],
         ],
+        "textures": {
+            **HEXDOC_PROPS["textures"],
+            "enabled": False,
+        },
         "template": {
             "icon": f"{web}/icon.png",
             "include": [
