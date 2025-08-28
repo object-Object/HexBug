@@ -7,14 +7,9 @@ dynamic = ["version"]
 name = "HexBug-web"
 requires-python = ">=3.12"
 dependencies = [
-    "HexBug-bot",
+    "HexBug-bot[data]",
     "HexBug-common",
     "tomli-w>=1.2.0",
-]
-
-[project.optional-dependencies]
-data = [
-    "HexBug-bot[data]",
 ]
 
 [tool.uv.sources]
