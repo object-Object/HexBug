@@ -113,7 +113,7 @@ jobs:
       - name: Sync dependencies
         run: |
           export UV_PROJECT_ENVIRONMENT="${pythonLocation}"
-          uv sync --frozen --no-dev --package HexBug-web
+          uv sync --frozen --no-dev --package HexBug-web --extra data
 
       - name: Build registry
         run: hexbug build
