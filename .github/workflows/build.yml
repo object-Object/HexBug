@@ -110,6 +110,8 @@ jobs:
           python-version-file: .python-version
 
       - name: Sync dependencies
+        env:
+          UV_PROJECT_ENVIRONMENT: /usr/local
         run: uv sync --frozen --no-dev --package HexBug-web --extra data
 
       - name: Build registry
