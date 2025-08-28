@@ -128,6 +128,7 @@ jobs:
           echo "#!/bin/sh" > "$HOME/tmp-bin/hatch"
           chmod +x "$HOME/tmp-bin/hatch"
           echo "$HOME/tmp-bin" >> "$GITHUB_PATH"
+          mkdir -p dist
 
       - name: Build hexdoc book
         id: build
