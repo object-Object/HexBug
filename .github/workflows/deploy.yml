@@ -189,6 +189,12 @@ jobs:
           export UV_PROJECT_ENVIRONMENT="${pythonLocation}"
           uv sync --frozen --no-dev --package HexBug-web
 
+      - name: Download hexdoc.toml artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: hexdoc-toml
+          path: hexdoc.toml
+
       - name: Merge and deploy to Pages
         uses: hexdoc-dev/actions/deploy-pages@v1
         with:

@@ -137,3 +137,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           release: false
+
+      - name: Upload hexdoc.toml artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hexdoc-toml
+          path: hexdoc.toml
