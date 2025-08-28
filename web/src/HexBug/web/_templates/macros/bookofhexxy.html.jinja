@@ -1,0 +1,5 @@
+{% macro mod_attribution(value) -%}
+  <div class="bookofhexxy-mod-attribution">
+    <small class="text-muted">Source: {{ bookofhexxy_mods[value.resource_dir.modid].name }}</small>
+  </div>
+{%- endmacro %}

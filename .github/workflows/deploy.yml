@@ -167,3 +167,28 @@ jobs:
           application: ${{ steps.parse.outputs.ApplicationName }}
           deployment-group: ${{ steps.parse.outputs.DeploymentGroupName }}
           s3-bucket: ${{ steps.parse.outputs.ArtifactsBucketName }}
+
+  deploy-pages:
+    needs:
+      - build
+      - setup
+    runs-on: ubuntu-latest
+    concurrency:
+      group: hexdoc-deploy-pages
+      cancel-in-progress: false
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: object-Object/ci/setup@v0
+        with:
+          python-version-file: .python-version
+
+      - name: Sync dependencies
+        run: uv sync --frozen --no-dev --package HexBug-web
+
+      - name: Merge and deploy to Pages
+        uses: hexdoc-dev/actions/deploy-pages@v1
+        with:
+          release: false
+          site-url: ${{ needs.build.outputs.pages-url }}

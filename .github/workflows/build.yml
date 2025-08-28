@@ -10,6 +10,8 @@ on:
     outputs:
       image-tag:
         value: ${{ jobs.build-image.outputs.tag }}
+      pages-url:
+        value: ${{ jobs.build-hexdoc.outputs.pages-url }}
 
 env:
   NODE_VERSION: 18
@@ -93,3 +95,33 @@ jobs:
         with:
           name: aws-cdk-synth
           path: cdk.out
+
+  build-hexdoc:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: read
+    outputs:
+      pages-url: ${{ steps.build.outputs.pages-url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: object-Object/ci/setup@v0
+        with:
+          python-version-file: .python-version
+
+      - name: Sync dependencies
+        run: uv sync --frozen --no-dev --package HexBug-web --extra data
+
+      - name: Build registry
+        run: hexbug build
+
+      - name: Generate hexdoc.toml
+        run: hexbug web build-props
+
+      - name: Build hexdoc book
+        id: build
+        uses: hexdoc-dev/actions/build@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          release: false

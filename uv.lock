@@ -11,6 +11,7 @@ members = [
     "hexbug-bot",
     "hexbug-common",
     "hexbug-infrastructure",
+    "hexbug-web",
 ]
 
 [manifest.dependency-groups]
@@ -928,6 +929,29 @@ requires-dist = [
     { name = "hexbug-common", editable = "common" },
     { name = "object-ci", extras = ["aws-cdk"], git = "https://github.com/object-Object/ci?rev=v0" },
 ]
+
+[[package]]
+name = "hexbug-web"
+source = { editable = "web" }
+dependencies = [
+    { name = "hexbug-bot" },
+    { name = "hexbug-common" },
+    { name = "tomli-w" },
+]
+
+[package.optional-dependencies]
+data = [
+    { name = "hexbug-bot", extra = ["data"] },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "hexbug-bot", editable = "bot" },
+    { name = "hexbug-bot", extras = ["data"], marker = "extra == 'data'", editable = "bot" },
+    { name = "hexbug-common", editable = "common" },
+    { name = "tomli-w", specifier = ">=1.2.0" },
+]
+provides-extras = ["data"]
 
 [[package]]
 name = "hexdoc"

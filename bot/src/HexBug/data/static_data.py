@@ -258,7 +258,13 @@ MODS: list[StaticModInfo] = [
         modloaders=[Modloader.FABRIC],
     ),
 ]
+"""The master list of mods supported by HexBug.
+
+Hex Casting is guaranteed to be the first mod in this list. All other mods are sorted
+alphabetically by name.
+"""
 MODS[1:] = sorted(MODS[1:], key=lambda m: m.name)
+assert MODS[0].id == "hexcasting"
 
 EXTRA_PATTERNS: list[StaticPatternInfo] = [
     StaticPatternInfo(
@@ -362,4 +368,27 @@ DISAMBIGUATED_PATTERNS: set[ResourceLocation] = {
 
 DISABLED_PAGES: set[str] = {
     "lamp/arch_lamps@hexical:lamp_finale",
+}
+
+HEXDOC_PROPS: dict[str, Any] = {
+    "modid": "hexbug",
+    "book": "hexcasting:thehexbook",
+    "resource_dirs": [
+        *({"modid": mod.id, "external": False} for mod in MODS),
+        {"modid": "minecraft"},
+        {"modid": "hexdoc"},
+    ],
+    "extra": {"hexcasting": {"pattern_stubs": []}},
+    "textures": {
+        "missing": [
+            "minecraft:chest",
+            "minecraft:shield",
+            "dthexcasting:*",
+            "dynamictrees:*",
+            "emi:*",
+            "hexdebug:*",
+            "hexical:gauntlet_staff",
+            "hexical:lightning_rod_staff",
+        ]
+    },
 }

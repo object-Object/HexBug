@@ -39,6 +39,7 @@ from .static_data import (
     DISABLED_PATTERNS,
     DISAMBIGUATED_PATTERNS,
     EXTRA_PATTERNS,
+    HEXDOC_PROPS,
     MODS,
     PATTERN_NAME_OVERRIDES,
     SPECIAL_HANDLERS,
@@ -56,7 +57,9 @@ class HexBugRegistry(BaseModel):
     special_handlers: dict[ResourceLocation, SpecialHandlerInfo]
 
     _lookups: PatternLookups = PrivateAttr(default_factory=PatternLookups)
-    _pregenerated_numbers: dict[int, HexPattern] = PrivateAttr(default_factory=dict)
+    _pregenerated_numbers: dict[int, HexPattern] = PrivateAttr(
+        default_factory=lambda: {}
+    )
 
     @classmethod
     def build(cls) -> Self:
@@ -86,27 +89,7 @@ class HexBugRegistry(BaseModel):
 
         logger.info("Initializing hexdoc.")
 
-        props = HexBugProperties.load_data(
-            props_dir=Path.cwd(),
-            data={
-                "modid": "hexbug",
-                "book": "hexcasting:thehexbook",
-                "resource_dirs": [
-                    *({"modid": mod.id, "external": False} for mod in MODS),
-                    {"modid": "minecraft"},
-                    {"modid": "hexdoc"},
-                ],
-                "extra": {"hexcasting": {"pattern_stubs": []}},
-                "textures": {
-                    "missing": [
-                        "minecraft:chest",
-                        "minecraft:shield",
-                        "emi:*",
-                        "dynamictrees:*",
-                    ]
-                },
-            },
-        )
+        props = HexBugProperties.load_data(props_dir=Path.cwd(), data=HEXDOC_PROPS)
         assert props.book_id
 
         pm = PluginManager("", props)

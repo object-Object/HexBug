@@ -31,6 +31,7 @@ members = [
     "bot",
     "common",
     "infrastructure",
+    "web",
 ]
 
 [tool.uv.sources]
@@ -100,6 +101,7 @@ include = [
     "bot/*",
     "common/*",
     "infrastructure/*",
+    "web/*",
 ]
 exclude = [
     "**/venv",

@@ -3,6 +3,8 @@
 .env*
 secrets/
 registry.json
+hexdoc.toml
+_site/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

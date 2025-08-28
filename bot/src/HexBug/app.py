@@ -17,6 +17,13 @@ app = Typer(
     pretty_exceptions_show_locals=False,
 )
 
+try:
+    import HexBug.web.app
+
+    app.add_typer(HexBug.web.app.app, name="web")
+except ImportError:
+    pass
+
 
 @app.command()
 def bot(
