@@ -8,7 +8,7 @@ from discord import (
 from discord.app_commands import Command
 from discord.ext.commands import Paginator
 
-from ..strings import truncate_str
+from HexBug.utils.strings import truncate_str
 
 AnyCommand = Command[Any, ..., Any]
 

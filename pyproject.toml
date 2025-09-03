@@ -73,6 +73,7 @@ extend-exclude = [
 extend-select = [
     "I", # import sorting
     "RUF022", # __all__ sorting
+    "TID252", # ban relative imports
 ]
 extend-ignore = [
     # covered by Pyright
@@ -89,6 +90,9 @@ known-first-party = [
 known-third-party = [
     "discord",
 ]
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "parents"
 
 # type checking
 
