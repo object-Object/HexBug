@@ -3,7 +3,7 @@
 [dependency-groups]
 dev = [
     "HexBug-bot[data]",
-    "ruff>=0.9.7",
+    "ruff>=0.12.11",
     "pre-commit",
     "poethepoet>=0.32.2",
     "hatch>=1.13.0",
@@ -62,6 +62,7 @@ filterwarnings = [
 # linting/formatting
 
 [tool.ruff]
+preview = true
 extend-exclude = [
     "**/venv",
     "**/.*",

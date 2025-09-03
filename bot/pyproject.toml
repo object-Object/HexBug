@@ -20,6 +20,7 @@ dependencies = [
     "fastapi>=0.115.12",
     "uvicorn>=0.34.0",
     "httpx>=0.28.1",
+    "lark[interegular]>=1.2.2",
 ]
 
 [project.scripts]

@@ -26,12 +26,10 @@ class ModCog(HexBugCog):
                 url=mod.icon_url,
             )
             .set_footer(
-                text=FOOTER_SEPARATOR.join(
-                    [
-                        mod.id,
-                        mod.pretty_version,
-                    ]
-                ),
+                text=FOOTER_SEPARATOR.join([
+                    mod.id,
+                    mod.pretty_version,
+                ]),
             )
         )
 
