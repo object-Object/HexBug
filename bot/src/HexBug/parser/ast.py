@@ -31,7 +31,7 @@ class BaseIota(ABC):
 @dataclass
 class PatternIota(BaseIota):
     direction: HexDir
-    signature: PatternSignature | None = None
+    signature: PatternSignature = ""
 
     @field_validator("direction", mode="before")
     @classmethod
