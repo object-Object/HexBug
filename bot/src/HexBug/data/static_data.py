@@ -35,7 +35,7 @@ MODS: list[StaticModInfo] = [
         name="Caduceus",
         description="A Clojure-based addon for advanced meta-evaluation related to jump iotas.",
         icon_url=URL(
-            "https://raw.githubusercontent.com/object-Object/Caduceus/9737367b932ee5241615ea6d96fe6897ff8ea704/common/src/main/resources/assets/caduceus/icon.png"
+            "https://raw.githubusercontent.com/object-Object/Caduceus/4bdfeada6ebc2448b66c7b861accdea864afb4f3/common/src/main/resources/assets/caduceus/icon.png"
         ),
         curseforge_slug="caduceus",
         modrinth_slug="caduceus",
