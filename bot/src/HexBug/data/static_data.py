@@ -23,7 +23,12 @@ MODS: list[StaticModInfo] = [
         ),
         curseforge_slug="hexcasting",
         modrinth_slug="hex-casting",
-        modloaders=[Modloader.FABRIC, Modloader.FORGE],
+        modloaders=[
+            Modloader.FABRIC,
+            Modloader.FORGE,
+            Modloader.NEOFORGE,
+            Modloader.QUILT,
+        ],
     ),
     StaticModInfo(
         id="caduceus",
@@ -59,6 +64,17 @@ MODS: list[StaticModInfo] = [
         modloaders=[Modloader.FORGE],
     ),
     StaticModInfo(
+        id="efhexs",
+        name="Special Efhexs",
+        description="An addon dedicated to special effects via particles and sounds.",
+        icon_url=URL(
+            "https://raw.githubusercontent.com/miyucomics/special-efhexs/81157d804c0e51a3082a1b328483425dec49f5da/src/main/resources/assets/efhexs/icon.png"
+        ),
+        curseforge_slug=None,
+        modrinth_slug=None,
+        modloaders=[Modloader.FABRIC],
+    ),
+    StaticModInfo(
         id="ephemera",
         name="Ephemera",
         description="An addon for Hex Casting with no particular theme.",
@@ -67,7 +83,7 @@ MODS: list[StaticModInfo] = [
         ),
         curseforge_slug="ephemera",
         modrinth_slug="ephemera",
-        modloaders=[Modloader.FABRIC, Modloader.FORGE],
+        modloaders=[Modloader.FABRIC, Modloader.FORGE, Modloader.QUILT],
     ),
     StaticModInfo(
         id="hexal",
@@ -89,7 +105,7 @@ MODS: list[StaticModInfo] = [
         ),
         curseforge_slug=None,
         modrinth_slug="hexcassettes",
-        modloaders=[Modloader.FABRIC],
+        modloaders=[Modloader.FABRIC, Modloader.QUILT],
     ),
     StaticModInfo(
         id="hexcellular",
@@ -100,7 +116,7 @@ MODS: list[StaticModInfo] = [
         ),
         curseforge_slug=None,
         modrinth_slug="hexcellular",
-        modloaders=[Modloader.FABRIC],
+        modloaders=[Modloader.FABRIC, Modloader.QUILT],
     ),
     StaticModInfo(
         id="hexchanting",
@@ -122,7 +138,7 @@ MODS: list[StaticModInfo] = [
         ),
         curseforge_slug="hexdebug",
         modrinth_slug="hexdebug",
-        modloaders=[Modloader.FABRIC, Modloader.FORGE],
+        modloaders=[Modloader.FABRIC, Modloader.FORGE, Modloader.QUILT],
     ),
     StaticModInfo(
         id="hexdim",
@@ -140,7 +156,6 @@ MODS: list[StaticModInfo] = [
         name="HexGender",
         description="Adds patterns for changing your gender via Wildfire's Female Gender Mod.",
         icon_url=URL(
-            # TODO: idk if webp will actually work on Discord
             "https://media.forgecdn.net/avatars/1184/151/638757987531288199.webp"
         ),
         curseforge_slug="hexgender",
@@ -156,7 +171,7 @@ MODS: list[StaticModInfo] = [
         ),
         curseforge_slug=None,
         modrinth_slug="hexical",
-        modloaders=[Modloader.FABRIC],
+        modloaders=[Modloader.FABRIC, Modloader.QUILT],
     ),
     StaticModInfo(
         id="hexmapping",
@@ -167,18 +182,51 @@ MODS: list[StaticModInfo] = [
         ),
         curseforge_slug="hexmapping",
         modrinth_slug="hexmapping",
-        modloaders=[Modloader.FABRIC, Modloader.FORGE],
+        modloaders=[Modloader.FABRIC, Modloader.FORGE, Modloader.QUILT],
     ),
     StaticModInfo(
-        id="hexposition",
-        name="Hexposition",
-        description="A Hexcasting addon all about getting information about the world!",
+        id="hexodus",
+        name="Hexodus",
+        description="A gravity addon for Hex Casting.",
         icon_url=URL(
-            "https://raw.githubusercontent.com/miyucomics/hexposition/f46447b6783c299f8de5de80950adb82f2e469e0/src/main/resources/assets/hexposition/icon.png"
+            "https://raw.githubusercontent.com/miyucomics/hexodus/42a13fbd998689c70e90e1c40179cd35504c9477/src/main/resources/assets/hexodus/icon.png"
         ),
         curseforge_slug=None,
         modrinth_slug=None,
         modloaders=[Modloader.FABRIC],
+    ),
+    StaticModInfo(
+        id="hexpose",
+        name="Hexpose",
+        description="A library addon for Hexcasting that adds many scrying patterns and the iotas for other addons to use.",
+        icon_url=URL(
+            "https://cdn.modrinth.com/data/VWvaiZqR/92684dcd340ede08e3a9a5314221bc59f34072dd.png"
+        ),
+        curseforge_slug=None,
+        modrinth_slug="hexpose",
+        modloaders=[Modloader.FABRIC],
+    ),
+    StaticModInfo(
+        id="hexstruction",
+        name="HexStruction",
+        description="Adds the ability to create, manipulate, and use Structure iotas.",
+        icon_url=URL(
+            "https://cdn.modrinth.com/data/dGRSMTTM/2a6bc4b80b41f5a464409827df5b4e85929e5cd5.png"
+        ),
+        curseforge_slug="hexstruction",
+        modrinth_slug="hexstruction",
+        modloaders=[Modloader.FABRIC],
+    ),
+    StaticModInfo(
+        id="hextended",
+        name="Hextended Staves",
+        description="Bolster your magic stick collection.",
+        icon_url=URL(
+            "https://raw.githubusercontent.com/abilliontrillionstars/hextended-staves/e3d6a09dbbdb425bfeca40c41f58928d01b24c65/common/src/main/icon.png"
+        ),
+        curseforge_slug="hextended-staves",
+        modrinth_slug="hextended-staves",
+        modloaders=[Modloader.FABRIC, Modloader.FORGE, Modloader.QUILT],
     ),
     StaticModInfo(
         id="hextrogen",
@@ -211,6 +259,17 @@ MODS: list[StaticModInfo] = [
         ),
         curseforge_slug="hexweb",
         modrinth_slug="hexweb",
+        modloaders=[Modloader.FABRIC, Modloader.FORGE, Modloader.QUILT],
+    ),
+    StaticModInfo(
+        id="hierophantics",
+        name="Hierophantics",
+        description="Addon for Hex Casting that lets you work with extracted minds to create conditional hexes, merge villagers, and cast spells for less media.",
+        icon_url=URL(
+            "https://cdn.modrinth.com/data/ybwf7iLN/6b830c0683581bf124c5b83ab33b0965b982e832.png"
+        ),
+        curseforge_slug="hierophantics",
+        modrinth_slug="hierophantics",
         modloaders=[Modloader.FABRIC, Modloader.FORGE],
     ),
     StaticModInfo(
@@ -225,11 +284,33 @@ MODS: list[StaticModInfo] = [
         modloaders=[Modloader.FABRIC, Modloader.FORGE],
     ),
     StaticModInfo(
+        id="lapisworks",
+        name="Lapisworks",
+        description="Harness Lapis' enchanting power with Hex Casting's media and enchant yourself.",
+        icon_url=URL(
+            "https://cdn.modrinth.com/data/YPwDELmO/4b950eeaccc76fe5dd989aac30bb6750c12979cf.png"
+        ),
+        curseforge_slug=None,
+        modrinth_slug="lapisworks",
+        modloaders=[Modloader.FABRIC],
+    ),
+    StaticModInfo(
+        id="lessertp",
+        name="Lesser Teleport",
+        description="A port of Lesser Teleport from HexKinetics.",
+        icon_url=URL(
+            "https://raw.githubusercontent.com/Real-Luxof/Lesser-Teleport/d74d97975d04b5d13b175ba39aa2b85ab397977e/src/main/resources/assets/lessertp/icon.png"
+        ),
+        curseforge_slug=None,
+        modrinth_slug="lesser-teleport",
+        modloaders=[Modloader.FABRIC],
+    ),
+    StaticModInfo(
         id="moreiotas",
         name="MoreIotas",
         description="Adds iotas for strings, matrices, types, and items.",
         icon_url=URL(
-            "https://raw.githubusercontent.com/object-Object/MoreIotas/9d053970db7cc4d4c29b12632521bf532612adf3/Common/src/main/resources/logo.png"
+            "https://raw.githubusercontent.com/FallingColors/MoreIotas/9d053970db7cc4d4c29b12632521bf532612adf3/Common/src/main/resources/logo.png"
         ),
         curseforge_slug="moreiotas",
         modrinth_slug="moreiotas",
@@ -244,7 +325,7 @@ MODS: list[StaticModInfo] = [
         ),
         curseforge_slug="oneironaut",
         modrinth_slug="oneironaut",
-        modloaders=[Modloader.FABRIC],
+        modloaders=[Modloader.FABRIC, Modloader.QUILT],
     ),
     StaticModInfo(
         id="overevaluate",
@@ -255,6 +336,26 @@ MODS: list[StaticModInfo] = [
         ),
         curseforge_slug=None,
         modrinth_slug=None,
+        modloaders=[Modloader.FABRIC],
+    ),
+    StaticModInfo(
+        id="scryglass",
+        name="Scryglass",
+        description="A Hexcasting addon to draw things on your screen!",
+        icon_url=None,
+        curseforge_slug=None,
+        modrinth_slug=None,
+        modloaders=[Modloader.FABRIC],
+    ),
+    StaticModInfo(
+        id="slate_work",
+        name="Slate Works",
+        description="An addon for improving and adding to Spell Circles in many different ways.",
+        icon_url=URL(
+            "https://cdn.modrinth.com/data/3DnSSjl3/47d6ade3a5550904b56d119c9ba14f59e26966bb.png"
+        ),
+        curseforge_slug=None,
+        modrinth_slug="slate-works",
         modloaders=[Modloader.FABRIC],
     ),
 ]
@@ -331,13 +432,10 @@ SPECIAL_HANDLERS: dict[ResourceLocation, SpecialHandler[Any]] = {
 
 DISABLED_PATTERNS: set[ResourceLocation] = {
     # commented out, but the regex doesn't account for that
-    # https://github.com/vgskye/Hexal/blob/efe2b7df1e/Common/src/main/java/ram/talia/hexal/common/lib/hex/HexalActions.kt#L210
+    # https://github.com/FallingColors/Hexal/blob/efe2b7df1e/Common/src/main/java/ram/talia/hexal/common/lib/hex/HexalActions.kt#L210
     ResourceLocation("hexal", "gate/mark/num/get"),
     ResourceLocation("hexal", "mote/count/get"),
     ResourceLocation("hexal", "mote/combine"),
-    ResourceLocation("oneironaut", "lichify"),
-    ResourceLocation("oneironaut", "getislich"),
-    ResourceLocation("oneironaut", "setlichtickhex"),
     # unused
     ResourceLocation("moreiotas", "altadd"),
     # undocumented
@@ -345,30 +443,41 @@ DISABLED_PATTERNS: set[ResourceLocation] = {
     ResourceLocation("complexhex", "chloe/make"),
     ResourceLocation("complexhex", "cnarg"),
     ResourceLocation("ephemera", "hashbits"),
+    ResourceLocation("hexical", "disguise_mage_block"),
+    ResourceLocation("hexical", "tweak_mage_block"),
+    ResourceLocation("hexpose", "entity_name"),
     ResourceLocation("hextweaks", "you_like_drinking_potions"),
+    ResourceLocation("lapisworks", "empty_prfn"),
     ResourceLocation("oneironaut", "advanceautomaton"),
+    ResourceLocation("oneironaut", "checksignature"),
+    ResourceLocation("oneironaut", "erosionshield"),
+    ResourceLocation("oneironaut", "getsoulprint"),
+    ResourceLocation("oneironaut", "signitem"),
     # conflicts
-    ResourceLocation("hexical", "periwinkle"),  # signature: hexal:mote/storage/bind
-    ResourceLocation("hexical", "effect_clouding"),  # shape: ephemera:invisibility
-    # ResourceLocation("hexical", "theodolite"),  # moved to hexposition
+    ResourceLocation("hexical", "age_scroll"),  # shape: hexical:greater_blink
+    ResourceLocation("hexstruction", "bounding_box"),  # shape: hexical:greater_blink
     # lmao what
     ResourceLocation("ephemera", "no"),
     ResourceLocation("hextweaks", "suicide"),
     ResourceLocation("oneironaut", "circle"),
+    # lapisworks? apparently it doesn't
+    ResourceLocation("lapisworks", "create_enchsent2"),
+    ResourceLocation("lapisworks", "create_enchsent3"),
+    ResourceLocation("lapisworks", "create_enchsent4"),
+    ResourceLocation("lapisworks", "create_enchsent5"),
+    ResourceLocation("lapisworks", "create_enchsent6"),
 }
 
 # replace the pattern's name entirely
-PATTERN_NAME_OVERRIDES: dict[ResourceLocation, str] = {}
+PATTERN_NAME_OVERRIDES: dict[ResourceLocation, str] = {
+    ResourceLocation("hexpose", "read_book"): "Reading Purification (book)",
+    ResourceLocation("hexpose", "create_text"): "Reading Purification (text)",
+}
 
 # append the mod's name to the pattern's name
-DISAMBIGUATED_PATTERNS: set[ResourceLocation] = {
-    ResourceLocation("hexical", "wristpocket_item"),
-    ResourceLocation("hexposition", "get_ender_chest"),
-}
+DISAMBIGUATED_PATTERNS: set[ResourceLocation] = set()
 
-DISABLED_PAGES: set[str] = {
-    "lamp/arch_lamps@hexical:lamp_finale",
-}
+DISABLED_PAGES: set[str] = set()
 
 HEXDOC_PROPS: dict[str, Any] = {
     "modid": "hexbug",
@@ -389,6 +498,9 @@ HEXDOC_PROPS: dict[str, Any] = {
             "hexdebug:*",
             "hexical:gauntlet_staff",
             "hexical:lightning_rod_staff",
+            "hextended:livingwood_staff",
+            "hextended:staff/livingwood",
+            "hextended:staff/long/extended_staff",
         ]
     },
 }

@@ -28,41 +28,58 @@ hexbug = "HexBug.app:app"
 [project.optional-dependencies]
 data = [
     "hexdoc-hexcasting~=0.11.2.0",
-    # hex addons
-    "hexdoc-caduceus~=0.1.0.1.20.1.0",
-    "hexdoc-complexhex~=0.1.3.0",
+    # hex addons (PyPI)
+    "hexdoc-caduceus~=0.1.1.1.20.1.0",
     "hexdoc-dthexcasting~=1.0.1.0",
-    "hexdoc-ephemera~=0.3.0.0",
-    "hexdoc-hexal~=0.3.0.0",
     "hexdoc-hexcassettes~=1.1.4.0",
-    "hexdoc-hexcellular~=1.0.4.0",
-    "hexdoc-hexchanting~=1.1.2.0",
+    "hexdoc-hexcellular~=1.1.0.0",
+    "hexdoc-hexchanting~=1.1.3.0",
     "hexdoc-hexdebug~=0.3.0.1.20.1.0",
     "hexdoc-hexdim~=1.2.1.1.20.0",
     "hexdoc-hexgender~=1.0.4.0",
-    "hexdoc-hexical~=2.0.0.0",
     "hexdoc-hexmapping~=0.0.3.0",
-    "hexdoc-hexposition~=1.0.0.0",
+    "hexdoc-hexodus~=1.0.0.0",
+    # workaround for https://github.com/miyucomics/hexpose/commit/26709051b306e70982cb904ac2776eb7f9da9f4d
+    # we can switch back to PyPI for the next release
+    "hexdoc-hexpose==1.0.0.1.0.0+hexbug",
     "hexdoc-hextrogen~=1.1.0.0",
     "hexdoc-hextweaks~=5.3.3.0",
     "hexdoc-hexweb~=1.0.4.0",
-    "hexdoc-ioticblocks~=1.0.0.1.20.1.0",
-    "hexdoc-moreiotas~=0.1.0.0",
-    "hexdoc-oneironaut~=0.5.0.0",
-    "hexdoc-overevaluate~=1.0.0.0",
+    "hexdoc-hierophantics~=1.3.2.0",
+    "hexdoc-ioticblocks~=1.0.1.1.20.1.0",
+    # hex addons (GitHub)
+    "hexdoc-complexhex",
+    "hexdoc-efhexs",
+    "hexdoc-ephemera",
+    "hexdoc-hexal",
+    "hexdoc-hexical",
+    "hexdoc-hexstruction",
+    "hexdoc-hextended",
+    "hexdoc-lapisworks",
+    "hexdoc-lessertp",
+    "hexdoc-moreiotas",
+    "hexdoc-oneironaut",
+    "hexdoc-overevaluate",
+    "hexdoc-scryglass",
+    "hexdoc-slate-work",
 ]
 
 [tool.uv.sources]
 HexBug-common = { workspace = true }
-hexdoc-complexhex = { url = "https://github.com/kineticneticat/ComplexHex/raw/2b0592408b09d14e1acb74a15ccd3b1dd7c211d4/docs/v/latest/0.1.x/dist/hexdoc_complexhex-0.1.3.1.0.dev0-py3-none-any.whl" }
-hexdoc-ephemera = { url = "https://github.com/beholderface/Ephemera/raw/77628c3c484f5754e9b714164a787baea1ec4e5d/docs/v/latest/1.20.1/dist/hexdoc_ephemera-0.3.0.1.0.dev0-py3-none-any.whl" }
-# see: https://github.com/astral-sh/uv/issues/12512
-# hexdoc-hexal = { url = "https://github.com/vgskye/Hexal/raw/6a8700ec078ec716e368f8e17e32191a0e27bd46/docs/v/latest/remaint/dist/hexdoc_hexal-0.3.0.1.0rc3.dev0-py3-none-any.whl" }
-hexdoc-hexical = { url = "https://github.com/miyucomics/hexical/raw/861df82153690e545f52c2aa57eddd0c67cb8c24/docs/v/latest/main/dist/hexdoc_hexical-2.0.0.1.0.0-py3-none-any.whl" }
-hexdoc-moreiotas = { url = "https://github.com/object-Object/MoreIotas/raw/91915ee8768d8fc17c8b86d4d888b7df5f536082/docs/v/0.1.0-6/1.0.dev0/dist/hexdoc_moreiotas-0.1.0.1.0rc6.dev0-py3-none-any.whl" }
-hexdoc-oneironaut = { url = "https://github.com/beholderface/oneironaut/raw/70817097a2d1df2aedb36051479b36f6db5d38cc/docs/v/latest/1.20.1/dist/hexdoc_oneironaut-0.5.0.1.0-py3-none-any.whl" }
-hexdoc-overevaluate = { url = "https://github.com/miyucomics/overevaluate/raw/2aee5bdca57a9882c5851a1d70413a8aa8c5ef9e/docs/v/latest/main/dist/hexdoc_overevaluate-1.0.0.1.0.0-py3-none-any.whl" }
-hexdoc-hexposition = { url = "https://github.com/miyucomics/hexposition/raw/3cdb09e54188fefb1732120b33e4eda9d62fca4f/docs/v/latest/main/dist/hexdoc_hexposition-1.0.0.1.0.0-py3-none-any.whl" }
+hexdoc-complexhex = { url = "https://github.com/kineticneticat/ComplexHex/raw/51cf2bbac7183cd6b4be360f205bd20d99d56952/docs/v/latest/0.1.x/dist/hexdoc_complexhex-0.1.6.1.0.dev0-py3-none-any.whl" }
+hexdoc-efhexs = { url = "https://github.com/miyucomics/special-efhexs/raw/8029ab75e0d42c92795612639d3dae3170520ddd/docs/v/latest/main/dist/hexdoc_efhexs-1.0.0.1.0.0-py3-none-any.whl" }
+hexdoc-ephemera = { url = "https://github.com/beholderface/Ephemera/raw/74e80eddd991059785eede8435981716480b69ae/docs/v/latest/1.20.1/dist/hexdoc_ephemera-0.3.0.1.0.dev0-py3-none-any.whl" }
+hexdoc-hexal = { url = "https://github.com/FallingColors/Hexal/raw/a5d1dbc6528e4a6c7c8f67ba3adc4c143dafb6e5/docs/v/latest/main/dist/hexdoc_hexal-0.3.0.1.0rc4.dev0-py3-none-any.whl" }
+hexdoc-hexical = { url = "https://github.com/miyucomics/hexical/raw/cd130b06041b99677961baab480055c77ea02ec1/docs/v/latest/main/dist/hexdoc_hexical-2.0.0.1.0.0-py3-none-any.whl" }
+hexdoc-hexstruction = { url = "https://github.com/PetersonE1/hexstruction/raw/510da7fea2f52d6497c50753990bbc5919ee71ad/docs/v/latest/main/dist/hexdoc_hexstruction-1.2.1.1.20.1.1.0-py3-none-any.whl" }
+hexdoc-hextended = { url = "https://github.com/abilliontrillionstars/hextended-staves/raw/0e6e0a61b7f4d3e79761b216cfebc1141e19b30b/docs/v/latest/main/dist/hexdoc_hextended-2.0.1.1.0.dev0-py3-none-any.whl" }
+hexdoc-lapisworks = { url = "https://github.com/Real-Luxof/Lapisworks/raw/6495353b463985a29fec54419b5a63a3d21c85e0/docs/v/latest/main/dist/hexdoc_lapisworks-1.5.0.1.0.dev0-py3-none-any.whl" }
+hexdoc-lessertp = { url = "https://github.com/Real-Luxof/Lesser-Teleport/raw/9d02b3b84bbcc8c1849a9a53eec46af9fb10193f/docs/v/latest/main/dist/hexdoc_lessertp-1.1.1.1.0.dev0-py3-none-any.whl" }
+hexdoc-moreiotas = { url = "https://github.com/FallingColors/MoreIotas/raw/faef659e65288c0fa59fa8e65e654615d39bd510/docs/v/latest/main/dist/hexdoc_moreiotas-0.1.0.1.0rc6.dev0-py3-none-any.whl" }
+hexdoc-oneironaut = { url = "https://github.com/beholderface/oneironaut/raw/99b7c992e2e2230b39ec9adceed4b1b2fed15831/docs/v/latest/1.20.1/dist/hexdoc_oneironaut-0.5.0.1.0-py3-none-any.whl" }
+hexdoc-overevaluate = { url = "https://github.com/miyucomics/overevaluate/raw/6c92a93c51fd966cf3709468f0a126c746ae85ba/docs/v/latest/main/dist/hexdoc_overevaluate-1.0.0.1.0.0-py3-none-any.whl" }
+hexdoc-scryglass = { url = "https://github.com/miyucomics/scryglass/raw/2b414d0ba9e9c0770c8b13bb01a67398630a4690/docs/v/latest/main/dist/hexdoc_scryglass-1.0.0.1.0.0-py3-none-any.whl" }
+hexdoc-slate-work = { url = "https://github.com/Stick404/SlateWork/raw/c92e1aee0ff0e55fe2927c90febdebd8424e68fc/docs/v/latest/main/dist/hexdoc_slate_work-1.0.2.1.0.dev0-py3-none-any.whl" }
 
 [tool.hatch.version]
 source = "regex"
