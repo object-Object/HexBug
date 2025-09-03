@@ -1258,38 +1258,72 @@
       95.12%, 97.55% { background-position-y: -1800% }
       97.56%, 100% { background-position-y: -1900% }
   }
+  .texture-oneironaut-textures-block-slipwaysuppressor_side_on-png {
+    animation: texture-oneironaut-textures-block-slipwaysuppressor_side_on-png 0.0s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/beholderface/oneironaut/3c212caf0ce46e1d1215607257053e6163a052d7/common/src/main/resources/assets/oneironaut/textures/block/slipwaysuppressor_side_on.png");
+  }
+  @keyframes texture-oneironaut-textures-block-slipwaysuppressor_side_on-png {
+  }
   .texture-oneironaut-textures-block-spacebomb_on-png {
     animation: texture-oneironaut-textures-block-spacebomb_on-png 0.0s linear infinite;
     background-size: 100%;
-    background-image: url("https://raw.githubusercontent.com/beholderface/oneironaut/df2498d61f0a49fc589296fd78585dd77414debf/common/src/main/resources/assets/oneironaut/textures/block/spacebomb_on.png");
+    background-image: url("https://raw.githubusercontent.com/beholderface/oneironaut/3c212caf0ce46e1d1215607257053e6163a052d7/common/src/main/resources/assets/oneironaut/textures/block/spacebomb_on.png");
   }
   @keyframes texture-oneironaut-textures-block-spacebomb_on-png {
   }
   .texture-oneironaut-textures-block-thought_slurry-png {
     animation: texture-oneironaut-textures-block-thought_slurry-png 0.0s linear infinite;
     background-size: 100%;
-    background-image: url("https://raw.githubusercontent.com/beholderface/oneironaut/df2498d61f0a49fc589296fd78585dd77414debf/common/src/main/resources/assets/oneironaut/textures/block/thought_slurry.png");
+    background-image: url("https://raw.githubusercontent.com/beholderface/oneironaut/3c212caf0ce46e1d1215607257053e6163a052d7/common/src/main/resources/assets/oneironaut/textures/block/thought_slurry.png");
   }
   @keyframes texture-oneironaut-textures-block-thought_slurry-png {
   }
   .texture-oneironaut-textures-block-thought_slurry_flowing-png {
     animation: texture-oneironaut-textures-block-thought_slurry_flowing-png 0.0s linear infinite;
     background-size: 100%;
-    background-image: url("https://raw.githubusercontent.com/beholderface/oneironaut/df2498d61f0a49fc589296fd78585dd77414debf/common/src/main/resources/assets/oneironaut/textures/block/thought_slurry_flowing.png");
+    background-image: url("https://raw.githubusercontent.com/beholderface/oneironaut/3c212caf0ce46e1d1215607257053e6163a052d7/common/src/main/resources/assets/oneironaut/textures/block/thought_slurry_flowing.png");
   }
   @keyframes texture-oneironaut-textures-block-thought_slurry_flowing-png {
   }
   .texture-oneironaut-textures-item-memory_fragment-png {
     animation: texture-oneironaut-textures-item-memory_fragment-png 0.0s linear infinite;
     background-size: 100%;
-    background-image: url("https://raw.githubusercontent.com/beholderface/oneironaut/df2498d61f0a49fc589296fd78585dd77414debf/common/src/main/resources/assets/oneironaut/textures/item/memory_fragment.png");
+    background-image: url("https://raw.githubusercontent.com/beholderface/oneironaut/3c212caf0ce46e1d1215607257053e6163a052d7/common/src/main/resources/assets/oneironaut/textures/item/memory_fragment.png");
   }
   @keyframes texture-oneironaut-textures-item-memory_fragment-png {
   }
   .texture-oneironaut-textures-item-shifting_pseudoamethyst-png {
     animation: texture-oneironaut-textures-item-shifting_pseudoamethyst-png 0.0s linear infinite;
     background-size: 100%;
-    background-image: url("https://raw.githubusercontent.com/beholderface/oneironaut/df2498d61f0a49fc589296fd78585dd77414debf/common/src/main/resources/assets/oneironaut/textures/item/shifting_pseudoamethyst.png");
+    background-image: url("https://raw.githubusercontent.com/beholderface/oneironaut/3c212caf0ce46e1d1215607257053e6163a052d7/common/src/main/resources/assets/oneironaut/textures/item/shifting_pseudoamethyst.png");
   }
   @keyframes texture-oneironaut-textures-item-shifting_pseudoamethyst-png {
+  }
+  .texture-slate_work-textures-item-allay_pigment-png {
+    animation: texture-slate_work-textures-item-allay_pigment-png 2.05s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/Stick404/SlateWork/5cf92c28d08d8a92b3bf3b172821fd6697472167/src/main/resources/assets/slate_work/textures/item/allay_pigment.png");
+  }
+  @keyframes texture-slate_work-textures-item-allay_pigment-png {
+      0%, 24.38% { background-position-y: 0% }
+      24.39%, 26.82% { background-position-y: -100% }
+      26.83%, 29.26% { background-position-y: -200% }
+      29.27%, 31.7% { background-position-y: -300% }
+      31.71%, 34.14% { background-position-y: -400% }
+      34.15%, 36.58% { background-position-y: -500% }
+      36.59%, 39.01% { background-position-y: -600% }
+      39.02%, 63.4% { background-position-y: -700% }
+      63.41%, 65.84% { background-position-y: -800% }
+      65.85%, 75.6% { background-position-y: -900% }
+      75.61%, 78.04% { background-position-y: -1000% }
+      78.05%, 80.48% { background-position-y: -1100% }
+      80.49%, 82.92% { background-position-y: -1200% }
+      82.93%, 85.36% { background-position-y: -1300% }
+      85.37%, 87.79% { background-position-y: -1400% }
+      87.8%, 90.23% { background-position-y: -1500% }
+      90.24%, 92.67% { background-position-y: -1600% }
+      92.68%, 95.11% { background-position-y: -1700% }
+      95.12%, 97.55% { background-position-y: -1800% }
+      97.56%, 100% { background-position-y: -1900% }
   }
