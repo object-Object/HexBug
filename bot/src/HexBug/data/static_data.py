@@ -277,7 +277,7 @@ MODS: list[StaticModInfo] = [
         name="IoticBlocks",
         description="Adds patterns for reading and writing iotas to/from blocks, and an API for addon developers to easily add iota reading/writing support to their blocks.",
         icon_url=URL(
-            "https://raw.githubusercontent.com/object-Object/IoticBlocks/99a2c20a1e91b8fc0319dce133aac7766a34e024/common/src/main/resources/assets/ioticblocks/icon.png"
+            "https://raw.githubusercontent.com/object-Object/IoticBlocks/5d751a1a5c72fc7914cdef67041491ee1094f7ec/common/src/main/resources/assets/ioticblocks/icon.png"
         ),
         curseforge_slug="ioticblocks",
         modrinth_slug="ioticblocks",
