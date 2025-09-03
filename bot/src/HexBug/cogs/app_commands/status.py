@@ -17,79 +17,68 @@ class StatusCog(HexBugCog):
     async def status(
         self,
         interaction: Interaction,
-        category: StatusCategory = "general",
         visibility: MessageVisibility = "private",
     ):
-        match category:
-            case "general":
-                if info := self.env.deployment:
-                    color = Color.green()
-                    commit_url = f"https://github.com/object-Object/HexBug/commit/{info.commit_sha}"
-                    commit_info = textwrap.dedent(
-                        f"""\
-                            [{info.short_commit_sha}]({commit_url}): {info.commit_message}
-                            {_discord_date(info.commit_timestamp)}"""
-                    )
-                    deployment_time_info = _discord_date(info.timestamp)
-                else:
-                    color = Color.orange()
-                    commit_info = await translate_text(interaction, "commit_unknown")
-                    deployment_time_info = await translate_text(
-                        interaction, "deployment-time_unknown"
-                    )
+        if info := self.env.deployment:
+            color = Color.green()
+            commit_url = (
+                f"https://github.com/object-Object/HexBug/commit/{info.commit_sha}"
+            )
+            commit_info = textwrap.dedent(
+                f"""\
+                    [{info.short_commit_sha}]({commit_url}): {info.commit_message}
+                    {_discord_date(info.commit_timestamp)}"""
+            )
+            deployment_time_info = _discord_date(info.timestamp)
+        else:
+            color = Color.orange()
+            commit_info = await translate_text(interaction, "commit_unknown")
+            deployment_time_info = await translate_text(
+                interaction, "deployment-time_unknown"
+            )
 
-                app_info = await self.bot.application_info()
+        app_info = await self.bot.application_info()
 
-                embed = (
-                    Embed(
-                        title=await translate_text(interaction, "title"),
-                        color=color,
-                    )
-                    .set_footer(text=f"v{VERSION}")
-                    .add_field(
-                        name=await translate_text(interaction, "commit"),
-                        value=commit_info,
-                        inline=False,
-                    )
-                    .add_field(
-                        name=await translate_text(interaction, "deployment-time"),
-                        value=deployment_time_info,
-                        inline=False,
-                    )
-                    .add_field(
-                        name=await translate_text(interaction, "uptime"),
-                        value=_discord_date(self.bot.start_time),
-                        inline=False,
-                    )
-                    .add_field(
-                        name=await translate_text(interaction, "installs"),
-                        value=await translate_text(
-                            interaction,
-                            "installs_value",
-                            servers=app_info.approximate_guild_count,
-                            users=app_info.approximate_user_install_count,
-                        ),
-                    )
-                    .add_field(
-                        name=await translate_text(interaction, "mods"),
-                        value=len(self.bot.registry.mods),
-                    )
-                    .add_field(
-                        name=await translate_text(interaction, "patterns"),
-                        value=len(self.bot.registry.patterns)
-                        + len(self.bot.registry.special_handlers),
-                    )
-                )
-            case "mods":
-                embed = Embed(
-                    title="Loaded Mods",
-                    description="\n".join(
-                        f"* **[{mod.name}]({mod.book_url})** ({mod.pretty_version})"
-                        for mod in self.bot.registry.mods.values()
-                    ),
-                ).set_footer(
-                    text=f"Count: {len(self.bot.registry.mods)}",
-                )
+        embed = (
+            Embed(
+                title=await translate_text(interaction, "title"),
+                color=color,
+            )
+            .set_footer(text=f"v{VERSION}")
+            .add_field(
+                name=await translate_text(interaction, "commit"),
+                value=commit_info,
+                inline=False,
+            )
+            .add_field(
+                name=await translate_text(interaction, "deployment-time"),
+                value=deployment_time_info,
+                inline=False,
+            )
+            .add_field(
+                name=await translate_text(interaction, "uptime"),
+                value=_discord_date(self.bot.start_time),
+                inline=False,
+            )
+            .add_field(
+                name=await translate_text(interaction, "installs"),
+                value=await translate_text(
+                    interaction,
+                    "installs_value",
+                    servers=app_info.approximate_guild_count,
+                    users=app_info.approximate_user_install_count,
+                ),
+            )
+            .add_field(
+                name=await translate_text(interaction, "mods"),
+                value=len(self.bot.registry.mods),
+            )
+            .add_field(
+                name=await translate_text(interaction, "patterns"),
+                value=len(self.bot.registry.patterns)
+                + len(self.bot.registry.special_handlers),
+            )
+        )
 
         await respond_with_visibility(interaction, visibility, embed=embed)
 

@@ -70,9 +70,37 @@ class PfzyAutocompleteTransformer(Transformer, ABC):
                 break
 
 
-class ModInfoTransformer(PfzyAutocompleteTransformer):
-    _mod_name_to_id = dict[str, str]()
+class ModAuthorTransformer(PfzyAutocompleteTransformer):
+    _authors: dict[str, str] = {}
 
+    @override
+    async def transform(self, interaction: Interaction, value: str) -> str:
+        author = self._authors.get(value.lower().strip())
+        if author is None:
+            raise ValueError("Unknown author.")
+        return author
+
+    @override
+    def _setup_autocomplete(self, interaction: Interaction):
+        self._words.clear()
+        self._authors.clear()
+
+        registry = HexBugBot.registry_of(interaction)
+        for mod in registry.mods.values():
+            author = mod.github_author
+            self._words.append(
+                AutocompleteWord(
+                    search_term=author,
+                    name=author,
+                    value=author,
+                )
+            )
+            self._authors[author.lower().strip()] = author
+
+        self._words.sort(key=lambda w: w["name"].lower())
+
+
+class ModInfoTransformer(PfzyAutocompleteTransformer):
     @override
     async def transform(self, interaction: Interaction, value: str) -> ModInfo:
         registry = HexBugBot.registry_of(interaction)
@@ -166,6 +194,8 @@ class SpecialHandlerInfoTransformer(PfzyAutocompleteTransformer):
 
         self._words.sort(key=lambda w: w["name"].lower())
 
+
+ModAuthorOption = Transform[str, ModAuthorTransformer]
 
 ModInfoOption = Transform[ModInfo, ModInfoTransformer]
 
