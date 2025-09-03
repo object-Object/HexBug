@@ -13,15 +13,12 @@ from HexBug.data.hex_math import VALID_SIGNATURE_PATTERN, HexDir, HexPattern
 from HexBug.data.registry import PatternMatchResult
 from HexBug.data.special_handlers import SpecialHandlerMatch
 from HexBug.data.static_data import SPECIAL_HANDLERS
-from HexBug.ui.views.patterns import PatternView
+from HexBug.ui.views.patterns import EmbedPatternView, NamedPatternView
 from HexBug.utils.discord.transformers import (
     PatternInfoOption,
     SpecialHandlerInfoOption,
 )
-from HexBug.utils.discord.visibility import (
-    MessageVisibility,
-    respond_with_visibility,
-)
+from HexBug.utils.discord.visibility import MessageVisibility
 
 PATTERN_FILENAME = "pattern.png"
 
@@ -35,7 +32,7 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
         info: PatternInfoOption,
         visibility: MessageVisibility = "private",
     ):
-        await PatternView(
+        await NamedPatternView(
             interaction=interaction,
             pattern=info.pattern,
             info=info,
@@ -59,7 +56,7 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
                 value, f"Failed to parse value for {info.base_name}."
             ) from e
 
-        await PatternView(
+        await NamedPatternView(
             interaction=interaction,
             pattern=pattern,
             info=SpecialHandlerMatch(
@@ -84,7 +81,7 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
 
         info = self.bot.registry.try_match_pattern(pattern)
 
-        await PatternView(
+        await NamedPatternView(
             interaction=interaction,
             pattern=pattern,
             info=info,
@@ -125,11 +122,16 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
             )
         else:
             embed = Embed(
-                description=title,
+                title=title,
                 color=Color.green(),
             )
 
-        await respond_with_visibility(interaction, visibility, embed=embed)
+        await EmbedPatternView(
+            interaction=interaction,
+            pattern=pattern,
+            hide_stroke_order=is_per_world,
+            embed=embed,
+        ).send(interaction, visibility)
 
 
 def validate_signature(signature: str) -> str:

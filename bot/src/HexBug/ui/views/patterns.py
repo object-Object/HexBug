@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from abc import ABC, abstractmethod
 from dataclasses import InitVar, dataclass, field
 from typing import Any, Self, override
 
@@ -37,11 +38,10 @@ PATTERN_FILENAME = "pattern.png"
 
 
 @dataclass(kw_only=True)
-class PatternView(ui.View):
+class BasePatternView(ui.View, ABC):
     interaction: InitVar[Interaction]
 
     pattern: HexPattern
-    info: PatternMatchResult | None
     hide_stroke_order: bool
 
     options: PatternRenderingOptions = field(default_factory=PatternRenderingOptions)
@@ -49,20 +49,103 @@ class PatternView(ui.View):
         default_factory=PatternRenderingOptions
     )
 
-    registry: HexBugRegistry = field(init=False)
     user: User | Member = field(init=False)
 
     command: AnyCommand | None = field(default=None, init=False)
-    op_index: int = field(default=0, init=False)
 
     def __post_init__(self, interaction: Interaction):
         super().__init__(timeout=None)
 
-        self.registry = HexBugBot.registry_of(interaction)
         self.user = interaction.user
 
         if isinstance(interaction.command, Command):
             self.command = interaction.command
+
+    @abstractmethod
+    def get_embed(self) -> Embed: ...
+
+    async def send(
+        self,
+        interaction: Interaction,
+        visibility: MessageVisibility,
+        show_usage: bool = False,
+    ):
+        self.clear_items()
+        self.add_items(interaction, visibility, show_usage)
+        await interaction.response.send_message(
+            embed=self.get_embed(),
+            file=self.get_image(),
+            view=self,
+            ephemeral=visibility == "private",
+        )
+
+    async def refresh(self, interaction: Interaction, *, view: ui.View | None = None):
+        await interaction.response.edit_message(
+            embed=self.get_embed(),
+            attachments=[self.get_image()],
+            view=view or self,
+        )
+
+    def get_image(self) -> File:
+        return self.options.render_discord_file(
+            self.pattern,
+            hide_stroke_order=self.hide_stroke_order,
+            filename=PATTERN_FILENAME,
+        )
+
+    def add_items(
+        self,
+        interaction: Interaction,
+        visibility: MessageVisibility,
+        show_usage: bool = False,
+    ):
+        self.add_item(self.options_button)
+
+        add_visibility_buttons(
+            view=self,
+            interaction=interaction,
+            command=self.command,
+            visibility=visibility,
+            show_usage=show_usage,
+            send_as_public=lambda i: self.send(i, "public", show_usage=True),
+        )
+
+    @override
+    async def interaction_check(self, interaction: Interaction):
+        return interaction.user == self.user
+
+    # UI components
+
+    @ui.button(emoji="⚙️")
+    async def options_button(self, interaction: Interaction, button: ui.Button[Self]):
+        await interaction.response.edit_message(
+            view=PatternRenderingOptionsView(parent=self),
+        )
+
+
+@dataclass(kw_only=True)
+class EmbedPatternView(BasePatternView):
+    embed: Embed
+
+    @override
+    def get_embed(self) -> Embed:
+        return self.embed.set_image(url=f"attachment://{PATTERN_FILENAME}")
+
+
+@dataclass(kw_only=True)
+class NamedPatternView(BasePatternView):
+    interaction: InitVar[Interaction]
+
+    info: PatternMatchResult | None
+
+    registry: HexBugRegistry = field(init=False)
+
+    op_index: int = field(default=0, init=False)
+
+    def __post_init__(self, interaction: Interaction):
+        super().__post_init__(interaction)
+
+        self.registry = HexBugBot.registry_of(interaction)
 
         self.operator_select.options = [
             SelectOption(
@@ -106,56 +189,6 @@ class PatternView(ui.View):
         return "Unknown"
 
     @override
-    async def interaction_check(self, interaction: Interaction):
-        return interaction.user == self.user
-
-    @ui.button(emoji="⚙️")
-    async def options_button(self, interaction: Interaction, button: ui.Button[Self]):
-        await interaction.response.edit_message(
-            view=PatternRenderingOptionsView(parent=self),
-        )
-
-    @ui.select(cls=ui.Select[Any], min_values=1, max_values=1)
-    async def operator_select(self, interaction: Interaction, select: ui.Select[Self]):
-        self.op_index = update_indexed_select_menu(select)[0]
-        await self.refresh(interaction)
-
-    async def send(
-        self,
-        interaction: Interaction,
-        visibility: MessageVisibility,
-        show_usage: bool = False,
-    ):
-        self.clear_items()
-
-        self.add_item(self.options_button)
-
-        add_visibility_buttons(
-            view=self,
-            interaction=interaction,
-            command=self.command,
-            visibility=visibility,
-            show_usage=show_usage,
-            send_as_public=lambda i: self.send(i, "public", show_usage=True),
-        )
-
-        if self.should_show_select_menu:
-            self.add_item(self.operator_select)
-
-        await interaction.response.send_message(
-            embed=self.get_embed(),
-            file=self.get_image(),
-            view=self,
-            ephemeral=visibility == "private",
-        )
-
-    async def refresh(self, interaction: Interaction, *, view: ui.View | None = None):
-        await interaction.response.edit_message(
-            embed=self.get_embed(),
-            attachments=[self.get_image()],
-            view=view or self,
-        )
-
     def get_embed(self) -> Embed:
         embed = (
             Embed(
@@ -191,17 +224,29 @@ class PatternView(ui.View):
 
         return embed
 
-    def get_image(self) -> File:
-        return self.options.render_discord_file(
-            self.pattern,
-            hide_stroke_order=self.hide_stroke_order,
-            filename=PATTERN_FILENAME,
-        )
+    @override
+    def add_items(
+        self,
+        interaction: Interaction,
+        visibility: MessageVisibility,
+        show_usage: bool = False,
+    ):
+        super().add_items(interaction, visibility, show_usage)
+
+        if self.should_show_select_menu:
+            self.add_item(self.operator_select)
+
+    # UI components
+
+    @ui.select(cls=ui.Select[Any], min_values=1, max_values=1)
+    async def operator_select(self, interaction: Interaction, select: ui.Select[Self]):
+        self.op_index = update_indexed_select_menu(select)[0]
+        await self.refresh(interaction)
 
 
 class PatternRenderingOptionsView(OptionsView):
-    def __init__(self, *, parent: PatternView):
-        self.parent: PatternView = parent
+    def __init__(self, *, parent: BasePatternView):
+        self.parent: BasePatternView = parent
 
         super().__init__(timeout=None)
 
