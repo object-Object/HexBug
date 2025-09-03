@@ -906,7 +906,7 @@ requires-dist = [
     { name = "hexdoc-hierophantics", marker = "extra == 'data'", specifier = "~=1.3.2.0" },
     { name = "hexdoc-ioticblocks", marker = "extra == 'data'", specifier = "~=1.0.1.1.20.1.0" },
     { name = "hexdoc-lapisworks", marker = "extra == 'data'", url = "https://github.com/Real-Luxof/Lapisworks/raw/6495353b463985a29fec54419b5a63a3d21c85e0/docs/v/latest/main/dist/hexdoc_lapisworks-1.5.0.1.0.dev0-py3-none-any.whl" },
-    { name = "hexdoc-lessertp", marker = "extra == 'data'", url = "https://github.com/Real-Luxof/Lesser-Teleport/raw/9d02b3b84bbcc8c1849a9a53eec46af9fb10193f/docs/v/latest/main/dist/hexdoc_lessertp-1.1.1.1.0.dev0-py3-none-any.whl" },
+    { name = "hexdoc-lessertp", marker = "extra == 'data'", specifier = "~=1.1.2.0" },
     { name = "hexdoc-moreiotas", marker = "extra == 'data'", url = "https://github.com/FallingColors/MoreIotas/raw/faef659e65288c0fa59fa8e65e654615d39bd510/docs/v/latest/main/dist/hexdoc_moreiotas-0.1.0.1.0rc6.dev0-py3-none-any.whl" },
     { name = "hexdoc-oneironaut", marker = "extra == 'data'", url = "https://github.com/beholderface/oneironaut/raw/99b7c992e2e2230b39ec9adceed4b1b2fed15831/docs/v/latest/1.20.1/dist/hexdoc_oneironaut-0.5.0.1.0-py3-none-any.whl" },
     { name = "hexdoc-overevaluate", marker = "extra == 'data'", url = "https://github.com/miyucomics/overevaluate/raw/6c92a93c51fd966cf3709468f0a126c746ae85ba/docs/v/latest/main/dist/hexdoc_overevaluate-1.0.0.1.0.0-py3-none-any.whl" },
@@ -1343,21 +1343,15 @@ provides-extras = ["dev"]
 
 [[package]]
 name = "hexdoc-lessertp"
-version = "1.1.1.1.0.dev0"
-source = { url = "https://github.com/Real-Luxof/Lesser-Teleport/raw/9d02b3b84bbcc8c1849a9a53eec46af9fb10193f/docs/v/latest/main/dist/hexdoc_lessertp-1.1.1.1.0.dev0-py3-none-any.whl" }
+version = "1.1.2.1.1.dev0"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "hexdoc-hexcasting" },
 ]
+sdist = { url = "https://files.pythonhosted.org/packages/a9/b8/afe598eb08d3680fdf0ccd4d8958c1b5cf97292a50595ba4f2e1be000050/hexdoc_lessertp-1.1.2.1.1.dev0.tar.gz", hash = "sha256:3229bc98892b56bd7aa680bb2f35ca3d87dba5e83ecfe16bd758bd2746a5ca49", size = 9586 }
 wheels = [
-    { url = "https://github.com/Real-Luxof/Lesser-Teleport/raw/9d02b3b84bbcc8c1849a9a53eec46af9fb10193f/docs/v/latest/main/dist/hexdoc_lessertp-1.1.1.1.0.dev0-py3-none-any.whl", hash = "sha256:72b19bd6b7bc61dc8132741402ba19c56e078b856bc0be3c756a6e46915e6840" },
+    { url = "https://files.pythonhosted.org/packages/cc/6a/bbc38986880afdb8d2e940e60a5731742c13d99af01f4c204a100891320f/hexdoc_lessertp-1.1.2.1.1.dev0-py3-none-any.whl", hash = "sha256:19412cf7bf0274e494497b7f64b714a9c3ea59fe0e41a533f3091c3811e795df", size = 12008 },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "hexdoc-hexcasting", specifier = "~=0.11.2.1.0" },
-    { name = "ruff", marker = "extra == 'dev'", specifier = "~=0.11.2" },
-]
-provides-extras = ["dev"]
 
 [[package]]
 name = "hexdoc-minecraft"

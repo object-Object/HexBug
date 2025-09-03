@@ -47,6 +47,7 @@ data = [
     "hexdoc-hexweb~=1.0.4.0",
     "hexdoc-hierophantics~=1.3.2.0",
     "hexdoc-ioticblocks~=1.0.1.1.20.1.0",
+    "hexdoc-lessertp~=1.1.2.0",
     # hex addons (GitHub)
     "hexdoc-complexhex",
     "hexdoc-efhexs",
@@ -56,7 +57,6 @@ data = [
     "hexdoc-hexstruction",
     "hexdoc-hextended",
     "hexdoc-lapisworks",
-    "hexdoc-lessertp",
     "hexdoc-moreiotas",
     "hexdoc-oneironaut",
     "hexdoc-overevaluate",
@@ -74,7 +74,6 @@ hexdoc-hexical = { url = "https://github.com/miyucomics/hexical/raw/cd130b06041b
 hexdoc-hexstruction = { url = "https://github.com/PetersonE1/hexstruction/raw/510da7fea2f52d6497c50753990bbc5919ee71ad/docs/v/latest/main/dist/hexdoc_hexstruction-1.2.1.1.20.1.1.0-py3-none-any.whl" }
 hexdoc-hextended = { url = "https://github.com/abilliontrillionstars/hextended-staves/raw/0e6e0a61b7f4d3e79761b216cfebc1141e19b30b/docs/v/latest/main/dist/hexdoc_hextended-2.0.1.1.0.dev0-py3-none-any.whl" }
 hexdoc-lapisworks = { url = "https://github.com/Real-Luxof/Lapisworks/raw/6495353b463985a29fec54419b5a63a3d21c85e0/docs/v/latest/main/dist/hexdoc_lapisworks-1.5.0.1.0.dev0-py3-none-any.whl" }
-hexdoc-lessertp = { url = "https://github.com/Real-Luxof/Lesser-Teleport/raw/9d02b3b84bbcc8c1849a9a53eec46af9fb10193f/docs/v/latest/main/dist/hexdoc_lessertp-1.1.1.1.0.dev0-py3-none-any.whl" }
 hexdoc-moreiotas = { url = "https://github.com/FallingColors/MoreIotas/raw/faef659e65288c0fa59fa8e65e654615d39bd510/docs/v/latest/main/dist/hexdoc_moreiotas-0.1.0.1.0rc6.dev0-py3-none-any.whl" }
 hexdoc-oneironaut = { url = "https://github.com/beholderface/oneironaut/raw/99b7c992e2e2230b39ec9adceed4b1b2fed15831/docs/v/latest/1.20.1/dist/hexdoc_oneironaut-0.5.0.1.0-py3-none-any.whl" }
 hexdoc-overevaluate = { url = "https://github.com/miyucomics/overevaluate/raw/6c92a93c51fd966cf3709468f0a126c746ae85ba/docs/v/latest/main/dist/hexdoc_overevaluate-1.0.0.1.0.0-py3-none-any.whl" }
