@@ -2,7 +2,7 @@ from enum import Enum
 from typing import Self
 
 from hexdoc.utils.types import PydanticURL
-from pydantic import BaseModel
+from pydantic import BaseModel, model_validator
 from yarl import URL
 
 
@@ -18,6 +18,7 @@ class StaticModInfo(BaseModel):
     name: str
     description: str
     icon_url: PydanticURL | None
+    """Relative URLs are interpreted relative to the mod's GitHub repository root."""
     curseforge_slug: str | None
     modrinth_slug: str | None
     modloaders: list[Modloader]
@@ -58,6 +59,15 @@ class DynamicModInfo(BaseModel):
         return self.github_url / "tree" / self.github_commit
 
     @property
+    def github_asset_url(self) -> URL:
+        return (
+            URL("https://raw.githubusercontent.com")
+            / self.github_author
+            / self.github_repo
+            / self.github_commit
+        )
+
+    @property
     def is_versioned(self) -> bool:
         """Returns True if the hexdoc plugin was built from a static book version.
 
@@ -80,3 +90,10 @@ class ModInfo(StaticModInfo, DynamicModInfo):
     @classmethod
     def from_parts(cls, static: StaticModInfo, dynamic: DynamicModInfo) -> Self:
         return cls(**dict(static), **dict(dynamic))
+
+    @model_validator(mode="after")
+    def _resolve_relative_icon_url(self):
+        if self.icon_url and not self.icon_url.absolute:
+            # https://github.com/aio-libs/yarl/issues/896
+            self.icon_url = self.github_asset_url / str(self.icon_url)
+        return self
