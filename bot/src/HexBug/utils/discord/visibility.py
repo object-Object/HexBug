@@ -1,16 +1,16 @@
 from dataclasses import dataclass
 from re import Match
-from typing import Any, Awaitable, Callable, Literal
+from typing import Any, Awaitable, Callable, Literal, overload
 
 from discord import Embed, Interaction
 from discord.app_commands import Command, ContextMenu
-from discord.ui import Button, DynamicItem, Item, View
+from discord.ui import ActionRow, Button, Container, DynamicItem, Item, View
 from discord.utils import MISSING
 
 from HexBug.core.bot import HexBugBot
 from HexBug.core.emoji import CustomEmoji
 
-from .commands import AnyCommand
+from .commands import AnyCommand, AnyInteractionCommand
 
 type MessageVisibility = Literal["public", "private"]
 
@@ -56,10 +56,10 @@ class MessageContents:
     ):
         view = View(timeout=None)
         add_visibility_buttons(
-            view=view,
-            interaction=interaction,
+            view,
+            interaction,
+            visibility,
             command=self.command,
-            visibility=visibility,
             show_usage=show_usage,
             send_as_public=lambda i: self.send_response(i, "public", show_usage=True),
         )
@@ -134,19 +134,58 @@ def get_command_usage_button(
     )
 
 
-def add_visibility_buttons(
-    *,
-    view: View,
+type ButtonParent = View | ActionRow[Any] | Container[Any]
+
+
+@overload
+def add_visibility_buttons[T: ButtonParent](
+    parent: T,
     interaction: Interaction,
-    command: AnyCommand | ContextMenu | None,
+    visibility: Literal["public"],
+    *,
+    command: AnyInteractionCommand,
+    show_usage: bool,
+) -> T: ...
+
+
+@overload
+def add_visibility_buttons[T: ButtonParent](
+    parent: T,
+    interaction: Interaction,
+    visibility: Literal["private"],
+    *,
+    send_as_public: Callable[[Interaction], Awaitable[Any]],
+) -> T: ...
+
+
+@overload
+def add_visibility_buttons[T: ButtonParent](
+    parent: T,
+    interaction: Interaction,
     visibility: MessageVisibility,
+    *,
+    command: AnyInteractionCommand,
     show_usage: bool,
     send_as_public: Callable[[Interaction], Awaitable[Any]],
-):
+) -> T: ...
+
+
+def add_visibility_buttons[T: ButtonParent](
+    parent: T,
+    interaction: Interaction,
+    visibility: MessageVisibility,
+    *,
+    command: AnyInteractionCommand = None,
+    show_usage: bool | None = None,
+    send_as_public: Callable[[Interaction], Awaitable[Any]] | None = None,
+) -> T:
     match visibility:
         case "private":
-            view.add_item(SendAsPublicButton(interaction, send_as_public))
+            assert send_as_public is not None
+            parent.add_item(SendAsPublicButton(interaction, send_as_public))
         case "public":
-            view.add_item(DeleteButton(user_id=interaction.user.id))
+            assert show_usage is not None
+            parent.add_item(DeleteButton(user_id=interaction.user.id))
             if show_usage:
-                view.add_item(get_command_usage_button(interaction, command))
+                parent.add_item(get_command_usage_button(interaction, command))
+    return parent

@@ -102,10 +102,10 @@ class BasePatternView(ui.View, ABC):
         self.add_item(self.options_button)
 
         add_visibility_buttons(
-            view=self,
-            interaction=interaction,
+            self,
+            interaction,
+            visibility,
             command=self.command,
-            visibility=visibility,
             show_usage=show_usage,
             send_as_public=lambda i: self.send(i, "public", show_usage=True),
         )

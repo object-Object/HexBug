@@ -15,7 +15,7 @@ from HexBug.parser.ast import (
     UnknownIota,
     VectorIota,
 )
-from HexBug.parser.reveal import parse
+from HexBug.parser.reveal import parse_reveal
 
 
 @pytest.mark.parametrize(
@@ -29,7 +29,7 @@ from HexBug.parser.reveal import parse
     ],
 )
 def test_number(text: str, want: Iota):
-    assert want == parse(text)
+    assert want == parse_reveal(text)
 
 
 @pytest.mark.parametrize(
@@ -39,7 +39,7 @@ def test_number(text: str, want: Iota):
     ],
 )
 def test_vector(text: str, want: Iota):
-    assert want == parse(text)
+    assert want == parse_reveal(text)
 
 
 @pytest.mark.parametrize(
@@ -52,7 +52,7 @@ def test_vector(text: str, want: Iota):
     ],
 )
 def test_bool_null(text: str, want: Iota):
-    assert want == parse(text)
+    assert want == parse_reveal(text)
 
 
 @pytest.mark.parametrize(
@@ -65,7 +65,7 @@ def test_bool_null(text: str, want: Iota):
     ],
 )
 def test_string(text: str, want: Iota):
-    assert want == parse(text)
+    assert want == parse_reveal(text)
 
 
 @pytest.mark.parametrize(
@@ -80,7 +80,7 @@ def test_string(text: str, want: Iota):
     ],
 )
 def test_matrix(text: str, want: Iota):
-    assert want == parse(text)
+    assert want == parse_reveal(text)
 
 
 @pytest.mark.parametrize(
@@ -99,7 +99,7 @@ def test_matrix(text: str, want: Iota):
     ],
 )
 def test_pattern(text: str, want: Iota):
-    assert want == parse(text)
+    assert want == parse_reveal(text)
 
 
 @pytest.mark.parametrize(
@@ -176,7 +176,7 @@ def test_pattern(text: str, want: Iota):
     ],
 )
 def test_list(text: str, want: Iota):
-    assert want == parse(text)
+    assert want == parse_reveal(text)
 
 
 @pytest.mark.parametrize(
@@ -194,7 +194,7 @@ def test_list(text: str, want: Iota):
     ],
 )
 def test_unknown(text: str, want: Iota):
-    assert want == parse(text)
+    assert want == parse_reveal(text)
 
 
 @pytest.mark.parametrize(
@@ -209,7 +209,7 @@ def test_unknown(text: str, want: Iota):
     ],
 )
 def test_jump(text: str, want: Iota):
-    assert want == parse(text)
+    assert want == parse_reveal(text)
 
 
 @pytest.mark.parametrize(
@@ -223,4 +223,4 @@ def test_jump(text: str, want: Iota):
     ],
 )
 def test_call(text: str, want: Iota):
-    assert want == parse(text)
+    assert want == parse_reveal(text)

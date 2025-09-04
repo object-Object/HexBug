@@ -28,16 +28,14 @@ class IotaPrinter:
         self.registry = registry
 
     def print(self, iota: Iota):
-        return "".join(node.value for node in self._iter_nodes(iota, 0))
+        return "".join(node.value for node in self._iter_nodes(iota, 0, True))
 
     def pretty_print(self, iota: Iota, *, indent: str = " " * 4):
         return "\n".join(
-            node.pretty_print(indent)
-            for node in self._iter_nodes(iota, 0)
-            if not node.inline
+            node.pretty_print(indent) for node in self._iter_nodes(iota, 0, False)
         )
 
-    def _iter_nodes(self, iota: Iota, level: int) -> Iterator[Node]:
+    def _iter_nodes(self, iota: Iota, level: int, inline: bool) -> Iterator[Node]:
         match iota:
             case PatternIota(direction=direction, signature=signature):
                 if match := self.registry.try_match_pattern(direction, signature):
@@ -54,10 +52,13 @@ class IotaPrinter:
                 yield Node("[Call]", level)
 
             case NumberIota(value=value):
-                yield Node(f"{value:.4f}", level)
+                yield Node(self._number(value), level)
 
             case VectorIota(x=x, y=y, z=z):
-                yield Node(f"({x:.4f}, {y:.4f}, {z:.4f})", level)
+                yield Node(
+                    f"({self._number(x)}, {self._number(y)}, {self._number(z)})",
+                    level,
+                )
 
             case BooleanIota(value=value):
                 yield Node(str(value), level)
@@ -77,9 +78,9 @@ class IotaPrinter:
             case ListIota([*children]):
                 yield Node("[", level)
                 for i, child in enumerate(children):
-                    if i > 0:
-                        yield Node(", ", level + 1, inline=True)
-                    yield from self._iter_nodes(child, level + 1)
+                    if inline and i > 0:
+                        yield Node(", ", level + 1)
+                    yield from self._iter_nodes(child, level + 1, inline)
                 yield Node("]", level)
 
             case MatrixIota(rows=m, columns=n) if m == 0 or n == 0:
@@ -87,22 +88,43 @@ class IotaPrinter:
 
             case MatrixIota(rows=1, columns=n, data=data):
                 yield Node(
-                    f"[({m}, {n}) | {', '.join(str(n) for n in data[0])}]", level
+                    f"[({m}, {n}) | {', '.join(self._number(v) for v in data[0])}]",
+                    level,
                 )
 
             case MatrixIota(rows=m, columns=n, data=data):
                 yield Node(f"[({m}, {n}) |", level)
-                for i, row in enumerate(data):
-                    semicolon = ";" if i + 1 < len(data) else ""
-                    yield Node(", ".join(str(n) for n in row) + semicolon, level + 1)
+
+                if inline:
+                    for i, row in enumerate(data):
+                        if i > 0:
+                            yield Node("; ", level + 1)
+                        yield Node(", ".join(self._number(v) for v in row), level + 1)
+                else:
+                    widths = [0] * n
+                    for row in data:
+                        for j, value in enumerate(row):
+                            widths[j] = max(widths[j], len(self._number(value)))
+
+                    for row in data:
+                        yield Node(
+                            " ".join(
+                                self._number(value).ljust(widths[j])
+                                for j, value in enumerate(row)
+                            ),
+                            level + 1,
+                        )
+
                 yield Node("]", level)
+
+    def _number(self, n: float):
+        return f"{n:.4f}".rstrip("0").rstrip(".")
 
 
 @dataclass
 class Node:
     value: str
     level: int
-    inline: bool = False
 
     def pretty_print(self, indent: str):
         return self.level * indent + self.value

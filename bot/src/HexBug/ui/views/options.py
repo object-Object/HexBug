@@ -54,7 +54,8 @@ class OptionItemMixin[ViewT: OptionsView, ValueT](ABC):
 
 
 class OptionButtonModal(ui.Modal):
-    value_input = ui.TextInput[Self](label="Value")
+    value_input = ui.TextInput[Any]()
+    value_label = ui.Label[Any](text="Value", component=value_input)
 
     def __init__(self, button: OptionButton[Any, Any]):
         super().__init__(title=button.name)

@@ -53,7 +53,7 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
             parsed_value, pattern = handler.parse_value(self.bot.registry, value)
         except ValueError as e:
             raise InvalidInputError(
-                value, f"Failed to parse value for {info.base_name}."
+                f"Failed to parse value for {info.base_name}.", value=value
             ) from e
 
         await NamedPatternView(
@@ -140,7 +140,7 @@ def validate_signature(signature: str) -> str:
         signature = ""
     elif not VALID_SIGNATURE_PATTERN.fullmatch(signature):
         raise InvalidInputError(
+            "Invalid signature, must only contain the characters `aqweds`.",
             value=signature,
-            message="Invalid signature, must only contain the characters `aqweds`.",
         )
     return signature

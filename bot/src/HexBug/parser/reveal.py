@@ -65,6 +65,6 @@ class RevealTransformer(Transformer[Token, Iota]):
     unknown = UnknownIota.parse
 
 
-def parse(text: str) -> Iota:
+def parse_reveal(text: str) -> Iota:
     tree = PARSER.parse(text)
     return RevealTransformer().transform(tree)

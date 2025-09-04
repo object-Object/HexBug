@@ -5,12 +5,14 @@ from discord import (
     Interaction,
     InteractionType,
 )
-from discord.app_commands import Command
+from discord.app_commands import Command, ContextMenu
 from discord.ext.commands import Paginator
 
 from HexBug.utils.strings import truncate_str
 
 AnyCommand = Command[Any, ..., Any]
+
+AnyInteractionCommand = AnyCommand | ContextMenu | None
 
 
 def get_command(interaction: Interaction) -> AnyCommand | None:

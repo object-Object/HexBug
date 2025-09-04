@@ -8,7 +8,8 @@ name = "HexBug-bot"
 requires-python = ">=3.12"
 dependencies = [
     "HexBug-common",
-    "discord-py>=2.5.0",
+    # 2.6.3: github.com/Rapptz/discord.py/issues/10291
+    "discord-py>=2.6.2,!=2.6.3",
     "pydantic>=2.10.6",
     "pydantic-settings>=2.8.0",
     "fluent-runtime>=0.4.0",
@@ -21,6 +22,7 @@ dependencies = [
     "uvicorn>=0.34.0",
     "httpx>=0.28.1",
     "lark[interegular]>=1.2.2",
+    "humanize>=4.13.0",
 ]
 
 [project.scripts]

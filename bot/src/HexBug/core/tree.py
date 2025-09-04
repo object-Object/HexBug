@@ -9,6 +9,7 @@ from discord.app_commands import (
 )
 
 from HexBug.core.exceptions import InvalidInputError, SilentError
+from HexBug.utils.discord.embeds import add_fields
 
 
 class HexBugCommandTree(CommandTree):
@@ -38,14 +39,10 @@ class HexBugCommandTree(CommandTree):
                     value=str(value),
                     inline=False,
                 )
-            case InvalidInputError(value=value, message=message):
+            case InvalidInputError(message=message, fields=fields):
                 embed.title = "Invalid input!"
                 embed.description = message
-                embed.add_field(
-                    name="Value",
-                    value=str(value),
-                    inline=False,
-                )
+                add_fields(embed, *fields)
             case _:
                 await super().on_error(interaction, error)
                 embed.title = "Command failed!"
@@ -56,12 +53,15 @@ class HexBugCommandTree(CommandTree):
                 name="Reason",
                 value=str(cause),
                 inline=False,
-            ).set_footer(
-                text=f"{error.__class__.__name__} ({cause.__class__.__name__})",
             )
-        else:
-            embed.set_footer(
-                text=error.__class__.__name__,
-            )
+
+        footer = error.__class__.__name__
+        if (
+            (context := error.__cause__)
+            or (context := error.__context__)
+            and not error.__suppress_context__
+        ):
+            footer += f" ({context.__class__.__name__})"
+        embed.set_footer(text=footer)
 
         await interaction.response.send_message(embed=embed, ephemeral=True)

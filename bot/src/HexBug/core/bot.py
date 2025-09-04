@@ -11,6 +11,7 @@ from HexBug import cogs
 from HexBug.common import VERSION
 from HexBug.data.mods import Modloader
 from HexBug.data.registry import HexBugRegistry
+from HexBug.parser.pretty_print import IotaPrinter
 from HexBug.utils.imports import iter_modules
 
 from .emoji import CustomEmoji
@@ -40,6 +41,7 @@ class HexBugBot(Bot):
             tree_cls=HexBugCommandTree,
         )
         self.start_time = datetime.now()
+        self.iota_printer = IotaPrinter(self.registry)
         self._custom_emoji = dict[CustomEmoji, Emoji]()
 
     @classmethod

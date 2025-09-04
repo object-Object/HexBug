@@ -1,7 +1,10 @@
-from typing import Any
+from typing import Any, Self, overload
 
 from discord.app_commands import AppCommandError
+from discord.utils import MISSING
 from hexdoc.core import ResourceLocation
+
+from HexBug.utils.discord.embeds import EmbedField
 
 
 class SilentError(AppCommandError):
@@ -14,10 +17,42 @@ class InvalidInputError(AppCommandError):
     Displays a similar error message as `TransformerError`.
     """
 
-    def __init__(self, value: Any, message: str):
-        self.value = value
-        self.message = message
-        super().__init__(f"{message} (value: {value})")
+    @overload
+    def __init__(self, message: str, *, value: Any) -> None: ...
+
+    @overload
+    def __init__(
+        self,
+        message: str,
+        *,
+        fields: list[EmbedField] = ...,
+    ) -> None: ...
+
+    def __init__(
+        self,
+        message: str,
+        *,
+        value: Any = MISSING,
+        fields: list[EmbedField] = MISSING,
+    ):
+        self.message: str = message
+        self.fields: list[EmbedField] = [] if fields is MISSING else fields
+
+        if value is MISSING:
+            super().__init__(message)
+        else:
+            super().__init__(f"{message} (value: {value})")
+            self.add_field(name="Value", value=value, inline=False)
+
+    def add_field(
+        self,
+        *,
+        name: Any,
+        value: Any,
+        inline: bool = True,
+    ) -> Self:
+        self.fields.append(EmbedField(name=name, value=value, inline=inline))
+        return self
 
 
 class DuplicatePatternError(ValueError):
