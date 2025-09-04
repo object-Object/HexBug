@@ -20,7 +20,7 @@ class HexBugProperties(Properties):
     @classproperty
     @classmethod
     @override
-    def context_key(cls) -> str:
+    def context_key(cls) -> str:  # pyright: ignore[reportIncompatibleVariableOverride]
         return Properties.context_key
 
     @cached_property
@@ -35,7 +35,7 @@ class HexBugBookContext(BookContext):
     @classproperty
     @classmethod
     @override
-    def context_key(cls) -> str:
+    def context_key(cls) -> str:  # pyright: ignore[reportIncompatibleVariableOverride]
         return BookContext.context_key
 
     @override
