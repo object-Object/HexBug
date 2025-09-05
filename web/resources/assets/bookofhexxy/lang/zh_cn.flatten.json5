@@ -1,0 +1,20 @@
+{
+  hexdoc: {
+    bookofhexxy: {
+      title: "Hexxy之书",
+      description: "诸多咒法学附属，辑录合一。",
+    },
+  },
+
+  bookofhexxy: {
+    welcome: {
+      header: "这是Hexxy之书。",
+      content: "可在此查阅$(l:{hex_book_url})咒法学手册/$的内容，其中包括许多兼容$(l:https://pypi.org/project/hexdoc/)hexdoc/$的附属的内容。$(br2)\
+        本页面由咒法学Discord机器人$(l:https://github.com/object-Object/HexBug)HexBug/$生成。如果你的附属并未出现，欢迎$(l:https://github.com/object-Object/HexBug/issues)创建议题/$。",
+      bleeding_edge: "本页面中部分附属的内容是根据GitHub上的最新代码构建而来的。\
+        其中可能包含游戏内暂未实装的$(bold)新/$特性，\
+        就连Modrinth和CurseForge上的最新版本里也找不到！",
+      mods: "书目来源",
+    },
+  },
+}
