@@ -36,6 +36,10 @@ RUN --mount=from=uv,source=/uv,target=/bin/uv \
     --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-dev --package HexBug-bot
 
+# validate bot setup
+
+RUN hexbug bot --no-run
+
 # NOTE: this must be a list, otherwise signals (eg. SIGINT) are not forwarded to the bot
 CMD ["hexbug", "bot"]
 

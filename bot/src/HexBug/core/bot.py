@@ -1,6 +1,5 @@
 import itertools
 import logging
-from dataclasses import dataclass
 from datetime import datetime
 from typing import Iterator
 
@@ -36,25 +35,36 @@ logger = logging.getLogger(__name__)
 COGS_MODULE = cogs.__name__
 
 
-@dataclass
 class HexBugBot(Bot):
     env: HexBugEnv
     registry: HexBugRegistry
+    should_run: bool
+    start_time: datetime
+    iota_printer: IotaPrinter
+    _custom_emoji: dict[CustomEmoji, Emoji]
+    _failed_translations: set[Locale]
 
-    def __post_init__(self):
+    # late-initialized
+    _translator: HexBugTranslator
+
+    def __init__(self, env: HexBugEnv, registry: HexBugRegistry, run: bool):
         super().__init__(
             command_prefix=commands.when_mentioned,
             intents=Intents.default(),
-            activity=self._get_activity(),
+            activity=self._get_activity(env),
             allowed_installs=AppInstallationType(guild=True, user=True),
             allowed_contexts=AppCommandContext(
                 guild=True, dm_channel=True, private_channel=True
             ),
             tree_cls=HexBugCommandTree,
         )
+        self.env = env
+        self.registry = registry
+        self.should_run = run
         self.start_time = datetime.now()
         self.iota_printer = IotaPrinter(self.registry)
-        self._custom_emoji = dict[CustomEmoji, Emoji]()
+        self._custom_emoji = {}
+        self._failed_translations = set()
 
     @classmethod
     def of(cls, interaction: Interaction):
@@ -66,12 +76,29 @@ class HexBugBot(Bot):
     def registry_of(cls, interaction: Interaction):
         return cls.of(interaction).registry
 
+    @classmethod
+    def _get_activity(cls, env: HexBugEnv):
+        text = f"v{VERSION}"
+        match env.environment:
+            case "dev":
+                text += " (local development)"
+            case "beta":
+                if env.deployment:
+                    text += f" @ {env.deployment.commit_sha[:8]}"
+                else:
+                    text += " @ (unknown)"
+            case "prod":
+                pass
+        return CustomActivity(text)
+
+    @property
+    def failed_translations(self):
+        return self._failed_translations
+
     async def load(self):
         await self._load_translator()
         await self._load_cogs()
-        for locale in self._translator.l10n.keys():
-            for context in self._walk_tree_translations():
-                await self._check_translation(locale, context)
+        await self._check_translations()
 
     async def _load_translator(self):
         logger.info("Loading translator")
@@ -86,6 +113,12 @@ class HexBugBot(Bot):
             except NoEntryPointError:
                 logger.warning(f"No entry point found: {cog}")
         logger.info("Loaded cogs: " + ", ".join(self.cogs.keys()))
+
+    async def _check_translations(self):
+        self._failed_translations.clear()
+        for locale in self._translator.l10n.keys():
+            for context in self._walk_tree_translations():
+                await self._check_translation(locale, context)
 
     def _walk_tree_translations(self) -> Iterator[TranslationContextTypes]:
         for command in itertools.chain(
@@ -132,10 +165,12 @@ class HexBugBot(Bot):
             string, locale, context, fallback=False
         )
         if result is None:
+            self._failed_translations.add(locale)
             logger.warning(
                 f"Failed to translate {context.location.name} to {locale.value}: {context.data.name}"
             )
         elif result == string.message:
+            self._failed_translations.add(locale)
             logger.warning(
                 f"Missing translation for {locale.value}: {self._translator.get_msg_id(string, context)}"
             )
@@ -157,23 +192,10 @@ class HexBugBot(Bot):
                 case _:
                     max_length = None
             if max_length and len(result) > max_length:
+                self._failed_translations.add(locale)
                 logger.warning(
                     f"Translation for {locale.value} is too long: {self._translator.get_msg_id(string, context)}"
                 )
-
-    def _get_activity(self):
-        text = f"v{VERSION}"
-        match self.env.environment:
-            case "dev":
-                text += " (local development)"
-            case "beta":
-                if self.env.deployment:
-                    text += f" @ {self.env.deployment.commit_sha[:8]}"
-                else:
-                    text += " @ (unknown)"
-            case "prod":
-                pass
-        return CustomActivity(text)
 
     async def fetch_custom_emojis(self):
         logger.info("Fetching custom emojis")
