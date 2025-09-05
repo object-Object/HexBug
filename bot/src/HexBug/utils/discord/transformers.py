@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Iterator, TypedDict, cast, override
+from typing import Any, Iterator, TypedDict, cast, override
 
 import pfzy
 from discord import Interaction
@@ -8,10 +8,11 @@ from discord.app_commands import (
     Transformer,
 )
 from discord.app_commands.models import Choice
+from discord.app_commands.transformers import EnumValueTransformer
 from hexdoc.core import ResourceLocation
 
 from HexBug.core.bot import HexBugBot
-from HexBug.data.mods import ModInfo
+from HexBug.data.mods import ModInfo, Modloader
 from HexBug.data.patterns import PatternInfo
 from HexBug.data.special_handlers import SpecialHandlerInfo
 
@@ -197,6 +198,13 @@ class SpecialHandlerInfoTransformer(PfzyAutocompleteTransformer):
         self._words.sort(key=lambda w: w["name"].lower())
 
 
+class BetterEnumValueTransformer(EnumValueTransformer):
+    def __init__(self, enum: Any) -> None:
+        super().__init__(enum)
+        for choice in self._choices:
+            choice.name = choice.value
+
+
 ModAuthorOption = Transform[str, ModAuthorTransformer]
 
 ModInfoOption = Transform[ModInfo, ModInfoTransformer]
@@ -204,3 +212,5 @@ ModInfoOption = Transform[ModInfo, ModInfoTransformer]
 PatternInfoOption = Transform[PatternInfo, PatternInfoTransformer]
 
 SpecialHandlerInfoOption = Transform[SpecialHandlerInfo, SpecialHandlerInfoTransformer]
+
+ModloaderOption = Transform[Modloader, BetterEnumValueTransformer(Modloader)]

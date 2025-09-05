@@ -87,8 +87,27 @@ command_mods =
     .parameter_author_description =
         Only show mods authored by this GitHub user.
 
+    .parameter_modloader =
+        modloader
+    .parameter_modloader_description =
+        Only show mods with support for this modloader.
+
     .parameter_visibility = {-parameter_visibility}
     .parameter_visibility_description = {-parameter_visibility_description}
+
+    .text_title =
+        { $modloader ->
+            [None]  Loaded Mods
+           *[other] Loaded Mods ({ $modloader })
+        }
+
+    .text_footer-normal =
+        Count: { $mods }
+    .text_footer-filtered =
+        Count: { $mods }/{ $total }
+
+    .text_no-mods-found =
+        ⚠️ No mods found with these filters.
 
 # /pattern
 
@@ -179,9 +198,9 @@ command_pattern-check =
 
     .text_title =
         { $conflicts ->
-            [0] No conflicts found.
-            [one] Conflict found!
-            *[other] Conflicts found!
+            [0]     No conflicts found.
+            [one]   Conflict found!
+           *[other] Conflicts found!
         }
 
 # /status
@@ -207,12 +226,12 @@ command_status =
     .text_installs = Installs
     .text_installs-value =
         { $servers ->
-            [one] 1 server
-            *[other] { $servers } servers
+            [one]   1 server
+           *[other] { $servers } servers
         }
         { $users ->
-            [one] 1 individual user
-            *[other] { $users } individual users
+            [one]   1 individual user
+           *[other] { $users } individual users
         }
 
     .text_mods = Mods

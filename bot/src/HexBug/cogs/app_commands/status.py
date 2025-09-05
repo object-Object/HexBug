@@ -63,7 +63,7 @@ class StatusCog(HexBugCog):
                     interaction,
                     "installs-value",
                     servers=app_info.approximate_guild_count,
-                    users=app_info.approximate_user_install_count,
+                    users=app_info.approximate_user_install_count or 0,
                 ),
             )
             .add_field(
