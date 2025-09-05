@@ -65,7 +65,7 @@ command_decode-file =
 command_mod =
         mod
     .description =
-        显示HexBug所支持的模组的信息和链接。
+        显示HexBug所支持模组的信息和链接。
 
     .parameter_mod =
         mod
@@ -162,7 +162,7 @@ command_pattern-raw =
 command_pattern-check =
         check
     .description =
-        检验图案是否已存在于任意HexBug支持的模组中。
+        检验图案是否已存在于HexBug支持的任意模组中。
 
     .parameter_signature =
         signature
@@ -172,7 +172,7 @@ command_pattern-check =
     .parameter_is-per-world =
         is_per_world
     .parameter_is-per-world_description =
-        若为true，则同时检验是否存在形状相同、笔顺不同，且不随世界不同而改变的图案。
+        若为true，则同时检验是否存在形状相同但笔顺不同，且不随世界不同而改变的图案。
 
     .parameter_visibility = {-parameter_visibility}
     .parameter_visibility_description = {-parameter_visibility_description}
