@@ -32,9 +32,9 @@ class StatusCog(HexBugCog):
             deployment_time_info = _discord_date(info.timestamp)
         else:
             color = Color.orange()
-            commit_info = await translate_text(interaction, "commit_unknown")
+            commit_info = await translate_text(interaction, "commit-unknown")
             deployment_time_info = await translate_text(
-                interaction, "deployment-time_unknown"
+                interaction, "deployment-time-unknown"
             )
 
         app_info = await self.bot.application_info()
@@ -64,7 +64,7 @@ class StatusCog(HexBugCog):
                 name=await translate_text(interaction, "installs"),
                 value=await translate_text(
                     interaction,
-                    "installs_value",
+                    "installs-value",
                     servers=app_info.approximate_guild_count,
                     users=app_info.approximate_user_install_count,
                 ),

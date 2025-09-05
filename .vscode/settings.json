@@ -33,6 +33,6 @@
     "java.server.launchMode": "LightWeight",
     "files.eol": "\n",
     "[fluent]": {
-        "editor.rulers": [104],
+        "editor.rulers": [8, 40, 108],
     },
 }

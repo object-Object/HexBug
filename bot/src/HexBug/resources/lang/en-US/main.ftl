@@ -1,64 +1,57 @@
-# command descriptions: {command}_description
-#   |--------------------------------------------------------------------------------------------------|
+# command/group/parameter name:
+#       |------------------------------|
 
-# parameter descriptions: {command}_parameter-description_{parameter}
-#   |--------------------------------------------------------------------------------------------------|
+# command/group/parameter description:
+#       |--------------------------------------------------------------------------------------------------|
 
 # common parameters
 
--parameter-description_visibility =
-    Whether the message should be visible to everyone, or just you.
+-parameter_visibility_description =
+        Whether the message should be visible to everyone, or just you.
 
 # /pattern check
 
-pattern-check_text_title =
-    { $conflicts ->
-        [0] No conflicts found.
-        [one] Conflict found!
-        *[other] Conflicts found!
-    }
+command_pattern-check =
+    .text_title =
+        { $conflicts ->
+            [0] No conflicts found.
+            [one] Conflict found!
+            *[other] Conflicts found!
+        }
 
 # /status
 
-status_description =
-    Show information about HexBug.
+command_status =
+        status
+    .description =
+        Show information about HexBug.
 
-status_parameter-description_visibility =
-    {-parameter-description_visibility}
+    .parameter_visibility =
+        visibility
+    .parameter_visibility_description =
+        {-parameter_visibility_description}
 
-status_text_title =
-    HexBug Status
+    .text_title = HexBug Status
 
-status_text_commit =
-    Deployed commit
+    .text_commit = Deployed commit
+    .text_commit-unknown = Unknown
 
-status_text_commit_unknown =
-    Unknown
+    .text_deployment-time = Deployment time
+    .text_deployment-time-unknown = Unknown
 
-status_text_deployment-time =
-    Deployment time
+    .text_uptime = Uptime
 
-status_text_deployment-time_unknown =
-    Unknown
+    .text_installs = Installs
+    .text_installs-value =
+        { $servers ->
+            [one] 1 server
+            *[other] { $servers } servers
+        }
+        { $users ->
+            [one] 1 individual user
+            *[other] { $users } individual users
+        }
 
-status_text_uptime =
-    Uptime
+    .text_mods = Mods
 
-status_text_installs =
-    Installs
-
-status_text_installs_value =
-    { $servers ->
-        [one] 1 server
-        *[other] { $servers } servers
-    }
-    { $users ->
-        [one] 1 individual user
-        *[other] { $users } individual users
-    }
-
-status_text_mods =
-    Mods
-
-status_text_patterns =
-    Patterns
+    .text_patterns = Patterns
