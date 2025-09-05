@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from discord import Color, Embed, Interaction, app_commands
 from discord.app_commands import Transform
 from discord.app_commands.transformers import EnumNameTransformer
@@ -20,8 +22,6 @@ from HexBug.utils.discord.transformers import (
 )
 from HexBug.utils.discord.visibility import MessageVisibility
 
-PATTERN_FILENAME = "pattern.png"
-
 
 class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
     @app_commands.command()
@@ -31,11 +31,13 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
         info: PatternInfoOption,
         visibility: MessageVisibility = "private",
     ):
+        display_info = self.bot.registry.display_pattern(info)
         await NamedPatternView(
             interaction=interaction,
-            pattern=info.pattern,
+            pattern=display_info.pattern,
+            hide_stroke_order=display_info.is_per_world,
             info=info,
-            hide_stroke_order=info.is_per_world,
+            display_info=display_info,
         ).send(interaction, visibility)
 
     @app_commands.command()
@@ -57,7 +59,7 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
         await NamedPatternView(
             interaction=interaction,
             pattern=pattern,
-            info=SpecialHandlerMatch(
+            info=SpecialHandlerMatch[Any].from_parts(
                 handler=handler,
                 info=info,
                 value=parsed_value,
@@ -113,7 +115,7 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
             embed = Embed(
                 title=title,
                 description="\n".join(
-                    f"- {conflict.name} (`{conflict.id}`)"
+                    f"- {self.bot.registry.display_pattern(conflict).name} (`{conflict.id}`)"
                     for conflict in conflicts.values()
                 ),
                 color=Color.red(),

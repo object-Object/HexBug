@@ -1,9 +1,11 @@
 import asyncio
 import logging
+import sys
 from pathlib import Path
 from typing import Annotated, Any, Coroutine
 
 import httpx
+from discord import Locale
 from typer import Option, Typer
 
 from HexBug.core.bot import HexBugBot
@@ -28,17 +30,40 @@ except ImportError:
 @app.command()
 def bot(
     registry_path: Path = Path("registry.json"),
+    run: bool = True,  # disable for CI checks
     verbose: Annotated[bool, Option("-v", "--verbose")] = False,
 ):
-    async def bot():
+    async def bot() -> int:
         setup_logging(verbose)
-        env = HexBugEnv.load()
-        registry = HexBugRegistry.load(registry_path)
-        async with HexBugBot(env, registry) as bot:
-            await bot.load()
-            await bot.start(env.token.get_secret_value())
 
-    run_async(bot())
+        if run:
+            env = HexBugEnv.load()
+        else:
+            env = HexBugEnv.empty()
+
+        registry = HexBugRegistry.load(registry_path)
+
+        async with HexBugBot(env, registry, run) as bot:
+            await bot.load()
+            if run:
+                await bot.start(env.token.get_secret_value())
+            elif bot.failed_translations:
+                logger.error(
+                    f"Failed to validate locale{
+                        '' if len(bot.failed_translations) == 1 else 's'
+                    }: {
+                        ', '.join(
+                            sorted(locale.value for locale in bot.failed_translations)
+                        )
+                    }"
+                )
+                # fail if en-US has errors, else just log the error message and continue
+                # calling sys.exit here produces a ton of unnecessary log output
+                return 1 if Locale.american_english in bot.failed_translations else 0
+
+        return 0
+
+    sys.exit(run_async(bot()))
 
 
 @app.command()
@@ -64,9 +89,9 @@ def health_check(
     logger.info(f"Response: {resp.text}")
 
 
-def run_async(main: Coroutine[Any, Any, Any]):
+def run_async[R](main: Coroutine[Any, Any, R]) -> R | None:
     try:
-        asyncio.run(main)
+        return asyncio.run(main)
     except KeyboardInterrupt:
         pass
 

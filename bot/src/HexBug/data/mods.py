@@ -44,7 +44,12 @@ class DynamicModInfo(BaseModel):
     github_commit: str
 
     pattern_count: int = 0
+    """Total number of patterns in this mod, excluding display-only patterns."""
+    documented_pattern_count: int = 0
+    """Number of patterns in this mod documented by at least one book page, excluding
+    display-only patterns."""
     special_handler_count: int = 0
+    """Number of special handlers supported by HexBug in this mod."""
     first_party_operator_count: int = 0
     """Number of operators added to this mod's patterns by this mod."""
     third_party_operator_count: int = 0

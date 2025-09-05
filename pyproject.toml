@@ -114,7 +114,7 @@ exclude = [
     "**/__pycache__",
 ]
 
-typeCheckingMode = "basic"
+typeCheckingMode = "standard"
 
 strictDictionaryInference = true
 strictListInference = true

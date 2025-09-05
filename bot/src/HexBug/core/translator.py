@@ -1,6 +1,7 @@
 import logging
 import re
 from contextlib import ExitStack
+from datetime import datetime
 from typing import Any
 
 from discord import Interaction, Locale
@@ -26,6 +27,8 @@ _SEPARATOR_PATTERN = re.compile(r"[ _-]+")
 
 
 type TranslationCommand = AnyCommand | ContextMenu
+
+type TranslationValue = str | int | float | datetime
 
 
 class HexBugTranslator(Translator):
@@ -103,7 +106,11 @@ class HexBugTranslator(Translator):
                 return string.message
 
 
-async def translate_text(interaction: Interaction, key: str, **kwargs: Any):
+async def translate_text(
+    interaction: Interaction,
+    key: str,
+    **kwargs: TranslationValue,
+):
     if interaction.command is None:
         raise ValueError(
             "Attempted to translate command text when interaction.command is None"
@@ -113,7 +120,11 @@ async def translate_text(interaction: Interaction, key: str, **kwargs: Any):
     return await _translate_or_warn(interaction, msg_id, **kwargs)
 
 
-async def translate_group_text(interaction: Interaction, key: str, **kwargs: Any):
+async def translate_group_text(
+    interaction: Interaction,
+    key: str,
+    **kwargs: TranslationValue,
+):
     if not isinstance(interaction.command, Command):
         raise ValueError(
             "Attempted to translate group text when interaction.command is not a Command"
@@ -128,7 +139,11 @@ async def translate_group_text(interaction: Interaction, key: str, **kwargs: Any
     return await _translate_or_warn(interaction, msg_id, **kwargs)
 
 
-async def _translate_or_warn(interaction: Interaction, msg_id: str, **kwargs: Any):
+async def _translate_or_warn(
+    interaction: Interaction,
+    msg_id: str,
+    **kwargs: TranslationValue,
+):
     result = await interaction.translate(locale_str(msg_id, **kwargs))
 
     if result is None:

@@ -53,6 +53,9 @@ class APICog(HexBugCog):
 
     async def cog_load(self):
         await super().cog_load()
+        if not self.bot.should_run:
+            logger.info("Skipping API start because should_run is False")
+            return
         app.state.bot = self.bot
         self.server = Server(
             Config(

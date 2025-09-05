@@ -383,12 +383,20 @@ SPECIAL_HANDLERS: dict[ResourceLocation, SpecialHandler[Any]] = {
     ]
 }
 
+# don't try to load these
 DISABLED_PATTERNS: set[ResourceLocation] = {
     # commented out, but the regex doesn't account for that
     # https://github.com/FallingColors/Hexal/blob/efe2b7df1e/Common/src/main/java/ram/talia/hexal/common/lib/hex/HexalActions.kt#L210
     ResourceLocation("hexal", "gate/mark/num/get"),
     ResourceLocation("hexal", "mote/count/get"),
     ResourceLocation("hexal", "mote/combine"),
+    # conflicts
+    ResourceLocation("hexical", "age_scroll"),  # shape: hexical:greater_blink
+    ResourceLocation("hexstruction", "bounding_box"),  # shape: hexical:greater_blink
+}
+
+# load these, but suppress the warning if we can't find any operators
+UNDOCUMENTED_PATTERNS: set[ResourceLocation] = {
     # unused
     ResourceLocation("moreiotas", "altadd"),
     # undocumented
@@ -406,19 +414,10 @@ DISABLED_PATTERNS: set[ResourceLocation] = {
     ResourceLocation("oneironaut", "erosionshield"),
     ResourceLocation("oneironaut", "getsoulprint"),
     ResourceLocation("oneironaut", "signitem"),
-    # conflicts
-    ResourceLocation("hexical", "age_scroll"),  # shape: hexical:greater_blink
-    ResourceLocation("hexstruction", "bounding_box"),  # shape: hexical:greater_blink
     # lmao what
     ResourceLocation("ephemera", "no"),
     ResourceLocation("hextweaks", "suicide"),
     ResourceLocation("oneironaut", "circle"),
-    # lapisworks? apparently it doesn't
-    ResourceLocation("lapisworks", "create_enchsent2"),
-    ResourceLocation("lapisworks", "create_enchsent3"),
-    ResourceLocation("lapisworks", "create_enchsent4"),
-    ResourceLocation("lapisworks", "create_enchsent5"),
-    ResourceLocation("lapisworks", "create_enchsent6"),
 }
 
 # replace the pattern's name entirely

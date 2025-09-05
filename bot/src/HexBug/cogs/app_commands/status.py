@@ -1,6 +1,5 @@
 import textwrap
 from datetime import datetime
-from typing import Literal
 
 from discord import Color, Embed, Interaction, app_commands
 
@@ -8,8 +7,6 @@ from HexBug.common.__version__ import VERSION
 from HexBug.core.cog import HexBugCog
 from HexBug.core.translator import translate_text
 from HexBug.utils.discord.visibility import MessageVisibility, respond_with_visibility
-
-StatusCategory = Literal["general", "mods"]
 
 
 class StatusCog(HexBugCog):
@@ -66,7 +63,7 @@ class StatusCog(HexBugCog):
                     interaction,
                     "installs-value",
                     servers=app_info.approximate_guild_count,
-                    users=app_info.approximate_user_install_count,
+                    users=app_info.approximate_user_install_count or 0,
                 ),
             )
             .add_field(
@@ -75,7 +72,7 @@ class StatusCog(HexBugCog):
             )
             .add_field(
                 name=await translate_text(interaction, "patterns"),
-                value=len(self.bot.registry.patterns)
+                value=len(self.bot.registry.patterns)  # includes hidden
                 + len(self.bot.registry.special_handlers),
             )
         )

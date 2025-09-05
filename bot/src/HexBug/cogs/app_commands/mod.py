@@ -67,7 +67,7 @@ class ModCog(HexBugCog):
                 name="Overloads",
                 value=textwrap.dedent(
                     f"""\
-                    {mod.first_party_operator_count - mod.pattern_count} first-party
+                    {mod.first_party_operator_count - mod.documented_pattern_count} first-party
                     {mod.third_party_operator_count} third-party
                     """
                 ),

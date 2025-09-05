@@ -36,6 +36,16 @@ class HexBugEnv(BaseSettings):
     def load(cls) -> Self:
         return cls.model_validate({})
 
+    @classmethod
+    def empty(cls) -> Self:
+        return cls(
+            environment="dev",
+            token=SecretStr(""),
+            api_port=0,
+            api_root_path="",
+            deployment=None,
+        )
+
 
 class DeploymentSettings(BaseSettings, env_prefix="deployment__"):
     timestamp: datetime

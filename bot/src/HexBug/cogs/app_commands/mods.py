@@ -1,7 +1,8 @@
 from discord import Embed, Interaction, app_commands
 
 from HexBug.core.cog import HexBugCog
-from HexBug.utils.discord.transformers import ModAuthorOption
+from HexBug.core.translator import translate_text
+from HexBug.utils.discord.transformers import ModAuthorOption, ModloaderOption
 from HexBug.utils.discord.visibility import MessageVisibility, respond_with_visibility
 
 
@@ -11,30 +12,36 @@ class ModsCog(HexBugCog):
         self,
         interaction: Interaction,
         author: ModAuthorOption | None = None,
+        modloader: ModloaderOption | None = None,
         visibility: MessageVisibility = "private",
     ):
-        if author:
-            mods = [
-                mod
-                for mod in self.bot.registry.mods.values()
-                if mod.github_author == author
-            ]
-        else:
-            mods = self.bot.registry.mods.values()
-
-        footer = f"Count: {len(mods)}"
-        if author:
-            footer += f"/{len(self.bot.registry.mods)}"
+        mods = [
+            mod
+            for mod in self.bot.registry.mods.values()
+            if (author is None or mod.github_author == author)
+            and (modloader is None or modloader in mod.modloaders)
+        ]
 
         # TODO: this will eventually need to be paginated
         embed = Embed(
-            title="Loaded Mods",
+            title=await translate_text(
+                interaction,
+                "title",
+                modloader=modloader.value if modloader else "None",
+            ),
             description="\n".join(
                 f"* **[{mod.name}]({mod.book_url})** ({mod.pretty_version})"
                 for mod in mods
-            ),
+            )
+            if mods
+            else await translate_text(interaction, "no-mods-found"),
         ).set_footer(
-            text=footer,
+            text=await translate_text(
+                interaction,
+                "footer-filtered" if author or modloader else "footer-normal",
+                mods=len(mods),
+                total=len(self.bot.registry.mods),
+            ),
         )
 
         if author:

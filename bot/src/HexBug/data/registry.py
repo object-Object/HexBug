@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import itertools
 import logging
 import os
 from collections import defaultdict
@@ -43,6 +44,7 @@ from .static_data import (
     MODS,
     PATTERN_NAME_OVERRIDES,
     SPECIAL_HANDLERS,
+    UNDOCUMENTED_PATTERNS,
 )
 
 logger = logging.getLogger(__name__)
@@ -54,6 +56,11 @@ type PatternMatchResult = PatternInfo | SpecialHandlerMatch[Any]
 class HexBugRegistry(BaseModel):
     mods: dict[str, ModInfo]
     patterns: dict[ResourceLocation, PatternInfo]
+    """The primary source of truth for patterns in this registry.
+
+    IMPORTANT: If accessing this directly, make sure to check `pattern.display_as`
+    and/or `pattern.is_hidden` as necessary.
+    """
     special_handlers: dict[ResourceLocation, SpecialHandlerInfo]
 
     _lookups: PatternLookups = PrivateAttr(default_factory=PatternLookups)
@@ -67,7 +74,7 @@ class HexBugRegistry(BaseModel):
 
         monkeypatch_hexdoc_hexcasting()
 
-        # lazy imports because hexdoc_hexcasting won't be available when the bot runs
+        # lazy imports because these won't be available when the bot runs
         from hexdoc_hexcasting.book.page import (
             ManualOpPatternPage,
             ManualRawPatternPage,
@@ -75,6 +82,8 @@ class HexBugRegistry(BaseModel):
             PageWithPattern,
         )
         from hexdoc_hexcasting.metadata import PatternMetadata
+        from hexdoc_hexcasting.utils.pattern import PatternInfo as HexdocPatternInfo
+        from hexdoc_lapisworks.book.pages.pages import LookupPWShapePage
 
         registry = cls(
             mods={},
@@ -178,6 +187,7 @@ class HexBugRegistry(BaseModel):
 
         id_ops = defaultdict[ResourceLocation, list[PatternOperator]](list)
         signature_ops = defaultdict[str, list[PatternOperator]](list)
+        lapisworks_per_world_shapes = dict[ResourceLocation, HexdocPatternInfo]()
 
         for category in book.categories.values():
             for entry in category.entries.values():
@@ -186,7 +196,7 @@ class HexBugRegistry(BaseModel):
                         continue
 
                     if (fragment := page.fragment(entry.fragment)) in DISABLED_PAGES:
-                        logger.warning(f"Skipping disabled page: {fragment}")
+                        logger.info(f"Skipping disabled page: {fragment}")
                         continue
 
                     if not isinstance(next_page, TextPage):
@@ -227,33 +237,55 @@ class HexBugRegistry(BaseModel):
                         for pattern in page.patterns:
                             signature_ops[pattern.signature].append(operator)
 
+                    # lapisworks per-world shapes
+                    if isinstance(page, LookupPWShapePage):
+                        lapisworks_per_world_shapes[page.op_id] = page.patterns[0]
+
         # load patterns
 
         logger.info("Loading patterns.")
 
-        pattern_infos = [
-            pattern_info
-            for pattern_metadata in pattern_metadatas.values()
-            for pattern_info in pattern_metadata.patterns
-        ] + EXTRA_PATTERNS
-
-        for pattern_info in pattern_infos:
+        for pattern_info in itertools.chain(
+            # hack: do these first so we can validate display_as
+            lapisworks_per_world_shapes.values(),
+            (
+                pattern_info
+                for pattern_metadata in pattern_metadatas.values()
+                for pattern_info in pattern_metadata.patterns
+            ),
+            EXTRA_PATTERNS,
+        ):
             if pattern_info.id in DISABLED_PATTERNS:
-                logger.warning(f"Skipping disabled pattern: {pattern_info.id}")
+                logger.info(f"Skipping disabled pattern: {pattern_info.id}")
                 continue
+
+            display_as = None
+            for other in lapisworks_per_world_shapes.keys():
+                if (
+                    pattern_info.id.namespace == other.id.namespace
+                    and pattern_info.id.path.startswith(other.id.path)
+                    and pattern_info.id.path.removeprefix(other.id.path).isnumeric()
+                ):
+                    display_as = other
+                    break
+
+            can_be_undocumented = (
+                display_as is not None or pattern_info.id in UNDOCUMENTED_PATTERNS
+            )
 
             name = i18n.localize(
                 f"hexcasting.action.{pattern_info.id}",
                 f"hexcasting.rawhook.{pattern_info.id}",
+                silent=can_be_undocumented,
             ).value
             if override_name := PATTERN_NAME_OVERRIDES.get(pattern_info.id):
-                logger.warning(
+                logger.info(
                     f"Renaming pattern from {name} to {override_name}: {pattern_info.id}"
                 )
                 name = override_name
             elif pattern_info.id in DISAMBIGUATED_PATTERNS:
                 mod = registry.mods[pattern_info.id.namespace]
-                logger.warning(
+                logger.info(
                     f"Appending mod name ({mod.name}) to pattern name ({name}): {pattern_info.id}"
                 )
                 name += f" ({mod.name})"
@@ -265,6 +297,8 @@ class HexBugRegistry(BaseModel):
                 direction=HexDir[pattern_info.startdir.name],
                 signature=pattern_info.signature,
                 is_per_world=pattern_info.is_per_world,
+                display_only=pattern_info.id in lapisworks_per_world_shapes,
+                display_as=display_as,
                 operators=[],
             )
 
@@ -283,8 +317,8 @@ class HexBugRegistry(BaseModel):
                 known_inputs[op.inputs] = op
                 pattern.operators.append(op)
 
-            if not pattern.operators:
-                raise ValueError(f"No operators found for pattern: {pattern.id}")
+            if not (pattern.operators or can_be_undocumented):
+                logger.warning(f"No operators found for pattern: {pattern.id}")
 
             pattern.operators.sort(
                 key=lambda op: (
@@ -335,7 +369,13 @@ class HexBugRegistry(BaseModel):
         logger.info("Calculating registry stats.")
 
         for pattern in registry.patterns.values():
+            if pattern.display_only:
+                continue
+
             registry.mods[pattern.mod_id].pattern_count += 1
+            if pattern.is_documented:
+                registry.mods[pattern.mod_id].documented_pattern_count += 1
+
             for operator in pattern.operators:
                 op_mod = registry.mods[operator.mod_id]
                 if pattern.mod_id == operator.mod_id:
@@ -408,13 +448,43 @@ class HexBugRegistry(BaseModel):
         # special handlers (eg. Numerical Reflection)
         for special_handler in SPECIAL_HANDLERS.values():
             if (value := special_handler.try_match(pattern)) is not None:
-                return SpecialHandlerMatch(
+                return SpecialHandlerMatch[Any].from_parts(
                     handler=special_handler,
                     info=self.special_handlers[special_handler.id],
                     value=value,
                 )
 
         return None
+
+    @overload
+    def display_pattern(
+        self,
+        info: PatternInfo,
+    ) -> PatternInfo: ...
+
+    @overload
+    def display_pattern(
+        self,
+        info: SpecialHandlerMatch[Any],
+    ) -> SpecialHandlerMatch[Any]: ...
+
+    @overload
+    def display_pattern(
+        self,
+        info: PatternInfo | SpecialHandlerMatch[Any],
+    ) -> PatternInfo | SpecialHandlerMatch[Any]: ...
+
+    def display_pattern(
+        self,
+        info: PatternInfo | SpecialHandlerMatch[Any],
+    ) -> PatternInfo | SpecialHandlerMatch[Any]:
+        """If the given pattern has a value for `display_as`, returns the referenced
+        pattern; otherwise, returns the input unchanged."""
+        match info:
+            case PatternInfo(display_as=display_as) if display_as is not None:
+                return self.patterns[display_as]
+            case _:
+                return info
 
     def _register_mod(self, mod: ModInfo):
         if mod.id in self.mods:
@@ -424,6 +494,8 @@ class HexBugRegistry(BaseModel):
     def _register_pattern(self, pattern: PatternInfo):
         if pattern.id in self.patterns:
             raise ValueError(f"Pattern is already registered: {pattern.id}")
+        if pattern.display_as is not None and pattern.display_as not in self.patterns:
+            raise ValueError(f"Broken display_as: {pattern.id} -> {pattern.display_as}")
         self.patterns[pattern.id] = pattern
         self.lookups.add_pattern(pattern)
 
