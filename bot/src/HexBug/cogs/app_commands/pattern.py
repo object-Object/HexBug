@@ -25,7 +25,6 @@ PATTERN_FILENAME = "pattern.png"
 
 class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
     @app_commands.command()
-    @app_commands.rename(info="name")
     async def name(
         self,
         interaction: Interaction,
@@ -40,7 +39,6 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
         ).send(interaction, visibility)
 
     @app_commands.command()
-    @app_commands.rename(info="name")
     async def special(
         self,
         interaction: Interaction,
@@ -73,8 +71,8 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
         interaction: Interaction,
         direction: Transform[HexDir, EnumNameTransformer(HexDir)],
         signature: str,
-        visibility: MessageVisibility = "private",
         hide_stroke_order: bool = False,
+        visibility: MessageVisibility = "private",
     ):
         signature = validate_signature(signature)
         pattern = HexPattern(direction, signature)

@@ -1,9 +1,21 @@
+import itertools
 import logging
 from dataclasses import dataclass
 from datetime import datetime
+from typing import Iterator
 
-from discord import CustomActivity, Emoji, Intents, Interaction
-from discord.app_commands import AppCommandContext, AppInstallationType
+from discord import AppCommandType, CustomActivity, Emoji, Intents, Interaction, Locale
+from discord.app_commands import (
+    AppCommandContext,
+    AppInstallationType,
+    Command,
+    ContextMenu,
+    Group,
+    TranslationContext,
+    TranslationContextLocation,
+    TranslationContextTypes,
+    locale_str,
+)
 from discord.ext import commands
 from discord.ext.commands import Bot, Context, NoEntryPointError
 
@@ -57,10 +69,14 @@ class HexBugBot(Bot):
     async def load(self):
         await self._load_translator()
         await self._load_cogs()
+        for locale in self._translator.l10n.keys():
+            for context in self._walk_tree_translations():
+                await self._check_translation(locale, context)
 
     async def _load_translator(self):
         logger.info("Loading translator")
-        await self.tree.set_translator(HexBugTranslator())
+        self._translator = HexBugTranslator()
+        await self.tree.set_translator(self._translator)
 
     async def _load_cogs(self):
         for cog in iter_modules(cogs, skip_internal=True):
@@ -70,6 +86,80 @@ class HexBugBot(Bot):
             except NoEntryPointError:
                 logger.warning(f"No entry point found: {cog}")
         logger.info("Loaded cogs: " + ", ".join(self.cogs.keys()))
+
+    def _walk_tree_translations(self) -> Iterator[TranslationContextTypes]:
+        for command in itertools.chain(
+            self.tree.walk_commands(type=AppCommandType.chat_input),
+            self.tree.walk_commands(type=AppCommandType.user),
+            self.tree.walk_commands(type=AppCommandType.message),
+        ):
+            match command:
+                case Command():
+                    yield TranslationContext(
+                        TranslationContextLocation.command_name, command
+                    )
+                    yield TranslationContext(
+                        TranslationContextLocation.command_description, command
+                    )
+                    for parameter in command.parameters:
+                        yield TranslationContext(
+                            TranslationContextLocation.parameter_name, parameter
+                        )
+                        yield TranslationContext(
+                            TranslationContextLocation.parameter_description, parameter
+                        )
+
+                case Group():
+                    yield TranslationContext(
+                        TranslationContextLocation.group_name, command
+                    )
+                    yield TranslationContext(
+                        TranslationContextLocation.group_description, command
+                    )
+
+                case ContextMenu():
+                    yield TranslationContext(
+                        TranslationContextLocation.command_name, command
+                    )
+
+    async def _check_translation(
+        self,
+        locale: Locale,
+        context: TranslationContextTypes,
+    ):
+        string = locale_str("__canary")
+        result = await self._translator.translate(
+            string, locale, context, fallback=False
+        )
+        if result is None:
+            logger.warning(
+                f"Failed to translate {context.location.name} to {locale.value}: {context.data.name}"
+            )
+        elif result == string.message:
+            logger.warning(
+                f"Missing translation for {locale.value}: {self._translator.get_msg_id(string, context)}"
+            )
+        else:
+            match context.location:
+                case (
+                    TranslationContextLocation.command_name
+                    | TranslationContextLocation.group_name
+                    | TranslationContextLocation.parameter_name
+                ):
+                    max_length = 32
+                case (
+                    TranslationContextLocation.command_description
+                    | TranslationContextLocation.group_description
+                    | TranslationContextLocation.parameter_description
+                    | TranslationContextLocation.choice_name
+                ):
+                    max_length = 100
+                case _:
+                    max_length = None
+            if max_length and len(result) > max_length:
+                logger.warning(
+                    f"Translation for {locale.value} is too long: {self._translator.get_msg_id(string, context)}"
+                )
 
     def _get_activity(self):
         text = f"v{VERSION}"
