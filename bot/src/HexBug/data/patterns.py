@@ -29,15 +29,34 @@ class PatternInfo(BaseModel):
     direction: HexDir
     signature: PatternSignature
     is_per_world: bool
+    display_only: bool
+    """If True, this is a fake pattern that doesn't actually exist ingame in this form.
+
+    This is currently used for Lapisworks' per-world shapes.
+    """
+    display_as: ResourceLocation | None
+    """If provided, when this pattern would be visible to users, display the referenced
+    pattern instead.
+
+    This is currently used for Lapisworks' per-world shapes.
+    """
     operators: list[PatternOperator]
 
     @property
-    def mod_id(self):
+    def mod_id(self) -> PatternSignature:
         return self.id.namespace
 
     @property
-    def pattern(self):
+    def pattern(self) -> HexPattern:
         return HexPattern(self.direction, self.signature)
+
+    @property
+    def is_hidden(self) -> bool:
+        return self.display_as is not None
+
+    @property
+    def is_documented(self) -> bool:
+        return bool(self.operators)
 
 
 class PatternOperator(BaseModel):

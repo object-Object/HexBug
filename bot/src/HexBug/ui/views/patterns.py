@@ -137,6 +137,7 @@ class NamedPatternView(BasePatternView):
     interaction: InitVar[Interaction]
 
     info: PatternMatchResult | None
+    display_info: PatternMatchResult | None = None
 
     registry: HexBugRegistry = field(init=False)
 
@@ -146,6 +147,9 @@ class NamedPatternView(BasePatternView):
         super().__post_init__(interaction)
 
         self.registry = HexBugBot.registry_of(interaction)
+
+        if self.info and not self.display_info:
+            self.display_info = self.registry.display_pattern(self.info)
 
         self.operator_select.options = [
             SelectOption(
@@ -158,11 +162,11 @@ class NamedPatternView(BasePatternView):
 
     @property
     def operators(self) -> list[PatternOperator]:
-        match self.info:
+        match self.display_info:
             case PatternInfo(operators=operators):
                 return operators
-            case SpecialHandlerMatch(info=info):
-                return [info.operator]
+            case SpecialHandlerMatch(operator=operator):
+                return [operator]
             case None:
                 return []
 
@@ -179,13 +183,15 @@ class NamedPatternView(BasePatternView):
     def mod(self):
         if self.operator:
             return self.registry.mods[self.operator.mod_id]
+        if self.display_info:
+            return self.registry.mods[self.display_info.mod_id]
 
     @property
     def title(self):
         if self.pattern.signature == "dewdeqwwedaqedwadweqewwd":
             return "Amogus"
-        if self.info:
-            return self.info.name
+        if self.display_info:
+            return self.display_info.name
         return "Unknown"
 
     @override

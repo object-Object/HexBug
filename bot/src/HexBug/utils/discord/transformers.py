@@ -145,6 +145,8 @@ class PatternInfoTransformer(PfzyAutocompleteTransformer):
 
         registry = HexBugBot.registry_of(interaction)
         for pattern in registry.patterns.values():
+            if pattern.is_hidden:
+                continue
             for search_term in [
                 pattern.name,
                 str(pattern.id),

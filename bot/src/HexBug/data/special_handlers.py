@@ -3,8 +3,7 @@ from __future__ import annotations
 import itertools
 import re
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
-from typing import TYPE_CHECKING, override
+from typing import TYPE_CHECKING, Self, override
 
 from hexdoc.core import ResourceLocation
 from pydantic import BaseModel
@@ -31,19 +30,24 @@ class SpecialHandlerInfo(BaseModel):
         return self.id.namespace
 
 
-@dataclass(kw_only=True)
-class SpecialHandlerMatch[T]:
+class SpecialHandlerMatch[T](SpecialHandlerInfo):
+    model_config = {"arbitrary_types_allowed": True}
+
     handler: SpecialHandler[T]
-    info: SpecialHandlerInfo
     value: T
 
-    @property
-    def id(self) -> ResourceLocation:
-        return self.info.id
+    @classmethod
+    def from_parts(
+        cls,
+        info: SpecialHandlerInfo,
+        handler: SpecialHandler[T],
+        value: T,
+    ) -> Self:
+        return cls(**dict(info), handler=handler, value=value)
 
     @property
     def name(self) -> str:
-        return self.handler.get_name(self.info.raw_name, self.value)
+        return self.handler.get_name(self.raw_name, self.value)
 
 
 class SpecialHandler[T](ABC):

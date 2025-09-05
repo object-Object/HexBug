@@ -88,7 +88,7 @@ class IotaPrinter:
 
             case MatrixIota(rows=1, columns=n, data=data):
                 yield Node(
-                    f"[({m}, {n}) | {', '.join(self._number(v) for v in data[0])}]",
+                    f"[({1}, {n}) | {', '.join(self._number(v) for v in data[0])}]",
                     level,
                 )
 

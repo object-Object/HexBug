@@ -72,7 +72,7 @@ class StatusCog(HexBugCog):
             )
             .add_field(
                 name=await translate_text(interaction, "patterns"),
-                value=len(self.bot.registry.patterns)
+                value=len(self.bot.registry.patterns)  # includes hidden
                 + len(self.bot.registry.special_handlers),
             )
         )
