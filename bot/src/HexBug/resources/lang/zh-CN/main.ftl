@@ -205,12 +205,8 @@ command_status =
 
     .text_installs = 安装情况
     .text_installs-value =
-        { $servers ->
-            *[other] { $servers }个服务器
-        }
-        { $users ->
-            *[other] { $users }个个人用户
-        }
+        { $servers }个服务器
+        { $users }个个人用户
 
     .text_mods = 模组
 
