@@ -129,7 +129,11 @@ class EmbedPatternView(BasePatternView):
 
     @override
     def get_embed(self) -> Embed:
-        return self.embed.set_image(url=f"attachment://{PATTERN_FILENAME}")
+        return self.embed.set_image(
+            url=f"attachment://{PATTERN_FILENAME}",
+        ).set_footer(
+            text=self.pattern.display() if not self.hide_stroke_order else None,
+        )
 
 
 @dataclass(kw_only=True)
