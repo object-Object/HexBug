@@ -10,7 +10,6 @@ from hexdoc.core import ResourceLocation
 
 from HexBug.core.cog import HexBugCog
 from HexBug.core.exceptions import InvalidInputError
-from HexBug.core.translator import translate_text
 from HexBug.data.hex_math import VALID_SIGNATURE_PATTERN, HexDir, HexPattern
 from HexBug.data.registry import PatternMatchResult
 from HexBug.data.special_handlers import SpecialHandlerMatch
@@ -20,6 +19,7 @@ from HexBug.utils.discord.transformers import (
     PatternInfoOption,
     SpecialHandlerInfoOption,
 )
+from HexBug.utils.discord.translation import translate_text
 from HexBug.utils.discord.visibility import MessageVisibility
 
 

@@ -1,8 +1,8 @@
 from discord import Embed, Interaction, app_commands
 
 from HexBug.core.cog import HexBugCog
-from HexBug.core.translator import translate_text
 from HexBug.utils.discord.transformers import ModAuthorOption, ModloaderOption
+from HexBug.utils.discord.translation import translate_text
 from HexBug.utils.discord.visibility import MessageVisibility, respond_with_visibility
 
 
