@@ -20,8 +20,6 @@ from HexBug.utils.discord.transformers import (
 )
 from HexBug.utils.discord.visibility import MessageVisibility
 
-PATTERN_FILENAME = "pattern.png"
-
 
 class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
     @app_commands.command()

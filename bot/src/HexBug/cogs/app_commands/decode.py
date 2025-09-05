@@ -20,13 +20,13 @@ from HexBug.core.exceptions import InvalidInputError
 from HexBug.parser.reveal import parse_reveal
 from HexBug.utils.discord.visibility import MessageVisibility, add_visibility_buttons
 
-TabWidthOption = Range[int, 1, 16]
-
 MAX_FILE_SIZE = 32 * 1024
 
 MAX_CONTENT_LENGTH = 4000
 
 ATTACHMENT_NAME = "decoded.hexpattern"
+
+TabWidthOption = Range[int, 1, 16]
 
 
 class DecodeCog(HexBugCog, GroupCog, group_name="decode"):
