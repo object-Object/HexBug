@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Annotated, Any, Coroutine
 
 import httpx
+from discord import Locale
 from typer import Option, Typer
 
 from HexBug.core.bot import HexBugBot
@@ -56,8 +57,9 @@ def bot(
                         )
                     }"
                 )
+                # fail if en-US has errors, else just log the error message and continue
                 # calling sys.exit here produces a ton of unnecessary log output
-                return 1
+                return 1 if Locale.american_english in bot.failed_translations else 0
 
         return 0
 
