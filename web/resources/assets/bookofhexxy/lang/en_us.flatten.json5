@@ -16,5 +16,7 @@
         even on the latest Modrinth/CurseForge version!",
       mods: "Source Books",
     },
+
+    mod_attribution: "Source: {mod_name}",
   },
 }
