@@ -913,7 +913,7 @@ requires-dist = [
     { name = "hexdoc-oneironaut", marker = "extra == 'data'", url = "https://github.com/beholderface/oneironaut/raw/99b7c992e2e2230b39ec9adceed4b1b2fed15831/docs/v/latest/1.20.1/dist/hexdoc_oneironaut-0.5.0.1.0-py3-none-any.whl" },
     { name = "hexdoc-overevaluate", marker = "extra == 'data'", url = "https://github.com/miyucomics/overevaluate/raw/6c92a93c51fd966cf3709468f0a126c746ae85ba/docs/v/latest/main/dist/hexdoc_overevaluate-1.0.0.1.0.0-py3-none-any.whl" },
     { name = "hexdoc-scryglass", marker = "extra == 'data'", url = "https://github.com/miyucomics/scryglass/raw/2b414d0ba9e9c0770c8b13bb01a67398630a4690/docs/v/latest/main/dist/hexdoc_scryglass-1.0.0.1.0.0-py3-none-any.whl" },
-    { name = "hexdoc-slate-work", marker = "extra == 'data'", url = "https://github.com/Stick404/SlateWork/raw/c92e1aee0ff0e55fe2927c90febdebd8424e68fc/docs/v/latest/main/dist/hexdoc_slate_work-1.0.2.1.0.dev0-py3-none-any.whl" },
+    { name = "hexdoc-slate-work", marker = "extra == 'data'", specifier = "~=1.0.3.0" },
     { name = "httpx", specifier = ">=0.28.1" },
     { name = "humanize", specifier = ">=4.13.0" },
     { name = "lark", extras = ["interegular"], specifier = ">=1.2.2" },
@@ -1440,23 +1440,16 @@ provides-extras = ["dev"]
 
 [[package]]
 name = "hexdoc-slate-work"
-version = "1.0.2.1.0.dev0"
-source = { url = "https://github.com/Stick404/SlateWork/raw/c92e1aee0ff0e55fe2927c90febdebd8424e68fc/docs/v/latest/main/dist/hexdoc_slate_work-1.0.2.1.0.dev0-py3-none-any.whl" }
+version = "1.0.3.1.0"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "hexdoc-hexcasting" },
     { name = "hexdoc-hexpose" },
 ]
+sdist = { url = "https://files.pythonhosted.org/packages/e2/24/ddea89da0f7008ea3718aebfbbce012eef0d01ead5cec79cea90cb7a4324/hexdoc_slate_work-1.0.3.1.0.tar.gz", hash = "sha256:479b10af539c8ee5f7c7eb7a380a868167546cbbd94a20e605b6cf032c2aed94", size = 86680 }
 wheels = [
-    { url = "https://github.com/Stick404/SlateWork/raw/c92e1aee0ff0e55fe2927c90febdebd8424e68fc/docs/v/latest/main/dist/hexdoc_slate_work-1.0.2.1.0.dev0-py3-none-any.whl", hash = "sha256:0ab5c9a443fa43c71f2229d13e5e906cadc34f8dca837a78ad0610a58a196cc0" },
+    { url = "https://files.pythonhosted.org/packages/22/f9/66303659252f6952861804ae1b6229ceca05b52c95a32c373a717dbcdf6f/hexdoc_slate_work-1.0.3.1.0-py3-none-any.whl", hash = "sha256:9a1399893097cbec19b5ef1eade8486328f582d4681384cbb81f41b787f7b206", size = 131390 },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "hexdoc-hexcasting", specifier = "~=0.11.2.1.0.dev20" },
-    { name = "hexdoc-hexpose", specifier = "~=1.0.0.1.0.dev0" },
-    { name = "ruff", marker = "extra == 'dev'", specifier = "~=0.11.2" },
-]
-provides-extras = ["dev"]
 
 [[package]]
 name = "httpcore"

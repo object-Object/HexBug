@@ -52,6 +52,7 @@ data = [
     "hexdoc-ioticblocks~=1.0.1.1.20.1.0",
     "hexdoc-lapisworks~=1.5.1.5.0",
     "hexdoc-lessertp~=1.1.2.0",
+    "hexdoc-slate-work~=1.0.3.0",
     # hex addons (GitHub)
     "hexdoc-complexhex",
     "hexdoc-efhexs",
@@ -64,7 +65,6 @@ data = [
     "hexdoc-oneironaut",
     "hexdoc-overevaluate",
     "hexdoc-scryglass",
-    "hexdoc-slate-work",
 ]
 
 [tool.uv.sources]
@@ -80,7 +80,6 @@ hexdoc-moreiotas = { url = "https://github.com/FallingColors/MoreIotas/raw/faef6
 hexdoc-oneironaut = { url = "https://github.com/beholderface/oneironaut/raw/99b7c992e2e2230b39ec9adceed4b1b2fed15831/docs/v/latest/1.20.1/dist/hexdoc_oneironaut-0.5.0.1.0-py3-none-any.whl" }
 hexdoc-overevaluate = { url = "https://github.com/miyucomics/overevaluate/raw/6c92a93c51fd966cf3709468f0a126c746ae85ba/docs/v/latest/main/dist/hexdoc_overevaluate-1.0.0.1.0.0-py3-none-any.whl" }
 hexdoc-scryglass = { url = "https://github.com/miyucomics/scryglass/raw/2b414d0ba9e9c0770c8b13bb01a67398630a4690/docs/v/latest/main/dist/hexdoc_scryglass-1.0.0.1.0.0-py3-none-any.whl" }
-hexdoc-slate-work = { url = "https://github.com/Stick404/SlateWork/raw/c92e1aee0ff0e55fe2927c90febdebd8424e68fc/docs/v/latest/main/dist/hexdoc_slate_work-1.0.2.1.0.dev0-py3-none-any.whl" }
 
 [tool.hatch.version]
 source = "regex"
