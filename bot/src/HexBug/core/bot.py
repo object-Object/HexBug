@@ -214,18 +214,19 @@ class HexBugBot(Bot):
                 )
 
     async def sync_custom_emojis(self):
-        logger.info("Syncing/uploading custom emojis")
-
-        self._custom_emoji.clear()
-
-        for emoji in await self.fetch_application_emojis():
-            await emoji.delete()
+        await self.clear_custom_emojis()
 
         for custom_emoji in CustomEmoji:
             self._custom_emoji[custom_emoji] = await self.create_application_emoji(
                 name=custom_emoji.name,
                 image=custom_emoji.load_image(),
             )
+
+    async def clear_custom_emojis(self):
+        self._custom_emoji.clear()
+
+        for emoji in await self.fetch_application_emojis():
+            await emoji.delete()
 
     def get_custom_emoji(self, custom_emoji: CustomEmoji) -> Emoji:
         emoji = self._custom_emoji.get(custom_emoji)
