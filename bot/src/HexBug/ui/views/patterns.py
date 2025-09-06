@@ -26,10 +26,7 @@ from HexBug.rendering.types import Palette, Theme
 from HexBug.utils.discord.commands import AnyCommand
 from HexBug.utils.discord.components import update_indexed_select_menu
 from HexBug.utils.discord.embeds import FOOTER_SEPARATOR
-from HexBug.utils.discord.visibility import (
-    MessageVisibility,
-    add_visibility_buttons,
-)
+from HexBug.utils.discord.visibility import Visibility, add_visibility_buttons
 from HexBug.utils.strings import join_truthy
 
 from .options import OptionsView, option_button, option_select
@@ -67,7 +64,7 @@ class BasePatternView(ui.View, ABC):
     async def send(
         self,
         interaction: Interaction,
-        visibility: MessageVisibility,
+        visibility: Visibility,
         show_usage: bool = False,
     ):
         self.clear_items()
@@ -76,7 +73,7 @@ class BasePatternView(ui.View, ABC):
             embed=self.get_embed(),
             file=self.get_image(),
             view=self,
-            ephemeral=visibility == "private",
+            ephemeral=visibility.ephemeral,
         )
 
     async def refresh(self, interaction: Interaction, *, view: ui.View | None = None):
@@ -96,7 +93,7 @@ class BasePatternView(ui.View, ABC):
     def add_items(
         self,
         interaction: Interaction,
-        visibility: MessageVisibility,
+        visibility: Visibility,
         show_usage: bool = False,
     ):
         self.add_item(self.options_button)
@@ -107,7 +104,7 @@ class BasePatternView(ui.View, ABC):
             visibility,
             command=self.command,
             show_usage=show_usage,
-            send_as_public=lambda i: self.send(i, "public", show_usage=True),
+            send_as_public=lambda i: self.send(i, Visibility.PUBLIC, show_usage=True),
         )
 
     @override
@@ -238,7 +235,7 @@ class NamedPatternView(BasePatternView):
     def add_items(
         self,
         interaction: Interaction,
-        visibility: MessageVisibility,
+        visibility: Visibility,
         show_usage: bool = False,
     ):
         super().add_items(interaction, visibility, show_usage)

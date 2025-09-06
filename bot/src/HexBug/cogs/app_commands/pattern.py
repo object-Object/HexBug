@@ -20,7 +20,7 @@ from HexBug.utils.discord.transformers import (
     SpecialHandlerInfoOption,
 )
 from HexBug.utils.discord.translation import translate_text
-from HexBug.utils.discord.visibility import MessageVisibility
+from HexBug.utils.discord.visibility import Visibility, VisibilityOption
 
 
 class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
@@ -29,7 +29,7 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
         self,
         interaction: Interaction,
         info: PatternInfoOption,
-        visibility: MessageVisibility = "private",
+        visibility: VisibilityOption = Visibility.PRIVATE,
     ):
         display_info = self.bot.registry.display_pattern(info)
         await NamedPatternView(
@@ -46,7 +46,7 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
         interaction: Interaction,
         info: SpecialHandlerInfoOption,
         value: str,
-        visibility: MessageVisibility = "private",
+        visibility: VisibilityOption = Visibility.PRIVATE,
     ):
         handler = SPECIAL_HANDLERS[info.id]
         try:
@@ -74,7 +74,7 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
         direction: Transform[HexDir, EnumNameTransformer(HexDir)],
         signature: str,
         hide_stroke_order: bool = False,
-        visibility: MessageVisibility = "private",
+        visibility: VisibilityOption = Visibility.PRIVATE,
     ):
         signature = validate_signature(signature)
         pattern = HexPattern(direction, signature)
@@ -94,7 +94,7 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
         interaction: Interaction,
         signature: str,
         is_per_world: bool,
-        visibility: MessageVisibility = "private",
+        visibility: VisibilityOption = Visibility.PRIVATE,
     ):
         signature = validate_signature(signature)
         pattern = HexPattern(HexDir.EAST, signature)

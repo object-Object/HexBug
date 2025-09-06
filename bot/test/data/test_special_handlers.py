@@ -6,7 +6,7 @@ from HexBug.data.special_handlers import MaskSpecialHandler
 
 
 def describe_MaskSpecialHandler():
-    @pytest.fixture
+    @pytest.fixture()
     def special_handler() -> MaskSpecialHandler:
         return MaskSpecialHandler(ResourceLocation("hexcasting", "mask"))
 

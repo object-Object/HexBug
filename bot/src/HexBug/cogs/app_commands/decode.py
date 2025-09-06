@@ -18,7 +18,11 @@ from lark import LarkError
 from HexBug.core.cog import HexBugCog
 from HexBug.core.exceptions import InvalidInputError
 from HexBug.parser.reveal import parse_reveal
-from HexBug.utils.discord.visibility import MessageVisibility, add_visibility_buttons
+from HexBug.utils.discord.visibility import (
+    Visibility,
+    VisibilityOption,
+    add_visibility_buttons,
+)
 
 MAX_FILE_SIZE = 32 * 1024
 
@@ -36,7 +40,7 @@ class DecodeCog(HexBugCog, GroupCog, group_name="decode"):
         interaction: Interaction,
         text: str,
         tab_width: TabWidthOption = 4,
-        visibility: MessageVisibility = "private",
+        visibility: VisibilityOption = Visibility.PRIVATE,
     ):
         await self._decode(interaction, text, tab_width, visibility)
 
@@ -46,7 +50,7 @@ class DecodeCog(HexBugCog, GroupCog, group_name="decode"):
         interaction: Interaction,
         file: Attachment,
         tab_width: TabWidthOption = 4,
-        visibility: MessageVisibility = "private",
+        visibility: VisibilityOption = Visibility.PRIVATE,
     ):
         if file.size > MAX_FILE_SIZE:
             raise InvalidInputError(
@@ -69,7 +73,7 @@ class DecodeCog(HexBugCog, GroupCog, group_name="decode"):
         interaction: Interaction,
         text: str,
         tab_width: int,
-        visibility: MessageVisibility,
+        visibility: Visibility,
     ):
         try:
             iota = parse_reveal(text)
@@ -123,7 +127,7 @@ class DecodeCog(HexBugCog, GroupCog, group_name="decode"):
             add_visibility_buttons(
                 row,
                 i,
-                "public",
+                Visibility.PUBLIC,
                 command=interaction.command,
                 show_usage=True,
             )
@@ -145,7 +149,7 @@ class DecodeCog(HexBugCog, GroupCog, group_name="decode"):
 
         await interaction.response.send_message(
             view=view,
-            ephemeral=visibility == "private",
+            ephemeral=visibility.ephemeral,
             file=File(BytesIO(file_contents), ATTACHMENT_NAME)
             if file_contents
             else MISSING,

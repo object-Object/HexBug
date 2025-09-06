@@ -1,23 +1,37 @@
 from dataclasses import dataclass
+from enum import Enum
 from re import Match
 from typing import Any, Awaitable, Callable, Literal, overload
 
 from discord import Embed, Interaction
-from discord.app_commands import Command, ContextMenu
+from discord.app_commands import Command, ContextMenu, Transform
 from discord.ui import ActionRow, Button, Container, DynamicItem, Item, View
 from discord.utils import MISSING
 
 from HexBug.core.bot import HexBugBot
 from HexBug.core.emoji import CustomEmoji
+from HexBug.utils.discord.translation import LocaleEnumTransformer
 
 from .commands import AnyCommand, AnyInteractionCommand
 
-type MessageVisibility = Literal["public", "private"]
+
+class Visibility(Enum):
+    PUBLIC = "public"
+    PRIVATE = "private"
+
+    @property
+    def ephemeral(self):
+        return self is Visibility.PRIVATE
+
+
+VisibilityOption = Transform[
+    Visibility, LocaleEnumTransformer(Visibility, name="value")
+]
 
 
 async def respond_with_visibility(
     interaction: Interaction,
-    visibility: MessageVisibility,
+    visibility: Visibility,
     *,
     content: Any | None = None,
     embed: Embed = MISSING,
@@ -38,20 +52,20 @@ class MessageContents:
     async def send_response(
         self,
         interaction: Interaction,
-        visibility: MessageVisibility,
+        visibility: Visibility,
         show_usage: bool = False,
     ):
         await interaction.response.send_message(
             content=self.content,
             embed=self.embed,
-            ephemeral=visibility == "private",
+            ephemeral=visibility.ephemeral,
             view=self._get_view(interaction, visibility, show_usage),
         )
 
     def _get_view(
         self,
         interaction: Interaction,
-        visibility: MessageVisibility,
+        visibility: Visibility,
         show_usage: bool,
     ):
         view = View(timeout=None)
@@ -61,7 +75,9 @@ class MessageContents:
             visibility,
             command=self.command,
             show_usage=show_usage,
-            send_as_public=lambda i: self.send_response(i, "public", show_usage=True),
+            send_as_public=lambda i: self.send_response(
+                i, Visibility.PUBLIC, show_usage=True
+            ),
         )
         return view
 
@@ -141,7 +157,7 @@ type ButtonParent = View | ActionRow[Any] | Container[Any]
 def add_visibility_buttons[T: ButtonParent](
     parent: T,
     interaction: Interaction,
-    visibility: Literal["public"],
+    visibility: Literal[Visibility.PUBLIC],
     *,
     command: AnyInteractionCommand,
     show_usage: bool,
@@ -152,7 +168,7 @@ def add_visibility_buttons[T: ButtonParent](
 def add_visibility_buttons[T: ButtonParent](
     parent: T,
     interaction: Interaction,
-    visibility: Literal["private"],
+    visibility: Literal[Visibility.PRIVATE],
     *,
     send_as_public: Callable[[Interaction], Awaitable[Any]],
 ) -> T: ...
@@ -162,7 +178,7 @@ def add_visibility_buttons[T: ButtonParent](
 def add_visibility_buttons[T: ButtonParent](
     parent: T,
     interaction: Interaction,
-    visibility: MessageVisibility,
+    visibility: Visibility,
     *,
     command: AnyInteractionCommand,
     show_usage: bool,
@@ -173,17 +189,17 @@ def add_visibility_buttons[T: ButtonParent](
 def add_visibility_buttons[T: ButtonParent](
     parent: T,
     interaction: Interaction,
-    visibility: MessageVisibility,
+    visibility: Visibility,
     *,
     command: AnyInteractionCommand = None,
     show_usage: bool | None = None,
     send_as_public: Callable[[Interaction], Awaitable[Any]] | None = None,
 ) -> T:
     match visibility:
-        case "private":
+        case Visibility.PRIVATE:
             assert send_as_public is not None
             parent.add_item(SendAsPublicButton(interaction, send_as_public))
-        case "public":
+        case Visibility.PUBLIC:
             assert show_usage is not None
             parent.add_item(DeleteButton(user_id=interaction.user.id))
             if show_usage:

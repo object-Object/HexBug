@@ -5,7 +5,11 @@ from discord import Embed, Interaction, app_commands
 from HexBug.core.cog import HexBugCog
 from HexBug.utils.discord.embeds import FOOTER_SEPARATOR, EmbedField, add_fields
 from HexBug.utils.discord.transformers import ModInfoOption
-from HexBug.utils.discord.visibility import MessageVisibility, respond_with_visibility
+from HexBug.utils.discord.visibility import (
+    Visibility,
+    VisibilityOption,
+    respond_with_visibility,
+)
 
 
 class ModCog(HexBugCog):
@@ -14,7 +18,7 @@ class ModCog(HexBugCog):
         self,
         interaction: Interaction,
         mod: ModInfoOption,
-        visibility: MessageVisibility = "private",
+        visibility: VisibilityOption = Visibility.PRIVATE,
     ):
         embed = (
             Embed(

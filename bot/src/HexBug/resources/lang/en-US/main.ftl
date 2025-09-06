@@ -1,7 +1,7 @@
 # command/group/parameter name:
 #       |------------------------------|
 
-# command/group/parameter description:
+# choice name, command/group/parameter description:
 #       |--------------------------------------------------------------------------------------------------|
 
 # common parameters
@@ -10,6 +10,14 @@
         visibility
 -parameter_visibility_description =
         Whether the response should be visible to everyone, or just you.
+
+# choices
+
+choice_HexBug-utils-discord-visibility-Visibility =
+    .PUBLIC =
+        public
+    .PRIVATE =
+        private
 
 # /decode
 
