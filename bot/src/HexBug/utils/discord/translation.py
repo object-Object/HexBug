@@ -76,7 +76,15 @@ class LocaleEnumTransformer[T: Enum](Transformer):
         return self._enum_type[value]
 
 
-async def translate_text(
+async def translate(
+    interaction: Interaction,
+    key: str,
+    **kwargs: TranslationValue,
+):
+    return await _translate_or_warn(interaction, key, **kwargs)
+
+
+async def translate_command_text(
     interaction: Interaction,
     key: str,
     **kwargs: TranslationValue,

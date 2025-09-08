@@ -14,7 +14,7 @@ from discord import (
     User,
     ui,
 )
-from discord.app_commands import Command, locale_str
+from discord.app_commands import Command
 from hexdoc.core import ResourceLocation
 
 from HexBug.core.bot import HexBugBot
@@ -27,6 +27,7 @@ from HexBug.rendering.types import Palette, Theme
 from HexBug.utils.discord.commands import AnyCommand
 from HexBug.utils.discord.components import update_indexed_select_menu
 from HexBug.utils.discord.embeds import FOOTER_SEPARATOR
+from HexBug.utils.discord.translation import translate
 from HexBug.utils.discord.visibility import Visibility, add_visibility_buttons
 from HexBug.utils.strings import join_truthy
 
@@ -271,11 +272,10 @@ class PerWorldPatternView(NamedPatternView):
         embed.set_footer(
             text=join_truthy(
                 FOOTER_SEPARATOR,
-                await interaction.translate(
-                    locale_str(
-                        "per-world-pattern-contributor",
-                        name=self.contributor.name,
-                    )
+                await translate(
+                    interaction,
+                    "per-world-pattern-contributor",
+                    name=self.contributor.name,
                 ),
                 self.pattern_id,
                 self.pattern.display(),

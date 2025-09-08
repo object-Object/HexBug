@@ -2,7 +2,7 @@ from discord import Embed, Interaction, app_commands
 
 from HexBug.core.cog import HexBugCog
 from HexBug.utils.discord.transformers import ModAuthorOption, ModloaderOption
-from HexBug.utils.discord.translation import translate_text
+from HexBug.utils.discord.translation import translate_command_text
 from HexBug.utils.discord.visibility import (
     Visibility,
     VisibilityOption,
@@ -28,7 +28,7 @@ class ModsCog(HexBugCog):
 
         # TODO: this will eventually need to be paginated
         embed = Embed(
-            title=await translate_text(
+            title=await translate_command_text(
                 interaction,
                 "title",
                 modloader=modloader.value if modloader else "None",
@@ -38,9 +38,9 @@ class ModsCog(HexBugCog):
                 for mod in mods
             )
             if mods
-            else await translate_text(interaction, "no-mods-found"),
+            else await translate_command_text(interaction, "no-mods-found"),
         ).set_footer(
-            text=await translate_text(
+            text=await translate_command_text(
                 interaction,
                 "footer-filtered" if author or modloader else "footer-normal",
                 mods=len(mods),

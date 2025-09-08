@@ -237,6 +237,25 @@ command_per-world-pattern-add =
     .parameter_signature = {-parameter_signature}
     .parameter_signature_description = {-parameter_signature_description}
 
+# /per-world-pattern list
+
+command_per-world-pattern-list =
+        list
+    .description =
+        List the per-world patterns in this server's database.
+
+    .parameter_contributor =
+        contributor
+    .parameter_contributor_description =
+        Only list patterns that were added by this user.
+
+    .parameter_visibility = {-parameter_visibility}
+    .parameter_visibility_description = {-parameter_visibility_description}
+
+    .text_title = Per-World Patterns
+
+    .text_no-patterns-found = ⚠️ No patterns found.
+
 # /per-world-pattern name
 
 command_per-world-pattern-name =

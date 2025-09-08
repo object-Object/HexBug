@@ -19,7 +19,7 @@ from HexBug.utils.discord.transformers import (
     PatternSignatureOption,
     SpecialHandlerInfoOption,
 )
-from HexBug.utils.discord.translation import translate_text
+from HexBug.utils.discord.translation import translate_command_text
 from HexBug.utils.discord.visibility import Visibility, VisibilityOption
 
 
@@ -107,7 +107,9 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
             for conflict in self.bot.registry.lookups.segments.get(segments, []):
                 conflicts[conflict.id] = conflict
 
-        title = await translate_text(interaction, "title", conflicts=len(conflicts))
+        title = await translate_command_text(
+            interaction, "title", conflicts=len(conflicts)
+        )
 
         if conflicts:
             embed = Embed(

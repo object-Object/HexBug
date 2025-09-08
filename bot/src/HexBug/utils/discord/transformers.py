@@ -211,15 +211,22 @@ class PerWorldPatternTransformer(PfzyAutocompleteTransformer):
     ) -> PerWorldPattern:
         assert interaction.guild_id
         id_ = ResourceLocation.from_str(value)
-        async with HexBugBot.db_session_of(interaction) as session:
+        bot = HexBugBot.of(interaction)
+
+        async with bot.db_session() as session:
             stmt = (
                 sa.select(PerWorldPattern)
                 .where(PerWorldPattern.id == id_)
                 .where(PerWorldPattern.guild_id == interaction.guild_id)
             )
+
             result = await session.scalar(stmt)
             if result is None:
-                raise ValueError("Pattern not found in this server.")
+                raise ValueError(
+                    "Pattern has not been added to this server's database."
+                    if id_ in bot.registry.patterns
+                    else "Pattern not found."
+                )
             return result
 
     @override

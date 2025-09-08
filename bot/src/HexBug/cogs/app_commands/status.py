@@ -5,7 +5,7 @@ from discord import Color, Embed, Interaction, app_commands
 
 from HexBug.common.__version__ import VERSION
 from HexBug.core.cog import HexBugCog
-from HexBug.utils.discord.translation import translate_text
+from HexBug.utils.discord.translation import translate_command_text
 from HexBug.utils.discord.visibility import (
     Visibility,
     VisibilityOption,
@@ -33,8 +33,8 @@ class StatusCog(HexBugCog):
             deployment_time_info = _discord_date(info.timestamp)
         else:
             color = Color.orange()
-            commit_info = await translate_text(interaction, "commit-unknown")
-            deployment_time_info = await translate_text(
+            commit_info = await translate_command_text(interaction, "commit-unknown")
+            deployment_time_info = await translate_command_text(
                 interaction, "deployment-time-unknown"
             )
 
@@ -42,28 +42,28 @@ class StatusCog(HexBugCog):
 
         embed = (
             Embed(
-                title=await translate_text(interaction, "title"),
+                title=await translate_command_text(interaction, "title"),
                 color=color,
             )
             .set_footer(text=f"v{VERSION}")
             .add_field(
-                name=await translate_text(interaction, "commit"),
+                name=await translate_command_text(interaction, "commit"),
                 value=commit_info,
                 inline=False,
             )
             .add_field(
-                name=await translate_text(interaction, "deployment-time"),
+                name=await translate_command_text(interaction, "deployment-time"),
                 value=deployment_time_info,
                 inline=False,
             )
             .add_field(
-                name=await translate_text(interaction, "uptime"),
+                name=await translate_command_text(interaction, "uptime"),
                 value=_discord_date(self.bot.start_time),
                 inline=False,
             )
             .add_field(
-                name=await translate_text(interaction, "installs"),
-                value=await translate_text(
+                name=await translate_command_text(interaction, "installs"),
+                value=await translate_command_text(
                     interaction,
                     "installs-value",
                     servers=app_info.approximate_guild_count,
@@ -71,11 +71,11 @@ class StatusCog(HexBugCog):
                 ),
             )
             .add_field(
-                name=await translate_text(interaction, "mods"),
+                name=await translate_command_text(interaction, "mods"),
                 value=len(self.bot.registry.mods),
             )
             .add_field(
-                name=await translate_text(interaction, "patterns"),
+                name=await translate_command_text(interaction, "patterns"),
                 value=len(self.bot.registry.patterns)  # includes hidden
                 + len(self.bot.registry.special_handlers),
             )
