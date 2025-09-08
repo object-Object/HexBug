@@ -42,7 +42,6 @@ https://alembic.sqlalchemy.org/en/latest/autogenerate.html
 
 ## TODO
 
-- Set up a test job in the build workflow, including `hexbug bot --no-run` and `pytest`.
 - Commands:
   - `/book`
   - `/info`
