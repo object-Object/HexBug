@@ -2,7 +2,6 @@
 
 [dependency-groups]
 dev = [
-    { include-group = "test" },
     "HexBug-bot[data]",
     "ruff>=0.12.11",
     "pre-commit",
@@ -20,6 +19,7 @@ notebooks = [
 # uv
 
 [tool.uv]
+default-groups = ["dev", "test"]
 find-links = [
     "./vendor",
 ]
