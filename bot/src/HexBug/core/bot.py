@@ -17,6 +17,7 @@ from discord.app_commands import (
 )
 from discord.ext import commands
 from discord.ext.commands import Bot, Context, NoEntryPointError
+from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engine
 
 from HexBug import cogs
 from HexBug.common import VERSION
@@ -39,6 +40,8 @@ class HexBugBot(Bot):
     env: HexBugEnv
     registry: HexBugRegistry
     should_run: bool
+
+    db_engine: AsyncEngine
     start_time: datetime
     iota_printer: IotaPrinter
     _custom_emoji: dict[CustomEmoji, Emoji]
@@ -61,6 +64,11 @@ class HexBugBot(Bot):
         self.env = env
         self.registry = registry
         self.should_run = run
+
+        self.db_engine = create_async_engine(
+            env.db_url,
+            pool_pre_ping=True,
+        )
         self.start_time = datetime.now()
         self.iota_printer = IotaPrinter(self.registry)
         self._custom_emoji = {}
@@ -75,6 +83,10 @@ class HexBugBot(Bot):
     @classmethod
     def registry_of(cls, interaction: Interaction):
         return cls.of(interaction).registry
+
+    @classmethod
+    def db_session_of(cls, interaction: Interaction):
+        return cls.of(interaction).db_session()
 
     @classmethod
     def _get_activity(cls, env: HexBugEnv):
@@ -95,10 +107,19 @@ class HexBugBot(Bot):
     def failed_translations(self):
         return self._failed_translations
 
+    def db_session(self):
+        return AsyncSession(self.db_engine)
+
     async def load(self):
+        await self._check_database()
         await self._load_translator()
         await self._load_cogs()
         await self._check_translations()
+
+    async def _check_database(self):
+        logger.info("Checking database connection")
+        async with self.db_engine.connect():
+            pass
 
     async def _load_translator(self):
         logger.info("Loading translator")

@@ -23,6 +23,9 @@ dependencies = [
     "httpx>=0.28.1",
     "lark[interegular]>=1.2.2",
     "humanize>=4.13.0",
+    "sqlalchemy[asyncio]>=2.0.43",
+    "alembic>=1.16.5",
+    "psycopg[binary,pool]>=3.2.9",
 ]
 
 [project.scripts]

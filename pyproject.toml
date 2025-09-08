@@ -89,6 +89,7 @@ known-first-party = [
     "HexBug",
 ]
 known-third-party = [
+    "alembic",
     "discord",
 ]
 

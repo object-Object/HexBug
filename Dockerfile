@@ -36,7 +36,13 @@ RUN --mount=from=uv,source=/uv,target=/bin/uv \
     --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-dev --package HexBug-bot
 
+# Alembic files
+
+COPY alembic/ alembic/
+COPY alembic.ini ./
+
 # validate bot setup
+# TODO: move this to GitHub Actions
 
 RUN hexbug bot --no-run
 

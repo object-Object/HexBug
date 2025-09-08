@@ -20,6 +20,7 @@
     "python.analysis.packageIndexDepths": [
         {"name": "hexdoc", "depth": 3},
         {"name": "pydantic", "depth": 2},
+        {"name": "sqlalchemy", "depth": 2},
     ],
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,

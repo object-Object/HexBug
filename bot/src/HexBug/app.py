@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import platform
 import sys
 from pathlib import Path
 from typing import Annotated, Any, Coroutine
@@ -90,6 +91,10 @@ def health_check(
 
 
 def run_async[R](main: Coroutine[Any, Any, R]) -> R | None:
+    # https://www.psycopg.org/psycopg3/docs/advanced/async.html#async
+    if platform.system() == "Windows":
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
     try:
         return asyncio.run(main)
     except KeyboardInterrupt:
