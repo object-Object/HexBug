@@ -51,7 +51,9 @@ jobs:
         run: docker compose up --detach postgres
 
       - name: Test image configuration
-        run: docker compose run --rm bot hexbug bot --no-run
+        run: |
+          touch .env
+          docker compose run --rm bot hexbug bot --no-run
 
       - name: Check Alembic upgrade/downgrade
         run: |
