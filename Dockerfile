@@ -41,11 +41,6 @@ RUN --mount=from=uv,source=/uv,target=/bin/uv \
 COPY alembic/ alembic/
 COPY alembic.ini ./
 
-# validate bot setup
-# TODO: move this to GitHub Actions
-
-RUN hexbug bot --no-run
-
 # NOTE: this must be a list, otherwise signals (eg. SIGINT) are not forwarded to the bot
 CMD ["hexbug", "bot"]
 
