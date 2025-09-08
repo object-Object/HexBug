@@ -215,6 +215,18 @@ command_pattern-check =
            *[other] Conflicts found!
         }
 
+# /pattern build
+
+command_pattern-build =
+        build
+    .description =
+        Draw a pattern incrementally using directional buttons.
+
+    .parameter_hide-stroke-order =
+        hide_stroke_order
+    .parameter_hide-stroke-order_description =
+        If true, hide the stroke order when rendering the pattern (like for great spells).
+
 # /per-world-pattern
 
 group_per-world-pattern =

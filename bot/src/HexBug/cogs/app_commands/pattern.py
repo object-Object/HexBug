@@ -12,7 +12,11 @@ from HexBug.data.hex_math import HexDir, HexPattern
 from HexBug.data.registry import PatternMatchResult
 from HexBug.data.special_handlers import SpecialHandlerMatch
 from HexBug.data.static_data import SPECIAL_HANDLERS
-from HexBug.ui.views.patterns import EmbedPatternView, NamedPatternView
+from HexBug.ui.views.patterns import (
+    EmbedPatternView,
+    NamedPatternView,
+    PatternBuilderView,
+)
 from HexBug.utils.discord.transformers import (
     HexDirOption,
     PatternInfoOption,
@@ -132,3 +136,10 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
             hide_stroke_order=is_per_world,
             embed=embed,
         ).send(interaction, visibility)
+
+    @app_commands.command()
+    async def build(self, interaction: Interaction, hide_stroke_order: bool = False):
+        await PatternBuilderView(
+            interaction=interaction,
+            hide_stroke_order=hide_stroke_order,
+        ).send(interaction, Visibility.PRIVATE)

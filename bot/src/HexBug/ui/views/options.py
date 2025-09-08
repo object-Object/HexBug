@@ -54,8 +54,12 @@ class OptionItemMixin[ViewT: OptionsView, ValueT](ABC):
 
 
 class OptionButtonModal(ui.Modal):
-    value_input = ui.TextInput[Any]()
-    value_label = ui.Label[Any](text="Value", component=value_input)
+    value_label = ui.Label[Any](text="Value", component=ui.TextInput[Any]())
+
+    @property
+    def value_input(self):
+        assert isinstance(self.value_label.component, ui.TextInput)
+        return self.value_label.component
 
     def __init__(self, button: OptionButton[Any, Any]):
         super().__init__(title=button.name)

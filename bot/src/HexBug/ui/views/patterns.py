@@ -18,7 +18,7 @@ from discord.app_commands import Command
 from hexdoc.core import ResourceLocation
 
 from HexBug.core.bot import HexBugBot
-from HexBug.data.hex_math import HexPattern
+from HexBug.data.hex_math import HexAngle, HexDir, HexPattern
 from HexBug.data.patterns import PatternInfo, PatternOperator
 from HexBug.data.registry import HexBugRegistry, PatternMatchResult
 from HexBug.data.special_handlers import SpecialHandlerMatch
@@ -63,7 +63,7 @@ class BasePatternView(ui.View, ABC):
             self.command = interaction.command
 
     @abstractmethod
-    async def get_embed(self, interaction: Interaction) -> Embed: ...
+    async def get_embeds(self, interaction: Interaction) -> list[Embed]: ...
 
     async def send(
         self,
@@ -77,25 +77,27 @@ class BasePatternView(ui.View, ABC):
         self.add_items(interaction, visibility, show_usage)
         await interaction.response.send_message(
             content=content,
-            embed=await self.get_embed(interaction),
-            file=self.get_image(),
+            embeds=await self.get_embeds(interaction),
+            files=self.get_attachments(),
             view=self,
             ephemeral=visibility.ephemeral,
         )
 
     async def refresh(self, interaction: Interaction, *, view: ui.View | None = None):
         await interaction.response.edit_message(
-            embed=await self.get_embed(interaction),
-            attachments=[self.get_image()],
+            embeds=await self.get_embeds(interaction),
+            attachments=self.get_attachments(),
             view=view or self,
         )
 
-    def get_image(self) -> File:
-        return self.options.render_discord_file(
-            self.pattern,
-            hide_stroke_order=self.hide_stroke_order,
-            filename=PATTERN_FILENAME,
-        )
+    def get_attachments(self) -> list[File]:
+        return [
+            self.options.render_discord_file(
+                self.pattern,
+                hide_stroke_order=self.hide_stroke_order,
+                filename=PATTERN_FILENAME,
+            )
+        ]
 
     def add_items(
         self,
@@ -135,12 +137,14 @@ class EmbedPatternView(BasePatternView):
     embed: Embed
 
     @override
-    async def get_embed(self, interaction: Interaction) -> Embed:
-        return self.embed.set_image(
-            url=f"attachment://{PATTERN_FILENAME}",
-        ).set_footer(
-            text=self.pattern.display() if not self.hide_stroke_order else None,
-        )
+    async def get_embeds(self, interaction: Interaction) -> list[Embed]:
+        return [
+            self.embed.set_image(
+                url=f"attachment://{PATTERN_FILENAME}",
+            ).set_footer(
+                text=self.pattern.display() if not self.hide_stroke_order else None,
+            )
+        ]
 
 
 @dataclass(kw_only=True)
@@ -150,7 +154,7 @@ class NamedPatternView(BasePatternView):
     info: PatternMatchResult | None
     display_info: PatternMatchResult | None = None
 
-    registry: HexBugRegistry = field(init=False)
+    registry: HexBugRegistry = field(init=False, repr=False)
 
     op_index: int = field(default=0, init=False)
 
@@ -206,7 +210,7 @@ class NamedPatternView(BasePatternView):
         return "Unknown"
 
     @override
-    async def get_embed(self, interaction: Interaction) -> Embed:
+    async def get_embeds(self, interaction: Interaction) -> list[Embed]:
         embed = (
             Embed(
                 title=self.title,
@@ -239,7 +243,7 @@ class NamedPatternView(BasePatternView):
                 url=self.mod.book_url,
             )
 
-        return embed
+        return [embed]
 
     @override
     def add_items(
@@ -284,8 +288,8 @@ class PerWorldPatternView(NamedPatternView):
         )
 
     @override
-    async def get_embed(self, interaction: Interaction) -> Embed:
-        embed = await super().get_embed(interaction)
+    async def get_embeds(self, interaction: Interaction) -> list[Embed]:
+        embed = (await super().get_embeds(interaction))[0]
         embed.set_footer(
             text=join_truthy(
                 FOOTER_SEPARATOR,
@@ -299,7 +303,161 @@ class PerWorldPatternView(NamedPatternView):
             ),
             icon_url=self.contributor.display_avatar.url,
         )
-        return embed
+        return [embed]
+
+
+@dataclass(kw_only=True)
+class PatternBuilderView(NamedPatternView):
+    pattern: HexPattern = HexPattern(HexDir.EAST, "")
+    info: PatternMatchResult | None = None
+    add_visibility_buttons: bool = False
+
+    _start_direction: HexDir | None = field(default=None, init=False)
+    current_direction: HexDir = field(default=HexDir.EAST, init=False)
+
+    @property
+    def start_direction(self):
+        return self._start_direction
+
+    @start_direction.setter
+    def start_direction(self, direction: HexDir | None):
+        self._start_direction = direction
+        if direction:
+            self.pattern = HexPattern(direction, self.pattern.signature)
+
+    @property
+    def signature(self):
+        return self.pattern.signature
+
+    @signature.setter
+    def signature(self, signature: str):
+        self.pattern = HexPattern(self.pattern.direction, signature)
+
+    async def append_direction(self, interaction: Interaction, direction: HexDir):
+        if self.start_direction is None:
+            self.start_direction = self.current_direction = direction
+        else:
+            angle = direction.angle_from(self.current_direction)
+            self.current_direction = direction
+            self.signature += angle.letter
+        await self.refresh(interaction)
+
+    @override
+    def add_items(
+        self,
+        interaction: Interaction,
+        visibility: Visibility,
+        show_usage: bool = False,
+    ):
+        super().add_items(interaction, visibility, show_usage)
+        if visibility is Visibility.PRIVATE:
+            for button in [
+                self.north_west_button,
+                self.north_east_button,
+                self.done_button,
+                self.west_button,
+                self.east_button,
+                self.undo_button,
+                self.south_west_button,
+                self.south_east_button,
+                self.clear_button,
+            ]:
+                self.add_item(button)
+
+    @override
+    async def get_embeds(self, interaction: Interaction) -> list[Embed]:
+        if self.start_direction is None:
+            return []
+        return await super().get_embeds(interaction)
+
+    @override
+    def get_attachments(self) -> list[File]:
+        if self.start_direction is None:
+            return []
+        return super().get_attachments()
+
+    @override
+    async def refresh(self, interaction: Interaction, *, view: ui.View | None = None):
+        if not view:
+            disabled = self.start_direction is None
+            self.done_button.disabled = disabled
+            self.undo_button.disabled = disabled
+            self.clear_button.disabled = disabled
+
+            if disabled:
+                self.info = self.display_info = None
+            else:
+                self.info = info = self.registry.try_match_pattern(self.pattern)
+                self.display_info = (
+                    self.registry.display_pattern(info) if info else None
+                )
+
+        await (
+            interaction.edit_original_response
+            if interaction.response.is_done()
+            else interaction.response.edit_message
+        )(
+            embeds=await self.get_embeds(interaction),
+            attachments=self.get_attachments(),
+            view=view or self,
+        )
+
+    # UI
+
+    @ui.button(emoji="↖️", row=2)
+    async def north_west_button(self, interaction: Interaction, button: ui.Button[Any]):
+        await interaction.response.defer()
+        await self.append_direction(interaction, HexDir.NORTH_WEST)
+
+    @ui.button(emoji="↗️", row=2)
+    async def north_east_button(self, interaction: Interaction, button: ui.Button[Any]):
+        await interaction.response.defer()
+        await self.append_direction(interaction, HexDir.NORTH_EAST)
+
+    @ui.button(emoji="✅", row=2, disabled=True)
+    async def done_button(self, interaction: Interaction, button: ui.Button[Any]):
+        self.add_visibility_buttons = True
+        await self.send(interaction, Visibility.PUBLIC, show_usage=True)
+
+    @ui.button(emoji="⬅️", row=3)
+    async def west_button(self, interaction: Interaction, button: ui.Button[Any]):
+        await interaction.response.defer()
+        await self.append_direction(interaction, HexDir.WEST)
+
+    @ui.button(emoji="➡️", row=3)
+    async def east_button(self, interaction: Interaction, button: ui.Button[Any]):
+        await interaction.response.defer()
+        await self.append_direction(interaction, HexDir.EAST)
+
+    @ui.button(emoji="↩️", row=3, disabled=True)
+    async def undo_button(self, interaction: Interaction, button: ui.Button[Any]):
+        await interaction.response.defer()
+        if self.pattern:
+            angle = HexAngle[self.signature[-1]]
+            self.current_direction = self.current_direction.rotated_by(-angle)
+            self.signature = self.signature[:-1]
+            await self.refresh(interaction)
+        elif self.start_direction:
+            self.start_direction = None
+            await self.refresh(interaction)
+
+    @ui.button(emoji="↙️", row=4)
+    async def south_west_button(self, interaction: Interaction, button: ui.Button[Any]):
+        await interaction.response.defer()
+        await self.append_direction(interaction, HexDir.SOUTH_WEST)
+
+    @ui.button(emoji="↘️", row=4)
+    async def south_east_button(self, interaction: Interaction, button: ui.Button[Any]):
+        await interaction.response.defer()
+        await self.append_direction(interaction, HexDir.SOUTH_EAST)
+
+    @ui.button(emoji="❌", row=4, disabled=True)
+    async def clear_button(self, interaction: Interaction, button: ui.Button[Any]):
+        await interaction.response.defer()
+        if self.start_direction:
+            self.start_direction = None
+            self.signature = ""
+            await self.refresh(interaction)
 
 
 class PatternRenderingOptionsView(OptionsView):
