@@ -15,6 +15,7 @@ from discord import (
     ui,
 )
 from discord.app_commands import Command, locale_str
+from hexdoc.core import ResourceLocation
 
 from HexBug.core.bot import HexBugBot
 from HexBug.data.hex_math import HexPattern
@@ -260,7 +261,9 @@ class NamedPatternView(BasePatternView):
 
 @dataclass(kw_only=True)
 class PerWorldPatternView(NamedPatternView):
+    pattern_id: ResourceLocation
     contributor: User | Member
+    hide_stroke_order: bool = False
 
     @override
     async def get_embed(self, interaction: Interaction) -> Embed:
@@ -274,7 +277,8 @@ class PerWorldPatternView(NamedPatternView):
                         name=self.contributor.name,
                     )
                 ),
-                embed.footer.text,
+                self.pattern_id,
+                self.pattern.display(),
             ),
             icon_url=self.contributor.display_avatar.url,
         )

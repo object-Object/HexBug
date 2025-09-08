@@ -222,7 +222,7 @@ group_per-world-pattern =
     .description =
         Commands for managing a per-server list of per-world pattern signatures.
 
-per-world-pattern-contributor = Added by: { $name }
+per-world-pattern-contributor = Added by { $name }
 
 # /per-world-pattern add
 

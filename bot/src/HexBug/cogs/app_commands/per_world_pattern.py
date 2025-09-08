@@ -9,8 +9,12 @@ from HexBug.data.hex_math import HexPattern
 from HexBug.data.patterns import PatternInfo
 from HexBug.db.models import PerWorldPattern
 from HexBug.ui.views.patterns import PerWorldPatternView
-from HexBug.utils.discord.transformers import HexDirOption, PatternSignatureOption
-from HexBug.utils.discord.visibility import Visibility
+from HexBug.utils.discord.transformers import (
+    HexDirOption,
+    PatternSignatureOption,
+    PerWorldPatternOption,
+)
+from HexBug.utils.discord.visibility import Visibility, VisibilityOption
 
 
 @app_commands.guild_install()
@@ -66,9 +70,9 @@ class PerWorldPatternCog(HexBugCog, GroupCog, group_name="per-world-pattern"):
 
         await PerWorldPatternView(
             interaction=interaction,
-            info=info,
             pattern=pattern,
-            hide_stroke_order=False,
+            pattern_id=info.id,
+            info=info,
             contributor=interaction.user,
             add_visibility_buttons=False,
         ).send(
@@ -76,3 +80,18 @@ class PerWorldPatternCog(HexBugCog, GroupCog, group_name="per-world-pattern"):
             Visibility.PRIVATE,
             content="Pattern added.",
         )
+
+    @app_commands.command()
+    async def name(
+        self,
+        interaction: Interaction,
+        entry: PerWorldPatternOption,
+        visibility: VisibilityOption = Visibility.PRIVATE,
+    ):
+        await PerWorldPatternView(
+            interaction=interaction,
+            pattern=entry.pattern,
+            pattern_id=entry.id,
+            info=self.bot.registry.patterns.get(entry.id),
+            contributor=await self.bot.fetch_user(entry.user_id),
+        ).send(interaction, visibility)

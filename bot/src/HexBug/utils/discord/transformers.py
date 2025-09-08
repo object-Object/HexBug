@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Any, Iterator, TypedDict, cast, override
 
 import pfzy
+import sqlalchemy as sa
 from discord import Interaction
 from discord.app_commands import (
     Transform,
@@ -16,6 +17,7 @@ from HexBug.data.hex_math import VALID_SIGNATURE_PATTERN, HexDir
 from HexBug.data.mods import ModInfo, Modloader
 from HexBug.data.patterns import PatternInfo
 from HexBug.data.special_handlers import SpecialHandlerInfo
+from HexBug.db.models import PerWorldPattern
 
 
 class AutocompleteWord(TypedDict):
@@ -29,13 +31,17 @@ class AutocompleteResult(AutocompleteWord):
 
 
 class PfzyAutocompleteTransformer(Transformer, ABC):
-    # FIXME: this is probably not how this should work.
     def __init_subclass__(cls):
         cls._words: list[AutocompleteWord] = []
 
     @abstractmethod
-    def _setup_autocomplete(self, interaction: Interaction):
+    async def _setup_autocomplete(self, interaction: Interaction) -> None:
         """Adds values to self._words."""
+
+    async def _get_words(self, interaction: Interaction) -> list[AutocompleteWord]:
+        if not self._words:
+            await self._setup_autocomplete(interaction)
+        return self._words
 
     @override
     async def autocomplete(  # pyright: ignore[reportIncompatibleMethodOverride]
@@ -43,12 +49,9 @@ class PfzyAutocompleteTransformer(Transformer, ABC):
         interaction: Interaction,
         value: str,
     ) -> list[Choice[str]]:
-        if not self._words:
-            self._setup_autocomplete(interaction)
-
         matches = await pfzy.fuzzy_match(
             value,
-            self._words,  # pyright: ignore[reportArgumentType]
+            await self._get_words(interaction),  # pyright: ignore[reportArgumentType]
             scorer=pfzy.fzy_scorer,
             key="search_term",
         )
@@ -83,7 +86,7 @@ class ModAuthorTransformer(PfzyAutocompleteTransformer):
         return author
 
     @override
-    def _setup_autocomplete(self, interaction: Interaction):
+    async def _setup_autocomplete(self, interaction: Interaction):
         self._words.clear()
         self._authors.clear()
 
@@ -112,7 +115,7 @@ class ModInfoTransformer(PfzyAutocompleteTransformer):
         return mod
 
     @override
-    def _setup_autocomplete(self, interaction: Interaction):
+    async def _setup_autocomplete(self, interaction: Interaction):
         self._words.clear()
 
         registry = HexBugBot.registry_of(interaction)
@@ -142,7 +145,7 @@ class PatternInfoTransformer(PfzyAutocompleteTransformer):
         return pattern
 
     @override
-    def _setup_autocomplete(self, interaction: Interaction):
+    async def _setup_autocomplete(self, interaction: Interaction):
         self._words.clear()
 
         registry = HexBugBot.registry_of(interaction)
@@ -179,7 +182,7 @@ class SpecialHandlerInfoTransformer(PfzyAutocompleteTransformer):
         return info
 
     @override
-    def _setup_autocomplete(self, interaction: Interaction):
+    async def _setup_autocomplete(self, interaction: Interaction):
         self._words.clear()
 
         registry = HexBugBot.registry_of(interaction)
@@ -197,6 +200,69 @@ class SpecialHandlerInfoTransformer(PfzyAutocompleteTransformer):
                 )
 
         self._words.sort(key=lambda w: w["name"].lower())
+
+
+class PerWorldPatternTransformer(PfzyAutocompleteTransformer):
+    @override
+    async def transform(
+        self,
+        interaction: Interaction,
+        value: str,
+    ) -> PerWorldPattern:
+        assert interaction.guild_id
+        id_ = ResourceLocation.from_str(value)
+        async with HexBugBot.db_session_of(interaction) as session:
+            stmt = (
+                sa.select(PerWorldPattern)
+                .where(PerWorldPattern.id == id_)
+                .where(PerWorldPattern.guild_id == interaction.guild_id)
+            )
+            result = await session.scalar(stmt)
+            if result is None:
+                raise ValueError("Pattern not found in this server.")
+            return result
+
+    @override
+    async def _get_words(self, interaction: Interaction) -> list[AutocompleteWord]:
+        if not interaction.guild_id:
+            return []
+
+        bot = HexBugBot.of(interaction)
+
+        # TODO: this feels inefficient
+        words = list[AutocompleteWord]()
+        async with bot.db_session() as session:
+            stmt = sa.select(PerWorldPattern).where(
+                PerWorldPattern.guild_id == interaction.guild_id
+            )
+            for entry in await session.scalars(stmt):
+                if info := bot.registry.patterns.get(entry.id):
+                    if info.is_hidden:
+                        continue
+                    for search_term in [
+                        info.name,
+                        str(info.id),
+                    ]:
+                        words.append(
+                            AutocompleteWord(
+                                search_term=search_term,
+                                name=info.name,
+                                value=str(entry.id),
+                            )
+                        )
+                else:
+                    words.append(
+                        AutocompleteWord(
+                            search_term=str(entry.id),
+                            name=str(entry.id),
+                            value=str(entry.id),
+                        )
+                    )
+        return words
+
+    @override
+    async def _setup_autocomplete(self, interaction: Interaction) -> None:
+        raise NotImplementedError()
 
 
 class PatternSignatureTransformer(Transformer):
@@ -225,6 +291,8 @@ ModInfoOption = Transform[ModInfo, ModInfoTransformer]
 PatternInfoOption = Transform[PatternInfo, PatternInfoTransformer]
 
 SpecialHandlerInfoOption = Transform[SpecialHandlerInfo, SpecialHandlerInfoTransformer]
+
+PerWorldPatternOption = Transform[PerWorldPattern, PerWorldPatternTransformer]
 
 PatternSignatureOption = Transform[str, PatternSignatureTransformer]
 
