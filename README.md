@@ -49,3 +49,4 @@ https://alembic.sqlalchemy.org/en/latest/autogenerate.html
   - `/palette`
   - `/pattern build`
   - `/patterns hex`
+  - `/patterns smart_number`
