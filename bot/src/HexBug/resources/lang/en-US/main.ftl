@@ -11,6 +11,16 @@
 -parameter_visibility_description =
         Whether the response should be visible to everyone, or just you.
 
+-parameter_direction =
+        direction
+-parameter_direction_description =
+        The starting direction of the pattern (eg. SOUTH_EAST).
+
+-parameter_signature =
+        signature
+-parameter_signature_description =
+        The angle signature of the pattern (eg. deaqq).
+
 # choices
 
 choice_HexBug-utils-discord-visibility-Visibility =
@@ -166,15 +176,11 @@ command_pattern-raw =
     .description =
         Generate a pattern from its angle signature.
 
-    .parameter_direction =
-        direction
-    .parameter_direction_description =
-        The starting direction of the pattern (eg. SOUTH_EAST).
+    .parameter_direction = {-parameter_direction}
+    .parameter_direction_description = {-parameter_direction_description}
 
-    .parameter_signature =
-        signature
-    .parameter_signature_description =
-        The angle signature of the pattern (eg. deaqq).
+    .parameter_signature = {-parameter_signature}
+    .parameter_signature_description = {-parameter_signature_description}
 
     .parameter_hide-stroke-order =
         hide_stroke_order
@@ -191,10 +197,8 @@ command_pattern-check =
     .description =
         Check if a pattern already exists in any of the mods supported by HexBug.
 
-    .parameter_signature =
-        signature
-    .parameter_signature_description =
-        The angle signature of the pattern (eg. deaqq).
+    .parameter_signature = {-parameter_signature}
+    .parameter_signature_description = {-parameter_signature_description}
 
     .parameter_is-per-world =
         is_per_world
@@ -210,6 +214,43 @@ command_pattern-check =
             [one]   Conflict found!
            *[other] Conflicts found!
         }
+
+# /per-world-pattern
+
+group_per-world-pattern =
+        per-world-pattern
+    .description =
+        Commands for managing a per-server list of per-world pattern signatures.
+
+per-world-pattern-contributor = Added by: { $name }
+
+# /per-world-pattern add
+
+command_per-world-pattern-add =
+        add
+    .description =
+        Add a per-world pattern to this server's database.
+
+    .parameter_direction = {-parameter_direction}
+    .parameter_direction_description = {-parameter_direction_description}
+
+    .parameter_signature = {-parameter_signature}
+    .parameter_signature_description = {-parameter_signature_description}
+
+# /per-world-pattern name
+
+command_per-world-pattern-name =
+        name
+    .description =
+        Look up a per-world pattern in this server's database by name.
+
+    .parameter_info =
+        name
+    .parameter_info_description =
+        The name of the per-world pattern to look up.
+
+    .parameter_visibility = {-parameter_visibility}
+    .parameter_visibility_description = {-parameter_visibility_description}
 
 # /status
 

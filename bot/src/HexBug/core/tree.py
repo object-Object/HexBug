@@ -3,10 +3,13 @@ from datetime import UTC, datetime
 from discord import Color, Embed, Interaction
 from discord.app_commands import (
     AppCommandError,
+    CommandInvokeError,
     CommandTree,
     Transformer,
     TransformerError,
 )
+from pydantic import ValidationError
+from sqlalchemy.exc import SQLAlchemyError
 
 from HexBug.core.exceptions import InvalidInputError, SilentError
 from HexBug.utils.discord.embeds import add_fields
@@ -43,15 +46,29 @@ class HexBugCommandTree(CommandTree):
                 embed.title = "Invalid input!"
                 embed.description = message
                 add_fields(embed, *fields)
+            case CommandInvokeError(command=command, original=original):
+                # don't print the error message twice
+                await super().on_error(interaction, error)
+                embed.title = "Command failed!"
+                embed.description = f"Command {command.name!r} raised an exception: {original.__class__.__name__}"
             case _:
                 await super().on_error(interaction, error)
                 embed.title = "Command failed!"
                 embed.description = str(error)
 
         if cause := error.__cause__:
+            match cause:
+                case SQLAlchemyError():
+                    # don't show the full SQL statement
+                    reason = f"```\n{cause.args[0]}\n```"
+                case ValidationError():
+                    reason = f"```\n{cause}\n```"
+                case _:
+                    reason = str(cause)
+
             embed.add_field(
                 name="Reason",
-                value=str(cause),
+                value=reason,
                 inline=False,
             )
 

@@ -78,7 +78,7 @@ class DecodeCog(HexBugCog, GroupCog, group_name="decode"):
         try:
             iota = parse_reveal(text)
         except LarkError as e:
-            raise InvalidInputError("Failed to parse input.").add_field(
+            raise InvalidInputError("Failed to parse input.", fields=[]).add_field(
                 name="Reason",
                 value=f"```\n{e}\n```",
                 inline=False,

@@ -3,20 +3,20 @@ from __future__ import annotations
 from typing import Any
 
 from discord import Color, Embed, Interaction, app_commands
-from discord.app_commands import Transform
-from discord.app_commands.transformers import EnumNameTransformer
 from discord.ext.commands import GroupCog
 from hexdoc.core import ResourceLocation
 
 from HexBug.core.cog import HexBugCog
 from HexBug.core.exceptions import InvalidInputError
-from HexBug.data.hex_math import VALID_SIGNATURE_PATTERN, HexDir, HexPattern
+from HexBug.data.hex_math import HexDir, HexPattern
 from HexBug.data.registry import PatternMatchResult
 from HexBug.data.special_handlers import SpecialHandlerMatch
 from HexBug.data.static_data import SPECIAL_HANDLERS
 from HexBug.ui.views.patterns import EmbedPatternView, NamedPatternView
 from HexBug.utils.discord.transformers import (
+    HexDirOption,
     PatternInfoOption,
+    PatternSignatureOption,
     SpecialHandlerInfoOption,
 )
 from HexBug.utils.discord.translation import translate_text
@@ -71,12 +71,11 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
     async def raw(
         self,
         interaction: Interaction,
-        direction: Transform[HexDir, EnumNameTransformer(HexDir)],
-        signature: str,
+        direction: HexDirOption,
+        signature: PatternSignatureOption,
         hide_stroke_order: bool = False,
         visibility: VisibilityOption = Visibility.PRIVATE,
     ):
-        signature = validate_signature(signature)
         pattern = HexPattern(direction, signature)
 
         info = self.bot.registry.try_match_pattern(pattern)
@@ -92,11 +91,10 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
     async def check(
         self,
         interaction: Interaction,
-        signature: str,
+        signature: PatternSignatureOption,
         is_per_world: bool,
         visibility: VisibilityOption = Visibility.PRIVATE,
     ):
-        signature = validate_signature(signature)
         pattern = HexPattern(HexDir.EAST, signature)
 
         conflicts = dict[ResourceLocation, PatternMatchResult]()
@@ -132,15 +130,3 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
             hide_stroke_order=is_per_world,
             embed=embed,
         ).send(interaction, visibility)
-
-
-def validate_signature(signature: str) -> str:
-    signature = signature.lower()
-    if signature in ["-", '"-"']:
-        signature = ""
-    elif not VALID_SIGNATURE_PATTERN.fullmatch(signature):
-        raise InvalidInputError(
-            "Invalid signature, must only contain the characters `aqweds`.",
-            value=signature,
-        )
-    return signature

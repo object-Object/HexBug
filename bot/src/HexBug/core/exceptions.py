@@ -25,7 +25,7 @@ class InvalidInputError(AppCommandError):
         self,
         message: str,
         *,
-        fields: list[EmbedField] = ...,
+        fields: list[EmbedField],
     ) -> None: ...
 
     def __init__(

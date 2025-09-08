@@ -6,7 +6,7 @@ Create Date: 2025-09-07 21:56:52.730654
 
 """
 
-from typing import Sequence, Union
+from typing import Sequence
 
 import sqlalchemy as sa
 from alembic import op
@@ -15,9 +15,9 @@ import HexBug.db.types
 
 # revision identifiers, used by Alembic.
 revision: str = "33506baa6a28"
-down_revision: Union[str, Sequence[str], None] = None
-branch_labels: Union[str, Sequence[str], None] = None
-depends_on: Union[str, Sequence[str], None] = None
+down_revision: str | Sequence[str] | None = None
+branch_labels: str | Sequence[str] | None = None
+depends_on: str | Sequence[str] | None = None
 
 
 def upgrade() -> None:
@@ -25,8 +25,8 @@ def upgrade() -> None:
     op.create_table(
         "per_world_pattern",
         sa.Column("id", HexBug.db.types.ResourceLocationType(), nullable=False),
-        sa.Column("guild_id", sa.Integer(), nullable=False),
-        sa.Column("user_id", sa.Integer(), nullable=False),
+        sa.Column("guild_id", sa.BigInteger(), nullable=False),
+        sa.Column("user_id", sa.BigInteger(), nullable=False),
         sa.Column(
             "direction",
             sa.Enum(
@@ -48,3 +48,4 @@ def upgrade() -> None:
 def downgrade() -> None:
     """Downgrade schema."""
     op.drop_table("per_world_pattern")
+    op.execute("DROP TYPE hexdir")

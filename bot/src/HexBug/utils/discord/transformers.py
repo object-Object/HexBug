@@ -8,10 +8,11 @@ from discord.app_commands import (
     Transformer,
 )
 from discord.app_commands.models import Choice
-from discord.app_commands.transformers import EnumValueTransformer
+from discord.app_commands.transformers import EnumNameTransformer, EnumValueTransformer
 from hexdoc.core import ResourceLocation
 
 from HexBug.core.bot import HexBugBot
+from HexBug.data.hex_math import VALID_SIGNATURE_PATTERN, HexDir
 from HexBug.data.mods import ModInfo, Modloader
 from HexBug.data.patterns import PatternInfo
 from HexBug.data.special_handlers import SpecialHandlerInfo
@@ -198,6 +199,18 @@ class SpecialHandlerInfoTransformer(PfzyAutocompleteTransformer):
         self._words.sort(key=lambda w: w["name"].lower())
 
 
+class PatternSignatureTransformer(Transformer):
+    async def transform(self, interaction: Interaction, value: Any) -> Any:
+        signature = value.lower()
+        if signature in ["-", '"-"']:
+            signature = ""
+        elif not VALID_SIGNATURE_PATTERN.fullmatch(signature):
+            raise ValueError(
+                "Invalid signature, must only contain the characters `aqweds`."
+            )
+        return signature
+
+
 class BetterEnumValueTransformer(EnumValueTransformer):
     def __init__(self, enum: Any) -> None:
         super().__init__(enum)
@@ -213,4 +226,8 @@ PatternInfoOption = Transform[PatternInfo, PatternInfoTransformer]
 
 SpecialHandlerInfoOption = Transform[SpecialHandlerInfo, SpecialHandlerInfoTransformer]
 
+PatternSignatureOption = Transform[str, PatternSignatureTransformer]
+
 ModloaderOption = Transform[Modloader, BetterEnumValueTransformer(Modloader)]
+
+HexDirOption = Transform[HexDir, EnumNameTransformer(HexDir)]

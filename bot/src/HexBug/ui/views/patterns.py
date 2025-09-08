@@ -14,7 +14,7 @@ from discord import (
     User,
     ui,
 )
-from discord.app_commands import Command
+from discord.app_commands import Command, locale_str
 
 from HexBug.core.bot import HexBugBot
 from HexBug.data.hex_math import HexPattern
@@ -45,6 +45,7 @@ class BasePatternView(ui.View, ABC):
     default_options: PatternRenderingOptions = field(
         default_factory=PatternRenderingOptions
     )
+    add_visibility_buttons: bool = True
 
     user: User | Member = field(init=False)
 
@@ -59,18 +60,21 @@ class BasePatternView(ui.View, ABC):
             self.command = interaction.command
 
     @abstractmethod
-    def get_embed(self) -> Embed: ...
+    async def get_embed(self, interaction: Interaction) -> Embed: ...
 
     async def send(
         self,
         interaction: Interaction,
         visibility: Visibility,
+        *,
+        content: str | None = None,
         show_usage: bool = False,
     ):
         self.clear_items()
         self.add_items(interaction, visibility, show_usage)
         await interaction.response.send_message(
-            embed=self.get_embed(),
+            content=content,
+            embed=await self.get_embed(interaction),
             file=self.get_image(),
             view=self,
             ephemeral=visibility.ephemeral,
@@ -78,7 +82,7 @@ class BasePatternView(ui.View, ABC):
 
     async def refresh(self, interaction: Interaction, *, view: ui.View | None = None):
         await interaction.response.edit_message(
-            embed=self.get_embed(),
+            embed=await self.get_embed(interaction),
             attachments=[self.get_image()],
             view=view or self,
         )
@@ -98,14 +102,17 @@ class BasePatternView(ui.View, ABC):
     ):
         self.add_item(self.options_button)
 
-        add_visibility_buttons(
-            self,
-            interaction,
-            visibility,
-            command=self.command,
-            show_usage=show_usage,
-            send_as_public=lambda i: self.send(i, Visibility.PUBLIC, show_usage=True),
-        )
+        if self.add_visibility_buttons:
+            add_visibility_buttons(
+                self,
+                interaction,
+                visibility,
+                command=self.command,
+                show_usage=show_usage,
+                send_as_public=lambda i: self.send(
+                    i, Visibility.PUBLIC, show_usage=True
+                ),
+            )
 
     @override
     async def interaction_check(self, interaction: Interaction):
@@ -125,7 +132,7 @@ class EmbedPatternView(BasePatternView):
     embed: Embed
 
     @override
-    def get_embed(self) -> Embed:
+    async def get_embed(self, interaction: Interaction) -> Embed:
         return self.embed.set_image(
             url=f"attachment://{PATTERN_FILENAME}",
         ).set_footer(
@@ -196,7 +203,7 @@ class NamedPatternView(BasePatternView):
         return "Unknown"
 
     @override
-    def get_embed(self) -> Embed:
+    async def get_embed(self, interaction: Interaction) -> Embed:
         embed = (
             Embed(
                 title=self.title,
@@ -249,6 +256,29 @@ class NamedPatternView(BasePatternView):
     async def operator_select(self, interaction: Interaction, select: ui.Select[Self]):
         self.op_index = update_indexed_select_menu(select)[0]
         await self.refresh(interaction)
+
+
+@dataclass(kw_only=True)
+class PerWorldPatternView(NamedPatternView):
+    contributor: User | Member
+
+    @override
+    async def get_embed(self, interaction: Interaction) -> Embed:
+        embed = await super().get_embed(interaction)
+        embed.set_footer(
+            text=join_truthy(
+                FOOTER_SEPARATOR,
+                await interaction.translate(
+                    locale_str(
+                        "per-world-pattern-contributor",
+                        name=self.contributor.name,
+                    )
+                ),
+                embed.footer.text,
+            ),
+            icon_url=self.contributor.display_avatar.url,
+        )
+        return embed
 
 
 class PatternRenderingOptionsView(OptionsView):
