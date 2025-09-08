@@ -47,6 +47,21 @@ jobs:
           load: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:tmp
 
+      - name: Start database
+        run: docker compose up --detach postgres
+
+      - name: Test image configuration
+        run: docker compose run --rm bot hexbug bot --no-run
+
+      - name: Check Alembic upgrade/downgrade
+        run: |
+          docker compose run --rm bot alembic upgrade head
+          docker compose run --rm bot alembic downgrade base
+          docker compose run --rm bot alembic upgrade head
+
+      - name: Check for new Alembic upgrades
+        run: docker compose run --rm bot alembic check
+
       - name: Extract registry from image
         run: |
           id=$(docker create ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:tmp)
@@ -157,35 +172,3 @@ jobs:
 
       - name: Run unit tests
         run: uv run pytest
-
-  test-image:
-    needs: build-image
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Download image artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: docker-image
-          path: ${{ runner.temp }}
-
-      - name: Load image
-        run: |
-          docker load --input ${{ runner.temp }}/image.tar
-          docker image ls -a
-
-      - name: Start database
-        run: docker compose up --detach postgres
-
-      - name: Test image configuration
-        run: docker compose run --rm bot hexbug bot --no-run
-
-      - name: Check Alembic upgrade/downgrade
-        run: |
-          docker compose run --rm bot alembic upgrade head
-          docker compose run --rm bot alembic downgrade base
-          docker compose run --rm bot alembic upgrade head
-
-      - name: Check for new Alembic upgrades
-        run: docker compose run --rm bot alembic check
