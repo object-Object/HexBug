@@ -156,7 +156,7 @@ jobs:
         run: uv sync --frozen --no-dev --package HexBug-bot
 
       - name: Run unit tests
-        run: pytest
+        run: uv run pytest
 
   test-image:
     needs: build-image
