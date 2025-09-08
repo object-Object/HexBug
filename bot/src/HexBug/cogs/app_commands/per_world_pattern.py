@@ -1,5 +1,5 @@
 import sqlalchemy as sa
-from discord import Embed, Interaction, Member, User, app_commands
+from discord import Embed, Interaction, User, app_commands
 from discord.app_commands import Transform
 from discord.ext.commands import GroupCog
 from psycopg.errors import UniqueViolation
@@ -150,7 +150,7 @@ class PerWorldPatternCog(HexBugCog, GroupCog, group_name="per-world-pattern"):
         entry: PerWorldPatternOption,
         visibility: VisibilityOption = Visibility.PRIVATE,
     ):
-        view = await self._get_view(interaction, entry)
+        view = await PerWorldPatternView.new(interaction, entry)
         await view.send(interaction, visibility)
 
     @app_commands.command()
@@ -173,23 +173,9 @@ class PerWorldPatternCog(HexBugCog, GroupCog, group_name="per-world-pattern"):
         async with self.bot.db_session() as session, session.begin():
             await session.delete(entry)
 
-        view = await self._get_view(interaction, entry, contributor)
+        view = await PerWorldPatternView.new(interaction, entry, contributor)
         await view.send(
             interaction,
             Visibility.PRIVATE,
             content=await translate_command_text(interaction, "removed"),
-        )
-
-    async def _get_view(
-        self,
-        interaction: Interaction,
-        entry: PerWorldPattern,
-        contributor: User | Member | None = None,
-    ):
-        return PerWorldPatternView(
-            interaction=interaction,
-            pattern=entry.pattern,
-            pattern_id=entry.id,
-            info=self.bot.registry.patterns.get(entry.id),
-            contributor=contributor or await self.bot.fetch_user(entry.user_id),
         )

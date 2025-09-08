@@ -220,7 +220,7 @@ command_pattern-check =
 group_per-world-pattern =
         per-world-pattern
     .description =
-        Commands for managing a per-server list of per-world pattern signatures.
+        Commands for adding to and querying a per-server list of per-world pattern signatures.
 
 per-world-pattern-contributor = Added by { $name }
 
@@ -286,6 +286,64 @@ command_per-world-pattern-remove =
         The name of the per-world pattern to remove. You can only remove patterns that you added.
 
     .text_removed = ✅ **Pattern removed.**
+
+# /per-world-pattern-manage
+
+group_per-world-pattern-manage =
+        per-world-pattern-manage
+    .description =
+        Privileged commands for managing this server's list of per-world pattern signatures.
+
+# /per-world-pattern-manage remove
+
+command_per-world-pattern-manage-remove =
+        remove
+    .description =
+        Remove a per-world pattern from this server's database that was added by another user.
+
+    .parameter_entry =
+        name
+    .parameter_entry_description =
+        The name of the per-world pattern to remove.
+
+    .text_removed = ✅ **Pattern removed.**
+
+# /per-world-pattern-manage remove-all
+
+command_per-world-pattern-manage-remove-all =
+        remove-all
+    .description =
+        Remove all per-world patterns from this server's database.
+
+    .parameter_contributor =
+        contributor
+    .parameter_contributor_description =
+        Only remove patterns that were added by this user.
+
+    .text_confirm-all =
+        { $count ->
+            [one]   Are you sure you want to remove **{ $count } pattern** from this server?
+           *[other] Are you sure you want to remove **{ $count } patterns** from this server?
+        }
+    .text_confirm-user =
+        { $count ->
+            [one]   Are you sure you want to remove **{ $count } pattern** added by { $user } from this server?
+           *[other] Are you sure you want to remove **{ $count } patterns** added by { $user } from this server?
+        }
+
+    .text_cancel = Cancel
+    .text_remove =
+        { $count ->
+            [one]   Remove Pattern
+           *[other] Remove Patterns
+        }
+
+    .text_cancelled = Cancelled.
+    .text_removed =
+        { $count ->
+            [one]   { $count } pattern removed.
+           *[other] { $count } patterns removed.
+        }
 
 # /status
 

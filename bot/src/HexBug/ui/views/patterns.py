@@ -22,6 +22,7 @@ from HexBug.data.hex_math import HexPattern
 from HexBug.data.patterns import PatternInfo, PatternOperator
 from HexBug.data.registry import HexBugRegistry, PatternMatchResult
 from HexBug.data.special_handlers import SpecialHandlerMatch
+from HexBug.db.models import PerWorldPattern
 from HexBug.rendering.draw import PatternRenderingOptions
 from HexBug.rendering.types import Palette, Theme
 from HexBug.utils.discord.commands import AnyCommand
@@ -265,6 +266,22 @@ class PerWorldPatternView(NamedPatternView):
     pattern_id: ResourceLocation
     contributor: User | Member
     hide_stroke_order: bool = False
+
+    @classmethod
+    async def new(
+        cls,
+        interaction: Interaction,
+        entry: PerWorldPattern,
+        contributor: User | Member | None = None,
+    ) -> Self:
+        bot = HexBugBot.of(interaction)
+        return cls(
+            interaction=interaction,
+            pattern=entry.pattern,
+            pattern_id=entry.id,
+            info=bot.registry.patterns.get(entry.id),
+            contributor=contributor or await bot.fetch_user(entry.user_id),
+        )
 
     @override
     async def get_embed(self, interaction: Interaction) -> Embed:
