@@ -45,6 +45,5 @@ https://alembic.sqlalchemy.org/en/latest/autogenerate.html
 - Commands:
   - `/book`
   - `/info`
-  - `/palette`
   - `/patterns hex`
   - `/patterns smart_number`

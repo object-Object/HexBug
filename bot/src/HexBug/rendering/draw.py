@@ -37,6 +37,7 @@ class PatternRenderingOptions(BaseModel):
     }
 
     palette: Palette = Palette.Classic
+    freeze_palette: bool = False
     theme: Theme = Theme.Dark
     line_width: float = Field(default=DEFAULT_LINE_WIDTH, ge=0, le=1)
     """Units: percentage of line length"""

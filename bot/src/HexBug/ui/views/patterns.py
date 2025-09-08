@@ -45,12 +45,10 @@ class BasePatternView(ui.View, ABC):
     hide_stroke_order: bool
 
     options: PatternRenderingOptions = field(default_factory=PatternRenderingOptions)
-    default_options: PatternRenderingOptions = field(
-        default_factory=PatternRenderingOptions
-    )
     add_visibility_buttons: bool = True
 
     user: User | Member = field(init=False)
+    default_options: PatternRenderingOptions = field(init=False)
 
     command: AnyCommand | None = field(default=None, init=False)
 
@@ -58,6 +56,7 @@ class BasePatternView(ui.View, ABC):
         super().__init__(timeout=None)
 
         self.user = interaction.user
+        self.default_options = self.options
 
         if isinstance(interaction.command, Command):
             self.command = interaction.command
@@ -465,6 +464,9 @@ class PatternRenderingOptionsView(OptionsView):
         self.parent: BasePatternView = parent
 
         super().__init__(timeout=None)
+
+        if self.options.freeze_palette:
+            self.remove_item(self.palette_select)
 
     @property
     def options(self):

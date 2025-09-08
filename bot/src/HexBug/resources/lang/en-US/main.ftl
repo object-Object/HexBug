@@ -21,6 +21,11 @@
 -parameter_signature_description =
         The angle signature of the pattern (eg. deaqq).
 
+-parameter_hide-stroke-order =
+        hide_stroke_order
+-parameter_hide-stroke-order_description =
+        Hide the stroke order when rendering the pattern (like for great spells).
+
 # choices
 
 choice_HexBug-utils-discord-visibility-Visibility =
@@ -127,6 +132,38 @@ command_mods =
     .text_no-mods-found =
         ⚠️ No mods found with these filters.
 
+# /palette
+
+command_palette =
+        palette
+    .description =
+        Display one of HexBug's pattern palettes.
+
+    .parameter_palette =
+        palette
+    .parameter_palette_description =
+        The name of the palette to display.
+
+    .parameter_hide-stroke-order = {-parameter_hide-stroke-order}
+    .parameter_hide-stroke-order_description = {-parameter_hide-stroke-order_description}
+
+    .parameter_visibility = {-parameter_visibility}
+    .parameter_visibility_description = {-parameter_visibility_description}
+
+    .text_rgb = RGB
+    .text_hex = Hex
+    .text_int = Int
+
+    .text_colors =
+        Lines:
+        { $colors }
+
+        Overlap:
+        { $overlap }
+
+        Per-world:
+        { $per_world }
+
 # /pattern
 
 group_pattern =
@@ -182,10 +219,8 @@ command_pattern-raw =
     .parameter_signature = {-parameter_signature}
     .parameter_signature_description = {-parameter_signature_description}
 
-    .parameter_hide-stroke-order =
-        hide_stroke_order
-    .parameter_hide-stroke-order_description =
-        If true, hide the stroke order when rendering the pattern (like for great spells).
+    .parameter_hide-stroke-order = {-parameter_hide-stroke-order}
+    .parameter_hide-stroke-order_description = {-parameter_hide-stroke-order_description}
 
     .parameter_visibility = {-parameter_visibility}
     .parameter_visibility_description = {-parameter_visibility_description}
@@ -203,7 +238,7 @@ command_pattern-check =
     .parameter_is-per-world =
         is_per_world
     .parameter_is-per-world_description =
-        If true, also check for non-per-world patterns with the same shape but a different stroke order.
+        Also check for non-per-world patterns with the same shape but a different stroke order.
 
     .parameter_visibility = {-parameter_visibility}
     .parameter_visibility_description = {-parameter_visibility_description}
@@ -222,10 +257,8 @@ command_pattern-build =
     .description =
         Draw a pattern incrementally using directional buttons.
 
-    .parameter_hide-stroke-order =
-        hide_stroke_order
-    .parameter_hide-stroke-order_description =
-        If true, hide the stroke order when rendering the pattern (like for great spells).
+    .parameter_hide-stroke-order = {-parameter_hide-stroke-order}
+    .parameter_hide-stroke-order_description = {-parameter_hide-stroke-order_description}
 
 # /per-world-pattern
 
