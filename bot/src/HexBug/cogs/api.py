@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import logging
+import math
+import sys
 from asyncio import Task
 from dataclasses import dataclass, field
 from typing import Annotated
@@ -42,7 +44,9 @@ async def get_health(
         response.status_code = HTTP_500_INTERNAL_SERVER_ERROR
 
     return HealthInfo(
-        websocket_latency=bot.latency,
+        websocket_latency=bot.latency
+        if math.isfinite(bot.latency)
+        else sys.float_info.max,
     )
 
 
