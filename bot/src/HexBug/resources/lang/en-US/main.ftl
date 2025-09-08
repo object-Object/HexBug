@@ -237,6 +237,8 @@ command_per-world-pattern-add =
     .parameter_signature = {-parameter_signature}
     .parameter_signature_description = {-parameter_signature_description}
 
+    .text_added = ✅ **Pattern added.**
+
 # /per-world-pattern list
 
 command_per-world-pattern-list =
@@ -263,13 +265,27 @@ command_per-world-pattern-name =
     .description =
         Look up a per-world pattern in this server's database by name.
 
-    .parameter_info =
+    .parameter_entry =
         name
-    .parameter_info_description =
+    .parameter_entry_description =
         The name of the per-world pattern to look up.
 
     .parameter_visibility = {-parameter_visibility}
     .parameter_visibility_description = {-parameter_visibility_description}
+
+# /per-world-pattern remove
+
+command_per-world-pattern-remove =
+        remove
+    .description =
+        Remove a per-world pattern from this server's database.
+
+    .parameter_entry =
+        name
+    .parameter_entry_description =
+        The name of the per-world pattern to remove. You can only remove patterns that you added.
+
+    .text_removed = ✅ **Pattern removed.**
 
 # /status
 

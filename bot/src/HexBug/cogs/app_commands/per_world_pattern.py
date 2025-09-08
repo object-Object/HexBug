@@ -1,5 +1,6 @@
 import sqlalchemy as sa
-from discord import Embed, Interaction, User, app_commands
+from discord import Embed, Interaction, Member, User, app_commands
+from discord.app_commands import Transform
 from discord.ext.commands import GroupCog
 from psycopg.errors import UniqueViolation
 from sqlalchemy.exc import IntegrityError
@@ -14,6 +15,7 @@ from HexBug.utils.discord.transformers import (
     HexDirOption,
     PatternSignatureOption,
     PerWorldPatternOption,
+    PerWorldPatternTransformer,
 )
 from HexBug.utils.discord.translation import translate, translate_command_text
 from HexBug.utils.discord.visibility import (
@@ -84,7 +86,7 @@ class PerWorldPatternCog(HexBugCog, GroupCog, group_name="per-world-pattern"):
         ).send(
             interaction,
             Visibility.PRIVATE,
-            content="Pattern added.",
+            content=await translate_command_text(interaction, "added"),
         )
 
     @app_commands.command()
@@ -148,10 +150,46 @@ class PerWorldPatternCog(HexBugCog, GroupCog, group_name="per-world-pattern"):
         entry: PerWorldPatternOption,
         visibility: VisibilityOption = Visibility.PRIVATE,
     ):
-        await PerWorldPatternView(
+        view = await self._get_view(interaction, entry)
+        await view.send(interaction, visibility)
+
+    @app_commands.command()
+    async def remove(
+        self,
+        interaction: Interaction,
+        entry: Transform[
+            PerWorldPattern,
+            PerWorldPatternTransformer(autocomplete_filter_user=True),
+        ],
+    ):
+        contributor = await self.bot.fetch_user(entry.user_id)
+        if contributor != interaction.user:
+            raise InvalidInputError(
+                f"This pattern can only be removed by the user who added it ({contributor.name})."
+                + " Use `/per-world-pattern-manage remove` to remove patterns added by other users.",
+                fields=[],
+            )
+
+        async with self.bot.db_session() as session, session.begin():
+            await session.delete(entry)
+
+        view = await self._get_view(interaction, entry, contributor)
+        await view.send(
+            interaction,
+            Visibility.PRIVATE,
+            content=await translate_command_text(interaction, "removed"),
+        )
+
+    async def _get_view(
+        self,
+        interaction: Interaction,
+        entry: PerWorldPattern,
+        contributor: User | Member | None = None,
+    ):
+        return PerWorldPatternView(
             interaction=interaction,
             pattern=entry.pattern,
             pattern_id=entry.id,
             info=self.bot.registry.patterns.get(entry.id),
-            contributor=await self.bot.fetch_user(entry.user_id),
-        ).send(interaction, visibility)
+            contributor=contributor or await self.bot.fetch_user(entry.user_id),
+        )

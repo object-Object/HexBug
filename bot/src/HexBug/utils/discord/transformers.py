@@ -203,6 +203,10 @@ class SpecialHandlerInfoTransformer(PfzyAutocompleteTransformer):
 
 
 class PerWorldPatternTransformer(PfzyAutocompleteTransformer):
+    def __init__(self, autocomplete_filter_user: bool = False):
+        super().__init__()
+        self.autocomplete_filter_user = autocomplete_filter_user
+
     @override
     async def transform(
         self,
@@ -242,6 +246,9 @@ class PerWorldPatternTransformer(PfzyAutocompleteTransformer):
             stmt = sa.select(PerWorldPattern).where(
                 PerWorldPattern.guild_id == interaction.guild_id
             )
+            if self.autocomplete_filter_user:
+                stmt = stmt.where(PerWorldPattern.user_id == interaction.user.id)
+
             for entry in await session.scalars(stmt):
                 if info := bot.registry.patterns.get(entry.id):
                     if info.is_hidden:
