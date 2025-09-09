@@ -251,7 +251,7 @@ class ComplexHexLongSpecialHandler(SpecialHandler[int]):
                 return None
 
         accumulator = 0
-        for c in pattern.signature[4:]:
+        for c in pattern.signature[9:]:
             match c:
                 case "w":
                     accumulator += 1
