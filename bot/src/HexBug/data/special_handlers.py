@@ -6,6 +6,7 @@ from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Self, override
 
 from hexdoc.core import ResourceLocation
+from hexdoc.minecraft import I18n, LocalizedStr
 from pydantic import BaseModel
 
 from .hex_math import HexAngle, HexDir, HexPattern
@@ -60,7 +61,7 @@ class SpecialHandler[T](ABC):
         """Attempts to match the given pattern against this special handler."""
 
     @abstractmethod
-    def parse_value(
+    def generate_pattern(
         self,
         registry: HexBugRegistry,
         value: str,
@@ -70,6 +71,10 @@ class SpecialHandler[T](ABC):
 
         Raises ValueError on failure.
         """
+
+    def localize(self, i18n: I18n) -> LocalizedStr:
+        """Returns the raw name of this handler from the lang file."""
+        return i18n.localize(f"hexcasting.special.{self.id}")
 
     def get_name(self, raw_name: str, value: T | None) -> str:
         """Given the raw name from the lang file and a value, returns a formatted
@@ -109,7 +114,7 @@ class NumberSpecialHandler(SpecialHandler[float]):
         return sign * accumulator
 
     @override
-    def parse_value(self, registry: HexBugRegistry, value: str):
+    def generate_pattern(self, registry: HexBugRegistry, value: str):
         value = value.strip()
         if not value.removeprefix("-").isnumeric():
             raise ValueError(f"Invalid integer: {value}")
@@ -150,7 +155,7 @@ class MaskSpecialHandler(SpecialHandler[str]):
         return result
 
     @override
-    def parse_value(self, registry: HexBugRegistry, value: str):
+    def generate_pattern(self, registry: HexBugRegistry, value: str):
         value = value.lower().strip()
         if not VALID_MASK_PATTERN.fullmatch(value):
             raise ValueError(f"Invalid mask (expected only - and v): {value}")
@@ -208,7 +213,7 @@ class OverevaluateTailDepthSpecialHandler(SpecialHandler[int]):
         return depth
 
     @override
-    def parse_value(self, registry: HexBugRegistry, value: str):
+    def generate_pattern(self, registry: HexBugRegistry, value: str):
         value = value.strip()
         if value.isnumeric():
             depth = int(value)
@@ -232,3 +237,57 @@ class OverevaluateTailDepthSpecialHandler(SpecialHandler[int]):
 
     def get_tail_char(self, index: int):
         return self.tail_chars[index % len(self.tail_chars)]
+
+
+class ComplexHexLongSpecialHandler(SpecialHandler[int]):
+    @override
+    def try_match(self, pattern: HexPattern) -> int | None:
+        match pattern.signature[:9]:
+            case "awdedwaaw":
+                sign = 1
+            case "dwaqawddw":
+                sign = -1
+            case _:
+                return None
+
+        accumulator = 0
+        for c in pattern.signature[4:]:
+            match c:
+                case "w":
+                    accumulator += 1
+                case "q":
+                    accumulator += 5
+                case "e":
+                    accumulator += 10
+                case "a":
+                    accumulator <<= 1
+                case "d":
+                    accumulator >>= 1
+                case _:
+                    pass
+
+        return sign * accumulator
+
+    @override
+    def generate_pattern(self, registry: HexBugRegistry, value: str):
+        value = value.strip()
+        if not value.removeprefix("-").isnumeric():
+            raise ValueError(f"Invalid integer: {value}")
+
+        # TODO: implement?
+        raise NotImplementedError
+
+    # TODO: remove localize and get_name when kinetic fixes the lang entry
+
+    @override
+    def localize(self, i18n: I18n):
+        return i18n.localize(f"hexcasting.action.{self.id}")
+
+    @override
+    def get_name(self, raw_name: str, value: int | None) -> str:
+        if ":" in raw_name:
+            return super().get_name(raw_name, value)
+
+        if value is None:
+            return raw_name
+        return f"{raw_name}: {value}"

@@ -7,6 +7,7 @@ from .hex_math import HexDir
 from .mods import Modloader, StaticModInfo
 from .patterns import StaticPatternInfo
 from .special_handlers import (
+    ComplexHexLongSpecialHandler,
     MaskSpecialHandler,
     NumberSpecialHandler,
     OverevaluateTailDepthSpecialHandler,
@@ -379,6 +380,9 @@ SPECIAL_HANDLERS: dict[ResourceLocation, SpecialHandler[Any]] = {
             prefix="aawdde",
             initial_depth=1,
             tail_chars="w",
+        ),
+        ComplexHexLongSpecialHandler(
+            id=ResourceLocation("complexhex", "long"),
         ),
     ]
 }

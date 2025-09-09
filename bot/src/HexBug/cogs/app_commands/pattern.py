@@ -54,10 +54,14 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
     ):
         handler = SPECIAL_HANDLERS[info.id]
         try:
-            parsed_value, pattern = handler.parse_value(self.bot.registry, value)
+            parsed_value, pattern = handler.generate_pattern(self.bot.registry, value)
         except ValueError as e:
             raise InvalidInputError(
                 f"Failed to parse value for {info.base_name}.", value=value
+            ) from e
+        except NotImplementedError as e:
+            raise InvalidInputError(
+                f"Generating {info.base_name} is not yet supported.", fields=[]
             ) from e
 
         await NamedPatternView(

@@ -347,13 +347,13 @@ class HexBugRegistry(BaseModel):
                         + "\n  ".join(str(op) for op in ops)
                     )
 
-            raw_name = i18n.localize(f"hexcasting.special.{special_handler.id}").value
+            raw_name = special_handler.localize(i18n).value
 
             for info in registry.patterns.values():
                 if info.is_per_world:
                     continue
                 if (value := special_handler.try_match(info.pattern)) is not None:
-                    raise ValueError(
+                    logger.warning(
                         f"Special handler {special_handler.id} conflicts with pattern {info.id} (value: {value})"
                     )
 
