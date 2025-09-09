@@ -1,12 +1,15 @@
 import asyncio
+import code
 import logging
 import platform
 import sys
+import textwrap
 from pathlib import Path
 from typing import Annotated, Any, Coroutine
 
 import httpx
 from discord import Locale
+from hexdoc.utils.logging import repl_readfunc
 from typer import Option, Typer
 
 from HexBug.core.bot import HexBugBot
@@ -99,6 +102,35 @@ def run_async[R](main: Coroutine[Any, Any, R]) -> R | None:
         return asyncio.run(main)
     except KeyboardInterrupt:
         pass
+
+
+@app.command()
+def repl(
+    registry_path: Path = Path("registry.json"),
+    verbose: Annotated[bool, Option("-v", "--verbose")] = False,
+):
+    setup_logging(verbose)
+
+    registry = HexBugRegistry.load(registry_path)
+
+    repl_locals = dict[str, Any](
+        registry=registry,
+        mods=registry.mods,
+        patterns=registry.patterns,
+        special_handlers=registry.special_handlers,
+        lookups=registry.lookups,
+    )
+
+    code.interact(
+        banner=textwrap.dedent(
+            f"""\
+            [HexBug repl] Python {sys.version}
+            Locals: {", ".join(sorted(repl_locals.keys()))}"""
+        ),
+        readfunc=repl_readfunc(),
+        local=repl_locals,
+        exitmsg="",
+    )
 
 
 if __name__ == "__main__":
