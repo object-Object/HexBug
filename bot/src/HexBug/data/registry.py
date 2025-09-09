@@ -366,6 +366,15 @@ class HexBugRegistry(BaseModel):
                 )
             )
 
+        # attempt to detect unregistered patterns with documentation (usually special handlers)
+        for pattern_id in id_ops.keys():
+            if (
+                pattern_id not in registry.patterns
+                and pattern_id not in registry.special_handlers
+                and pattern_id not in DISABLED_PATTERNS
+            ):
+                logger.warning(f"Unregistered pattern: {pattern_id}")
+
         logger.info("Calculating registry stats.")
 
         for pattern in registry.patterns.values():

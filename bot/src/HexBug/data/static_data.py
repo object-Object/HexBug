@@ -393,6 +393,10 @@ DISABLED_PATTERNS: set[ResourceLocation] = {
     # conflicts
     ResourceLocation("hexical", "age_scroll"),  # shape: hexical:greater_blink
     ResourceLocation("hexstruction", "bounding_box"),  # shape: hexical:greater_blink
+    # not real patterns
+    ResourceLocation("hexcasting", "const/vec/x"),
+    ResourceLocation("hexcasting", "const/vec/y"),
+    ResourceLocation("hexcasting", "const/vec/z"),
 }
 
 # load these, but suppress the warning if we can't find any operators
