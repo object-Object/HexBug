@@ -289,6 +289,10 @@ class PerWorldPatternView(NamedPatternView):
     @override
     async def get_embeds(self, interaction: Interaction) -> list[Embed]:
         embed = (await super().get_embeds(interaction))[0]
+
+        if not self.info:
+            embed.title = str(self.pattern_id)
+
         embed.set_footer(
             text=join_truthy(
                 FOOTER_SEPARATOR,
@@ -302,6 +306,7 @@ class PerWorldPatternView(NamedPatternView):
             ),
             icon_url=self.contributor.display_avatar.url,
         )
+
         return [embed]
 
 
