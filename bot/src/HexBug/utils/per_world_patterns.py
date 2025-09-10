@@ -41,7 +41,7 @@ async def add_per_world_pattern(
                 value=pattern.display(),
             ).add_field(
                 name="Pattern",
-                value=info.name if info else str(pattern_id),
+                value=info.name if info else f"`{pattern_id}`",
             )
         raise
 
