@@ -1,5 +1,5 @@
 from hexdoc.core import ResourceLocation
-from sqlalchemy import BigInteger, MetaData
+from sqlalchemy import BigInteger, MetaData, UniqueConstraint
 from sqlalchemy.ext.asyncio import AsyncAttrs
 from sqlalchemy.orm import DeclarativeBase, Mapped, MappedAsDataclass, mapped_column
 
@@ -26,6 +26,10 @@ class Base(AsyncAttrs, MappedAsDataclass, DeclarativeBase):
 
 class PerWorldPattern(Base):
     __tablename__ = "per_world_pattern"
+    __table_args__ = (
+        # signatures should be unique per-guild (NOT globally)
+        UniqueConstraint("signature", "guild_id"),
+    )
 
     id: Mapped[ResourceLocation] = mapped_column(primary_key=True)
     """The ResourceLocation of the pattern.
@@ -39,7 +43,7 @@ class PerWorldPattern(Base):
 
     direction: Mapped[HexDir]
     """Starting direction."""
-    signature: Mapped[str] = mapped_column(unique=True)
+    signature: Mapped[str]
     """Angle signature."""
 
     @property
