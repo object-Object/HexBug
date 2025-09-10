@@ -1,5 +1,5 @@
 from hexdoc.core import ResourceLocation
-from sqlalchemy import BigInteger
+from sqlalchemy import BigInteger, MetaData
 from sqlalchemy.ext.asyncio import AsyncAttrs
 from sqlalchemy.orm import DeclarativeBase, Mapped, MappedAsDataclass, mapped_column
 
@@ -9,6 +9,16 @@ from .types import ResourceLocationType
 
 
 class Base(AsyncAttrs, MappedAsDataclass, DeclarativeBase):
+    # https://docs.sqlalchemy.org/en/20/core/constraints.html#configuring-constraint-naming-conventions
+    metadata = MetaData(
+        naming_convention={
+            "ix": "ix_%(column_0_label)s",
+            "uq": "uq_%(table_name)s_%(column_0_name)s",
+            "ck": "ck_%(table_name)s_%(constraint_name)s",
+            "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
+            "pk": "pk_%(table_name)s",
+        },
+    )
     type_annotation_map = {
         ResourceLocation: ResourceLocationType,
     }
@@ -29,7 +39,7 @@ class PerWorldPattern(Base):
 
     direction: Mapped[HexDir]
     """Starting direction."""
-    signature: Mapped[str]
+    signature: Mapped[str] = mapped_column(unique=True)
     """Angle signature."""
 
     @property
