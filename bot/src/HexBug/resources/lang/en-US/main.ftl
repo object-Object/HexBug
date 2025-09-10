@@ -267,6 +267,8 @@ group_per-world-pattern =
     .description =
         Commands for adding to and querying a per-server list of per-world pattern signatures.
 
+per-world-pattern-added = ✅ **Pattern added.**
+
 per-world-pattern-contributor = Added by { $name }
 
 # /per-world-pattern add
@@ -281,8 +283,6 @@ command_per-world-pattern-add =
 
     .parameter_signature = {-parameter_signature}
     .parameter_signature_description = {-parameter_signature_description}
-
-    .text_added = ✅ **Pattern added.**
 
 # /per-world-pattern list
 
@@ -338,6 +338,24 @@ group_per-world-pattern-manage =
         per-world-pattern-manage
     .description =
         Privileged commands for managing this server's list of per-world pattern signatures.
+
+# /per-world-pattern-manage add
+
+command_per-world-pattern-manage-add =
+        add
+    .description =
+        Add a per-world pattern to this server's database that is not in HexBug's registry.
+
+    .parameter_pattern-id =
+        id
+    .parameter_pattern-id_description =
+        The ID of the pattern to add (eg. hexcasting:create_lava).
+
+    .parameter_direction = {-parameter_direction}
+    .parameter_direction_description = {-parameter_direction_description}
+
+    .parameter_signature = {-parameter_signature}
+    .parameter_signature_description = {-parameter_signature_description}
 
 # /per-world-pattern-manage remove
 

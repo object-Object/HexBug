@@ -2,8 +2,6 @@ import sqlalchemy as sa
 from discord import Embed, Interaction, User, app_commands
 from discord.app_commands import Transform
 from discord.ext.commands import GroupCog
-from psycopg.errors import UniqueViolation
-from sqlalchemy.exc import IntegrityError
 
 from HexBug.core.cog import HexBugCog
 from HexBug.core.exceptions import InvalidInputError
@@ -23,6 +21,7 @@ from HexBug.utils.discord.visibility import (
     VisibilityOption,
     respond_with_visibility,
 )
+from HexBug.utils.per_world_patterns import add_per_world_pattern
 
 
 @app_commands.guild_install()
@@ -35,8 +34,6 @@ class PerWorldPatternCog(HexBugCog, GroupCog, group_name="per-world-pattern"):
         direction: HexDirOption,
         signature: PatternSignatureOption,
     ):
-        assert interaction.guild_id
-
         # look up the pattern to make sure it's actually per-world
         pattern = HexPattern(direction, signature)
         match self.bot.registry.try_match_pattern(pattern):
@@ -53,40 +50,11 @@ class PerWorldPatternCog(HexBugCog, GroupCog, group_name="per-world-pattern"):
                     value=self.bot.registry.display_pattern(match).name,
                 )
 
-        # insert the pattern
-        try:
-            async with self.bot.db_session() as session, session.begin():
-                session.add(
-                    PerWorldPattern(
-                        id=info.id,
-                        guild_id=interaction.guild_id,
-                        user_id=interaction.user.id,
-                        direction=direction,
-                        signature=signature,
-                    )
-                )
-        except IntegrityError as e:
-            if isinstance(e.orig, UniqueViolation):
-                raise InvalidInputError(
-                    "Pattern has already been added to this server's database.",
-                    value=pattern.display(),
-                ).add_field(
-                    name="Pattern",
-                    value=self.bot.registry.display_pattern(info).name,
-                )
-            raise
-
-        await PerWorldPatternView(
-            interaction=interaction,
-            pattern=pattern,
-            pattern_id=info.id,
-            info=info,
-            contributor=interaction.user,
-            add_visibility_buttons=False,
-        ).send(
+        await add_per_world_pattern(
             interaction,
-            Visibility.PRIVATE,
-            content=await translate_command_text(interaction, "added"),
+            pattern,
+            info.id,
+            self.bot.registry.display_pattern(info),
         )
 
     @app_commands.command()

@@ -9,11 +9,20 @@ from sqlalchemy import func
 from HexBug.core.bot import HexBugBot
 from HexBug.core.cog import HexBugCog
 from HexBug.core.exceptions import InvalidInputError
+from HexBug.data.hex_math import HexPattern
+from HexBug.data.patterns import PatternInfo
+from HexBug.data.special_handlers import SpecialHandlerMatch
 from HexBug.db.models import PerWorldPattern
 from HexBug.ui.views.patterns import PerWorldPatternView
-from HexBug.utils.discord.transformers import PerWorldPatternOption
+from HexBug.utils.discord.transformers import (
+    HexDirOption,
+    PatternSignatureOption,
+    PerWorldPatternOption,
+    ResourceLocationOption,
+)
 from HexBug.utils.discord.translation import translate_command_text
 from HexBug.utils.discord.visibility import Visibility
+from HexBug.utils.per_world_patterns import add_per_world_pattern
 
 
 @app_commands.guild_install()
@@ -22,6 +31,54 @@ from HexBug.utils.discord.visibility import Visibility
 class PerWorldPatternManageCog(
     HexBugCog, GroupCog, group_name="per-world-pattern-manage"
 ):
+    @app_commands.command()
+    async def add(
+        self,
+        interaction: Interaction,
+        pattern_id: ResourceLocationOption,
+        direction: HexDirOption,
+        signature: PatternSignatureOption,
+    ):
+        pattern = HexPattern(direction, signature)
+        match self.bot.registry.try_match_pattern(pattern):
+            case PatternInfo(is_per_world=True, display_only=False) as info:
+                if info.id != pattern_id:
+                    raise InvalidInputError(
+                        "A pattern with this shape exists, but does not match the provided ID.",
+                        value=f"`{pattern_id}`",
+                    ).add_field(
+                        name="Pattern",
+                        value=f"{self.bot.registry.display_pattern(info).name} (`{info.id}`)",
+                    )
+
+            case PatternInfo() as info:
+                raise InvalidInputError(
+                    "A pattern with this shape exists, but is not per-world.",
+                    value=pattern.display(),
+                ).add_field(
+                    name="Pattern",
+                    value=self.bot.registry.display_pattern(info).name,
+                )
+
+            # we allow special handler matches in case an addon adds a per-world pattern that conflicts with a special handler
+            # like craft phial, for instance
+            case SpecialHandlerMatch() | None:
+                if info := self.bot.registry.patterns.get(pattern_id):
+                    raise InvalidInputError(
+                        "A pattern with this ID exists, but does not match the provided shape.",
+                        value=pattern.display(),
+                    ).add_field(
+                        name="Pattern",
+                        value=self.bot.registry.display_pattern(info).name,
+                    )
+
+        await add_per_world_pattern(
+            interaction,
+            HexPattern(direction, signature),
+            pattern_id,
+            info,
+        )
+
     @app_commands.command()
     async def remove(self, interaction: Interaction, entry: PerWorldPatternOption):
         async with self.bot.db_session() as session, session.begin():

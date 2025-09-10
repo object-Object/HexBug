@@ -280,7 +280,7 @@ class PerWorldPatternTransformer(PfzyAutocompleteTransformer):
 
 
 class PatternSignatureTransformer(Transformer):
-    async def transform(self, interaction: Interaction, value: Any) -> Any:
+    async def transform(self, interaction: Interaction, value: str) -> Any:
         signature = value.lower()
         if signature in ["-", '"-"']:
             signature = ""
@@ -289,6 +289,11 @@ class PatternSignatureTransformer(Transformer):
                 "Invalid signature, must only contain the characters `aqweds`."
             )
         return signature
+
+
+class ResourceLocationTransformer(Transformer):
+    async def transform(self, interaction: Interaction, value: str) -> Any:
+        return ResourceLocation.from_str(value)
 
 
 class BetterEnumValueTransformer(EnumValueTransformer):
@@ -309,6 +314,8 @@ SpecialHandlerInfoOption = Transform[SpecialHandlerInfo, SpecialHandlerInfoTrans
 PerWorldPatternOption = Transform[PerWorldPattern, PerWorldPatternTransformer]
 
 PatternSignatureOption = Transform[str, PatternSignatureTransformer]
+
+ResourceLocationOption = Transform[ResourceLocation, ResourceLocationTransformer]
 
 ModloaderOption = Transform[Modloader, BetterEnumValueTransformer(Modloader)]
 
