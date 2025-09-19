@@ -40,6 +40,10 @@ docker compose up --build
 
 https://alembic.sqlalchemy.org/en/latest/autogenerate.html
 
+### Book of Hexxy for addon developers
+
+Gist by penguinencounter: https://gist.github.com/penguinencounter/ace5c45455ea968738a80b8c5e777235
+
 ## TODO
 
 - Commands:
