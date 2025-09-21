@@ -946,7 +946,7 @@ requires-dist = [
     { name = "hexdoc-hexcasting", marker = "extra == 'data'", specifier = "~=0.11.2.0" },
     { name = "hexdoc-hexcellular", marker = "extra == 'data'", specifier = "~=1.1.0.0" },
     { name = "hexdoc-hexchanting", marker = "extra == 'data'", specifier = "~=1.1.3.0" },
-    { name = "hexdoc-hexdebug", marker = "extra == 'data'", specifier = "~=0.3.0.1.20.1.0" },
+    { name = "hexdoc-hexdebug", marker = "extra == 'data'", specifier = "~=0.4.0.1.20.1.0" },
     { name = "hexdoc-hexdim", marker = "extra == 'data'", specifier = "~=1.2.1.1.20.0" },
     { name = "hexdoc-hexgender", marker = "extra == 'data'", specifier = "~=1.0.4.0" },
     { name = "hexdoc-hexical", marker = "extra == 'data'", url = "https://github.com/miyucomics/hexical/raw/cd130b06041b99677961baab480055c77ea02ec1/docs/v/latest/main/dist/hexdoc_hexical-2.0.0.1.0.0-py3-none-any.whl" },
@@ -959,10 +959,10 @@ requires-dist = [
     { name = "hexdoc-hextweaks", marker = "extra == 'data'", specifier = "~=5.3.3.0" },
     { name = "hexdoc-hexweb", marker = "extra == 'data'", specifier = "~=1.0.4.0" },
     { name = "hexdoc-hierophantics", marker = "extra == 'data'", specifier = "~=1.3.2.0" },
-    { name = "hexdoc-ioticblocks", marker = "extra == 'data'", specifier = "~=1.0.1.1.20.1.0" },
-    { name = "hexdoc-lapisworks", marker = "extra == 'data'", specifier = "~=1.5.1.5.0" },
-    { name = "hexdoc-lessertp", marker = "extra == 'data'", specifier = "~=1.1.2.0" },
-    { name = "hexdoc-moreiotas", marker = "extra == 'data'", url = "https://github.com/FallingColors/MoreIotas/raw/faef659e65288c0fa59fa8e65e654615d39bd510/docs/v/latest/main/dist/hexdoc_moreiotas-0.1.0.1.0rc6.dev0-py3-none-any.whl" },
+    { name = "hexdoc-ioticblocks", marker = "extra == 'data'", specifier = "~=1.0.2.1.20.1.0" },
+    { name = "hexdoc-lapisworks", marker = "extra == 'data'", specifier = "~=1.5.4.5.0" },
+    { name = "hexdoc-lessertp", marker = "extra == 'data'", specifier = "~=1.2.1.0" },
+    { name = "hexdoc-moreiotas", marker = "extra == 'data'", url = "https://github.com/FallingColors/MoreIotas/raw/b87cfd6445f5cb0f90bd698159d6708ba97f7905/docs/v/latest/main/dist/hexdoc_moreiotas-0.1.0.1.0rc7.dev0-py3-none-any.whl" },
     { name = "hexdoc-oneironaut", marker = "extra == 'data'", url = "https://github.com/beholderface/oneironaut/raw/99b7c992e2e2230b39ec9adceed4b1b2fed15831/docs/v/latest/1.20.1/dist/hexdoc_oneironaut-0.5.0.1.0-py3-none-any.whl" },
     { name = "hexdoc-overevaluate", marker = "extra == 'data'", url = "https://github.com/miyucomics/overevaluate/raw/6c92a93c51fd966cf3709468f0a126c746ae85ba/docs/v/latest/main/dist/hexdoc_overevaluate-1.0.0.1.0.0-py3-none-any.whl" },
     { name = "hexdoc-scryglass", marker = "extra == 'data'", url = "https://github.com/miyucomics/scryglass/raw/2b414d0ba9e9c0770c8b13bb01a67398630a4690/docs/v/latest/main/dist/hexdoc_scryglass-1.0.0.1.0.0-py3-none-any.whl" },
@@ -1201,15 +1201,16 @@ wheels = [
 
 [[package]]
 name = "hexdoc-hexdebug"
-version = "0.3.0.1.20.1.1.0"
+version = "0.4.0.1.20.1.1.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "hexdoc" },
     { name = "hexdoc-hexcasting" },
+    { name = "hexdoc-ioticblocks" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/9b/65/2a329cd74fbb05b6b6a796227eab8a60f3f009ecbf19d0373f5162363f46/hexdoc_hexdebug-0.3.0.1.20.1.1.0.tar.gz", hash = "sha256:66a2d58c7232daa1dc38eec4435d4212cfa546f0f4568922e35e762dcc6a3648", size = 59850 }
+sdist = { url = "https://files.pythonhosted.org/packages/8c/0b/49a0abd70c835a4733622f9fb87a1d5768e1be70ba03fbeba19405474fe0/hexdoc_hexdebug-0.4.0.1.20.1.1.1.tar.gz", hash = "sha256:9bf826d1d6f7e0181a2d0ba54e555fd40f81372a4e97657dfc413724dc187b95", size = 76622 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/03/d7/b0669ab010aa07bbe7ad47ed8e7f7efb42d0efc3781d9d3d96de4d0bba2e/hexdoc_hexdebug-0.3.0.1.20.1.1.0-py3-none-any.whl", hash = "sha256:f3b72e6edf5e6f70bde3594bc01d947f92dd7c6d45d669e8c652f633d3e3d965", size = 88334 },
+    { url = "https://files.pythonhosted.org/packages/19/c2/d6776714abbc8107de4977d5c57a10c24f716c44816ff2bde55954e5bc90/hexdoc_hexdebug-0.4.0.1.20.1.1.1-py3-none-any.whl", hash = "sha256:4c9020c288efdead2df7ae1bd526210962006c7ab79cfc48406a6ac0b79f1409", size = 115553 },
 ]
 
 [[package]]
@@ -1372,19 +1373,19 @@ wheels = [
 
 [[package]]
 name = "hexdoc-ioticblocks"
-version = "1.0.1.1.20.1.1.0"
+version = "1.0.2.1.20.1.1.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "hexdoc-hexcasting" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/7c/a8/15d7b67c5f45d2ed75b0a22d144b399c2786be5071562d3b84a1002fc597/hexdoc_ioticblocks-1.0.1.1.20.1.1.0.tar.gz", hash = "sha256:eebaec2778cd0acecda583b7d96aa428f97bab0b06ca5e975521938b62453da6", size = 8795 }
+sdist = { url = "https://files.pythonhosted.org/packages/52/bb/c2b8622a967d7d6fc9ed1f4c2b9f34a31df0e7a13a5cddd971bf9c13fff4/hexdoc_ioticblocks-1.0.2.1.20.1.1.0.tar.gz", hash = "sha256:82bea4a3f4961e214bbdc66bf1fa4b848111470cef3e7f6942855d56f2d7cc85", size = 8798 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/36/b5/72c34e46e3bf62cea0868ad308b3e8fefbb1973b682f96252987cd552d91/hexdoc_ioticblocks-1.0.1.1.20.1.1.0-py3-none-any.whl", hash = "sha256:376d881f3450e5aa16a8d2fd5ecdb0c8d88176d48f22d89fb156785af6881a0f", size = 11251 },
+    { url = "https://files.pythonhosted.org/packages/b9/6b/6c8c79dc3926bfc7c232679140edc074ffecda3b246d695c3d5ca247ae0e/hexdoc_ioticblocks-1.0.2.1.20.1.1.0-py3-none-any.whl", hash = "sha256:9ffed77ca5343a3775850aa8b4c72c01ab6d5a7470ce0732f3b186c04cef658e", size = 11257 },
 ]
 
 [[package]]
 name = "hexdoc-lapisworks"
-version = "1.5.1.5.1.1.dev0"
+version = "1.5.4.5.1.4.5.dev0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "hexdoc" },
@@ -1392,21 +1393,21 @@ dependencies = [
     { name = "networkx" },
     { name = "scipy" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/99/da/a7a4b942cd8dd98138345da87d9d1556a48676f6a5cefc2db499da525f6f/hexdoc_lapisworks-1.5.1.5.1.1.dev0.tar.gz", hash = "sha256:4f9d212d9c0e9d7c778b5bd4256770ceedb07deaf9f6456163e59057ae1c66ae", size = 61736 }
+sdist = { url = "https://files.pythonhosted.org/packages/f8/13/76f9f4e65f64f177498dd3480e25d6e92148bdc4a8470fa7830d0419037b/hexdoc_lapisworks-1.5.4.5.1.4.5.dev0.tar.gz", hash = "sha256:920ebcc7779477f33376019cdf5fdf0f2f908f3d41a66826ecf0b17b327e4115", size = 73461 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/57/76/791e6c61a75af06b248eb7bb4895960eede0e6081da57f2b18d1badb3f3b/hexdoc_lapisworks-1.5.1.5.1.1.dev0-py3-none-any.whl", hash = "sha256:4484c03fc0df9addcf53dbc23044b928400d07a9bb2683c62a482a097620cc11", size = 98634 },
+    { url = "https://files.pythonhosted.org/packages/5a/1f/3ea98b74b002197768684bec82b07fa6f9ff6078e8c294f8b637a8762fae/hexdoc_lapisworks-1.5.4.5.1.4.5.dev0-py3-none-any.whl", hash = "sha256:2e119ba54f095fc23ff1f7f3b075029de0b0ec290b168eae83180a7b4c186e2c", size = 118291 },
 ]
 
 [[package]]
 name = "hexdoc-lessertp"
-version = "1.1.2.1.1.dev0"
+version = "1.2.1.1.2.dev0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "hexdoc-hexcasting" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/a9/b8/afe598eb08d3680fdf0ccd4d8958c1b5cf97292a50595ba4f2e1be000050/hexdoc_lessertp-1.1.2.1.1.dev0.tar.gz", hash = "sha256:3229bc98892b56bd7aa680bb2f35ca3d87dba5e83ecfe16bd758bd2746a5ca49", size = 9586 }
+sdist = { url = "https://files.pythonhosted.org/packages/11/4e/bbdc1c9cea22af2c7d2823ece4c62d3a7e58d76ad26fe3c7e68bb0423762/hexdoc_lessertp-1.2.1.1.2.dev0.tar.gz", hash = "sha256:4fc620fcacff9a699bb30182b191b68a8353a82103abeab7e4757c0a3cf537d9", size = 9936 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/cc/6a/bbc38986880afdb8d2e940e60a5731742c13d99af01f4c204a100891320f/hexdoc_lessertp-1.1.2.1.1.dev0-py3-none-any.whl", hash = "sha256:19412cf7bf0274e494497b7f64b714a9c3ea59fe0e41a533f3091c3811e795df", size = 12008 },
+    { url = "https://files.pythonhosted.org/packages/b1/09/df2668e1cd9ebd3094b2014f0ac8e4f769bf010cd0c9edc0b0b38e6df3e7/hexdoc_lessertp-1.2.1.1.2.dev0-py3-none-any.whl", hash = "sha256:7d004d217c535adc549ed673095f7e9661d33dffc23ce32f0416156e7d4439a0", size = 12869 },
 ]
 
 [[package]]
@@ -1423,13 +1424,13 @@ wheels = [
 
 [[package]]
 name = "hexdoc-moreiotas"
-version = "0.1.0.1.0rc6.dev0"
-source = { url = "https://github.com/FallingColors/MoreIotas/raw/faef659e65288c0fa59fa8e65e654615d39bd510/docs/v/latest/main/dist/hexdoc_moreiotas-0.1.0.1.0rc6.dev0-py3-none-any.whl" }
+version = "0.1.0.1.0rc7.dev0"
+source = { url = "https://github.com/FallingColors/MoreIotas/raw/b87cfd6445f5cb0f90bd698159d6708ba97f7905/docs/v/latest/main/dist/hexdoc_moreiotas-0.1.0.1.0rc7.dev0-py3-none-any.whl" }
 dependencies = [
     { name = "hexdoc-hexcasting" },
 ]
 wheels = [
-    { url = "https://github.com/FallingColors/MoreIotas/raw/faef659e65288c0fa59fa8e65e654615d39bd510/docs/v/latest/main/dist/hexdoc_moreiotas-0.1.0.1.0rc6.dev0-py3-none-any.whl", hash = "sha256:6080dd85d8216e7d0f3475f5106966c384075288ac99c490c14cadbd80ab28b5" },
+    { url = "https://github.com/FallingColors/MoreIotas/raw/b87cfd6445f5cb0f90bd698159d6708ba97f7905/docs/v/latest/main/dist/hexdoc_moreiotas-0.1.0.1.0rc7.dev0-py3-none-any.whl", hash = "sha256:d8ff23bb11e1bbfe417c853375cecbda5750009f39bc8cb75e1722b7d4f33763" },
 ]
 
 [package.metadata]

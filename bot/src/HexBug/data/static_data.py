@@ -397,6 +397,8 @@ DISABLED_PATTERNS: set[ResourceLocation] = {
     # conflicts
     ResourceLocation("hexical", "age_scroll"),  # shape: hexical:greater_blink
     ResourceLocation("hexstruction", "bounding_box"),  # shape: hexical:greater_blink
+    ResourceLocation("lapisworks", "hastenature1"),  # shape: oneironaut:resistdetection
+    ResourceLocation("lapisworks", "hastenature3"),  # shape: hexical:greater_blink
     # not real patterns
     ResourceLocation("hexcasting", "const/vec/x"),
     ResourceLocation("hexcasting", "const/vec/y"),
