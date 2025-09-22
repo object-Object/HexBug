@@ -10,5 +10,6 @@ def setup_logging(verbose: bool = False):
         logging.getLogger("hexdoc").setLevel(logging.DEBUG)
     else:
         logging.getLogger("hexdoc").setLevel(logging.INFO)
+        logging.getLogger("hexdoc.minecraft.assets.textures").setLevel(logging.ERROR)
         logging.getLogger("httpx").setLevel(logging.WARNING)
     discord.VoiceClient.warn_nacl = False
