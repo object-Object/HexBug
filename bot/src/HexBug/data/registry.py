@@ -273,11 +273,19 @@ class HexBugRegistry(BaseModel):
                 display_as is not None or pattern_info.id in UNDOCUMENTED_PATTERNS
             )
 
+            display_only = pattern_info.id in lapisworks_per_world_shapes
+
+            # hack: use the name of the first real pattern instead
+            name_id = pattern_info.id
+            if display_only:
+                name_id += "0"
+
             name = i18n.localize(
-                f"hexcasting.action.{pattern_info.id}",
-                f"hexcasting.rawhook.{pattern_info.id}",
+                f"hexcasting.action.{name_id}",
+                f"hexcasting.rawhook.{name_id}",
                 silent=can_be_undocumented,
             ).value
+
             if override_name := PATTERN_NAME_OVERRIDES.get(pattern_info.id):
                 logger.info(
                     f"Renaming pattern from {name} to {override_name}: {pattern_info.id}"
@@ -297,7 +305,7 @@ class HexBugRegistry(BaseModel):
                 direction=HexDir[pattern_info.startdir.name],
                 signature=pattern_info.signature,
                 is_per_world=pattern_info.is_per_world,
-                display_only=pattern_info.id in lapisworks_per_world_shapes,
+                display_only=display_only,
                 display_as=display_as,
                 operators=[],
             )
