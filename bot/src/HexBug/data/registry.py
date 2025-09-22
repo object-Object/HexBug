@@ -147,7 +147,7 @@ class HexBugRegistry(BaseModel):
         styled_template = jinja_env.from_string(
             r"""
             {%- import "macros/formatting.md.jinja" as fmt with context -%}
-            {{- fmt.styled(text)|replace("\\n", "\n") if text else "" -}}
+            {{- fmt.styled(text) if text else "" -}}
             """,
             globals={
                 "book_links": book_context.book_links,

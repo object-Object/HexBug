@@ -13,7 +13,7 @@ dependencies = [
     "pydantic>=2.10.6",
     "pydantic-settings>=2.8.0",
     "fluent-runtime>=0.4.0",
-    "hexdoc>=1!0.1.0a23",
+    "hexdoc>=1!0.1.0a29",
     "typer>=0.15.1",
     "pfzy>=0.3.4",
     "hex-renderer-py>=0.1.5",
@@ -42,9 +42,12 @@ data = [
     "hexdoc-hexchanting~=1.1.3.0",
     "hexdoc-hexdebug~=0.4.0.1.20.1.0",
     "hexdoc-hexdim~=1.2.1.1.20.0",
+    "hexdoc-hexflow~=0.3.0.1.0",
     "hexdoc-hexgender~=1.0.4.0",
     "hexdoc-hexmapping~=0.0.3.0",
     "hexdoc-hexodus~=1.0.0.0",
+    "hexdoc-hexoverpowered~=0.8.2.0",
+    "hexdoc-hexparse~=1.3.3.0",
     # workaround for https://github.com/miyucomics/hexpose/commit/26709051b306e70982cb904ac2776eb7f9da9f4d
     # we can switch back to PyPI for the next release
     "hexdoc-hexpose==1.0.0.1.0.0+hexbug",

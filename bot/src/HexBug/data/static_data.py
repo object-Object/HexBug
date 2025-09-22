@@ -8,6 +8,7 @@ from .mods import Modloader, StaticModInfo
 from .patterns import StaticPatternInfo
 from .special_handlers import (
     ComplexHexLongSpecialHandler,
+    HexFlowNumberSpecialHandler,
     MaskSpecialHandler,
     NumberSpecialHandler,
     OverevaluateTailDepthSpecialHandler,
@@ -134,6 +135,15 @@ MODS: list[StaticModInfo] = [
         modloaders=[Modloader.FABRIC],
     ),
     StaticModInfo(
+        id="hexflow",
+        name="HexFlow",
+        description="Adds several new patterns for better control of spell executions.",
+        icon_url=URL("common/src/main/resources/logo.png"),
+        curseforge_slug="hexflow",
+        modrinth_slug="hexflow",
+        modloaders=[Modloader.FABRIC, Modloader.FORGE],
+    ),
+    StaticModInfo(
         id="hexgender",
         name="HexGender",
         description="Adds patterns for changing your gender via Wildfire's Female Gender Mod.",
@@ -172,6 +182,24 @@ MODS: list[StaticModInfo] = [
         curseforge_slug=None,
         modrinth_slug=None,
         modloaders=[Modloader.FABRIC],
+    ),
+    StaticModInfo(
+        id="hexoverpowered",
+        name="HexFlow",
+        description="Adds some OP stuff for Hex Casting.",
+        icon_url=URL("common/src/main/resources/logo.png"),
+        curseforge_slug="hexoverpowered",
+        modrinth_slug="hexoverpowered",
+        modloaders=[Modloader.FABRIC, Modloader.FORGE],
+    ),
+    StaticModInfo(
+        id="hexparse",
+        name="HexParse",
+        description="Provides a pair of patterns and a set of commands to convert custom code into a list iota.",
+        icon_url=URL("common/src/main/resources/logo.png"),
+        curseforge_slug="hexparse",
+        modrinth_slug="hexparse",
+        modloaders=[Modloader.FABRIC, Modloader.FORGE],
     ),
     StaticModInfo(
         id="hexpose",
@@ -383,6 +411,9 @@ SPECIAL_HANDLERS: dict[ResourceLocation, SpecialHandler[Any]] = {
         ),
         ComplexHexLongSpecialHandler(
             id=ResourceLocation("complexhex", "long"),
+        ),
+        HexFlowNumberSpecialHandler(
+            id=ResourceLocation("hexflow", "noob_num"),
         ),
     ]
 }
