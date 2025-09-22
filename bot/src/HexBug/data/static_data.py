@@ -185,7 +185,7 @@ MODS: list[StaticModInfo] = [
     ),
     StaticModInfo(
         id="hexoverpowered",
-        name="HexFlow",
+        name="HexOverpowered",
         description="Adds some OP stuff for Hex Casting.",
         icon_url=URL("common/src/main/resources/logo.png"),
         curseforge_slug="hexoverpowered",
