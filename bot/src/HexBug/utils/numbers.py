@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import math
+from contextvars import ContextVar
 from dataclasses import dataclass
 from datetime import timedelta
 from fractions import Fraction
@@ -9,6 +10,10 @@ from typing import Sequence
 from hexnumgen import AStarOptions, generate_number_pattern
 
 from HexBug.data.hex_math import HexDir, HexPattern
+from HexBug.utils.context import set_contextvar
+
+_literals_var = ContextVar[dict[int, HexPattern]]("_literals_var")
+
 
 ONE = HexPattern(HexDir.SOUTH_EAST, "aqaaw")
 NEGATIVE_ONE = HexPattern(HexDir.NORTH_EAST, "deddw")
@@ -58,24 +63,19 @@ class DecomposedNumber:
                 HexPattern(HexDir[result.direction], result.pattern),
             )
 
-        match target:
-            case Fraction(numerator=n, denominator=d):
-                return cls.decompose(n, literals) / cls.decompose(d, literals)
-            case int():
-                return cls.decompose(target, literals)
+        with set_contextvar(_literals_var, literals):
+            match target:
+                case Fraction(numerator=numerator, denominator=denominator):
+                    return cls._decompose(numerator) / cls._decompose(denominator)
+                case int():
+                    return cls._decompose(target)
 
     @classmethod
-    def decompose(
-        cls,
-        target: int,
-        literals: dict[int, HexPattern],
-    ) -> DecomposedNumber:
-        if target in literals:
-            return cls(value=target, equation=str(target), patterns=[literals[target]])
+    def _decompose(cls, target: int) -> DecomposedNumber:
+        if literal := _literals_var.get().get(target):
+            return cls.simple(target, literal)
 
-        a, b, c, d, e, f, g = (
-            cls.decompose(n, literals) for n in _decompose_int(abs(target))
-        )
+        a, b, c, d, e, f, g = (cls._decompose(n) for n in _decompose_int(abs(target)))
 
         if target > 0:
             option_1 = a**b * c + d
@@ -102,6 +102,13 @@ class DecomposedNumber:
             return self.equation
         return f"({self.equation})"
 
+    def simplify(self) -> DecomposedNumber:
+        if self.value.is_integer():
+            value = int(self.value)
+            if literal := _literals_var.get().get(value):
+                return DecomposedNumber.simple(value, literal)
+        return self
+
     def __add__(self, other: DecomposedNumber) -> DecomposedNumber:
         if self.value == 0:
             return other
@@ -111,7 +118,7 @@ class DecomposedNumber:
             value=self.value + other.value,
             equation=f"{self.equation} + {other.equation}",
             patterns=(*self.patterns, *other.patterns, ADD),
-        )
+        ).simplify()
 
     def __sub__(self, other: DecomposedNumber) -> DecomposedNumber:
         if self.value == 0:
@@ -122,7 +129,7 @@ class DecomposedNumber:
             value=self.value - other.value,
             equation=f"{self.equation} - {other.equation}",
             patterns=(*self.patterns, *other.patterns, SUB),
-        )
+        ).simplify()
 
     def __mul__(self, other: DecomposedNumber) -> DecomposedNumber:
         if self.value == 0 or other.value == 1:
@@ -133,7 +140,7 @@ class DecomposedNumber:
             value=self.value * other.value,
             equation=f"{self.wrap_equation(if_add=True)} × {other.wrap_equation(if_add=True)}",
             patterns=(*self.patterns, *other.patterns, MUL),
-        )
+        ).simplify()
 
     def __truediv__(self, other: DecomposedNumber) -> DecomposedNumber:
         if self.value == 0 or other.value == 1:
@@ -142,7 +149,7 @@ class DecomposedNumber:
             value=self.value / other.value,
             equation=f"{self.wrap_equation()} ÷ {other.wrap_equation()}",
             patterns=(*self.patterns, *other.patterns, DIV),
-        )
+        ).simplify()
 
     def __pow__(self, other: DecomposedNumber) -> DecomposedNumber:
         if other.value == 0:
@@ -153,7 +160,7 @@ class DecomposedNumber:
             value=self.value**other.value,
             equation=f"{self.wrap_equation()}^{other.wrap_equation()}",
             patterns=(*self.patterns, *other.patterns, POW),
-        )
+        ).simplify()
 
     def __neg__(self) -> DecomposedNumber:
         if self.is_equation:
