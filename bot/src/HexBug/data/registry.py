@@ -197,6 +197,10 @@ class HexBugRegistry(BaseModel):
                     DynamicModInfo(
                         version=mod_plugin.mod_version,
                         book_url=hexdoc_metadata.book_url,
+                        book_title=i18n.localize(f"hexdoc.{mod_id}.title").value,
+                        book_description=i18n.localize(
+                            f"hexdoc.{mod_id}.description"
+                        ).value,
                         github_author=author,
                         github_repo=repo,
                         github_commit=commit,

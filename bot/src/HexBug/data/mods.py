@@ -38,7 +38,11 @@ class StaticModInfo(BaseModel):
 
 class DynamicModInfo(BaseModel):
     version: str
+
     book_url: PydanticURL
+    book_title: str
+    book_description: str
+
     github_author: str
     github_repo: str
     github_commit: str

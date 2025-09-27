@@ -34,6 +34,28 @@ choice_HexBug-utils-discord-visibility-Visibility =
     .PRIVATE =
         private
 
+# /book
+
+group_book =
+        book
+    .description =
+        Commands for getting links to web book content.
+
+# /book home
+
+command_book-home =
+        home
+    .description =
+        Get a link to a mod's web book.
+
+    .parameter_mod =
+        mod
+    .parameter_mod_description =
+        The name of the mod to look up.
+
+    .parameter_visibility = {-parameter_visibility}
+    .parameter_visibility_description = {-parameter_visibility_description}
+
 # /decode
 
 group_decode =
