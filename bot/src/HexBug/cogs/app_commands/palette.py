@@ -50,7 +50,7 @@ class PaletteCog(HexBugCog):
 
         await EmbedPatternView(
             interaction=interaction,
-            pattern=_make_palette_showcase(len(palette.line_colors)),
+            patterns=[_make_palette_showcase(len(palette.line_colors))],
             options=PatternRenderingOptions(
                 palette=palette,
                 freeze_palette=True,

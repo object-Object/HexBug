@@ -9,6 +9,8 @@ from hexdoc.core import ResourceLocation
 from hexdoc.minecraft import I18n, LocalizedStr
 from pydantic import BaseModel
 
+from HexBug.utils.strings import format_number
+
 from .hex_math import HexAngle, HexDir, HexPattern
 from .patterns import PatternOperator
 
@@ -149,6 +151,12 @@ class NumberSpecialHandler(PrefixSpecialHandler[float, int]):
             raise ValueError(f"No pregenerated number found for {n}.")
 
         return n, registry.pregenerated_numbers[n]
+
+    @override
+    def get_name(self, raw_name: str, value: float | None) -> str:
+        if value is not None:
+            return raw_name % format_number(value)
+        return super().get_name(raw_name, value)
 
 
 class MaskSpecialHandler(SpecialHandler[str]):

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import InitVar, dataclass, field
-from typing import Any, Self, override
+from typing import Any, Iterable, Self, override
 
 from discord import (
     ButtonStyle,
@@ -41,7 +41,6 @@ PATTERN_FILENAME = "pattern.png"
 class BasePatternView(ui.View, ABC):
     interaction: InitVar[Interaction]
 
-    pattern: HexPattern
     hide_stroke_order: bool
 
     options: PatternRenderingOptions = field(default_factory=PatternRenderingOptions)
@@ -60,6 +59,9 @@ class BasePatternView(ui.View, ABC):
 
         if isinstance(interaction.command, Command):
             self.command = interaction.command
+
+    @abstractmethod
+    def get_patterns(self) -> Iterable[HexPattern]: ...
 
     @abstractmethod
     async def get_embeds(self, interaction: Interaction) -> list[Embed]: ...
@@ -92,7 +94,7 @@ class BasePatternView(ui.View, ABC):
     def get_attachments(self) -> list[File]:
         return [
             self.options.render_discord_file(
-                self.pattern,
+                self.get_patterns(),
                 hide_stroke_order=self.hide_stroke_order,
                 filename=PATTERN_FILENAME,
             )
@@ -134,6 +136,11 @@ class BasePatternView(ui.View, ABC):
 @dataclass(kw_only=True)
 class EmbedPatternView(BasePatternView):
     embed: Embed
+    patterns: Iterable[HexPattern]
+
+    @override
+    def get_patterns(self) -> Iterable[HexPattern]:
+        return self.patterns
 
     @override
     async def get_embeds(self, interaction: Interaction) -> list[Embed]:
@@ -141,7 +148,9 @@ class EmbedPatternView(BasePatternView):
             self.embed.set_image(
                 url=f"attachment://{PATTERN_FILENAME}",
             ).set_footer(
-                text=self.pattern.display() if not self.hide_stroke_order else None,
+                text=", ".join(p.display() for p in self.patterns)
+                if not self.hide_stroke_order
+                else None,
             )
         ]
 
@@ -150,6 +159,7 @@ class EmbedPatternView(BasePatternView):
 class NamedPatternView(BasePatternView):
     interaction: InitVar[Interaction]
 
+    pattern: HexPattern
     info: PatternMatchResult | None
     display_info: PatternMatchResult | None = None
 
@@ -207,6 +217,10 @@ class NamedPatternView(BasePatternView):
         if self.display_info:
             return self.display_info.name
         return "Unknown"
+
+    @override
+    def get_patterns(self) -> list[HexPattern]:
+        return [self.pattern]
 
     @override
     async def get_embeds(self, interaction: Interaction) -> list[Embed]:

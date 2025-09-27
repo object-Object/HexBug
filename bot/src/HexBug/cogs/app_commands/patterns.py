@@ -1,0 +1,59 @@
+from datetime import timedelta
+from fractions import Fraction
+
+from discord import Embed, Interaction, app_commands
+from discord.ext.commands import GroupCog
+
+from HexBug.core.cog import HexBugCog
+from HexBug.core.exceptions import InvalidInputError
+from HexBug.ui.views.patterns import EmbedPatternView, NamedPatternView
+from HexBug.utils.discord.visibility import Visibility, VisibilityOption
+from HexBug.utils.numbers import DecomposedNumber
+from HexBug.utils.strings import format_number
+
+MAX_NUMBER = 1e12
+MAX_LENGTH = 48
+
+
+class PatternsCog(HexBugCog, GroupCog, group_name="patterns"):
+    @app_commands.command()
+    async def number(
+        self,
+        interaction: Interaction,
+        number: str,
+        visibility: VisibilityOption = Visibility.PRIVATE,
+    ):
+        if len(number) > MAX_LENGTH:
+            raise InvalidInputError("Number is too large.", value=number)
+
+        try:
+            target = Fraction(number)
+        except Exception as e:
+            raise InvalidInputError("Invalid number.", value=number) from e
+
+        if target.numerator > MAX_NUMBER or target.denominator > MAX_NUMBER:
+            raise InvalidInputError("Number is too large.", value=number)
+
+        result = DecomposedNumber.generate_or_decompose(
+            target=target,
+            literals=self.bot.registry.pregenerated_numbers,
+            timeout=timedelta(seconds=1),
+        )
+
+        if result.is_equation:
+            await EmbedPatternView(
+                interaction=interaction,
+                patterns=result.patterns,
+                hide_stroke_order=False,
+                embed=Embed(
+                    title=format_number(result.value),
+                    description=f"```\n{result.equation}\n```",
+                ),
+            ).send(interaction, visibility)
+        else:
+            await NamedPatternView(
+                interaction=interaction,
+                pattern=result.patterns[0],
+                hide_stroke_order=False,
+                info=self.bot.registry.try_match_pattern(result.patterns[0]),
+            ).send(interaction, visibility)

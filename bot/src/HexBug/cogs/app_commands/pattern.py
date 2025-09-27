@@ -136,7 +136,7 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
 
         await EmbedPatternView(
             interaction=interaction,
-            pattern=pattern,
+            patterns=[pattern],
             hide_stroke_order=is_per_world,
             embed=embed,
         ).send(interaction, visibility)

@@ -260,6 +260,28 @@ command_pattern-build =
     .parameter_hide-stroke-order = {-parameter_hide-stroke-order}
     .parameter_hide-stroke-order_description = {-parameter_hide-stroke-order_description}
 
+# /patterns
+
+group_patterns =
+        patterns
+    .description =
+        Commands for generating and/or rendering many patterns at once.
+
+# /patterns number
+
+command_patterns-number =
+        number
+    .description =
+        Generate and display a sequence of patterns to push any rational number to the stack.
+
+    .parameter_number =
+        number
+    .parameter_number_description =
+        The number to generate. May be a decimal or fraction.
+
+    .parameter_visibility = {-parameter_visibility}
+    .parameter_visibility_description = {-parameter_visibility_description}
+
 # /per-world-pattern
 
 group_per-world-pattern =
