@@ -1,3 +1,4 @@
+import asyncio
 from datetime import timedelta
 from fractions import Fraction
 
@@ -34,10 +35,12 @@ class PatternsCog(HexBugCog, GroupCog, group_name="patterns"):
         if target.numerator > MAX_NUMBER or target.denominator > MAX_NUMBER:
             raise InvalidInputError("Number is too large.", value=number)
 
-        result = DecomposedNumber.generate_or_decompose(
-            target=target,
-            literals=self.bot.registry.pregenerated_numbers,
-            timeout=timedelta(seconds=1),
+        result = await asyncio.get_running_loop().run_in_executor(
+            None,
+            DecomposedNumber.generate_or_decompose,
+            target,
+            self.bot.registry.pregenerated_numbers,
+            timedelta(seconds=1),
         )
 
         if result.is_equation:
