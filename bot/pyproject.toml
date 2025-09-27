@@ -8,24 +8,24 @@ name = "HexBug-bot"
 requires-python = ">=3.12"
 dependencies = [
     "HexBug-common",
+    "alembic>=1.16.5",
     # 2.6.3: github.com/Rapptz/discord.py/issues/10291
     "discord-py>=2.6.2,!=2.6.3",
-    "pydantic>=2.10.6",
-    "pydantic-settings>=2.8.0",
-    "fluent-runtime>=0.4.0",
-    "hexdoc>=1!0.1.0a29",
-    "typer>=0.15.1",
-    "pfzy>=0.3.4",
-    "hex-renderer-py>=0.1.5",
-    "matplotlib>=3.10.1",
     "fastapi>=0.115.12",
-    "uvicorn>=0.34.0",
+    "fluent-runtime>=0.4.0",
+    "hex-renderer-py>=0.1.5",
+    "hexdoc>=1!0.1.0a29",
     "httpx>=0.28.1",
-    "lark[interegular]>=1.2.2",
     "humanize>=4.13.0",
-    "sqlalchemy[asyncio]>=2.0.43",
-    "alembic>=1.16.5",
+    "lark[interegular]>=1.2.2",
+    "matplotlib>=3.10.1",
+    "pfzy>=0.3.4",
     "psycopg[binary,pool]>=3.2.9",
+    "pydantic-settings>=2.8.0",
+    "pydantic>=2.10.6",
+    "sqlalchemy[asyncio]>=2.0.43",
+    "typer>=0.15.1",
+    "uvicorn>=0.34.0",
 ]
 
 [project.scripts]

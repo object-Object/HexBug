@@ -8,8 +8,8 @@ name = "HexBug-infrastructure"
 requires-python = ">=3.12"
 dependencies = [
     "HexBug-common",
-    "aws-cdk-lib>=2.180.0",
     "aws-cdk-github-oidc>=2.4.1",
+    "aws-cdk-lib>=2.180.0",
     "object-ci[aws-cdk] @ git+https://github.com/object-Object/ci@v0",
 ]
 
