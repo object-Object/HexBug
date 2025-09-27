@@ -11,6 +11,7 @@ from HexBug.utils.discord.transformers import (
     EntryInfoOption,
     ModInfoOption,
     PageInfoOption,
+    RecipeInfoOption,
 )
 from HexBug.utils.discord.translation import translate_command_text
 from HexBug.utils.discord.visibility import (
@@ -51,6 +52,10 @@ class BookCog(HexBugCog, GroupCog, group_name="book"):
             .add_field(
                 name=await translate_command_text(interaction, "pages"),
                 value=mod.linkable_page_count,
+            )
+            .add_field(
+                name=await translate_command_text(interaction, "recipes"),
+                value=mod.recipe_count,
             )
         )
         await respond_with_visibility(interaction, visibility, embed=embed)
@@ -143,6 +148,53 @@ class BookCog(HexBugCog, GroupCog, group_name="book"):
         _set_icon(embed, page.icon_urls)
 
         await respond_with_visibility(interaction, visibility, embed=embed)
+
+    @app_commands.command()
+    async def recipe(
+        self,
+        interaction: Interaction,
+        recipes: RecipeInfoOption,
+        visibility: VisibilityOption = Visibility.PRIVATE,
+    ):
+        embeds = list[Embed]()
+
+        for recipe in recipes:
+            page = self.bot.registry.pages[recipe.page_key] if recipe.page_key else None
+            entry = self.bot.registry.entries[recipe.entry_id]
+            category = self.bot.registry.categories[entry.category_id]
+
+            embed = (
+                Embed(
+                    title=await translate_command_text(
+                        interaction, "title", title=recipe.name
+                    ),
+                    url=page.url if page else entry.url,
+                )
+                .set_footer(
+                    text=f"{recipe.id} ({recipe.type})",
+                )
+                .add_field(
+                    name=await translate_command_text(interaction, "category"),
+                    value=f"[{category.name}]({category.url})",
+                )
+                .add_field(
+                    name=await translate_command_text(interaction, "entry"),
+                    value=f"[{entry.name}]({entry.url})",
+                )
+            )
+            if page:
+                embed.description = page.text
+                embed.add_field(
+                    name=await translate_command_text(interaction, "page"),
+                    value=f"[{page.title}]({page.url})",
+                )
+
+            set_embed_mod_author(embed, self.bot.registry.mods[recipe.mod_id])
+            _set_icon(embed, recipe.icon_urls)
+
+            embeds.append(embed)
+
+        await respond_with_visibility(interaction, visibility, embeds=embeds)
 
 
 def _set_icon(embed: Embed, icon_urls: list[URL]):

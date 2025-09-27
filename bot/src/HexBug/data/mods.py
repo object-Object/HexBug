@@ -62,6 +62,7 @@ class DynamicModInfo(BaseModel):
     category_count: int = 0
     entry_count: int = 0
     linkable_page_count: int = 0
+    recipe_count: int = 0
 
     @property
     def github_url(self) -> URL:

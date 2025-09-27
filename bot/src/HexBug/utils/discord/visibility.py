@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from enum import Enum
 from re import Match
-from typing import Any, Awaitable, Callable, Literal, overload
+from typing import Any, Awaitable, Callable, Literal, Sequence, overload
 
 from discord import Embed, Interaction
 from discord.app_commands import Command, ContextMenu, Transform
@@ -35,11 +35,13 @@ async def respond_with_visibility(
     *,
     content: Any | None = None,
     embed: Embed = MISSING,
+    embeds: Sequence[Embed] = MISSING,
 ):
     await MessageContents(
         command=interaction.command,
         content=content,
         embed=embed,
+        embeds=embeds,
     ).send_response(interaction, visibility)
 
 
@@ -48,6 +50,7 @@ class MessageContents:
     command: AnyCommand | ContextMenu | None
     content: Any | None = None
     embed: Embed = MISSING
+    embeds: Sequence[Embed] = MISSING
 
     async def send_response(
         self,
@@ -58,6 +61,7 @@ class MessageContents:
         await interaction.response.send_message(
             content=self.content,
             embed=self.embed,
+            embeds=self.embeds,
             ephemeral=visibility.ephemeral,
             view=self._get_view(interaction, visibility, show_usage),
         )

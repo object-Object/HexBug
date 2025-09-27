@@ -13,7 +13,7 @@ from discord.app_commands.transformers import EnumNameTransformer, EnumValueTran
 from hexdoc.core import ResourceLocation
 
 from HexBug.core.bot import HexBugBot
-from HexBug.data.book import CategoryInfo, EntryInfo, PageInfo
+from HexBug.data.book import CategoryInfo, EntryInfo, PageInfo, RecipeInfo
 from HexBug.data.hex_math import VALID_SIGNATURE_PATTERN, HexDir
 from HexBug.data.mods import ModInfo, Modloader
 from HexBug.data.patterns import PatternInfo
@@ -372,6 +372,37 @@ class PageInfoTransformer(PfzyAutocompleteTransformer):
         self._words.sort(key=lambda w: w["name"].lower())
 
 
+class RecipeInfoTransformer(PfzyAutocompleteTransformer):
+    @override
+    async def transform(self, interaction: Interaction, value: str) -> list[RecipeInfo]:
+        recipe_id = ResourceLocation.from_str(value)
+        recipe = HexBugBot.registry_of(interaction).recipes.get(recipe_id)
+        if recipe is None:
+            raise ValueError("Unknown recipe.")
+        return recipe
+
+    @override
+    async def _setup_autocomplete(self, interaction: Interaction):
+        self._words.clear()
+
+        registry = HexBugBot.registry_of(interaction)
+        for recipe_id, recipes in registry.recipes.items():
+            for recipe in recipes:
+                for search_term in [
+                    recipe.name,
+                    str(recipe_id),
+                ]:
+                    self._words.append(
+                        AutocompleteWord(
+                            search_term=search_term,
+                            name=recipe.name,
+                            value=str(recipe_id),
+                        )
+                    )
+
+        self._words.sort(key=lambda w: w["name"].lower())
+
+
 class PatternSignatureTransformer(Transformer):
     async def transform(self, interaction: Interaction, value: str) -> Any:
         signature = value.lower()
@@ -411,6 +442,8 @@ CategoryInfoOption = Transform[CategoryInfo, CategoryInfoTransformer]
 EntryInfoOption = Transform[EntryInfo, EntryInfoTransformer]
 
 PageInfoOption = Transform[PageInfo, PageInfoTransformer]
+
+RecipeInfoOption = Transform[list[RecipeInfo], RecipeInfoTransformer]
 
 PatternSignatureOption = Transform[str, PatternSignatureTransformer]
 

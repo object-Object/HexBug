@@ -12,6 +12,7 @@ from typing import Any, Self, overload
 
 from hexdoc.cli.utils import init_context
 from hexdoc.core import (
+    ItemStack,
     MinecraftVersion,
     ModResourceLoader,
     ResourceLocation,
@@ -28,7 +29,7 @@ from hexdoc.minecraft.assets import (
 from hexdoc.minecraft.assets.with_texture import BaseWithTexture
 from hexdoc.minecraft.recipe import ItemResult, Recipe
 from hexdoc.patchouli import Book, BookContext, FormatTree
-from hexdoc.patchouli.page import ImagePage, Page, SpotlightPage, TextPage
+from hexdoc.patchouli.page import EntityPage, ImagePage, Page, SpotlightPage, TextPage
 from hexdoc.plugin import PluginManager
 from jinja2 import PackageLoader
 from pydantic import BaseModel, PrivateAttr, TypeAdapter, model_validator
@@ -41,7 +42,7 @@ from HexBug.utils.hexdoc import (
     monkeypatch_hexdoc_hexcasting,
 )
 
-from .book import CategoryInfo, EntryInfo, PageInfo
+from .book import CategoryInfo, EntryInfo, PageInfo, RecipeInfo
 from .hex_math import HexDir, HexPattern, PatternSignature
 from .lookups import PatternLookups
 from .mods import DynamicModInfo, ModInfo
@@ -78,6 +79,7 @@ class HexBugRegistry(BaseModel):
     categories: dict[ResourceLocation, CategoryInfo]
     entries: dict[ResourceLocation, EntryInfo]
     pages: dict[str, PageInfo]
+    recipes: dict[ResourceLocation, list[RecipeInfo]]
 
     _lookups: PatternLookups = PrivateAttr(default_factory=PatternLookups)
     _pregenerated_numbers: dict[int, HexPattern] = PrivateAttr(
@@ -108,6 +110,7 @@ class HexBugRegistry(BaseModel):
             categories={},
             entries={},
             pages={},
+            recipes={},
         )
 
         # load hexdoc data
@@ -275,6 +278,23 @@ class HexBugRegistry(BaseModel):
                         logger.info(f"Skipping disabled page: {fragment}")
                         continue
 
+                    for recipe in _get_page_recipes(page):
+                        if result := _get_recipe_result(recipe):
+                            assert recipe.type
+                            registry._register_recipe(
+                                RecipeInfo(
+                                    mod_id=entry_mod.id,
+                                    icon_urls=_get_texture_urls(result.texture),
+                                    entry_id=entry.id,
+                                    page_key=f"{entry.id}#{page.anchor}"
+                                    if page.anchor
+                                    else None,
+                                    type=recipe.type,
+                                    id=result.id.id,
+                                    name=result.name.value,
+                                )
+                            )
+
                     url_key = page.book_link_key(entry.book_link_key)
                     book_url = book_context.book_links.get(url_key) if url_key else None
 
@@ -286,6 +306,7 @@ class HexBugRegistry(BaseModel):
                             case (
                                 Page(title=LocalizedStr(value=title))
                                 | Page(header=LocalizedStr(value=title))
+                                | Page(name=LocalizedStr(value=title))
                             ):
                                 pass
                             case _:
@@ -526,6 +547,11 @@ class HexBugRegistry(BaseModel):
         for page in registry.pages.values():
             registry.mods[page.mod_id].linkable_page_count += 1
 
+        for recipes in registry.recipes.values():
+            recipes.sort(key=lambda v: (str(v.entry_id), v.page_key))
+            for recipe in recipes:
+                registry.mods[recipe.mod_id].recipe_count += 1
+
         logger.info("Done.")
         return registry
 
@@ -660,6 +686,11 @@ class HexBugRegistry(BaseModel):
             raise ValueError(f"Page is already registered: {page.key}")
         self.pages[page.key] = page
 
+    def _register_recipe(self, recipe: RecipeInfo):
+        if recipe.id not in self.recipes:
+            self.recipes[recipe.id] = []
+        self.recipes[recipe.id].append(recipe)
+
     @model_validator(mode="after")
     def _post_root(self):
         for pattern in self.patterns.values():
@@ -677,30 +708,49 @@ class HexBugRegistry(BaseModel):
 
 def _get_page_icon(page: Page) -> Texture | None:
     match page:
-        case ImagePage(images=[texture, *_]):
+        case ImagePage(images=[texture, *_]) | EntityPage(texture=texture):
             return texture
         case _:
             if item := _get_page_item(page):
                 return item.texture
 
 
-def _get_page_item(page: Page) -> BaseWithTexture[Any, Any] | None:
-    from hexdoc_hexcasting.book.recipes import BlockState
+type AnyWithTexture = (
+    BaseWithTexture[ResourceLocation, Any] | BaseWithTexture[ItemStack, Any]
+)
 
+
+def _get_page_item(page: Page) -> AnyWithTexture | None:
     match page:
         case SpotlightPage(item=item):
             return item
-        case Page(recipe=Recipe() as recipe) | Page(recipes=[Recipe() as recipe, *_]):
-            match recipe:
-                case (
-                    Recipe(result=BaseWithTexture() as texture)
-                    | Recipe(result=ItemResult(item=texture))
-                    | Recipe(result=BlockState(name=texture))
-                    | Recipe(result_item=BaseWithTexture() as texture)
-                ):
-                    return texture
-                case _:
-                    return None
+        case _:
+            for recipe in _get_page_recipes(page):
+                if result := _get_recipe_result(recipe):
+                    return result
+
+
+def _get_page_recipes(page: Page) -> list[Recipe]:
+    match page:
+        case Page(recipe=Recipe() as recipe):
+            return [recipe]
+        case Page(recipes=recipes):
+            return [recipes]
+        case _:
+            return []
+
+
+def _get_recipe_result(recipe: Recipe) -> AnyWithTexture | None:
+    from hexdoc_hexcasting.book.recipes import BlockState
+
+    match recipe:
+        case (
+            Recipe(result=BaseWithTexture() as texture)
+            | Recipe(result=ItemResult(item=texture))
+            | Recipe(result=BlockState(name=texture))
+            | Recipe(result_item=BaseWithTexture() as texture)
+        ):
+            return texture
         case _:
             return None
 

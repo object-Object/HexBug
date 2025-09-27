@@ -114,6 +114,26 @@ command_book-page =
     .text_category = Category
     .text_entry = Entry
 
+# /book recipe
+
+command_book-recipe =
+        recipe
+    .description =
+        Get a link to a recipe in a mod's web book.
+
+    .parameter_recipes =
+        item
+    .parameter_recipes_description =
+        The name of the item being crafted.
+
+    .parameter_visibility = {-parameter_visibility}
+    .parameter_visibility_description = {-parameter_visibility_description}
+
+    .text_title = [Recipe] { $title }
+    .text_category = Category
+    .text_entry = Entry
+    .text_page = Page
+
 # /decode
 
 group_decode =
