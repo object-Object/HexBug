@@ -1,0 +1,17 @@
+{
+    "Translate Command Text": {
+        "prefix": "tct",
+        "body": "await translate_command_text(interaction, \"$1\"$2)$0",
+        "scope": "python",
+    },
+    "Translate Group Text": {
+        "prefix": "tgt",
+        "body": "await translate_group_text(interaction, \"$1\"$2)$0",
+        "scope": "python",
+    },
+    "Translate Text": {
+        "prefix": "tt",
+        "body": "await translate(interaction, \"$1\"$2)$0",
+        "scope": "python",
+    },
+}

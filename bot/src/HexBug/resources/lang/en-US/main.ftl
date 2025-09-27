@@ -198,6 +198,26 @@ command_mod =
     .parameter_visibility = {-parameter_visibility}
     .parameter_visibility_description = {-parameter_visibility_description}
 
+    .text_loaders = Supported Loaders
+
+    .text_curseforge = CurseForge
+    .text_modrinth = Modrinth
+    .text_github = GitHub
+
+    .text_patterns = Patterns
+
+    .text_overloads = Overloads
+    .text_overloads-value =
+        { $first_party } first-party
+        { $third_party } third-party
+
+    .text_special = Special Handlers
+
+    .text_categories = Categories
+    .text_entries = Entries
+    .text_pages = Linkable Pages
+    .text_recipes = Recipes
+
 # /mods
 
 command_mods =
@@ -564,3 +584,8 @@ command_status =
     .text_mods = Mods
 
     .text_patterns = Patterns
+
+    .text_categories = Categories
+    .text_entries = Entries
+    .text_pages = Linkable Pages
+    .text_recipes = Recipes

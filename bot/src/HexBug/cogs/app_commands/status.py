@@ -39,6 +39,7 @@ class StatusCog(HexBugCog):
             )
 
         app_info = await self.bot.application_info()
+        registry = self.bot.registry
 
         embed = (
             Embed(
@@ -72,12 +73,28 @@ class StatusCog(HexBugCog):
             )
             .add_field(
                 name=await translate_command_text(interaction, "mods"),
-                value=len(self.bot.registry.mods),
+                value=len(registry.mods),
             )
             .add_field(
                 name=await translate_command_text(interaction, "patterns"),
-                value=len(self.bot.registry.patterns)  # includes hidden
-                + len(self.bot.registry.special_handlers),
+                value=len(registry.patterns)  # includes hidden
+                + len(registry.special_handlers),
+            )
+            .add_field(
+                name=await translate_command_text(interaction, "categories"),
+                value=len(registry.categories),
+            )
+            .add_field(
+                name=await translate_command_text(interaction, "entries"),
+                value=len(registry.entries),
+            )
+            .add_field(
+                name=await translate_command_text(interaction, "pages"),
+                value=len(registry.pages),
+            )
+            .add_field(
+                name=await translate_command_text(interaction, "recipes"),
+                value=sum(len(recipes) for recipes in registry.recipes.values()),
             )
         )
 
