@@ -1,9 +1,9 @@
-from typing import Annotated, Any
+from __future__ import annotations
 
 from hexdoc.core import ResourceLocation
 from hexdoc.model import Color
 from hexdoc.utils import PydanticURL
-from pydantic import BaseModel as _BaseModel, BeforeValidator, PlainSerializer
+from pydantic import BaseModel as _BaseModel
 
 
 class BaseModel(_BaseModel):
@@ -28,22 +28,9 @@ class EntryInfo(BaseModel):
 class PageInfo(BaseModel):
     entry_id: ResourceLocation
     anchor: str
-    title: str | None
+    title: str
     text: str | None
 
-
-def _validate_PageKey(value: Any):
-    if isinstance(value, str):
-        return value.split("#", 1)
-    return value
-
-
-def _serialize_PageKey(value: tuple[ResourceLocation, str]):
-    return f"{value[0]}#{value[1]}"
-
-
-type PageKey = Annotated[
-    tuple[ResourceLocation, str],
-    BeforeValidator(_validate_PageKey),
-    PlainSerializer(_serialize_PageKey),
-]
+    @property
+    def key(self) -> str:
+        return f"{self.entry_id}#{self.anchor}"

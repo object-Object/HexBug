@@ -27,7 +27,7 @@ from HexBug.rendering.draw import PatternRenderingOptions
 from HexBug.rendering.types import Palette, Theme
 from HexBug.utils.discord.commands import AnyCommand
 from HexBug.utils.discord.components import update_indexed_select_menu
-from HexBug.utils.discord.embeds import FOOTER_SEPARATOR
+from HexBug.utils.discord.embeds import FOOTER_SEPARATOR, set_embed_mod_author
 from HexBug.utils.discord.translation import translate
 from HexBug.utils.discord.visibility import Visibility, add_visibility_buttons
 from HexBug.utils.strings import join_truthy
@@ -250,11 +250,7 @@ class NamedPatternView(BasePatternView):
                 embed.url = str(self.operator.book_url)
 
         if self.mod:
-            embed.set_author(
-                name=self.mod.name,
-                icon_url=self.mod.icon_url,
-                url=self.mod.book_url,
-            )
+            set_embed_mod_author(embed, self.mod)
 
         return [embed]
 

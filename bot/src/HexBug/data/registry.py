@@ -1,3 +1,5 @@
+# pyright: reportUnknownVariableType=information
+
 from __future__ import annotations
 
 import itertools
@@ -24,7 +26,7 @@ from hexdoc.minecraft.assets import (
     Texture,
 )
 from hexdoc.minecraft.assets.with_texture import BaseWithTexture
-from hexdoc.minecraft.recipe import Recipe
+from hexdoc.minecraft.recipe import ItemResult, Recipe
 from hexdoc.patchouli import Book, BookContext, FormatTree
 from hexdoc.patchouli.page import ImagePage, Page, SpotlightPage, TextPage
 from hexdoc.plugin import PluginManager
@@ -39,7 +41,7 @@ from HexBug.utils.hexdoc import (
     monkeypatch_hexdoc_hexcasting,
 )
 
-from .book import CategoryInfo, EntryInfo, PageInfo, PageKey
+from .book import CategoryInfo, EntryInfo, PageInfo
 from .hex_math import HexDir, HexPattern, PatternSignature
 from .lookups import PatternLookups
 from .mods import DynamicModInfo, ModInfo
@@ -75,7 +77,7 @@ class HexBugRegistry(BaseModel):
     special_handlers: dict[ResourceLocation, SpecialHandlerInfo]
     categories: dict[ResourceLocation, CategoryInfo]
     entries: dict[ResourceLocation, EntryInfo]
-    pages: dict[PageKey, PageInfo]
+    pages: dict[str, PageInfo]
 
     _lookups: PatternLookups = PrivateAttr(default_factory=PatternLookups)
     _pregenerated_numbers: dict[int, HexPattern] = PrivateAttr(
@@ -287,7 +289,13 @@ class HexBugRegistry(BaseModel):
                             ):
                                 pass
                             case _:
-                                title = None
+                                if item := _get_page_item(page):
+                                    title = item.name.value
+                                else:
+                                    logger.warning(
+                                        f"Failed to find title for page: {entry.id}#{page.anchor}"
+                                    )
+                                    title = f"{entry.name}: {page.anchor.capitalize()}"
 
                         # text
                         match page:
@@ -648,10 +656,9 @@ class HexBugRegistry(BaseModel):
         self.entries[entry.id] = entry
 
     def _register_page(self, page: PageInfo):
-        key = (page.entry_id, page.anchor)
-        if key in self.pages:
-            raise ValueError(f"Page is already registered: {key}")
-        self.pages[key] = page
+        if page.key in self.pages:
+            raise ValueError(f"Page is already registered: {page.key}")
+        self.pages[page.key] = page
 
     @model_validator(mode="after")
     def _post_root(self):
@@ -669,24 +676,27 @@ class HexBugRegistry(BaseModel):
 
 
 def _get_page_icon(page: Page) -> Texture | None:
-    from hexdoc_hexcasting.book.recipes import BlockState
-
     match page:
         case ImagePage(images=[texture, *_]):
             return texture
+        case _:
+            if item := _get_page_item(page):
+                return item.texture
+
+
+def _get_page_item(page: Page) -> BaseWithTexture[Any, Any] | None:
+    from hexdoc_hexcasting.book.recipes import BlockState
+
+    match page:
         case SpotlightPage(item=item):
-            return item.texture
-        case (
-            Page(recipe=Recipe() as recipe)
-            | Page(
-                recipes=[Recipe() as recipe, *_],  # pyright: ignore[reportUnknownVariableType]
-            )
-        ):
+            return item
+        case Page(recipe=Recipe() as recipe) | Page(recipes=[Recipe() as recipe, *_]):
             match recipe:
                 case (
-                    Recipe(result=BaseWithTexture(texture=texture))
-                    | Recipe(result=BlockState(name=BaseWithTexture(texture=texture)))
-                    | Recipe(result_item=BaseWithTexture(texture=texture))
+                    Recipe(result=BaseWithTexture() as texture)
+                    | Recipe(result=ItemResult(item=texture))
+                    | Recipe(result=BlockState(name=texture))
+                    | Recipe(result_item=BaseWithTexture() as texture)
                 ):
                     return texture
                 case _:
@@ -700,7 +710,7 @@ def _get_texture_urls(texture: Texture) -> list[URL]:
         case (
             PNGTexture(url=URL() as url)
             | SingleItemTexture(inner=PNGTexture(url=URL() as url))
-        ):
+        ) if url.scheme in {"http", "https"}:
             return [url]
         case MultiItemTexture(inner=inner, gaslighting=gaslighting):
             urls = [url for v in inner for url in _get_texture_urls(v)]

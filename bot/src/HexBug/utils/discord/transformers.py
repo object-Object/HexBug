@@ -13,6 +13,7 @@ from discord.app_commands.transformers import EnumNameTransformer, EnumValueTran
 from hexdoc.core import ResourceLocation
 
 from HexBug.core.bot import HexBugBot
+from HexBug.data.book import CategoryInfo, EntryInfo, PageInfo
 from HexBug.data.hex_math import VALID_SIGNATURE_PATTERN, HexDir
 from HexBug.data.mods import ModInfo, Modloader
 from HexBug.data.patterns import PatternInfo
@@ -279,6 +280,98 @@ class PerWorldPatternTransformer(PfzyAutocompleteTransformer):
         raise NotImplementedError()
 
 
+class CategoryInfoTransformer(PfzyAutocompleteTransformer):
+    @override
+    async def transform(self, interaction: Interaction, value: str) -> CategoryInfo:
+        category_id = ResourceLocation.from_str(value)
+        category = HexBugBot.registry_of(interaction).categories.get(category_id)
+        if category is None:
+            raise ValueError("Unknown category.")
+        return category
+
+    @override
+    async def _setup_autocomplete(self, interaction: Interaction):
+        self._words.clear()
+
+        registry = HexBugBot.registry_of(interaction)
+        for category in registry.categories.values():
+            for search_term in [
+                category.name,
+                str(category.id),
+            ]:
+                self._words.append(
+                    AutocompleteWord(
+                        search_term=search_term,
+                        name=category.name,
+                        value=str(category.id),
+                    )
+                )
+
+        self._words.sort(key=lambda w: w["name"].lower())
+
+
+class EntryInfoTransformer(PfzyAutocompleteTransformer):
+    @override
+    async def transform(self, interaction: Interaction, value: str) -> EntryInfo:
+        entry_id = ResourceLocation.from_str(value)
+        entry = HexBugBot.registry_of(interaction).entries.get(entry_id)
+        if entry is None:
+            raise ValueError("Unknown entry.")
+        return entry
+
+    @override
+    async def _setup_autocomplete(self, interaction: Interaction):
+        self._words.clear()
+
+        registry = HexBugBot.registry_of(interaction)
+        for entry in registry.entries.values():
+            for search_term in [
+                entry.name,
+                str(entry.id),
+                str(entry.category_id),
+            ]:
+                self._words.append(
+                    AutocompleteWord(
+                        search_term=search_term,
+                        name=entry.name,
+                        value=str(entry.id),
+                    )
+                )
+
+        self._words.sort(key=lambda w: w["name"].lower())
+
+
+class PageInfoTransformer(PfzyAutocompleteTransformer):
+    @override
+    async def transform(self, interaction: Interaction, value: str) -> PageInfo:
+        page = HexBugBot.registry_of(interaction).pages.get(value)
+        if page is None:
+            raise ValueError("Unknown page.")
+        return page
+
+    @override
+    async def _setup_autocomplete(self, interaction: Interaction):
+        self._words.clear()
+
+        registry = HexBugBot.registry_of(interaction)
+        for page in registry.pages.values():
+            for search_term in [
+                page.title,
+                page.anchor,
+                page.key,
+                str(page.entry_id),
+            ]:
+                self._words.append(
+                    AutocompleteWord(
+                        search_term=search_term,
+                        name=page.title,
+                        value=str(page.key),
+                    )
+                )
+
+        self._words.sort(key=lambda w: w["name"].lower())
+
+
 class PatternSignatureTransformer(Transformer):
     async def transform(self, interaction: Interaction, value: str) -> Any:
         signature = value.lower()
@@ -312,6 +405,12 @@ PatternInfoOption = Transform[PatternInfo, PatternInfoTransformer]
 SpecialHandlerInfoOption = Transform[SpecialHandlerInfo, SpecialHandlerInfoTransformer]
 
 PerWorldPatternOption = Transform[PerWorldPattern, PerWorldPatternTransformer]
+
+CategoryInfoOption = Transform[CategoryInfo, CategoryInfoTransformer]
+
+EntryInfoOption = Transform[EntryInfo, EntryInfoTransformer]
+
+PageInfoOption = Transform[PageInfo, PageInfoTransformer]
 
 PatternSignatureOption = Transform[str, PatternSignatureTransformer]
 

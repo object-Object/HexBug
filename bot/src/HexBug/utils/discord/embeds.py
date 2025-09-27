@@ -3,6 +3,8 @@ from typing import Any
 
 from discord import Embed
 
+from HexBug.data.mods import ModInfo
+
 FOOTER_SEPARATOR = "  •  "
 
 
@@ -32,3 +34,11 @@ def add_fields(
             inline=field.inline if field.inline is not None else default_inline,
         )
     return embed
+
+
+def set_embed_mod_author(embed: Embed, mod: ModInfo):
+    return embed.set_author(
+        name=mod.name,
+        url=mod.book_url,
+        icon_url=mod.icon_url,
+    )

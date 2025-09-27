@@ -56,6 +56,64 @@ command_book-home =
     .parameter_visibility = {-parameter_visibility}
     .parameter_visibility_description = {-parameter_visibility_description}
 
+    .text_categories = Categories
+    .text_entries = Entries
+    .text_pages = Linkable Pages
+
+# /book category
+
+command_book-category =
+        category
+    .description =
+        Get a link to a category in a mod's web book.
+
+    .parameter_category =
+        category
+    .parameter_category_description =
+        The name of the category to look up.
+
+    .parameter_visibility = {-parameter_visibility}
+    .parameter_visibility_description = {-parameter_visibility_description}
+
+    .text_title = [Category] { $name }
+
+# /book entry
+
+command_book-entry =
+        entry
+    .description =
+        Get a link to an entry in a mod's web book.
+
+    .parameter_entry =
+        entry
+    .parameter_entry_description =
+        The name of the entry to look up.
+
+    .parameter_visibility = {-parameter_visibility}
+    .parameter_visibility_description = {-parameter_visibility_description}
+
+    .text_title = [Entry] { $name }
+    .text_category = Category
+
+# /book page
+
+command_book-page =
+        page
+    .description =
+        Get a link to a page (if it has an anchor) in a mod's web book.
+
+    .parameter_page =
+        page
+    .parameter_page_description =
+        The name of the page to look up.
+
+    .parameter_visibility = {-parameter_visibility}
+    .parameter_visibility_description = {-parameter_visibility_description}
+
+    .text_title = [Page] { $title }
+    .text_category = Category
+    .text_entry = Entry
+
 # /decode
 
 group_decode =
