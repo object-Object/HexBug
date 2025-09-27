@@ -16,14 +16,22 @@ from hexdoc.core import (
 )
 from hexdoc.data import HexdocMetadata
 from hexdoc.jinja.render import create_jinja_env_with_loader
-from hexdoc.minecraft import I18n
-from hexdoc.patchouli import Book, BookContext
-from hexdoc.patchouli.page import TextPage
+from hexdoc.minecraft import I18n, LocalizedStr
+from hexdoc.minecraft.assets import (
+    MultiItemTexture,
+    PNGTexture,
+    SingleItemTexture,
+    Texture,
+)
+from hexdoc.minecraft.assets.with_texture import BaseWithTexture
+from hexdoc.minecraft.recipe import Recipe
+from hexdoc.patchouli import Book, BookContext, FormatTree
+from hexdoc.patchouli.page import ImagePage, Page, SpotlightPage, TextPage
 from hexdoc.plugin import PluginManager
 from jinja2 import PackageLoader
 from pydantic import BaseModel, PrivateAttr, TypeAdapter, model_validator
+from yarl import URL
 
-from HexBug.data.lookups import PatternLookups
 from HexBug.resources import load_resource
 from HexBug.utils.hexdoc import (
     HexBugBookContext,
@@ -31,11 +39,14 @@ from HexBug.utils.hexdoc import (
     monkeypatch_hexdoc_hexcasting,
 )
 
+from .book import CategoryInfo, EntryInfo, PageInfo, PageKey
 from .hex_math import HexDir, HexPattern, PatternSignature
+from .lookups import PatternLookups
 from .mods import DynamicModInfo, ModInfo
 from .patterns import PatternInfo, PatternOperator
 from .special_handlers import SpecialHandlerInfo, SpecialHandlerMatch
 from .static_data import (
+    DISABLED_FLAGS,
     DISABLED_PAGES,
     DISABLED_PATTERNS,
     DISAMBIGUATED_PATTERNS,
@@ -62,6 +73,9 @@ class HexBugRegistry(BaseModel):
     and/or `pattern.is_hidden` as necessary.
     """
     special_handlers: dict[ResourceLocation, SpecialHandlerInfo]
+    categories: dict[ResourceLocation, CategoryInfo]
+    entries: dict[ResourceLocation, EntryInfo]
+    pages: dict[PageKey, PageInfo]
 
     _lookups: PatternLookups = PrivateAttr(default_factory=PatternLookups)
     _pregenerated_numbers: dict[int, HexPattern] = PrivateAttr(
@@ -89,6 +103,9 @@ class HexBugRegistry(BaseModel):
             mods={},
             patterns={},
             special_handlers={},
+            categories={},
+            entries={},
+            pages={},
         )
 
         # load hexdoc data
@@ -154,6 +171,12 @@ class HexBugRegistry(BaseModel):
             },
         )
 
+        def _style_text(text: FormatTree, mod: ModInfo):
+            return styled_template.render(
+                text=text,
+                page_url=str(mod.book_url),
+            ).strip()
+
         # load mods
 
         for static_info in MODS:
@@ -190,42 +213,121 @@ class HexBugRegistry(BaseModel):
         lapisworks_per_world_shapes = dict[ResourceLocation, HexdocPatternInfo]()
 
         for category in book.categories.values():
+            if category.flag in DISABLED_FLAGS:
+                logger.info(
+                    f"Skipping category {category.id} because of disabled flag {category.flag}"
+                )
+                continue
+
+            assert category.resource_dir.modid is not None
+            category_mod = registry.mods[category.resource_dir.modid]
+
+            registry._register_category(
+                CategoryInfo(
+                    mod_id=category_mod.id,
+                    id=category.id,
+                    url=book_context.book_links[category.book_link_key],
+                    icon_urls=_get_texture_urls(category.icon.texture),
+                    name=category.name.value,
+                    description=_style_text(category.description, category_mod),
+                )
+            )
+
             for entry in category.entries.values():
-                for page, next_page in zip_longest(entry.pages, entry.pages[1:]):
-                    if not isinstance(page, PageWithPattern):
+                if entry.flag in DISABLED_FLAGS:
+                    logger.info(
+                        f"Skipping entry {entry.id} because of disabled flag {entry.flag}"
+                    )
+                    continue
+
+                assert entry.resource_dir.modid is not None
+                entry_mod = registry.mods[entry.resource_dir.modid]
+
+                registry._register_entry(
+                    EntryInfo(
+                        mod_id=entry_mod.id,
+                        category_id=category.id,
+                        id=entry.id,
+                        url=book_context.book_links[entry.book_link_key],
+                        icon_urls=_get_texture_urls(entry.icon.texture),
+                        name=entry.name.value,
+                        color=entry.entry_color,
+                    )
+                )
+
+                for i, (page, next_page) in enumerate(
+                    zip_longest(entry.pages, entry.pages[1:], fillvalue=None)
+                ):
+                    assert page
+                    if page.flag in DISABLED_FLAGS:
+                        logger.info(
+                            f"Skipping page {entry.id}[{i}] because of disabled flag {page.flag}"
+                        )
                         continue
 
                     if (fragment := page.fragment(entry.fragment)) in DISABLED_PAGES:
                         logger.info(f"Skipping disabled page: {fragment}")
                         continue
 
+                    url_key = page.book_link_key(entry.book_link_key)
+                    book_url = book_context.book_links.get(url_key) if url_key else None
+
+                    if book_url is not None:
+                        assert page.anchor is not None
+
+                        # title
+                        match page:
+                            case (
+                                Page(title=LocalizedStr(value=title))
+                                | Page(header=LocalizedStr(value=title))
+                            ):
+                                pass
+                            case _:
+                                title = None
+
+                        # text
+                        match page:
+                            case Page(text=FormatTree() as text):
+                                text = _style_text(text, entry_mod)
+                            case _:
+                                text = None
+
+                        # icon
+                        icon = _get_page_icon(page)
+
+                        registry._register_page(
+                            PageInfo(
+                                mod_id=entry_mod.id,
+                                entry_id=entry.id,
+                                anchor=page.anchor,
+                                url=book_url,
+                                icon_urls=_get_texture_urls(icon) if icon else [],
+                                title=title,
+                                text=text,
+                            )
+                        )
+
+                    if not isinstance(page, PageWithPattern):
+                        continue
+
                     if not isinstance(next_page, TextPage):
                         next_page = None
+
+                    text = page.text or (next_page and next_page.text)
+                    if text:
+                        description = _style_text(text, entry_mod)
+                    else:
+                        description = None
 
                     # use the mod that the entry came from, not the mod of the pattern
                     # eg. MoreIotas adds operators for hexcasting:add
                     # in that case, mod should be MoreIotas, not Hex Casting
-                    assert entry.resource_dir.modid is not None
-                    mod = registry.mods[entry.resource_dir.modid]
-
-                    text = page.text or (next_page and next_page.text)
-                    if text:
-                        description = styled_template.render(
-                            text=text,
-                            page_url=str(mod.book_url),
-                        ).strip()
-                    else:
-                        description = None
-
-                    url_key = page.book_link_key(entry.book_link_key)
-                    book_url = book_context.book_links.get(url_key) if url_key else None
-
                     operator = PatternOperator(
                         description=description,
                         inputs=page.input,
                         outputs=page.output,
                         book_url=book_url,
-                        mod_id=mod.id,
+                        mod_id=entry_mod.id,
                     )
 
                     # use PageWithOpPattern instead of LookupPatternPage so we can find special handler pages
@@ -403,6 +505,15 @@ class HexBugRegistry(BaseModel):
         for info in registry.special_handlers.values():
             registry.mods[info.mod_id].special_handler_count += 1
 
+        for category in registry.categories.values():
+            registry.mods[category.mod_id].category_count += 1
+
+        for entry in registry.entries.values():
+            registry.mods[entry.mod_id].entry_count += 1
+
+        for page in registry.pages.values():
+            registry.mods[page.mod_id].linkable_page_count += 1
+
         logger.info("Done.")
         return registry
 
@@ -522,6 +633,22 @@ class HexBugRegistry(BaseModel):
         self.special_handlers[info.id] = info
         self.lookups.add_special_handler(info)
 
+    def _register_category(self, category: CategoryInfo):
+        if category.id in self.categories:
+            raise ValueError(f"Category is already registered: {category.id}")
+        self.categories[category.id] = category
+
+    def _register_entry(self, entry: EntryInfo):
+        if entry.id in self.entries:
+            raise ValueError(f"Entry is already registered: {entry.id}")
+        self.entries[entry.id] = entry
+
+    def _register_page(self, page: PageInfo):
+        key = (page.entry_id, page.anchor)
+        if key in self.pages:
+            raise ValueError(f"Page is already registered: {key}")
+        self.pages[key] = page
+
     @model_validator(mode="after")
     def _post_root(self):
         for pattern in self.patterns.values():
@@ -535,3 +662,44 @@ class HexBugRegistry(BaseModel):
             self.pregenerated_numbers[n] = HexPattern(direction, signature)
 
         return self
+
+
+def _get_page_icon(page: Page) -> Texture | None:
+    from hexdoc_hexcasting.book.recipes import BlockState
+
+    match page:
+        case ImagePage(images=[texture, *_]):
+            return texture
+        case SpotlightPage(item=item):
+            return item.texture
+        case (
+            Page(recipe=Recipe() as recipe)
+            | Page(
+                recipes=[Recipe() as recipe, *_],  # pyright: ignore[reportUnknownVariableType]
+            )
+        ):
+            match recipe:
+                case (
+                    Recipe(result=BaseWithTexture(texture=texture))
+                    | Recipe(result=BlockState(name=BaseWithTexture(texture=texture)))
+                    | Recipe(result_item=BaseWithTexture(texture=texture))
+                ):
+                    return texture
+                case _:
+                    return None
+        case _:
+            return None
+
+
+def _get_texture_urls(texture: Texture) -> list[URL]:
+    match texture:
+        case (
+            PNGTexture(url=URL() as url)
+            | SingleItemTexture(inner=PNGTexture(url=URL() as url))
+        ):
+            return [url]
+        case MultiItemTexture(inner=inner, gaslighting=gaslighting):
+            urls = [url for v in inner for url in _get_texture_urls(v)]
+            return urls if gaslighting else urls[:1]
+        case _:
+            return []
