@@ -10,6 +10,9 @@ from hexnumgen import AStarOptions, generate_number_pattern
 
 from HexBug.data.hex_math import HexDir, HexPattern
 
+ONE = HexPattern(HexDir.SOUTH_EAST, "aqaaw")
+NEGATIVE_ONE = HexPattern(HexDir.NORTH_EAST, "deddw")
+
 ADD = HexPattern(HexDir.NORTH_EAST, "waaw")
 SUB = HexPattern(HexDir.NORTH_WEST, "wddw")
 MUL = HexPattern(HexDir.SOUTH_EAST, "waqaw")
@@ -25,11 +28,11 @@ class DecomposedNumber:
 
     @classmethod
     def one(cls) -> DecomposedNumber:
-        return cls.simple(1, HexPattern(HexDir.SOUTH_EAST, "aqaaw"))
+        return cls.simple(1, ONE)
 
     @classmethod
     def negative_one(cls) -> DecomposedNumber:
-        return cls.simple(-1, HexPattern(HexDir.NORTH_EAST, "deddw"))
+        return cls.simple(-1, NEGATIVE_ONE)
 
     @classmethod
     def simple(cls, value: float, pattern: HexPattern):
