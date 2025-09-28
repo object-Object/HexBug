@@ -278,6 +278,14 @@ class HexBugRegistry(BaseModel):
                         logger.info(f"Skipping disabled page: {fragment}")
                         continue
 
+                    # text
+                    match page:
+                        case Page(text=FormatTree() as text):
+                            text = _style_text(text, entry_mod)
+                        case _:
+                            text = None
+
+                    # TODO: this should probably work like operators
                     for recipe in _get_page_recipes(page):
                         if result := _get_recipe_result(recipe):
                             assert recipe.type
@@ -292,6 +300,7 @@ class HexBugRegistry(BaseModel):
                                     type=recipe.type,
                                     id=result.id.id,
                                     name=result.name.value,
+                                    description=text,
                                 )
                             )
 
@@ -321,13 +330,6 @@ class HexBugRegistry(BaseModel):
                                         .replace("-", " ")
                                         .title()
                                     )
-
-                        # text
-                        match page:
-                            case Page(text=FormatTree() as text):
-                                text = _style_text(text, entry_mod)
-                            case _:
-                                text = None
 
                         # icon
                         icon = _get_page_icon(page)

@@ -44,3 +44,4 @@ class RecipeInfo(BaseModel):
     type: ResourceLocation
     id: ResourceLocation
     name: str
+    description: str | None

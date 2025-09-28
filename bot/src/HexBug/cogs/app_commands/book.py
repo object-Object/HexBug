@@ -169,6 +169,7 @@ class BookCog(HexBugCog, GroupCog, group_name="book"):
                         interaction, "title", title=recipe.name
                     ),
                     url=page.url if page else entry.url,
+                    description=recipe.description,
                 )
                 .set_footer(
                     text=f"{recipe.id} ({recipe.type})",
@@ -183,7 +184,6 @@ class BookCog(HexBugCog, GroupCog, group_name="book"):
                 )
             )
             if page:
-                embed.description = page.text
                 embed.add_field(
                     name=await translate_command_text(interaction, "page"),
                     value=f"[{page.title}]({page.url})",
