@@ -316,7 +316,11 @@ class HexBugRegistry(BaseModel):
                                     logger.warning(
                                         f"Failed to find title for page: {entry.id}#{page.anchor}"
                                     )
-                                    title = f"{entry.name}: {page.anchor.capitalize()}"
+                                    title = (
+                                        page.anchor.replace("_", " ")
+                                        .replace("-", " ")
+                                        .title()
+                                    )
 
                         # text
                         match page:

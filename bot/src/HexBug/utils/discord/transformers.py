@@ -19,6 +19,7 @@ from HexBug.data.mods import ModInfo, Modloader
 from HexBug.data.patterns import PatternInfo
 from HexBug.data.special_handlers import SpecialHandlerInfo
 from HexBug.db.models import PerWorldPattern
+from HexBug.utils.strings import truncate_str
 
 
 class AutocompleteWord(TypedDict):
@@ -355,8 +356,11 @@ class PageInfoTransformer(PfzyAutocompleteTransformer):
 
         registry = HexBugBot.registry_of(interaction)
         for page in registry.pages.values():
+            name = truncate_str(
+                f"{page.title} ({registry.entries[page.entry_id].name})", 100
+            )
             for search_term in [
-                page.title,
+                name,
                 page.anchor,
                 page.key,
                 str(page.entry_id),
@@ -364,7 +368,7 @@ class PageInfoTransformer(PfzyAutocompleteTransformer):
                 self._words.append(
                     AutocompleteWord(
                         search_term=search_term,
-                        name=page.title,
+                        name=name,
                         value=str(page.key),
                     )
                 )
