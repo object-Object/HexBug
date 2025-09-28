@@ -23,6 +23,18 @@ Note: If using Docker with WSL2 on Windows, [networkingMode=mirrored](https://le
 
 ### Running
 
+First, create a file called `.env`:
+
+```
+ENVIRONMENT="dev"
+TOKEN="put your discord bot token here"
+API_PORT="5000"
+API_ROOT_PATH=""
+
+GITHUB_REPOSITORY="object-Object/HexBug"
+GITHUB_SHA="v2"
+```
+
 Standalone (faster for development):
 
 ```sh
@@ -47,7 +59,4 @@ Gist by penguinencounter: https://gist.github.com/penguinencounter/ace5c45455ea9
 ## TODO
 
 - Commands:
-  - `/book`
-  - `/info`
   - `/patterns hex`
-  - `/patterns smart_number`
