@@ -23,7 +23,7 @@ Note: If using Docker with WSL2 on Windows, [networkingMode=mirrored](https://le
 
 ### Running
 
-First, create a file called `.env`:
+Create a file called `.env`:
 
 ```sh
 # bot
@@ -37,14 +37,15 @@ GITHUB_REPOSITORY="object-Object/HexBug"
 GITHUB_SHA="v2"
 ```
 
-Standalone (faster for development):
+Run the bot standalone (faster for development):
 
 ```sh
 docker compose up --detach postgres
+uv run hexbug build --indent 2
 uv run hexbug bot
 ```
 
-In Docker:
+Run the bot in Docker:
 
 ```sh
 docker compose up --build
