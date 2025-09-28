@@ -25,12 +25,14 @@ Note: If using Docker with WSL2 on Windows, [networkingMode=mirrored](https://le
 
 First, create a file called `.env`:
 
-```
+```sh
+# bot
 ENVIRONMENT="dev"
 TOKEN="put your discord bot token here"
 API_PORT="5000"
 API_ROOT_PATH=""
 
+# book
 GITHUB_REPOSITORY="object-Object/HexBug"
 GITHUB_SHA="v2"
 ```
