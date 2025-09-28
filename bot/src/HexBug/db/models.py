@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from hexdoc.core import ResourceLocation
 from sqlalchemy import BigInteger, MetaData, UniqueConstraint
 from sqlalchemy.ext.asyncio import AsyncAttrs
@@ -49,3 +51,11 @@ class PerWorldPattern(Base):
     @property
     def pattern(self):
         return HexPattern(self.direction, self.signature)
+
+
+class InfoMessage(Base):
+    __tablename__ = "info_message"
+
+    name: Mapped[str] = mapped_column(primary_key=True)
+    usage_count: Mapped[int]
+    last_used: Mapped[datetime]

@@ -34,6 +34,68 @@ choice_HexBug-utils-discord-visibility-Visibility =
     .PRIVATE =
         private
 
+choice_HexBug-cogs-app-commands-info-InfoMessage =
+    .addons =
+        Addons
+
+    .bosnia =
+        Bosnia
+    .bosnia_text_description =
+        Botania.
+
+    .bug-report =
+        Bug Report
+    .bug-report_text_description =
+        Please do not post your bug reports to Discord. Instead, post them to the issue tracker on the mod's GitHub.
+
+        Hex Casting: https://github.com/gamma-delta/HexMod/issues
+        PAUCAL: https://github.com/gamma-delta/PAUCAL/issues
+        Addons: `/mod`
+
+    .crashlog =
+        Crashlog
+    .crashlog_text_description =
+        You can use a service like [mclo.gs](https://mclo.gs) (preferred) or [Pastebin](https://pastebin.com) to post the crashlog.
+        Please do *not* upload it directly to Discord in a message or file.
+
+    .forum =
+        Forum
+    .forum_text_title =
+        petrak@'s mods forum
+    .forum_text_description =
+        {"["}Join the forum](https://forum.petra-k.at/ucp.php?mode=register) to post/browse cool hexes, ask for help, or chat about petrak@'s mods.
+
+        {"**"}Quick links**
+        {"["}General Chat](https://forum.petra-k.at/viewforum.php?f=7)
+        {"["}Akashic Records](https://forum.petra-k.at/viewforum.php?f=2)
+        {"["}Hexcasting Help](https://forum.petra-k.at/viewforum.php?f=5)
+        {"["}Miner's Lung](https://forum.petra-k.at/viewforum.php?f=9)
+        {"["}Bliss Mods](https://forum.petra-k.at/viewforum.php?f=10)
+
+    .great-spells =
+        Great Spells
+
+    .gtp-itemdrop =
+        GTP Item Drop
+    .gtp-itemdrop_text_description =
+        When someone casts Greater Teleport on themself, each item in their inventory (except for those in their hands and any slots added by mods) has a random chance to drop at their destination.
+        For items in the main three inventory rows, the chance is N/10,000. For items in their hotbar, the chance is N/20,000. For items in their armor slots, the chance is N/40,000.
+        N is the length of the offset vector supplied to GTP. When the vector is over 32,768 meters long, the spell will fail to teleport the target, but items can still drop.
+
+    .patterns =
+        patterns.csv
+
+    .pluralkit =
+        PluralKit
+    .pluralkit_text_description =
+        {"**"}What are all the `[BOT]` messages doing?**
+        This is the result of PluralKit, a discord bot for plural people. Plurality is the experience of having more than one mind in one body.
+
+        {"["}PluralKit](https://pluralkit.me/)  |  [More info on plurality](https://morethanone.info/)
+
+    .tools =
+        Tools
+
 # /book
 
 group_book =
@@ -182,6 +244,26 @@ command_decode-file =
 
     .parameter_visibility = {-parameter_visibility}
     .parameter_visibility_description = {-parameter_visibility_description}
+
+# /info
+
+command_info =
+        info
+    .description =
+        Show a premade info message.
+
+    .parameter_message =
+        message
+    .parameter_message_description =
+        The name of the message to show.
+
+    .parameter_visibility = {-parameter_visibility}
+    .parameter_visibility_description = {-parameter_visibility_description}
+
+    .text_footer-usage-count =
+        Times posted: { $count }
+    .text_footer-days-since =
+        Days since last post: { $days }
 
 # /mod
 

@@ -117,6 +117,16 @@ async def translate_group_text(
     return await _translate_or_warn(interaction, msg_id, **kwargs)
 
 
+async def translate_choice_text(
+    interaction: Interaction,
+    enum: Enum,
+    key: str,
+    **kwargs: TranslationValue,
+):
+    msg_id = enum_choice_text_id(enum, key)
+    return await _translate_or_warn(interaction, msg_id, **kwargs)
+
+
 async def _translate_or_warn(
     interaction: Interaction,
     msg_id: str,
@@ -169,6 +179,10 @@ def parameter_description_id(parameter: Parameter):
 def enum_choice_name_id(enum: Enum):
     class_ = enum.__class__
     return choice_name_id(f"{class_.__module__}.{class_.__qualname__}", enum.name)
+
+
+def enum_choice_text_id(enum: Enum, key: str):
+    return f"{enum_choice_name_id(enum)}_text_{key}"
 
 
 def choice_name_id(type_name: str, item_name: str):
