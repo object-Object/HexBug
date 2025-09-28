@@ -5,6 +5,7 @@ from __future__ import annotations
 import itertools
 import logging
 import os
+import re
 from collections import defaultdict
 from itertools import zip_longest
 from pathlib import Path
@@ -47,7 +48,11 @@ from .hex_math import HexDir, HexPattern, PatternSignature
 from .lookups import PatternLookups
 from .mods import DynamicModInfo, ModInfo
 from .patterns import PatternInfo, PatternOperator
-from .special_handlers import SpecialHandlerInfo, SpecialHandlerMatch
+from .special_handlers import (
+    SpecialHandlerInfo,
+    SpecialHandlerMatch,
+    SpecialHandlerPattern,
+)
 from .static_data import (
     DISABLED_FLAGS,
     DISABLED_PAGES,
@@ -64,7 +69,34 @@ from .static_data import (
 logger = logging.getLogger(__name__)
 
 
+_SPECIAL_HANDLER_PATTERN = re.compile(
+    r"""
+    ^
+    (?P<name>.+)
+    (?<!:)
+    (?: :\s* | \s+ )
+    (?P<value>.+?)
+    $
+    """,
+    re.VERBOSE,
+)
+
+_RAW_PATTERN_PATTERN = re.compile(
+    r"""
+    ^
+    (?P<direction>\S+)
+    (?:
+        \s+
+        (?P<signature>[aqweds]+)
+    )?
+    $
+    """,
+    re.VERBOSE,
+)
+
+
 type PatternMatchResult = PatternInfo | SpecialHandlerMatch[Any]
+type ShorthandMatchResult = PatternInfo | SpecialHandlerPattern[Any] | HexPattern
 
 
 class HexBugRegistry(BaseModel):
@@ -621,10 +653,47 @@ class HexBugRegistry(BaseModel):
         for special_handler in SPECIAL_HANDLERS.values():
             if (value := special_handler.try_match(pattern)) is not None:
                 return SpecialHandlerMatch[Any].from_parts(
-                    handler=special_handler,
                     info=self.special_handlers[special_handler.id],
+                    handler=special_handler,
                     value=value,
                 )
+
+        return None
+
+    def try_match_shorthand(self, shorthand: str) -> ShorthandMatchResult | None:
+        shorthand = shorthand.lower().strip()
+
+        if pattern := self.lookups.shorthand.get(shorthand):
+            return pattern
+
+        if (match := _SPECIAL_HANDLER_PATTERN.match(shorthand)) and (
+            info := self.lookups.special_handler_shorthand.get(match["name"])
+        ):
+            special_handler = SPECIAL_HANDLERS[info.id]
+            value, pattern = special_handler.generate_pattern(self, match["value"])
+            return SpecialHandlerPattern[Any].from_parts(
+                info=self.special_handlers[special_handler.id],
+                handler=special_handler,
+                value=value,
+                pattern=pattern,
+            )
+
+        for special_handler in SPECIAL_HANDLERS.values():
+            try:
+                value, pattern = special_handler.generate_pattern(self, shorthand)
+                return SpecialHandlerPattern[Any].from_parts(
+                    info=self.special_handlers[special_handler.id],
+                    handler=special_handler,
+                    value=value,
+                    pattern=pattern,
+                )
+            except (ValueError, NotImplementedError):
+                pass
+
+        if (match := _RAW_PATTERN_PATTERN.match(shorthand)) and (
+            direction := HexDir.from_shorthand(match["direction"])
+        ):
+            return HexPattern(direction, match["signature"] or "")
 
         return None
 

@@ -3,7 +3,7 @@ from __future__ import annotations
 import itertools
 import re
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, Self, override
+from typing import TYPE_CHECKING, Any, override
 
 from hexdoc.core import ResourceLocation
 from hexdoc.minecraft import I18n, LocalizedStr
@@ -39,18 +39,35 @@ class SpecialHandlerMatch[T](SpecialHandlerInfo):
     handler: SpecialHandler[T]
     value: T
 
-    @classmethod
-    def from_parts(
-        cls,
+    @staticmethod
+    def from_parts[_T](
         info: SpecialHandlerInfo,
-        handler: SpecialHandler[T],
-        value: T,
-    ) -> Self:
-        return cls(**dict(info), handler=handler, value=value)
+        handler: SpecialHandler[_T],
+        value: _T,
+    ) -> SpecialHandlerMatch[_T]:
+        return SpecialHandlerMatch(**dict(info), handler=handler, value=value)
 
     @property
     def name(self) -> str:
         return self.handler.get_name(self.raw_name, self.value)
+
+
+class SpecialHandlerPattern[T](SpecialHandlerMatch[T]):
+    pattern: HexPattern
+
+    @staticmethod
+    def from_parts[_T](  # pyright: ignore[reportIncompatibleMethodOverride]
+        info: SpecialHandlerInfo,
+        handler: SpecialHandler[_T],
+        value: _T,
+        pattern: HexPattern,
+    ) -> SpecialHandlerPattern[_T]:
+        return SpecialHandlerPattern(
+            **dict(info),
+            handler=handler,
+            value=value,
+            pattern=pattern,
+        )
 
 
 class SpecialHandler[T](ABC):
@@ -73,6 +90,10 @@ class SpecialHandler[T](ABC):
 
         Raises ValueError on failure.
         """
+
+    @property
+    def supports_unprefixed_shorthand(self) -> bool:
+        return False
 
     def localize(self, i18n: I18n) -> LocalizedStr:
         """Returns the raw name of this handler from the lang file."""
@@ -112,6 +133,11 @@ class PrefixSpecialHandler[T, P](SpecialHandler[T]):
 
 
 class NumberSpecialHandler(PrefixSpecialHandler[float, int]):
+    @property
+    @override
+    def supports_unprefixed_shorthand(self) -> bool:
+        return True
+
     @property
     @override
     def prefix_map(self):
@@ -160,6 +186,11 @@ class NumberSpecialHandler(PrefixSpecialHandler[float, int]):
 
 
 class MaskSpecialHandler(SpecialHandler[str]):
+    @property
+    @override
+    def supports_unprefixed_shorthand(self) -> bool:
+        return True
+
     @override
     def try_match(self, pattern: HexPattern) -> str | None:
         if pattern.signature.startswith(HexAngle.LEFT_BACK.letter):
@@ -262,6 +293,10 @@ class OverevaluateTailDepthSpecialHandler(PrefixSpecialHandler[int, Any]):
             raise ValueError(
                 f"Invalid tail depth (expected at least {self.initial_depth}): {depth}"
             )
+
+        # sanity check
+        if depth > 128:
+            raise ValueError(f"Invalid tail depth: {depth}")
 
         signature = self.prefix + "".join(
             self.get_tail_char(index) for index in range(depth - self.initial_depth)

@@ -469,6 +469,21 @@ group_patterns =
     .description =
         Commands for generating and/or rendering many patterns at once.
 
+# /patterns hex
+
+command_patterns-hex =
+        hex
+    .description =
+        Display a list of patterns.
+
+    .parameter_hex =
+        hex
+    .parameter_hex_description =
+        One or more comma-separated patterns to display. Shorthand is allowed.
+
+    .parameter_visibility = {-parameter_visibility}
+    .parameter_visibility_description = {-parameter_visibility_description}
+
 # /patterns number
 
 command_patterns-number =

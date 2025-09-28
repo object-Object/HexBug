@@ -21,6 +21,28 @@ class HexDir(WrappingEnum):
     WEST = 4
     NORTH_WEST = 5
 
+    @classmethod
+    def from_shorthand(cls, shorthand: str):
+        shorthand = (
+            shorthand.lower()
+            .strip()
+            .replace("_", "")
+            .replace("-", "")
+            .replace("north", "n")
+            .replace("south", "s")
+            .replace("west", "w")
+            .replace("east", "e")
+        )
+
+        return {
+            "e": HexDir.EAST,
+            "se": HexDir.SOUTH_EAST,
+            "sw": HexDir.SOUTH_WEST,
+            "w": HexDir.WEST,
+            "nw": HexDir.NORTH_WEST,
+            "ne": HexDir.NORTH_EAST,
+        }.get(shorthand)
+
     @property
     def delta(self) -> HexCoord:
         match self:

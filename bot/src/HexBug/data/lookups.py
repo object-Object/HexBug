@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from typing import Callable
 
 from HexBug.core.exceptions import DuplicatePatternError
+from HexBug.utils.shorthand import get_shorthand_names
 
 from .hex_math import HexAngle, HexPattern, HexSegment, align_segments_to_origin
 from .patterns import PatternInfo
@@ -42,6 +43,9 @@ class PatternLookups:
         self.per_world_segments = dict[frozenset[HexSegment], PatternInfo]()
 
         self.special_handler_name = SpecialHandlerLookup("name", lambda i: i.base_name)
+
+        self.shorthand = dict[str, PatternInfo]()
+        self.special_handler_shorthand = dict[str, SpecialHandlerInfo]()
 
     def add_pattern(self, pattern: PatternInfo):
         if not pattern.is_hidden:
@@ -83,6 +87,10 @@ class PatternLookups:
 
                 self.segments[segments].append(pattern)
 
+        for name in get_shorthand_names(pattern.id, pattern.name):
+            if name not in self.shorthand:
+                self.shorthand[name] = pattern
+
     def add_special_handler(self, info: SpecialHandlerInfo):
         for lookup in [
             self.special_handler_name,
@@ -91,3 +99,7 @@ class PatternLookups:
             if (other := lookup.get(key)) and other is not info:
                 raise DuplicatePatternError(lookup.name, key, info.id, other.id)
             lookup[key] = info
+
+        for name in get_shorthand_names(info.id, info.base_name):
+            if name not in self.shorthand:
+                self.special_handler_shorthand[name] = info

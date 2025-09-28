@@ -7,6 +7,9 @@ from discord.ext.commands import GroupCog
 
 from HexBug.core.cog import HexBugCog
 from HexBug.core.exceptions import InvalidInputError
+from HexBug.data.hex_math import HexPattern
+from HexBug.data.patterns import PatternInfo
+from HexBug.data.special_handlers import SpecialHandlerPattern
 from HexBug.ui.views.patterns import EmbedPatternView, NamedPatternView
 from HexBug.utils.discord.visibility import Visibility, VisibilityOption
 from HexBug.utils.numbers import DecomposedNumber
@@ -17,6 +20,37 @@ MAX_LENGTH = 48
 
 
 class PatternsCog(HexBugCog, GroupCog, group_name="patterns"):
+    @app_commands.command()
+    async def hex(
+        self,
+        interaction: Interaction,
+        hex: str,
+        visibility: VisibilityOption = Visibility.PRIVATE,
+    ):
+        patterns = list[HexPattern]()
+
+        for shorthand in hex.split(","):
+            shorthand = shorthand.strip()
+            if not shorthand:
+                continue
+
+            match self.bot.registry.try_match_shorthand(shorthand):
+                case (
+                    PatternInfo(pattern=pattern)
+                    | SpecialHandlerPattern(pattern=pattern)
+                    | (HexPattern() as pattern)
+                ):
+                    patterns.append(pattern)
+                case None:
+                    raise InvalidInputError("Unrecognized pattern.", value=shorthand)
+
+        await EmbedPatternView(
+            interaction=interaction,
+            patterns=patterns,
+            hide_stroke_order=False,
+            embed=Embed(),
+        ).send(interaction, visibility)
+
     @app_commands.command()
     async def number(
         self,
