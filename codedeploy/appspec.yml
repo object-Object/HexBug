@@ -1,19 +1,16 @@
 version: 0.0
-os: linux 
+os: linux
 files:
   - source: /
-    destination: /var/lib/codedeploy-apps/HexBug
+    destination: /var/lib/codedeploy-apps/$APPLICATION_NAME
 file_exists_behavior: OVERWRITE
 hooks:
   ApplicationStop:
-    - location: hooks/application-stop.sh
+    - location: hooks/ApplicationStop.sh
       timeout: 60
   AfterInstall:
-    - location: hooks/after-install.sh
-      timeout: 60
-  ApplicationStart:
-    - location: hooks/application-start.sh
+    - location: hooks/AfterInstall.sh
       timeout: 120
-  ValidateService:
-    - location: hooks/validate-service.sh
+  ApplicationStart:
+    - location: hooks/ApplicationStart.sh
       timeout: 240

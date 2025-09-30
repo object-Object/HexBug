@@ -1,144 +1,64 @@
-name: Build and deploy
+name: Deploy
 
 on:
   push:
-    branches: main
+    branches:
+      - main
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+*'
   workflow_dispatch:
-
-concurrency:
-  group: deploy
-  cancel-in-progress: false
+    inputs:
+      stage:
+        description: Stage
+        type: choice
+        required: true
+        options:
+          - beta
+          - prod
 
 env:
+  NODE_VERSION: 18
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
-  AWS_REGION: us-east-1
-  STACK_NAME: prod-HexBug
-  S3_BUCKET: prod-objectobject-ca-codedeploy-artifacts
-  CDK_IAM_ROLE_ARN: arn:aws:iam::511603859520:role/prod-objectobject-ca-GitHubActionsCDKRole19D97701-sweSB0Sp33WN
+  IMAGE_NAME: object-object/hexbug
 
 jobs:
-  # phase 1
+  build:
+    uses: ./.github/workflows/build.yml
+    secrets: inherit
 
-  test:
+  setup:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          submodules: recursive
-      - uses: object-Object/ci/setup@v0
-        with:
-          python-version: 3.11
-          python-packages: nox
-
-      - name: Run tests
-        run: nox
-
-  scrape-book-types:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          submodules: recursive
-      - uses: object-Object/ci/setup@v0
-        with:
-          python-version: 3.11
-          python-packages: nox
-      
-      - name: Scrape book types
-        run: nox --session scrape_book_types
-
-      - name: Fail if book types need to be updated
-        run: git diff --exit-code
-
-  dump-patterns:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          submodules: recursive
-      - uses: object-Object/ci/setup@v0
-        with:
-          python-version: 3.11
-          python-packages: .[runtime] --find-links ./vendor
-      
-      - name: Dump patterns
-        run: python scripts/github/dump_patterns.py patterns.csv.new
-      
-      - name: Check out gh-pages
-        uses: actions/checkout@v3
-        with:
-          clean: false
-          ref: gh-pages
-      
-      - name: Overwrite file
-        run: mv patterns.csv.new patterns.csv
-      
-      - name: Commit updated pattern dump
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Update pattern dump
-          file_pattern: patterns.csv
-
-  # phase 2
-
-  deploy-aws-cdk:
-    needs:
-      - test
-      - scrape-book-types
-      - dump-patterns
-    runs-on: ubuntu-latest
-    environment:
-      name: prod-aws-cdk
-    permissions:
-      id-token: write
-      contents: read
     outputs:
-      application-name: ${{ steps.cdk-outputs.outputs.application-name }}
-      deployment-group-name: ${{ steps.cdk-outputs.outputs.deployment-group-name }}
-      iam-role-arn: ${{ steps.cdk-outputs.outputs.iam-role-arn }}
+      stage: ${{ steps.get-stage.outputs.stage }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: object-Object/ci/setup@v0
-        with:
-          python-version: 3.11
-          python-packages: .[aws-cdk]
-          node-version: 18
-          npm-packages: aws-cdk
-          aws-region: ${{ env.AWS_REGION }}
-          role-to-assume: ${{ env.CDK_IAM_ROLE_ARN }}
-      
-      - name: Deploy CDK stack
-        run: cdk deploy prod --ci --require-approval never --outputs-file outputs.json
-
-      - name: Parse CDK outputs file
-        id: cdk-outputs
+      - name: Get deployment stage
+        id: get-stage
         run: |
-          outputs_json="$(cat outputs.json | jq '.["${{ env.STACK_NAME }}"]')"
-          echo "application-name=$(echo "$outputs_json" | jq '.ApplicationName' --raw-output)" >> "$GITHUB_OUTPUT"
-          echo "deployment-group-name=$(echo "$outputs_json" | jq '.DeploymentGroupName' --raw-output)" >> "$GITHUB_OUTPUT"
-          echo "iam-role-arn=$(echo "$outputs_json" | jq '.GitHubActionsRoleARN' --raw-output)" >> "$GITHUB_OUTPUT"
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            STAGE="${{ inputs.stage }}"
+          elif [[ "${{ github.ref }}" =~ ^refs/tags/v[0-9]+(\.[0-9]+)+$ ]]; then
+            STAGE="prod"
+          else
+            STAGE="beta"
+          fi
+          echo "Deployment stage: $STAGE"
+          echo "stage=$STAGE" >> "$GITHUB_OUTPUT"
 
-  build-image:
-    needs: 
-      - test
-      - scrape-book-types
-      - dump-patterns
+  push-image:
+    needs:
+      - build
+      - setup
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
     environment:
-      name: prod-docker
+      name: ${{ needs.setup.outputs.stage }}-docker
+      url: https://${{ needs.build.outputs.image-tag }}
     outputs:
-      image-id: ${{ steps.push.outputs.imageid }}
+      digest: ${{ steps.digest.outputs.value }}
     steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - uses: docker/setup-buildx-action@v3
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
@@ -147,83 +67,138 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract image metadata
-        id: meta
-        uses: docker/metadata-action@v5
+      - name: Download image artifact
+        uses: actions/download-artifact@v4
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          name: docker-image
+          path: ${{ runner.temp }}
 
-      - name: Build and push Docker image
-        id: push
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+      - name: Load image
+        run: docker load --input ${{ runner.temp }}/image.tar
 
-  # phase 3
+      - name: Push image
+        run: docker image push --all-tags ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
-  deploy-codedeploy:
+      - name: Get image digest
+        id: digest
+        run: echo "value=$(docker inspect --format='{{index .RepoDigests 0}}' ${{ needs.build.outputs.image-tag }})" >> "$GITHUB_OUTPUT"
+
+  deploy-aws-cdk:
     needs:
-      - deploy-aws-cdk
-      - build-image
+      - build
+      - setup
     runs-on: ubuntu-latest
-    env:
-      APPLICATION_NAME: ${{ needs.deploy-aws-cdk.outputs.application-name }}
-      DEPLOYMENT_GROUP_NAME: ${{ needs.deploy-aws-cdk.outputs.deployment-group-name }}
-      IAM_ROLE_ARN: ${{ needs.deploy-aws-cdk.outputs.iam-role-arn }}
-    environment:
-      name: prod-codedeploy
-      url: ${{ steps.create-deployment.outputs.url }}
     permissions:
-      id-token: write
       contents: read
+      id-token: write
+    environment:
+      name: ${{ needs.setup.outputs.stage }}-aws-cdk
     steps:
       - uses: actions/checkout@v4
       - uses: object-Object/ci/setup@v0
         with:
-          python-version: 3.11
-          aws-region: ${{ env.AWS_REGION }}
-          role-to-assume: ${{ env.IAM_ROLE_ARN }}
+          node-version: ${{ env.NODE_VERSION }}
+          npm-packages: aws-cdk
+          role-to-assume: repo
 
-      - name: Set runtime environment variables
+      - name: Download synth artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: aws-cdk-synth
+          path: cdk.out
+
+      - name: Deploy stack
+        run: cdk deploy --ci --no-lookups --require-approval=never --app=cdk.out --outputs-file=outputs.json ${{ needs.setup.outputs.stage }}
+
+      - name: Upload outputs artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: aws-cdk-outputs
+          path: outputs.json
+
+  deploy-codedeploy:
+    needs:
+      - setup
+      - push-image
+      - deploy-aws-cdk
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    environment:
+      name: ${{ needs.setup.outputs.stage }}-codedeploy
+      url: ${{ steps.deploy.outputs.deployment-url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download outputs artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: aws-cdk-outputs
+
+      - name: Parse outputs
+        id: parse
+        uses: object-Object/ci/parse-cdk-outputs@v0
+        with:
+          file: outputs.json
+
+      - uses: object-Object/ci/setup@v0
+        with:
+          role-to-assume: ${{ steps.parse.outputs.ActionsCodeDeployRoleARN }}
+
+      - name: Create runtime files
+        working-directory: codedeploy
         run: |
-          cat <<EOF > codedeploy/.env
-          IMAGE_ID="${{ needs.build-image.outputs.image-id }}"
-          BOT_ID="${{ vars.BOT_ID }}"
-          HEALTH_CHECK_CHANNEL_ID="${{ vars.HEALTH_CHECK_CHANNEL_ID }}"
+          sed -i -e 's/\$APPLICATION_NAME/${{ steps.parse.outputs.ApplicationName }}/g' appspec.yml
+
+          cat <<END_OF_FILE > .env
+          IMAGE="${{ needs.push-image.outputs.digest }}"
+          ENVIRONMENT="${{ needs.setup.outputs.stage }}"
           TOKEN="${{ secrets.DISCORD_TOKEN }}"
-          LOG_WEBHOOK_URL="${{ secrets.LOG_WEBHOOK_URL }}"
-          HEALTH_CHECK_WEBHOOK_URL="${{ secrets.HEALTH_CHECK_WEBHOOK_URL }}"
-          EOF
+          DEPLOYMENT="{}"
+          DEPLOYMENT__COMMIT_SHA="${{ github.sha }}"
+          DEPLOYMENT__COMMIT_TIMESTAMP="$(git show --no-patch --format=%at ${{ github.sha }})"
+          DEPLOYMENT__COMMIT_MESSAGE="$(git log --oneline --format=%B -n 1 ${{ github.sha }} | head -n 1)"
+          END_OF_FILE
 
-      - name: Upload deployment bundle to S3
-        id: upload-bundle
+      - name: Deploy application
+        id: deploy
+        uses: object-Object/ci/deploy-codedeploy@v0
+        with:
+          path: codedeploy
+          stack: ${{ steps.parse.outputs.stack-name }}
+          application: ${{ steps.parse.outputs.ApplicationName }}
+          deployment-group: ${{ steps.parse.outputs.DeploymentGroupName }}
+          s3-bucket: ${{ steps.parse.outputs.ArtifactsBucketName }}
+
+  deploy-pages:
+    needs:
+      - build
+      - setup
+    runs-on: ubuntu-latest
+    concurrency:
+      group: hexdoc-deploy-pages
+      cancel-in-progress: false
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: object-Object/ci/setup@v0
+        with:
+          python-version-file: .python-version
+
+      - name: Sync dependencies
         run: |
-          S3_KEY="${{ env.STACK_NAME }}/${{ github.sha }}.zip"
-          echo "s3-key=$S3_KEY" >> "$GITHUB_OUTPUT"
-          aws deploy push \
-            --application-name ${{ env.APPLICATION_NAME }} \
-            --s3-location s3://${{ env.S3_BUCKET }}/$S3_KEY \
-            --source codedeploy
+          export UV_PROJECT_ENVIRONMENT="${pythonLocation}"
+          uv sync --frozen --no-dev --package HexBug-web
 
-      - name: Create CodeDeploy deployment
-        id: create-deployment
-        run: |
-          response="$(aws deploy create-deployment \
-            --application-name ${{ env.APPLICATION_NAME }} \
-            --deployment-group-name ${{ env.DEPLOYMENT_GROUP_NAME }} \
-            --s3-location "bucket=${{ env.S3_BUCKET }},key=${{ steps.upload-bundle.outputs.s3-key }},bundleType=zip")"
-          
-          deployment_id="$(echo "$response" | jq '.deploymentId' --raw-output)"
-          url="https://${{ env.AWS_REGION }}.console.aws.amazon.com/codesuite/codedeploy/deployments/${deployment_id}?region=${{ env.AWS_REGION }}"
-          echo "Deployment URL: $url"
+      - name: Download hexdoc.toml artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: hexdoc-toml
 
-          echo "deployment-id=$deployment_id" >> "$GITHUB_OUTPUT"
-          echo "url=$url" >> "$GITHUB_OUTPUT"
-
-      - name: Wait for deployment to finish
-        run: |
-          aws deploy wait deployment-successful \
-            --deployment-id ${{ steps.create-deployment.outputs.deployment-id }}
+      - name: Merge and deploy to Pages
+        uses: hexdoc-dev/actions/deploy-pages@v1
+        with:
+          release: false
+          site-url: ${{ needs.build.outputs.pages-url }}

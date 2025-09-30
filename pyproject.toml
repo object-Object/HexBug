@@ -1,103 +1,60 @@
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+# dependencies
 
-# project metadata
-
-[project]
-name = "HexBug"
-version = "0.1.0"
-authors = [
-    { name="object-Object" },
-]
-keywords = ["hexdoc"]
-requires-python = ">=3.11,<3.12"
-dependencies = [
-    "typer~=0.9",
-]
-
-[project.optional-dependencies]
-aws-cdk = [
-    "aws-cdk-lib==2.102.0",
-    "aws-cdk-github-oidc==2.4.0",
-]
-codedeploy = [
-    "boto3~=1.34",
-    "boto3-stubs-lite[s3,ssm]",
-]
-runtime = [
-    "discord.py~=2.4.0",
-    "hexdoc-hexgloop @ https://github.com/SamsTheNerd/HexGloop/raw/af72e6cc318d/docs/v/latest/main/dist/hexdoc_hexgloop-0.2.1.1.0.dev0-py3-none-any.whl",
-    "hexdoc-hexal==0.2.19.1.0.dev0",
-    "hexdoc-hexbound==0.1.4.1.19.2.1.0.dev2",
-    "hexdoc-hexkeys==0.1.3.1.0.dev0",
-    "hexdoc-mediaworks==1.0.6.1.0.dev0",
-    "hexdoc-oneironaut==0.3.4.1.0",
-    "hexdoc-hexdebug==0.2.2.1.19.2.1.0",
-    "hexdoc-hexcellular==1.0.2.1.0.dev0",
-    "hexdoc-hexical==1.3.2.1.0.dev0",
-    "hexdoc-hexcassettes==1.1.1.1.0.0",
-    "hexdoc==1!0.1.0a18",
-    "importlib_resources>=5.10",
-    "jproperties~=2.1",
-    "lark[interegular]~=1.1",
-    "matplotlib~=3.6",
-    "networkx~=3.1",
-    "numpy~=1.23",
-    "pillow~=9.5",
-    "python-dotenv~=0.21",
-    "ruff~=0.1.4,!=0.1.12",
-    "semver~=3.0",
-    "sty~=1.0",
-    "typing_extensions~=4.7",
-    "hex-renderer-py~=0.1.2",
-    "hexnumgen>=0.2.0",
-]
-target-any = [
-    "hexnumgen @ git+https://github.com/object-Object/hexnumgen-rs.git@70d683ee9b",
+[dependency-groups]
+dev = [
+    "HexBug-bot[data]",
+    "hatch>=1.13.0",
+    "poethepoet>=0.32.2",
+    "pre-commit",
+    "ruff>=0.12.11",
 ]
 test = [
-    "pytest~=8.1",
+    "pytest>=8.3.5",
+    "pytest-describe>=2.2.0",
 ]
-dev = [
-    "HexBug[aws-cdk,codedeploy,runtime,test]",
-    "nox",
-    "tqdm",
-]
-
-[project.urls]
-Source = "https://github.com/object-Object/HexBug"
-
-[tool.hatch.metadata]
-allow-direct-references = true
-
-# directory inclusion
-
-[tool.hatch.build]
-include = [
-    "src/HexBug",
-    "vendor/*",
-    "scripts",
-    "main.py",
-    "gradle.properties",
+notebooks = [
+    "ipykernel>=6.29.5",
 ]
 
-[tool.hatch.build.targets.wheel]
-sources = [
-    "src",
-    "vendor",
+# uv
+
+[tool.uv]
+default-groups = ["dev", "test"]
+find-links = [
+    "./vendor",
+]
+dependency-metadata = [
+    { name = "hexdoc-hexdim", version = "1.2.1.1.20.0", requires-dist = [] },
+    { name = "hexdoc-hexweb", version = "1.0.4.1.1", requires-dist = [] },
 ]
 
-# hexdoc entry points
+[tool.uv.workspace]
+members = [
+    "bot",
+    "common",
+    "infrastructure",
+    "web",
+]
 
-[project.entry-points.hexdoc]
-hexbug = "HexBug._hooks:HexBugPlugin"
+[tool.uv.sources]
+HexBug-bot = { workspace = true }
 
-# other tools
+# poe
+
+[tool.poe.tasks]
+aws-cdk = "python -m HexBug.aws_cdk.app"
+version = { cmd = "hatch version", cwd = "common" }
+
+setup = ["_setup_sync", "_setup_pre-commit"]
+_setup_sync = "uv sync"
+_setup_pre-commit = "pre-commit install"
+
+# pytest
 
 [tool.pytest.ini_options]
-testpaths = ["test"]
-pythonpath = ["."]
+testpaths = [
+    "bot/test",
+]
 addopts = [
     "--import-mode=importlib",
 ]
@@ -105,75 +62,111 @@ filterwarnings = [
     'ignore:setDaemon\(\) is deprecated, set the daemon attribute instead:DeprecationWarning:javascript.events',
 ]
 
+# linting/formatting
+
+[tool.ruff]
+preview = true
+extend-exclude = [
+    "**/venv",
+    "**/.*",
+    "**/node_modules",
+    "**/__pycache__",
+]
+
+[tool.ruff.lint]
+extend-select = [
+    "I", # import sorting
+    "RUF022", # __all__ sorting
+    "TID252", # ban relative imports
+]
+extend-ignore = [
+    # covered by Pyright
+    "F821", # undefined variable
+    "F401", # imported but unused
+    "F841", # unused variable
+]
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+known-first-party = [
+    "HexBug",
+]
+known-third-party = [
+    "alembic",
+    "discord",
+]
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "parents"
+
+# type checking
+
 [tool.pyright]
-pythonVersion = "3.11"
+pythonVersion = "3.12"
 pythonPlatform = "All"
 
 include = [
-    "src",
-    "test",
-    "scripts",
-    "main.py",
-]
-extraPaths = [
-    "vendor",
+    "bot/*",
+    "common/*",
+    "infrastructure/*",
+    "web/*",
 ]
 exclude = [
-    "venv",
-    ".*",
-    "out",
-    "_site",
+    "**/venv",
+    "**/.*",
+    "**/node_modules",
+    "**/__pycache__",
 ]
 
-enableExperimentalFeatures = true
+typeCheckingMode = "standard"
 
-typeCheckingMode = "basic"
+strictDictionaryInference = true
+strictListInference = true
+strictSetInference = true
 
-# strictDictionaryInference = true
-# strictListInference = true
-# strictSetInference = true
+reportAssertAlwaysTrue = "error"
+reportConstantRedefinition = "error"
+reportDeprecated = "error"
+reportFunctionMemberAccess = "error"
+reportIncompatibleMethodOverride = "error"
+reportIncompatibleVariableOverride = "error"
+reportIncompleteStub = "error"
+reportInconsistentConstructor = "error"
+reportInvalidStringEscapeSequence = "error"
+reportInvalidStubStatement = "error"
+reportInvalidTypeVarUse = "error"
+reportMatchNotExhaustive = "error"
+reportMissingParameterType = "error"
+reportOverlappingOverload = "error"
+reportSelfClsParameterName = "error"
+reportTypeCommentUsage = "error"
+reportUnknownParameterType = "error"
+reportUnnecessaryCast = "error"
+reportUnnecessaryContains = "error"
+reportUnsupportedDunderAll = "error"
+reportUntypedBaseClass = "error"
+reportUntypedClassDecorator = "error"
+reportUntypedFunctionDecorator = "error"
+reportUntypedNamedTuple = "error"
+reportWildcardImportFromLibrary = "error"
 
-# reportAssertAlwaysTrue = "error"
-# reportConstantRedefinition = "error"
-# reportDeprecated = "error"
-# reportDuplicateImport = "error"
-# reportFunctionMemberAccess = "error"
-# reportIncompatibleMethodOverride = "error"
-# reportIncompleteStub = "error"
-# reportInconsistentConstructor = "error"
-# reportInvalidStringEscapeSequence = "error"
-# reportInvalidStubStatement = "error"
-# reportInvalidTypeVarUse = "error"
-# reportMatchNotExhaustive = "error"
-# reportMissingParameterType = "error"
-# reportMissingTypeStubs = "error"
-# reportOverlappingOverload = "error"
-# reportSelfClsParameterName = "error"
-# reportTypeCommentUsage = "error"
-# reportUnknownParameterType = "error"
-# reportUnnecessaryCast = "error"
-# reportUnnecessaryContains = "error"
-# reportUnsupportedDunderAll = "error"
-# reportUntypedBaseClass = "error"
-# reportUntypedClassDecorator = "error"
-# reportUntypedFunctionDecorator = "error"
-# reportUntypedNamedTuple = "error"
-# reportWildcardImportFromLibrary = "error"
+reportMissingTypeArgument = "warning"
+reportPrivateUsage = "warning"
+reportUnknownArgumentType = "warning"
+reportUnknownLambdaType = "warning"
+reportUnknownMemberType = "warning"
+reportUnknownVariableType = "warning"
+reportUnnecessaryComparison = "warning"
+reportUnnecessaryIsInstance = "warning"
+reportUnusedClass = "warning"
+reportUnusedExpression = "warning"
+reportUnusedFunction = "warning"
+reportUnusedImport = "warning"
+reportUnusedVariable = "warning"
 
-# reportMissingTypeArgument = "warning"
-# reportPrivateUsage = "warning"
-# reportUnnecessaryComparison = "warning"
-# reportUnnecessaryIsInstance =  	"warning"
-# reportUnusedClass = "warning"
-# reportUnusedExpression = "warning"
-# reportUnusedFunction = "warning"
-# reportUnusedImport = "warning"
-# reportUnusedVariable = "warning"
+reportMissingTypeStubs = "none"
+reportDuplicateImport = "none"
 
-# TODO: move back to warning
-reportUnknownLambdaType = "none"
-reportUnknownArgumentType = "none"
-reportUnknownMemberType = "none"
-
-reportUnknownVariableType = "none"
-reportIncompatibleVariableOverride = "none"
+[[tool.pyright.executionEnvironments]]
+root = "bot/test"
+reportUnusedFunction = "none"

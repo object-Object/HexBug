@@ -1,0 +1,27 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+dynamic = ["version"]
+name = "HexBug-infrastructure"
+requires-python = ">=3.12"
+dependencies = [
+    "HexBug-common",
+    "aws-cdk-github-oidc>=2.4.1",
+    "aws-cdk-lib>=2.180.0",
+    "object-ci[aws-cdk] @ git+https://github.com/object-Object/ci@v0",
+]
+
+[tool.uv.sources]
+HexBug-common = { workspace = true }
+
+[tool.hatch.version]
+source = "regex"
+path = "../common/src/HexBug/common/__version__.py"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/HexBug"]

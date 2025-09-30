@@ -2,12 +2,13 @@
 services:
   bot:
     build: .
-    volumes:
-      - type: bind
-        source: ~/.aws
-        target: /root/.aws
     environment:
       ENVIRONMENT: dev
+
+  postgres:
+    ports:
+      - 6543:5432
+
 secrets:
   env:
     file: .env

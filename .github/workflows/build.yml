@@ -1,0 +1,176 @@
+name: Build
+
+on:
+  push:
+    branches: ['*']
+  pull_request:
+    branches: ['*']
+  workflow_dispatch:
+  workflow_call:
+    outputs:
+      image-tag:
+        value: ${{ jobs.build-image.outputs.tag }}
+      pages-url:
+        value: ${{ jobs.build-hexdoc.outputs.pages-url }}
+
+env:
+  NODE_VERSION: 18
+  REGISTRY: ghcr.io
+  IMAGE_NAME: object-object/hexbug
+
+jobs:
+  build-image:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ fromJson(steps.meta.outputs.json).tags[0] }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract image metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          load: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:tmp
+
+      - name: Start database
+        run: docker compose up --detach postgres
+
+      - name: Test image configuration
+        run: |
+          touch .env
+          docker compose run --rm bot hexbug bot --no-run
+
+      - name: Check Alembic upgrade/downgrade
+        run: |
+          docker compose run --rm bot alembic upgrade head
+          docker compose run --rm bot alembic downgrade base
+          docker compose run --rm bot alembic upgrade head
+
+      - name: Check for new Alembic upgrades
+        run: docker compose run --rm bot alembic check
+
+      - name: Extract registry from image
+        run: |
+          id=$(docker create ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:tmp)
+          docker cp $id:/app/registry.json registry.json
+          docker rm -v $id
+
+      - name: Export Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          outputs: type=docker,dest=${{ runner.temp }}/image.tar
+
+      - name: Upload image artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image
+          path: ${{ runner.temp }}/image.tar
+          retention-days: 7
+
+      - name: Upload registry artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: registry
+          path: registry.json
+
+  build-aws-cdk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: object-Object/ci/setup@v0
+        with:
+          python-version-file: .python-version
+          node-version: ${{ env.NODE_VERSION }}
+          npm-packages: aws-cdk
+
+      - name: Sync dependencies
+        run: uv sync --frozen --no-dev --package HexBug-infrastructure
+
+      - name: Synth aws-cdk stack
+        run: cdk synth --ci --no-lookups --strict
+
+      - name: Upload synth artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: aws-cdk-synth
+          path: cdk.out
+
+  build-hexdoc:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: read
+    outputs:
+      pages-url: ${{ steps.build.outputs.pages-url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: object-Object/ci/setup@v0
+        with:
+          python-version-file: .python-version
+
+      # https://github.com/astral-sh/uv/issues/8085#issuecomment-2406665798
+      - name: Sync dependencies
+        run: |
+          export UV_PROJECT_ENVIRONMENT="${pythonLocation}"
+          uv sync --frozen --no-dev --package HexBug-web
+
+      - name: Build registry
+        run: hexbug build
+
+      - name: Generate hexdoc.toml
+        run: hexbug web build-props
+
+      # HACK
+      - name: Prevent hexdoc from running hatch build
+        run: |
+          mkdir -p "$HOME/tmp-bin"
+          echo "#!/bin/sh" > "$HOME/tmp-bin/hatch"
+          chmod +x "$HOME/tmp-bin/hatch"
+          echo "$HOME/tmp-bin" >> "$GITHUB_PATH"
+          mkdir -p dist
+
+      - name: Build hexdoc book
+        id: build
+        uses: hexdoc-dev/actions/build@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          release: false
+
+      - name: Upload hexdoc.toml artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hexdoc-toml
+          path: hexdoc.toml
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: object-Object/ci/setup@v0
+        with:
+          python-version-file: .python-version
+
+      - name: Sync dependencies
+        run: uv sync --frozen --no-dev --package HexBug-bot
+
+      - name: Run unit tests
+        run: uv run pytest

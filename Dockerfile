@@ -1,29 +1,53 @@
-FROM ghcr.io/astral-sh/uv:0.4.17 AS uv
+FROM ghcr.io/astral-sh/uv:0.6.2 AS uv
+FROM python:3.12.9-slim
 
-FROM python:3.11.10
+ENV UV_PROJECT_ENVIRONMENT=/usr/local
+ENV UV_COMPILE_BYTECODE=1
+ENV UV_LINK_MODE=copy
 
-COPY --from=uv /uv /usr/bin/uv
+WORKDIR /app
 
-WORKDIR /app/bot
+# dependencies
 
 COPY vendor/ vendor/
 COPY pyproject.toml ./
-COPY src/HexBug/__init__.py src/HexBug/
+COPY uv.lock ./
 
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv pip install --system -e '.[runtime]' --find-links ./vendor
+RUN --mount=from=uv,source=/uv,target=/bin/uv \
+    --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen --no-dev --package HexBug-bot --no-install-workspace
 
-COPY .git/ .git/
-COPY scripts/bot/ scripts/bot/
-COPY src/HexBug/ src/HexBug/
-COPY main.py ./
+# project code
 
-CMD ["python", "main.py"]
+COPY common/ common/
+COPY bot/ bot/
+
+# sync dependencies with data to build registry
+
+RUN --mount=from=uv,source=/uv,target=/bin/uv \
+    --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen --no-dev --package HexBug-bot --extra data
+
+RUN hexbug build
+
+# sync dependencies without data to reduce image size hopefully idk i didn't check
+
+RUN --mount=from=uv,source=/uv,target=/bin/uv \
+    --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen --no-dev --package HexBug-bot
+
+# Alembic files
+
+COPY alembic/ alembic/
+COPY alembic.ini ./
+
+# NOTE: this must be a list, otherwise signals (eg. SIGINT) are not forwarded to the bot
+CMD ["hexbug", "bot"]
 
 HEALTHCHECK \
-    --interval=15m \
+    --interval=1m \
     --timeout=30s \
     --start-period=2m \
-    --start-interval=1m \
-    --retries=1 \
-    CMD ["python", "scripts/bot/health_check.py"]
+    --start-interval=15s \
+    --retries=3 \
+    CMD ["hexbug", "health-check"]

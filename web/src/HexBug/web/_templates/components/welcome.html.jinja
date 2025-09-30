@@ -1,0 +1,20 @@
+{% extends "hexdoc:components/welcome.html.jinja" %}
+
+{% block content %}
+  <h1>{{ _("bookofhexxy.welcome.header").format(mod_name) }}</h1>
+
+  {# scuffed: we need to replace the url placeholder before formatting, otherwise we get an error #}
+  {# this unfortunately produces a warning message #}
+  {{ fmt.styled(_f(
+    _("bookofhexxy.welcome.content").format(hex_book_url=bookofhexxy_mods["hexcasting"].book_url)
+  )) }}
+  {{ fmt.styled(_f("bookofhexxy.welcome.bleeding_edge")) }}
+  {{ fmt.styled(_f("hexdoc.welcome.spoilers")) }}
+
+  <h2>{{ _("bookofhexxy.welcome.mods") }}</h2>
+  <ul>
+    {% for mod in bookofhexxy_mods.values() %}
+      <li><a href="{{ mod.book_url }}">{{ mod.name }}</a> ({{ mod.pretty_version }})</li>
+    {% endfor %}
+  </ul>
+{% endblock content %}

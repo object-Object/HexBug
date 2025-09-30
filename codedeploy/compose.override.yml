@@ -1,16 +1,9 @@
 # production overrides for compose.yml
 services:
   bot:
-    image: "ghcr.io/object-object/hexbug@${IMAGE_ID}"
-    volumes:
-      - type: bind
-        source: /home/object/codedeploy
-        target: /app/codedeploy
-        read_only: true
-    environment:
-      ENVIRONMENT: prod
-      AWS_SHARED_CREDENTIALS_FILE: /app/codedeploy/temporary-credentials
-    restart: on-failure
+    restart: unless-stopped
+    image: "${IMAGE}"
+
 secrets:
   env:
     file: .env

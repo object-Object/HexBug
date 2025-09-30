@@ -1,0 +1,13 @@
+{% import "macros/bookofhexxy.html.jinja" as bookofhexxy with context -%}
+{% import "macros/formatting.html.jinja" as fmt with context -%}
+
+<div id="{{ entry.id.path }}" class="entry">
+  {% call fmt.maybe_spoilered(entry) %}
+    {{- fmt.section_header(entry, "h3", "entry-title") }}
+    {{ bookofhexxy.mod_attribution(entry) }}
+
+    {% for page in entry.preprocess_pages() +%}
+      {% include page.template~".html.jinja" %}
+    {% endfor %}
+  {% endcall %}
+</div>
