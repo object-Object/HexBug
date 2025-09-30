@@ -41,7 +41,7 @@ jobs:
           else
             STAGE="beta"
           fi
-          echo "Deployment stage: `$STAGE`" | tee >> $GITHUB_STEP_SUMMARY
+          echo "Deployment stage: \`$STAGE\`" | tee >> $GITHUB_STEP_SUMMARY
           echo "stage=$STAGE" >> "$GITHUB_OUTPUT"
 
   push-image:
