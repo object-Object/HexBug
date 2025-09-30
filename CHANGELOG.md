@@ -32,6 +32,7 @@ Initial release of HexBug v2, a total rewrite of the entire bot from the ground 
 - Moved pattern rendering options from command arguments to a component-based menu.
 - Styled text in pattern descriptions (links, bold, italic, etc) is now properly rendered using Markdown.
 - Added the pattern ID to the pattern embed footer.
+- Message names in `/info` are now properly localized.
 
 ### Removed
 
