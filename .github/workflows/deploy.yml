@@ -172,6 +172,7 @@ jobs:
           s3-bucket: ${{ steps.parse.outputs.ArtifactsBucketName }}
 
   deploy-pages:
+    if: startsWith(github.ref, 'refs/heads/')
     needs:
       - build
       - setup
