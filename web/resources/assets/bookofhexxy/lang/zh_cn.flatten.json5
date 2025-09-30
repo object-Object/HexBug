@@ -16,5 +16,7 @@
         就连Modrinth和CurseForge上的最新版本里也找不到！",
       mods: "书目来源",
     },
+
+    mod_attribution: "来源：{mod_name}",
   },
 }
