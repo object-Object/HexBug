@@ -51,6 +51,14 @@ Run the bot in Docker:
 docker compose up --build
 ```
 
+Build and serve the Book of Hexxy:
+
+```sh
+uv run hexbug build
+uv run hexbug web build-props
+uv run hexdoc serve
+```
+
 ### Creating database migrations
 
 https://alembic.sqlalchemy.org/en/latest/autogenerate.html
