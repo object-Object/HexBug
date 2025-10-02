@@ -17,4 +17,4 @@ def join_truthy(joiner: str, *values: Any) -> str:
 
 
 def format_number(n: float) -> str:
-    return f"{n:,}".rstrip("0").rstrip(".").replace(",", " ")
+    return f"{n:,}".replace(",", " ")
