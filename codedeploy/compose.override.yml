@@ -4,6 +4,9 @@ services:
     restart: unless-stopped
     image: "${IMAGE}"
 
+  postgres:
+    restart: unless-stopped
+
 secrets:
   env:
     file: .env
