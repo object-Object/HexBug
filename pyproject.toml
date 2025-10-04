@@ -39,10 +39,14 @@ members = [
 [tool.uv.sources]
 HexBug-bot = { workspace = true }
 
+[tool.uv.pip]
+prerelease = "allow"
+
 # poe
 
 [tool.poe.tasks]
 aws-cdk = "python -m HexBug.aws_cdk.app"
+outdated.shell = "uv pip list --outdated --no-progress --exclude hexdoc-minecraft | grep hexdoc"
 version = { cmd = "hatch version", cwd = "common" }
 
 setup = ["_setup_sync", "_setup_pre-commit"]
