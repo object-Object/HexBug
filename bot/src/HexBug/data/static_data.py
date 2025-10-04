@@ -81,6 +81,15 @@ MODS: list[StaticModInfo] = [
         modloaders=[Modloader.FABRIC, Modloader.FORGE, Modloader.QUILT],
     ),
     StaticModInfo(
+        id="hex_ars_link",
+        name="Hex-Ars Linker",
+        description="Link Ars Nouveau mana to Hex Casting media & cast Ars Nouveau spells inside Hex Casting.",
+        icon_url=URL("common/src/main/resources/cover.png"),
+        curseforge_slug="hex-ars-linker",
+        modrinth_slug="hex-ars-linker",
+        modloaders=[Modloader.FORGE],
+    ),
+    StaticModInfo(
         id="hexal",
         name="Hexal",
         description="Adds many utility patterns/spells (eg. entity health, item smelting), autonomous casting with wisps, and powerful item manipulation/storage.",
@@ -428,8 +437,7 @@ DISABLED_PATTERNS: set[ResourceLocation] = {
     # conflicts
     ResourceLocation("hexical", "age_scroll"),  # shape: hexical:greater_blink
     ResourceLocation("hexstruction", "bounding_box"),  # shape: hexical:greater_blink
-    ResourceLocation("lapisworks", "hastenature1"),  # shape: oneironaut:resistdetection
-    ResourceLocation("lapisworks", "hastenature3"),  # shape: hexical:greater_blink
+    ResourceLocation("lapisworks", "empty_prfn"),  # signature: hexal:mote/storage/get
     # not real patterns
     ResourceLocation("hexcasting", "const/vec/x"),
     ResourceLocation("hexcasting", "const/vec/y"),

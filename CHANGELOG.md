@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and [Pydantic's HISTORY.md](https://github.com/pydantic/pydantic/blob/main/HISTORY.md), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [UNRELEASED]
+
+### Mods Added
+
+- Hex-Ars Linker: 0.9.2.4
+
+### Mods Updated
+
+- HexDebug: 0.7.0+1.20.1
+- HexFlow: 0.3.1.1
+- HexParse: 1.4.0
+- Hierophantics: 1.3.3
+- Lapisworks: 1.5.5
+- MoreIotas: 0.1.1
+
 ## `2.0.1` - 2025-10-02
 
 ### Fixed
