@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [UNRELEASED]
 
+### Changed
+
+- Added more shorthand names to a few patterns in `/patterns hex`.
+- `/patterns hex` now accepts "punctuation shorthand" patterns without commas surrounding them. For example, `{ mind } flock disint, hermes` is now parsed correctly.
+
 ### Mods Added
 
 - Hex-Ars Linker: 0.9.2.4

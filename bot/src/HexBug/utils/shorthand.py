@@ -1,4 +1,20 @@
+from typing import Iterator
+
 from hexdoc.core import ResourceLocation
+
+EXTRA_SHORTHAND = {
+    ResourceLocation("hexcasting", "open_paren"): ["{", "(", "intro"],
+    ResourceLocation("hexcasting", "close_paren"): ["}", ")", "retro"],
+    ResourceLocation("hexcasting", "escape"): ["\\"],
+    ResourceLocation("hexcasting", "mask"): ["book"],
+}
+
+PUNCTUATION = {
+    value
+    for values in EXTRA_SHORTHAND.values()
+    for value in values
+    if not value.isalnum()
+}
 
 SUFFIXES = {
     " reflection": ["", " ref", " refl"],
@@ -30,7 +46,9 @@ REPLACEMENTS = [
 
 
 # this is genuinely cursed, but it still works
-def get_shorthand_names(id: ResourceLocation, name: str):
+def get_shorthand_names(id: ResourceLocation, name: str) -> Iterator[str]:
+    yield from EXTRA_SHORTHAND.get(id, [])
+
     yield str(id).lower()
     yield id.path.lower()
 

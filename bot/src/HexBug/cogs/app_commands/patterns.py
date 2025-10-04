@@ -13,6 +13,7 @@ from HexBug.data.special_handlers import SpecialHandlerPattern
 from HexBug.ui.views.patterns import EmbedPatternView, NamedPatternView
 from HexBug.utils.discord.visibility import Visibility, VisibilityOption
 from HexBug.utils.numbers import DecomposedNumber
+from HexBug.utils.shorthand import PUNCTUATION
 from HexBug.utils.strings import format_number
 
 MAX_NUMBER = 1e12
@@ -28,6 +29,10 @@ class PatternsCog(HexBugCog, GroupCog, group_name="patterns"):
         visibility: VisibilityOption = Visibility.PRIVATE,
     ):
         patterns = list[HexPattern]()
+
+        # allow eg. { mind } compass
+        for punctuation in PUNCTUATION:
+            hex = hex.replace(punctuation, f",{punctuation},")
 
         for shorthand in hex.split(","):
             shorthand = shorthand.strip()
