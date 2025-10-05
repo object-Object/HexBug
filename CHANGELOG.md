@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 - Added more shorthand names to a few patterns in `/patterns hex`.
 - `/patterns hex` now accepts "punctuation shorthand" patterns without commas surrounding them. For example, `{ mind } flock disint, hermes` is now parsed correctly.
+- `/decode` now renders Introspection/Retrospection as `{`/`}` respectively and indents patterns between them.
 
 ### Mods Added
 

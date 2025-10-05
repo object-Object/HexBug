@@ -358,24 +358,29 @@ alphabetically by name.
 MODS[1:] = sorted(MODS[1:], key=lambda m: m.name)
 assert MODS[0].id == "hexcasting"
 
+CONSIDERATION = ResourceLocation("hexcasting", "escape")
+INTROSPECTION = ResourceLocation("hexcasting", "open_paren")
+RETROSPECTION = ResourceLocation("hexcasting", "close_paren")
+EVANITION = ResourceLocation("hexcasting", "undo")
+
 EXTRA_PATTERNS: list[StaticPatternInfo] = [
     StaticPatternInfo(
-        id=ResourceLocation("hexcasting", "escape"),
+        id=CONSIDERATION,
         startdir=HexDir.WEST,
         signature="qqqaw",
     ),
     StaticPatternInfo(
-        id=ResourceLocation("hexcasting", "open_paren"),
+        id=INTROSPECTION,
         startdir=HexDir.WEST,
         signature="qqq",
     ),
     StaticPatternInfo(
-        id=ResourceLocation("hexcasting", "close_paren"),
+        id=RETROSPECTION,
         startdir=HexDir.EAST,
         signature="eee",
     ),
     StaticPatternInfo(
-        id=ResourceLocation("hexcasting", "undo"),
+        id=EVANITION,
         startdir=HexDir.EAST,
         signature="eeedw",
     ),

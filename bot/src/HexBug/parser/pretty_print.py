@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+from contextlib import contextmanager
 from dataclasses import dataclass
 from typing import Iterator
 
+from HexBug.data import static_data
+from HexBug.data.patterns import PatternInfo
 from HexBug.data.registry import HexBugRegistry
 
 from .ast import (
@@ -23,102 +26,136 @@ from .ast import (
 
 class IotaPrinter:
     registry: HexBugRegistry
+    _level: int
+    _min_level: int
 
     def __init__(self, registry: HexBugRegistry):
         self.registry = registry
 
     def print(self, iota: Iota):
-        return "".join(node.value for node in self._iter_nodes(iota, 0, True))
+        self._reset()
+        return "".join(node.value for node in self._iter_nodes(iota, True))
 
     def pretty_print(self, iota: Iota, *, indent: str = " " * 4):
+        self._reset()
         return "\n".join(
-            node.pretty_print(indent) for node in self._iter_nodes(iota, 0, False)
+            node.pretty_print(indent) for node in self._iter_nodes(iota, False)
         )
 
-    def _iter_nodes(self, iota: Iota, level: int, inline: bool) -> Iterator[Node]:
+    def _reset(self):
+        self._level = 0
+        self._min_level = 0
+
+    def _iter_nodes(self, iota: Iota, inline: bool) -> Iterator[Node]:
         match iota:
             case PatternIota(direction=direction, signature=signature):
-                if match := self.registry.try_match_pattern(direction, signature):
-                    value = match.name
-                else:
-                    signature = (" " + signature) if signature else ""
-                    value = f"HexPattern({direction.name}{signature})"
-                yield Node(value, level)
+                match self.registry.try_match_pattern(direction, signature):
+                    case PatternInfo(id=static_data.INTROSPECTION) if not inline:
+                        yield self._node("{")
+                        self._level += 1
+                    case PatternInfo(id=static_data.RETROSPECTION) if not inline:
+                        self._level -= 1
+                        yield self._node("}")
+                    case None:
+                        signature = (" " + signature) if signature else ""
+                        yield self._node(f"HexPattern({direction.name}{signature})")
+                    case match:
+                        yield self._node(match.name)
 
             case JumpIota():
-                yield Node("[Jump]", level)
+                yield self._node("[Jump]")
 
             case CallIota():
-                yield Node("[Call]", level)
+                yield self._node("[Call]")
 
             case NumberIota(value=value):
-                yield Node(self._number(value), level)
+                yield self._node(self._number(value))
 
             case VectorIota(x=x, y=y, z=z):
-                yield Node(
-                    f"({self._number(x)}, {self._number(y)}, {self._number(z)})",
-                    level,
+                yield self._node(
+                    f"({self._number(x)}, {self._number(y)}, {self._number(z)})"
                 )
 
             case BooleanIota(value=value):
-                yield Node(str(value), level)
+                yield self._node(str(value))
 
             case NullIota():
-                yield Node("Null", level)
+                yield self._node("Null")
 
             case StringIota(value=value):
-                yield Node(f'"{value}"', level)
+                yield self._node(f'"{value}"')
 
             case UnknownIota(value=value):
-                yield Node(value, level)
+                yield self._node(value)
 
             case ListIota([]):
-                yield Node("[]", level)
+                yield self._node("[]")
 
             case ListIota([*children]):
-                yield Node("[", level)
-                for i, child in enumerate(children):
-                    if inline and i > 0:
-                        yield Node(", ", level + 1)
-                    yield from self._iter_nodes(child, level + 1, inline)
-                yield Node("]", level)
+                yield self._node("[")
+                with self._indent(), self._set_min_level():
+                    for i, child in enumerate(children):
+                        if inline and i > 0:
+                            yield self._node(", ")
+                        yield from self._iter_nodes(child, inline)
+                yield self._node("]")
 
             case MatrixIota(rows=m, columns=n) if m == 0 or n == 0:
-                yield Node(f"[({m}, {n})]", level)
+                yield self._node(f"[({m}, {n})]")
 
             case MatrixIota(rows=1, columns=n, data=data):
-                yield Node(
-                    f"[({1}, {n}) | {', '.join(self._number(v) for v in data[0])}]",
-                    level,
+                yield self._node(
+                    f"[({1}, {n}) | {', '.join(self._number(v) for v in data[0])}]"
                 )
 
             case MatrixIota(rows=m, columns=n, data=data):
-                yield Node(f"[({m}, {n}) |", level)
+                yield self._node(f"[({m}, {n}) |")
 
                 if inline:
                     for i, row in enumerate(data):
                         if i > 0:
-                            yield Node("; ", level + 1)
-                        yield Node(", ".join(self._number(v) for v in row), level + 1)
+                            yield self._node("; ")
+                        yield self._node(", ".join(self._number(v) for v in row))
                 else:
                     widths = [0] * n
                     for row in data:
                         for j, value in enumerate(row):
                             widths[j] = max(widths[j], len(self._number(value)))
 
-                    for row in data:
-                        yield Node(
-                            " ".join(
-                                self._number(value).ljust(widths[j])
-                                for j, value in enumerate(row)
-                            ),
-                            level + 1,
-                        )
+                    with self._indent():
+                        for row in data:
+                            yield self._node(
+                                " ".join(
+                                    self._number(value).ljust(widths[j])
+                                    for j, value in enumerate(row)
+                                )
+                            )
 
-                yield Node("]", level)
+                yield self._node("]")
 
     def _number(self, n: float):
         return f"{n:.4f}".rstrip("0").rstrip(".")
+
+    @property
+    def _safe_level(self):
+        return max(self._level, self._min_level)
+
+    def _node(self, value: str):
+        return Node(value, self._safe_level)
+
+    @contextmanager
+    def _indent(self, amount: int = 1):
+        prev = self._level
+        self._level = self._safe_level + amount
+        yield
+        self._level = prev
+
+    @contextmanager
+    def _set_min_level(self):
+        prev = self._min_level
+        self._min_level = self._safe_level
+        yield
+        self._level = self._min_level = prev
 
 
 @dataclass
