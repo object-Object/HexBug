@@ -12,6 +12,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - `/patterns hex` now accepts "punctuation shorthand" patterns without commas surrounding them. For example, `{ mind } flock disint, hermes` is now parsed correctly.
 - `/decode` now renders Introspection/Retrospection as `{`/`}` respectively and indents patterns between them.
 
+### Fixed
+
+- Fixed an incorrect lang key being used in `/mod`.
+
 ### Mods Added
 
 - Hex-Ars Linker: 0.9.2.4

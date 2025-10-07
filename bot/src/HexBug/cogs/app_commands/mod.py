@@ -39,7 +39,7 @@ class ModCog(HexBugCog):
         add_fields(
             embed,
             EmbedField(
-                name=await translate_command_text(interaction, "modloaders"),
+                name=await translate_command_text(interaction, "loaders"),
                 value="\n".join(
                     f"{self.bot.get_modloader_emoji(modloader)} {modloader.value}"
                     for modloader in mod.modloaders
