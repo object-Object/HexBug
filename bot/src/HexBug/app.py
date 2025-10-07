@@ -15,6 +15,7 @@ from typer import Option, Typer
 from HexBug.core.bot import HexBugBot
 from HexBug.core.env import HexBugEnv
 from HexBug.data.registry import HexBugRegistry
+from HexBug.parser import load_parsers
 from HexBug.utils.logging import setup_logging
 
 logger = logging.getLogger(__name__)
@@ -39,6 +40,9 @@ def bot(
 ):
     async def bot() -> int:
         setup_logging(verbose)
+
+        # do this after logging is set up so we see any warnings from lark
+        load_parsers()
 
         if run:
             env = HexBugEnv.load()

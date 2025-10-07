@@ -1,5 +1,5 @@
 from importlib import resources
-from typing import TYPE_CHECKING, Any, Callable
+from typing import Any
 
 from lark import Lark, Token, Transformer
 
@@ -17,25 +17,9 @@ from .ast import (
     UnknownIota,
     VectorIota,
 )
+from .helpers import v_args
 
-if TYPE_CHECKING:
-
-    def v_args[T](
-        inline: bool = False,
-        meta: bool = False,
-        tree: bool = False,
-    ) -> Callable[[T], T]: ...
-
-else:
-    from lark import v_args
-
-GRAMMAR = (resources.files() / "reveal.lark").read_text("utf-8")
-
-PARSER = Lark(
-    GRAMMAR,
-    parser="lalr",
-    strict=True,
-)
+_parser: Lark | None = None
 
 
 @v_args(meta=True)
@@ -65,6 +49,18 @@ class RevealTransformer(Transformer[Token, Iota]):
     unknown = UnknownIota.parse
 
 
+def load_reveal_parser() -> Lark:
+    global _parser
+    if _parser is None:
+        grammar = (resources.files() / "reveal.lark").read_text("utf-8")
+        _parser = Lark(
+            grammar,
+            parser="lalr",
+            strict=True,
+        )
+    return _parser
+
+
 def parse_reveal(text: str) -> Iota:
-    tree = PARSER.parse(text)
+    tree = load_reveal_parser().parse(text)
     return RevealTransformer().transform(tree)

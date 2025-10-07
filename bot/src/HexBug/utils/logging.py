@@ -1,15 +1,32 @@
 import logging
 
 import discord
+import lark.utils
+
+logger = logging.getLogger(__name__)
 
 
 def setup_logging(verbose: bool = False):
-    discord.utils.setup_logging()
-    logging.getLogger("HexBug").setLevel(logging.DEBUG)
     if verbose:
-        logging.getLogger("hexdoc").setLevel(logging.DEBUG)
+        levels = {
+            None: logging.DEBUG,
+            "lark": logging.DEBUG,
+        }
     else:
-        logging.getLogger("hexdoc").setLevel(logging.INFO)
-        logging.getLogger("hexdoc.minecraft.assets.textures").setLevel(logging.ERROR)
-        logging.getLogger("httpx").setLevel(logging.WARNING)
+        levels = {
+            None: logging.INFO,
+            "HexBug": logging.DEBUG,
+            "hexdoc.minecraft.assets.textures": logging.ERROR,
+            "httpx": logging.WARNING,
+        }
+
+    # :/
+    for handler in lark.utils.logger.handlers:
+        lark.utils.logger.removeHandler(handler)
+
+    discord.utils.setup_logging()
     discord.VoiceClient.warn_nacl = False
+    for name, level in levels.items():
+        logging.getLogger(name).setLevel(level)
+
+    logger.debug("Logger initialized.")
