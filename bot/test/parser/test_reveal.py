@@ -3,6 +3,7 @@ import pytest
 from HexBug.data.hex_math import HexDir
 from HexBug.parser.ast import (
     BooleanIota,
+    BubbleIota,
     CallIota,
     Iota,
     JumpIota,
@@ -21,9 +22,9 @@ from HexBug.parser.reveal import parse_reveal
 @pytest.mark.parametrize(
     ["text", "want"],
     [
-        ("0", NumberIota(0)),
-        ("1", NumberIota(1)),
-        ("-1", NumberIota(-1)),
+        ("0.00", NumberIota(0)),
+        ("1.00", NumberIota(1)),
+        ("-1.00", NumberIota(-1)),
         ("23.45", NumberIota(23.45)),
         ("-23.45", NumberIota(-23.45)),
     ],
@@ -35,7 +36,7 @@ def test_number(text: str, want: Iota):
 @pytest.mark.parametrize(
     ["text", "want"],
     [
-        ("(0, 1, -2.5)", VectorIota(0, 1, -2.5)),
+        ("(0.00, 1.00, -2.50)", VectorIota(0, 1, -2.5)),
     ],
 )
 def test_vector(text: str, want: Iota):
@@ -106,8 +107,8 @@ def test_pattern(text: str, want: Iota):
     ["text", "want"],
     [
         ("[]", ListIota([])),
-        ("[1]", ListIota([NumberIota(1)])),
-        ("[1, 2]", ListIota([NumberIota(1), NumberIota(2)])),
+        ("[1.00]", ListIota([NumberIota(1)])),
+        ("[1.00, 2.00]", ListIota([NumberIota(1), NumberIota(2)])),
         # latest.log
         (
             "[HexPattern(EAST), HexPattern(SOUTH_WEST w), 0.00]",
@@ -223,4 +224,39 @@ def test_jump(text: str, want: Iota):
     ],
 )
 def test_call(text: str, want: Iota):
+    assert want == parse_reveal(text)
+
+
+@pytest.mark.parametrize(
+    ["text", "want"],
+    [
+        ("{(0.00, 1.00, 0.00)}", BubbleIota(VectorIota(0, 1, 0))),
+        ("{[(0.00, 1.00, 0.00)]}", BubbleIota(ListIota([VectorIota(0, 1, 0)]))),
+        (
+            "[{[(0.00, 1.00, 0.00)]}]",
+            ListIota([BubbleIota(ListIota([VectorIota(0, 1, 0)]))]),
+        ),
+        ("{kowen}", BubbleIota(UnknownIota("kowen"))),
+        ("{[Amethyst Dust]}", BubbleIota(ListIota([UnknownIota("Amethyst Dust")]))),
+    ],
+)
+def test_bubble(text: str, want: Iota):
+    assert want == parse_reveal(text)
+
+
+@pytest.mark.parametrize(
+    ["text", "want"],
+    [
+        ("Amethyst Dust x142161", UnknownIota("Amethyst Dust x142161")),
+        (
+            "[HexPattern[WEST, qqq], Amethyst Shard x244808, HexPattern[EAST, eee]]",
+            ListIota([
+                PatternIota(HexDir.WEST, "qqq"),
+                UnknownIota("Amethyst Shard x244808"),
+                PatternIota(HexDir.EAST, "eee"),
+            ]),
+        ),
+    ],
+)
+def test_mote(text: str, want: Iota):
     assert want == parse_reveal(text)

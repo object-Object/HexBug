@@ -10,6 +10,7 @@ from HexBug.data.registry import HexBugRegistry
 
 from .ast import (
     BooleanIota,
+    BubbleIota,
     CallIota,
     Iota,
     JumpIota,
@@ -31,20 +32,47 @@ class IotaPrinter:
 
     def __init__(self, registry: HexBugRegistry):
         self.registry = registry
-
-    def print(self, iota: Iota):
-        self._reset()
-        return "".join(node.value for node in self._iter_nodes(iota, True))
-
-    def pretty_print(self, iota: Iota, *, indent: str = " " * 4):
-        self._reset()
-        return "\n".join(
-            node.pretty_print(indent) for node in self._iter_nodes(iota, False)
-        )
-
-    def _reset(self):
         self._level = 0
         self._min_level = 0
+
+    def print(self, iota: Iota):
+        with self._reset():
+            return "".join(node.value for node in self._iter_nodes(iota, inline=True))
+
+    def pretty_print(
+        self,
+        iota: Iota,
+        *,
+        indent: str = " " * 4,
+        flatten_list: bool = False,
+    ):
+        with self._reset():
+            if flatten_list and isinstance(iota, ListIota):
+                nodes = (
+                    node
+                    for inner in iota.values
+                    for node in self._iter_embedded_nodes(inner, inline=False)
+                )
+            else:
+                nodes = self._iter_nodes(iota, inline=False)
+
+            return "\n".join(node.pretty_print(indent) for node in nodes)
+
+    def _iter_embedded_nodes(self, iota: Iota, inline: bool) -> Iterator[Node]:
+        nodes = self._iter_nodes(iota, inline)
+        if isinstance(iota, PatternIota):
+            yield from nodes
+            return
+
+        match list(nodes):
+            case [node]:
+                yield "<" + node + ">"
+            case [first, *middle, last]:
+                yield "<" + first
+                yield from middle
+                yield last + ">"
+            case other:
+                yield from other
 
     def _iter_nodes(self, iota: Iota, inline: bool) -> Iterator[Node]:
         match iota:
@@ -61,6 +89,9 @@ class IotaPrinter:
                         yield self._node(f"HexPattern({direction.name}{signature})")
                     case match:
                         yield self._node(match.name)
+
+            case BubbleIota(inner=inner):
+                yield self._node("{" + self.print(inner) + "}")
 
             case JumpIota():
                 yield self._node("[Jump]")
@@ -144,6 +175,14 @@ class IotaPrinter:
         return Node(value, self._safe_level)
 
     @contextmanager
+    def _reset(self):
+        prev = (self._level, self._min_level)
+        self._level = 0
+        self._min_level = 0
+        yield
+        self._level, self._min_level = prev
+
+    @contextmanager
     def _indent(self, amount: int = 1):
         prev = self._level
         self._level = self._safe_level + amount
@@ -165,3 +204,9 @@ class Node:
 
     def pretty_print(self, indent: str):
         return self.level * indent + self.value
+
+    def __add__(self, other: str):
+        return Node(self.value + other, self.level)
+
+    def __radd__(self, other: str):
+        return Node(other + self.value, self.level)

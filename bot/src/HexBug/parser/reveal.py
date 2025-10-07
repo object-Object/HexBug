@@ -1,10 +1,11 @@
 from importlib import resources
 from typing import Any
 
-from lark import Lark, Token, Transformer
+from lark import Lark, ParseError, Token, Transformer, UnexpectedToken
 
 from .ast import (
     BooleanIota,
+    BubbleIota,
     CallIota,
     Iota,
     JumpIota,
@@ -37,6 +38,7 @@ class RevealTransformer(Transformer[Token, Iota]):
         return values
 
     pattern = PatternIota.parse
+    bubble = BubbleIota.parse
     jump = JumpIota.parse
     call = CallIota.parse
     list = ListIota.parse
@@ -55,6 +57,7 @@ def load_reveal_parser() -> Lark:
         grammar = (resources.files() / "reveal.lark").read_text("utf-8")
         _parser = Lark(
             grammar,
+            lexer="contextual",
             parser="lalr",
             strict=True,
         )
@@ -62,5 +65,8 @@ def load_reveal_parser() -> Lark:
 
 
 def parse_reveal(text: str) -> Iota:
-    tree = load_reveal_parser().parse(text)
+    try:
+        tree = load_reveal_parser().parse(text)  # pyright: ignore[reportUnknownMemberType]
+    except UnexpectedToken as e:
+        raise ParseError(str(e) + "\n" + e.get_context(text) + "\n")
     return RevealTransformer().transform(tree)

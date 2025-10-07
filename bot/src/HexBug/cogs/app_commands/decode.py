@@ -39,16 +39,18 @@ class DecodeCog(HexBugCog, GroupCog, group_name="decode"):
         self,
         interaction: Interaction,
         text: str,
+        flatten_list: bool = True,
         tab_width: TabWidthOption = 4,
         visibility: VisibilityOption = Visibility.PRIVATE,
     ):
-        await self._decode(interaction, text, tab_width, visibility)
+        await self._decode(interaction, text, flatten_list, tab_width, visibility)
 
     @app_commands.command()
     async def file(
         self,
         interaction: Interaction,
         file: Attachment,
+        flatten_list: bool = True,
         tab_width: TabWidthOption = 4,
         visibility: VisibilityOption = Visibility.PRIVATE,
     ):
@@ -66,12 +68,13 @@ class DecodeCog(HexBugCog, GroupCog, group_name="decode"):
                 value=file.filename,
             ) from e
 
-        await self._decode(interaction, text, tab_width, visibility)
+        await self._decode(interaction, text, flatten_list, tab_width, visibility)
 
     async def _decode(
         self,
         interaction: Interaction,
         text: str,
+        flatten_list: bool,
         tab_width: int,
         visibility: Visibility,
     ):
@@ -84,7 +87,11 @@ class DecodeCog(HexBugCog, GroupCog, group_name="decode"):
                 inline=False,
             )
 
-        output = self.bot.iota_printer.pretty_print(iota, indent=" " * tab_width)
+        output = self.bot.iota_printer.pretty_print(
+            iota,
+            indent=" " * tab_width,
+            flatten_list=flatten_list,
+        )
 
         view = LayoutView()
 

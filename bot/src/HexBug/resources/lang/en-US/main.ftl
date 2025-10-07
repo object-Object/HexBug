@@ -206,6 +206,11 @@ group_decode =
 -decode_contents_description =
         The result of using Reveal on an iota, copied from latest.log.
 
+-decode_flatten-list =
+        flatten_list
+-decode_flatten-list_description =
+        If the iota being decoded is a list, dedent its contents and wrap embedded iotas in <>.
+
 -decode_tab-width =
         tab_width
 -decode_tab-width_description =
@@ -221,6 +226,9 @@ command_decode-text =
     .parameter_text =
         text
     .parameter_text_description = {-decode_contents_description}
+
+    .parameter_flatten-list = {-decode_flatten-list}
+    .parameter_flatten-list_description = {-decode_flatten-list_description}
 
     .parameter_tab-width = {-decode_tab-width}
     .parameter_tab-width_description = {-decode_tab-width_description}
@@ -238,6 +246,9 @@ command_decode-file =
     .parameter_file =
         file
     .parameter_file_description = {-decode_contents_description}
+
+    .parameter_flatten-list = {-decode_flatten-list}
+    .parameter_flatten-list_description = {-decode_flatten-list_description}
 
     .parameter_tab-width = {-decode_tab-width}
     .parameter_tab-width_description = {-decode_tab-width_description}

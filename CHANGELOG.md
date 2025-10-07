@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [UNRELEASED]
 
+### Added
+
+- Added a new option `flatten_list` to `/decode`. If enabled (the default) and the iota being decoded is a list, its contents are dedented and any embedded iotas are wrapped in `<>`, like in `.hexpattern`.
+
 ### Changed
 
 - Added more shorthand names to a few patterns in `/patterns hex`.
@@ -15,6 +19,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 ### Fixed
 
 - Fixed an incorrect lang key being used in `/mod`.
+- Fixed `/decode` failing to parse hexes containing bubbles/motes/properties.
+- Fixed incorrect pretty-printing of bubble iotas.
 
 ### Mods Added
 

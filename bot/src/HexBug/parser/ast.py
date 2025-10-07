@@ -44,6 +44,11 @@ class PatternIota(BaseIota):
 
 
 @dataclass
+class BubbleIota(BaseIota):
+    inner: Iota
+
+
+@dataclass
 class JumpIota(BaseIota):
     frames: list[str]
 
@@ -63,7 +68,7 @@ class CallIota(BaseIota):
 
 @dataclass
 class ListIota(BaseIota):
-    values: list[Iota]
+    values: list[Iota] = Field(fail_fast=True)
 
     @classmethod
     def parse(cls, meta: Meta, tokens: list[Any]) -> Self:
@@ -152,6 +157,7 @@ class UnknownIota(BaseIota):
 
 type Iota = (
     PatternIota
+    | BubbleIota
     | JumpIota
     | CallIota
     | ListIota
