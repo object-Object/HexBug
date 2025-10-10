@@ -14,4 +14,19 @@
         "body": "await translate(interaction, \"$1\"$2)$0",
         "scope": "python",
     },
+    "StaticModInfo": {
+        "prefix": "staticmod",
+        "body": [
+            "StaticModInfo(",
+            "    id=\"$1\",",
+            "    name=\"$2\",",
+            "    description=\"$3\",",
+            "    icon_url=${4:URL(\"$5\")},",
+            "    curseforge_slug=${6:\"$7\"},",
+            "    modrinth_slug=${8:\"$9\"},",
+            "    modloaders=[${10:Modloader.FABRIC, }${11:Modloader.FORGE, }${12:Modloader.QUILT}],",
+            "),",
+        ],
+        "scope": "python"
+    },
 }

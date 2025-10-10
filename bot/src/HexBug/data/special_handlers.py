@@ -416,3 +416,35 @@ class HexFlowNumberSpecialHandler(PrefixSpecialHandler[float, int]):
         if value is None:
             return raw_name
         return f"{raw_name}: {value}"
+
+
+class HexTraceSpecialHandler(PrefixSpecialHandler[str, Any]):
+    @property
+    @override
+    def prefix_map(self):
+        return {"qqqaw": None}
+
+    @override
+    def try_match_suffix(self, _: Any, suffix: str) -> str | None:
+        return suffix or None
+
+    @override
+    def generate_pattern(
+        self,
+        registry: HexBugRegistry,
+        value: str,
+    ) -> tuple[str, HexPattern]:
+        return value, HexPattern(HexDir.WEST, "qqqaw" + value)
+
+    @override
+    def get_name(self, raw_name: str, value: str | None) -> str:
+        return raw_name
+
+    # TODO: remove localize when vivi fixes the lang entry
+
+    @override
+    def localize(self, i18n: I18n):
+        try:
+            return super().localize(i18n)
+        except ValueError:
+            return i18n.localize(f"hexcasting.action.{self.id}")

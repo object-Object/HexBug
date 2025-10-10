@@ -53,6 +53,7 @@ data = [
     # workaround for https://github.com/miyucomics/hexpose/commit/26709051b306e70982cb904ac2776eb7f9da9f4d
     # we can switch back to PyPI for the next release
     "hexdoc-hexpose==1.0.0.1.0.0+hexbug",
+    "hexdoc-hextrace==0.1.0.1.20.1.*",
     "hexdoc-hextrogen==1.1.0.*",
     "hexdoc-hextweaks==5.3.3.*",
     "hexdoc-hexweb==1.0.4.*",
@@ -60,6 +61,7 @@ data = [
     "hexdoc-ioticblocks==1.0.2.1.20.1.*",
     "hexdoc-lapisworks==1.5.5.*",
     "hexdoc-lessertp==1.2.1.*",
+    "hexdoc-mediatransport==1.0.1.1.20.1.*",
     "hexdoc-moreiotas==0.1.1.*",
     "hexdoc-slate-work==1.0.3.*",
     # hex addons (GitHub)

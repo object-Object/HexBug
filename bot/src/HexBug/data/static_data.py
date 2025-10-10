@@ -9,6 +9,7 @@ from .patterns import StaticPatternInfo
 from .special_handlers import (
     ComplexHexLongSpecialHandler,
     HexFlowNumberSpecialHandler,
+    HexTraceSpecialHandler,
     MaskSpecialHandler,
     NumberSpecialHandler,
     OverevaluateTailDepthSpecialHandler,
@@ -238,6 +239,15 @@ MODS: list[StaticModInfo] = [
         modloaders=[Modloader.FABRIC, Modloader.FORGE, Modloader.QUILT],
     ),
     StaticModInfo(
+        id="hextrace",
+        name="Hex Trace",
+        description="Allows adding tracers to iotas to help with debugging.",
+        icon_url=None,
+        curseforge_slug=None,
+        modrinth_slug=None,
+        modloaders=[Modloader.FABRIC, Modloader.FORGE],
+    ),
+    StaticModInfo(
         id="hextrogen",
         name="Hextrogen",
         description="Adds interop with Create: Estrogen.",
@@ -303,6 +313,15 @@ MODS: list[StaticModInfo] = [
         curseforge_slug=None,
         modrinth_slug="lesser-teleport",
         modloaders=[Modloader.FABRIC],
+    ),
+    StaticModInfo(
+        id="mediatransport",
+        name="mediatransport",
+        description="Figura integration for Hex Casting.",
+        icon_url=URL("common/src/main/resources/assets/mediatransport/icon.png"),
+        curseforge_slug=None,
+        modrinth_slug="mediatransport",
+        modloaders=[Modloader.FABRIC, Modloader.FORGE],
     ),
     StaticModInfo(
         id="moreiotas",
@@ -428,6 +447,9 @@ SPECIAL_HANDLERS: dict[ResourceLocation, SpecialHandler[Any]] = {
         ),
         HexFlowNumberSpecialHandler(
             id=ResourceLocation("hexflow", "noob_num"),
+        ),
+        HexTraceSpecialHandler(
+            id=ResourceLocation("hextrace", "trace"),
         ),
     ]
 }

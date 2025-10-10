@@ -918,6 +918,7 @@ data = [
     { name = "hexdoc-hexpose" },
     { name = "hexdoc-hexstruction" },
     { name = "hexdoc-hextended" },
+    { name = "hexdoc-hextrace" },
     { name = "hexdoc-hextrogen" },
     { name = "hexdoc-hextweaks" },
     { name = "hexdoc-hexweb" },
@@ -925,6 +926,7 @@ data = [
     { name = "hexdoc-ioticblocks" },
     { name = "hexdoc-lapisworks" },
     { name = "hexdoc-lessertp" },
+    { name = "hexdoc-mediatransport" },
     { name = "hexdoc-moreiotas" },
     { name = "hexdoc-oneironaut" },
     { name = "hexdoc-overevaluate" },
@@ -964,6 +966,7 @@ requires-dist = [
     { name = "hexdoc-hexpose", marker = "extra == 'data'", specifier = "==1.0.0.1.0.0+hexbug" },
     { name = "hexdoc-hexstruction", marker = "extra == 'data'", url = "https://github.com/PetersonE1/hexstruction/raw/510da7fea2f52d6497c50753990bbc5919ee71ad/docs/v/latest/main/dist/hexdoc_hexstruction-1.2.1.1.20.1.1.0-py3-none-any.whl" },
     { name = "hexdoc-hextended", marker = "extra == 'data'", url = "https://github.com/abilliontrillionstars/hextended-staves/raw/0e6e0a61b7f4d3e79761b216cfebc1141e19b30b/docs/v/latest/main/dist/hexdoc_hextended-2.0.1.1.0.dev0-py3-none-any.whl" },
+    { name = "hexdoc-hextrace", marker = "extra == 'data'", specifier = "==0.1.0.1.20.1.*" },
     { name = "hexdoc-hextrogen", marker = "extra == 'data'", specifier = "==1.1.0.*" },
     { name = "hexdoc-hextweaks", marker = "extra == 'data'", specifier = "==5.3.3.*" },
     { name = "hexdoc-hexweb", marker = "extra == 'data'", specifier = "==1.0.4.*" },
@@ -971,6 +974,7 @@ requires-dist = [
     { name = "hexdoc-ioticblocks", marker = "extra == 'data'", specifier = "==1.0.2.1.20.1.*" },
     { name = "hexdoc-lapisworks", marker = "extra == 'data'", specifier = "==1.5.5.*" },
     { name = "hexdoc-lessertp", marker = "extra == 'data'", specifier = "==1.2.1.*" },
+    { name = "hexdoc-mediatransport", marker = "extra == 'data'", specifier = "==1.0.1.1.20.1.*" },
     { name = "hexdoc-moreiotas", marker = "extra == 'data'", specifier = "==0.1.1.*" },
     { name = "hexdoc-oneironaut", marker = "extra == 'data'", url = "https://github.com/beholderface/oneironaut/raw/99b7c992e2e2230b39ec9adceed4b1b2fed15831/docs/v/latest/1.20.1/dist/hexdoc_oneironaut-0.5.0.1.0-py3-none-any.whl" },
     { name = "hexdoc-overevaluate", marker = "extra == 'data'", url = "https://github.com/miyucomics/overevaluate/raw/6c92a93c51fd966cf3709468f0a126c746ae85ba/docs/v/latest/main/dist/hexdoc_overevaluate-1.0.0.1.0.0-py3-none-any.whl" },
@@ -1385,6 +1389,18 @@ requires-dist = [
 provides-extras = ["dev"]
 
 [[package]]
+name = "hexdoc-hextrace"
+version = "0.1.0.1.20.1.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "hexdoc-hexcasting" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/74/94/55facf19106c274d9d9bda1975cb54f91eb6f3fa49f13c508c1ab13ff719/hexdoc_hextrace-0.1.0.1.20.1.1.0.tar.gz", hash = "sha256:fafbedb9104379ba6c2bce3c4802a143d46567c7bacf99c09e6d5682da603fde", size = 6159 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ad/9a/440068e832ea30aff72cd4d429379595a7570abf9a3fd0361d48e8ecc608/hexdoc_hextrace-0.1.0.1.20.1.1.0-py3-none-any.whl", hash = "sha256:8487d6fec5eda717197d395a197c1adc644decb2194fc52579237ba204ce9a60", size = 7890 },
+]
+
+[[package]]
 name = "hexdoc-hextrogen"
 version = "1.1.0.1.0.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1467,6 +1483,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/11/4e/bbdc1c9cea22af2c7d2823ece4c62d3a7e58d76ad26fe3c7e68bb0423762/hexdoc_lessertp-1.2.1.1.2.dev0.tar.gz", hash = "sha256:4fc620fcacff9a699bb30182b191b68a8353a82103abeab7e4757c0a3cf537d9", size = 9936 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/b1/09/df2668e1cd9ebd3094b2014f0ac8e4f769bf010cd0c9edc0b0b38e6df3e7/hexdoc_lessertp-1.2.1.1.2.dev0-py3-none-any.whl", hash = "sha256:7d004d217c535adc549ed673095f7e9661d33dffc23ce32f0416156e7d4439a0", size = 12869 },
+]
+
+[[package]]
+name = "hexdoc-mediatransport"
+version = "1.0.1.1.20.1.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "hexdoc-hexcasting" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/24/4e/9acd19240a3cf71e4ca555448c6e22e4be526263971feeb0d8cab324ab5f/hexdoc_mediatransport-1.0.1.1.20.1.1.0.tar.gz", hash = "sha256:26b259f1472ba9c0d78a41df3c6b8d1a24a03a82ee05b2a0ffa56d7ed23d60e8", size = 27206 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/39/ab/15daf08fec31b321f4b77694239ad440f9f18188ba96a6e70c67a708b242/hexdoc_mediatransport-1.0.1.1.20.1.1.0-py3-none-any.whl", hash = "sha256:9d05127f71126202bde9bd88e9658cef2babe87ee6a7e670893d9348fe421786", size = 41380 },
 ]
 
 [[package]]
