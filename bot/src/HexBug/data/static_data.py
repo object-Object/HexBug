@@ -434,13 +434,7 @@ SPECIAL_HANDLERS: dict[ResourceLocation, SpecialHandler[Any]] = {
 
 # don't try to load these
 DISABLED_PATTERNS: set[ResourceLocation] = {
-    # commented out, but the regex doesn't account for that
-    # https://github.com/FallingColors/Hexal/blob/efe2b7df1e/Common/src/main/java/ram/talia/hexal/common/lib/hex/HexalActions.kt#L210
-    ResourceLocation("hexal", "gate/mark/num/get"),
-    ResourceLocation("hexal", "mote/count/get"),
-    ResourceLocation("hexal", "mote/combine"),
     # conflicts
-    ResourceLocation("hexical", "age_scroll"),  # shape: hexical:greater_blink
     ResourceLocation("hexstruction", "bounding_box"),  # shape: hexical:greater_blink
     ResourceLocation("lapisworks", "empty_prfn"),  # signature: hexal:mote/storage/get
     # not real patterns

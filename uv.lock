@@ -947,7 +947,7 @@ requires-dist = [
     { name = "hexdoc-efhexs", marker = "extra == 'data'", url = "https://github.com/miyucomics/special-efhexs/raw/8029ab75e0d42c92795612639d3dae3170520ddd/docs/v/latest/main/dist/hexdoc_efhexs-1.0.0.1.0.0-py3-none-any.whl" },
     { name = "hexdoc-ephemera", marker = "extra == 'data'", url = "https://github.com/beholderface/Ephemera/raw/74e80eddd991059785eede8435981716480b69ae/docs/v/latest/1.20.1/dist/hexdoc_ephemera-0.3.0.1.0.dev0-py3-none-any.whl" },
     { name = "hexdoc-hex-ars-link", marker = "extra == 'data'", specifier = "==0.9.2.4.*" },
-    { name = "hexdoc-hexal", marker = "extra == 'data'", url = "https://github.com/FallingColors/Hexal/raw/a5d1dbc6528e4a6c7c8f67ba3adc4c143dafb6e5/docs/v/latest/main/dist/hexdoc_hexal-0.3.0.1.0rc4.dev0-py3-none-any.whl" },
+    { name = "hexdoc-hexal", marker = "extra == 'data'", url = "https://github.com/FallingColors/Hexal/raw/49cf10f0c8586e5887f40cae1d3075b0acfb13e2/docs/v/latest/main/dist/hexdoc_hexal-0.3.0.1.0rc4-py3-none-any.whl" },
     { name = "hexdoc-hexcassettes", marker = "extra == 'data'", specifier = "==1.1.4.*" },
     { name = "hexdoc-hexcasting", marker = "extra == 'data'", specifier = "==0.11.2.*" },
     { name = "hexdoc-hexcellular", marker = "extra == 'data'", specifier = "==1.1.0.*" },
@@ -956,7 +956,7 @@ requires-dist = [
     { name = "hexdoc-hexdim", marker = "extra == 'data'", specifier = "==1.2.1.1.20.*" },
     { name = "hexdoc-hexflow", marker = "extra == 'data'", specifier = "==0.3.1.1.*" },
     { name = "hexdoc-hexgender", marker = "extra == 'data'", specifier = "==1.0.4.*" },
-    { name = "hexdoc-hexical", marker = "extra == 'data'", url = "https://github.com/miyucomics/hexical/raw/cd130b06041b99677961baab480055c77ea02ec1/docs/v/latest/main/dist/hexdoc_hexical-2.0.0.1.0.0-py3-none-any.whl" },
+    { name = "hexdoc-hexical", marker = "extra == 'data'", url = "https://github.com/miyucomics/hexical/raw/9e065b5e7995efc9045ab8cecd1f8838106df171/docs/v/latest/main/dist/hexdoc_hexical-2.0.0.1.0.0-py3-none-any.whl" },
     { name = "hexdoc-hexmapping", marker = "extra == 'data'", specifier = "==0.0.3.*" },
     { name = "hexdoc-hexodus", marker = "extra == 'data'", specifier = "==1.0.0.*" },
     { name = "hexdoc-hexoverpowered", marker = "extra == 'data'", specifier = "==0.8.2.*" },
@@ -1157,21 +1157,21 @@ wheels = [
 
 [[package]]
 name = "hexdoc-hexal"
-version = "0.3.0.1.0rc4.dev0"
-source = { url = "https://github.com/FallingColors/Hexal/raw/a5d1dbc6528e4a6c7c8f67ba3adc4c143dafb6e5/docs/v/latest/main/dist/hexdoc_hexal-0.3.0.1.0rc4.dev0-py3-none-any.whl" }
+version = "0.3.0.1.0rc4"
+source = { url = "https://github.com/FallingColors/Hexal/raw/49cf10f0c8586e5887f40cae1d3075b0acfb13e2/docs/v/latest/main/dist/hexdoc_hexal-0.3.0.1.0rc4-py3-none-any.whl" }
 dependencies = [
     { name = "hexdoc-hexcasting" },
+    { name = "hexdoc-moreiotas" },
 ]
 wheels = [
-    { url = "https://github.com/FallingColors/Hexal/raw/a5d1dbc6528e4a6c7c8f67ba3adc4c143dafb6e5/docs/v/latest/main/dist/hexdoc_hexal-0.3.0.1.0rc4.dev0-py3-none-any.whl", hash = "sha256:54dba8d42dc633bfddccde81d60dfc2fca0a23fab4fc033f50200b30ae6ef91a" },
+    { url = "https://github.com/FallingColors/Hexal/raw/49cf10f0c8586e5887f40cae1d3075b0acfb13e2/docs/v/latest/main/dist/hexdoc_hexal-0.3.0.1.0rc4-py3-none-any.whl", hash = "sha256:d927cff47768513964d1665024dd1f87684702205a5b71279022bd000cc582a2" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "hexdoc-hexcasting", specifier = "~=0.11.2.1.0.dev20" },
-    { name = "ruff", marker = "extra == 'dev'", specifier = "~=0.1.4" },
+    { name = "hexdoc-hexcasting", specifier = "~=0.11.2.1.0" },
+    { name = "hexdoc-moreiotas", specifier = "~=0.1.1.1.0" },
 ]
-provides-extras = ["dev"]
 
 [[package]]
 name = "hexdoc-hexcassettes"
@@ -1272,13 +1272,13 @@ wheels = [
 [[package]]
 name = "hexdoc-hexical"
 version = "2.0.0.1.0.0"
-source = { url = "https://github.com/miyucomics/hexical/raw/cd130b06041b99677961baab480055c77ea02ec1/docs/v/latest/main/dist/hexdoc_hexical-2.0.0.1.0.0-py3-none-any.whl" }
+source = { url = "https://github.com/miyucomics/hexical/raw/9e065b5e7995efc9045ab8cecd1f8838106df171/docs/v/latest/main/dist/hexdoc_hexical-2.0.0.1.0.0-py3-none-any.whl" }
 dependencies = [
     { name = "hexdoc-hexcasting" },
     { name = "hexdoc-hexpose" },
 ]
 wheels = [
-    { url = "https://github.com/miyucomics/hexical/raw/cd130b06041b99677961baab480055c77ea02ec1/docs/v/latest/main/dist/hexdoc_hexical-2.0.0.1.0.0-py3-none-any.whl", hash = "sha256:6c44e2bf5a67dcab3f6d644deb83721d4793ea9170a7008fd019464d2293b8ef" },
+    { url = "https://github.com/miyucomics/hexical/raw/9e065b5e7995efc9045ab8cecd1f8838106df171/docs/v/latest/main/dist/hexdoc_hexical-2.0.0.1.0.0-py3-none-any.whl", hash = "sha256:2089d91d74e18e057199ede29949ce682d337dc6346e68be9e4d692f015dc380" },
 ]
 
 [package.metadata]
@@ -1483,14 +1483,14 @@ wheels = [
 
 [[package]]
 name = "hexdoc-moreiotas"
-version = "0.1.1.1.0.dev0"
+version = "0.1.1.1.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "hexdoc-hexcasting" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ca/3d/a23ad0137f9a7f25ad40c04a5fa631ea335631d525a06dc41ac612994f82/hexdoc_moreiotas-0.1.1.1.0.dev0.tar.gz", hash = "sha256:e9e64326d6371193383c6a29f4a6a4dd825c1b53b1bf1b616af1de2a2be68430", size = 16328 }
+sdist = { url = "https://files.pythonhosted.org/packages/79/6d/741307c0f82d2dcd2cf69e1881f352a510ab80c7a7fb8ee42279ff9763f1/hexdoc_moreiotas-0.1.1.1.0.tar.gz", hash = "sha256:830d0fde94a0ea4a773605c67fd943ad977b438a1a4bb44d62751333b9a9662a", size = 16337 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/6a/69/d1d694958462eded0f8f114ff6af7e3379c4d688bf9fcfda4f51aea87153/hexdoc_moreiotas-0.1.1.1.0.dev0-py3-none-any.whl", hash = "sha256:f9ce44d99c0f19cf853f2359ee8e57cb8f9692360a7245d1dc859387f04fb2d0", size = 20709 },
+    { url = "https://files.pythonhosted.org/packages/14/65/dbdfc25f2bbfd1b0bff5f7a12e7a7ec595deb69176028dfd6cc00479c79d/hexdoc_moreiotas-0.1.1.1.0-py3-none-any.whl", hash = "sha256:2e9dfdbc2d969ce2c13e806237723188e35c6f029b99a1143fbb077786116211", size = 20660 },
 ]
 
 [[package]]
