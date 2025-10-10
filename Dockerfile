@@ -21,6 +21,7 @@ RUN --mount=from=uv,source=/uv,target=/bin/uv \
 
 COPY common/ common/
 COPY bot/ bot/
+COPY CHANGELOG.md bot/src/HexBug/resources/
 
 # sync dependencies with data to build registry
 

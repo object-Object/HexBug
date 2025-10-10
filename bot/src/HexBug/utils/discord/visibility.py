@@ -36,12 +36,14 @@ async def respond_with_visibility(
     content: Any | None = None,
     embed: Embed = MISSING,
     embeds: Sequence[Embed] = MISSING,
+    items: Sequence[Item[Any]] = MISSING,
 ):
     await MessageContents(
         command=interaction.command,
         content=content,
         embed=embed,
         embeds=embeds,
+        items=items,
     ).send_response(interaction, visibility)
 
 
@@ -51,6 +53,7 @@ class MessageContents:
     content: Any | None = None
     embed: Embed = MISSING
     embeds: Sequence[Embed] = MISSING
+    items: Sequence[Item[Any]] = MISSING
 
     async def send_response(
         self,
@@ -73,6 +76,9 @@ class MessageContents:
         show_usage: bool,
     ):
         view = View(timeout=None)
+        if self.items:
+            for item in self.items:
+                view.add_item(item)
         add_visibility_buttons(
             view,
             interaction,

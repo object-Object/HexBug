@@ -196,6 +196,16 @@ command_book-recipe =
     .text_entry = Entry
     .text_page = Page
 
+# /changelog
+
+command_changelog =
+        changelog
+    .description =
+        Show HexBug's changelog.
+
+    .parameter_visibility = {-parameter_visibility}
+    .parameter_visibility_description = {-parameter_visibility_description}
+
 # /decode
 
 group_decode =
