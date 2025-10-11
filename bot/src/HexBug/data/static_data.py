@@ -517,7 +517,6 @@ HEXDOC_PROPS: dict[str, Any] = {
             "dthexcasting:*",
             "dynamictrees:*",
             "emi:*",
-            "hexdebug:*",
             "hexical:gauntlet_staff",
             "hexical:lightning_rod_staff",
             "hextended:livingwood_staff",
