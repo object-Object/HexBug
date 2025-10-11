@@ -168,7 +168,9 @@ MODS: list[StaticModInfo] = [
         id="hexic",
         name="Hexic",
         description="Miscellaneous neat features and QoL patterns for Hex Casting.",
-        icon_url=URL("https://codeberg.org/poollovernathan/hexic/raw/commit/1.3.4/src/main/resources/assets/hexic/icon.png"),
+        icon_url=URL(
+            "https://codeberg.org/poollovernathan/hexic/raw/commit/1.3.4/src/main/resources/assets/hexic/icon.png"
+        ),
         curseforge_slug=None,
         modrinth_slug="hexic",
         modloaders=[Modloader.FABRIC, Modloader.QUILT],
@@ -488,6 +490,7 @@ UNDOCUMENTED_PATTERNS: set[ResourceLocation] = {
     ResourceLocation("hexpose", "entity_name"),
     ResourceLocation("hextweaks", "you_like_drinking_potions"),
     ResourceLocation("lapisworks", "empty_prfn"),
+    ResourceLocation("lapisworks", "writable_offhand"),
     ResourceLocation("oneironaut", "advanceautomaton"),
     ResourceLocation("oneironaut", "checksignature"),
     ResourceLocation("oneironaut", "erosionshield"),
