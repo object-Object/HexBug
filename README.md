@@ -49,6 +49,8 @@ Run the bot in Docker:
 docker compose up --build
 ```
 
+After running the bot for the first time or modifying a command, you'll need to sync slash commands and/or bot emoji. To do this, use the `sync` message command. For example: `@HexBug sync`
+
 Build and serve the Book of Hexxy:
 
 ```sh
