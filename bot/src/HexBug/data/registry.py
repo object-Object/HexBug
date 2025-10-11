@@ -48,6 +48,12 @@ from .hex_math import HexDir, HexPattern, PatternSignature
 from .lookups import PatternLookups
 from .mods import DynamicModInfo, ModInfo
 from .patterns import PatternInfo, PatternOperator
+from .sources import (
+    CodebergSourceInfo,
+    CodebergUserInfo,
+    GitHubSourceInfo,
+    GitHubUserInfo,
+)
 from .special_handlers import (
     SpecialHandlerInfo,
     SpecialHandlerMatch,
@@ -225,7 +231,33 @@ class HexBugRegistry(BaseModel):
             if hexdoc_metadata.book_url is None:
                 raise ValueError(f"Mod missing book url: {mod_id}")
 
-            _, author, repo, commit = hexdoc_metadata.asset_url.parts
+            asset_url = hexdoc_metadata.asset_url
+            match asset_url.host:
+                case "raw.githubusercontent.com":
+                    _, author, repo, commit = asset_url.parts
+                    source = GitHubSourceInfo(
+                        author=GitHubUserInfo(author),
+                        repo=repo,
+                        commit=commit,
+                    )
+                case "codeberg.org":
+                    _, author, repo, _, _, commit = asset_url.parts
+                    source = CodebergSourceInfo(
+                        author=CodebergUserInfo(author),
+                        repo=repo,
+                        commit=commit,
+                    )
+                case "example.com" if mod_id == "hexic":  # :/
+                    _, author, repo, commit = asset_url.parts
+                    source = CodebergSourceInfo(
+                        author=CodebergUserInfo(author),
+                        repo=repo,
+                        commit=commit,
+                    )
+                case _:
+                    raise ValueError(
+                        f"Unhandled asset url host for {mod_id}: {asset_url}"
+                    )
 
             registry._register_mod(
                 ModInfo.from_parts(
@@ -237,9 +269,7 @@ class HexBugRegistry(BaseModel):
                         book_description=i18n.localize(
                             f"hexdoc.{mod_id}.description"
                         ).value,
-                        github_author=author,
-                        github_repo=repo,
-                        github_commit=commit,
+                        source=source,
                     ),
                 )
             )

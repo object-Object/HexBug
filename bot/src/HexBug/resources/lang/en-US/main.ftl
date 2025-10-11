@@ -305,7 +305,9 @@ command_mod =
 
     .text_curseforge = CurseForge
     .text_modrinth = Modrinth
-    .text_github = GitHub
+
+    .text_source-github = GitHub
+    .text_source-codeberg = Codeberg
 
     .text_patterns = Patterns
 
@@ -331,7 +333,7 @@ command_mods =
     .parameter_author =
         author
     .parameter_author_description =
-        Only show mods authored by this GitHub user.
+        Only show mods authored by this GitHub/Codeberg user.
 
     .parameter_modloader =
         modloader

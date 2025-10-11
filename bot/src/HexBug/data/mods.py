@@ -5,6 +5,8 @@ from hexdoc.utils.types import PydanticURL
 from pydantic import BaseModel, model_validator
 from yarl import URL
 
+from HexBug.data.sources import SourceInfo
+
 
 class Modloader(Enum):
     FABRIC = "Fabric"
@@ -18,7 +20,7 @@ class StaticModInfo(BaseModel):
     name: str
     description: str
     icon_url: PydanticURL | None
-    """Relative URLs are interpreted relative to the mod's GitHub repository root."""
+    """Relative URLs are interpreted relative to the mod's repository root."""
     curseforge_slug: str | None
     modrinth_slug: str | None
     modloaders: list[Modloader]
@@ -43,9 +45,7 @@ class DynamicModInfo(BaseModel):
     book_title: str
     book_description: str
 
-    github_author: str
-    github_repo: str
-    github_commit: str
+    source: SourceInfo
 
     pattern_count: int = 0
     """Total number of patterns in this mod, excluding display-only patterns."""
@@ -65,23 +65,6 @@ class DynamicModInfo(BaseModel):
     recipe_count: int = 0
 
     @property
-    def github_url(self) -> URL:
-        return URL("https://github.com") / self.github_author / self.github_repo
-
-    @property
-    def github_permalink(self) -> URL:
-        return self.github_url / "tree" / self.github_commit
-
-    @property
-    def github_asset_url(self) -> URL:
-        return (
-            URL("https://raw.githubusercontent.com")
-            / self.github_author
-            / self.github_repo
-            / self.github_commit
-        )
-
-    @property
     def is_versioned(self) -> bool:
         """Returns True if the hexdoc plugin was built from a static book version.
 
@@ -93,11 +76,11 @@ class DynamicModInfo(BaseModel):
 
     @property
     def pretty_version(self) -> str:
-        """Returns `version` if `is_versioned` is True, otherwise appends the GitHub
+        """Returns `version` if `is_versioned` is True, otherwise appends the source
         commit hash."""
         if self.is_versioned:
             return self.version
-        return f"{self.version} @ {self.github_commit[:8]}"
+        return f"{self.version} @ {self.source.commit[:8]}"
 
 
 class ModInfo(StaticModInfo, DynamicModInfo):
@@ -109,5 +92,5 @@ class ModInfo(StaticModInfo, DynamicModInfo):
     def _resolve_relative_icon_url(self):
         if self.icon_url and not self.icon_url.absolute:
             # https://github.com/aio-libs/yarl/issues/896
-            self.icon_url = self.github_asset_url / str(self.icon_url)
+            self.icon_url = self.source.asset_url / str(self.icon_url)
         return self

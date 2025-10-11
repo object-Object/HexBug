@@ -22,7 +22,7 @@ class ModsCog(HexBugCog):
         mods = [
             mod
             for mod in self.bot.registry.mods.values()
-            if (author is None or mod.github_author == author)
+            if (author is None or mod.source.author == author)
             and (modloader is None or modloader in mod.modloaders)
         ]
 
@@ -50,9 +50,9 @@ class ModsCog(HexBugCog):
 
         if author:
             embed.set_author(
-                name=author,
-                url=f"https://github.com/{author}",
-                icon_url=f"https://github.com/{author}.png",
+                name=author.name,
+                url=author.url,
+                icon_url=author.icon_url,
             )
 
         await respond_with_visibility(interaction, visibility, embed=embed)

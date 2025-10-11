@@ -54,8 +54,10 @@ class ModCog(HexBugCog):
                 value=mod.modrinth_url,
             ),
             EmbedField(
-                name=await translate_command_text(interaction, "github"),
-                value=f"{mod.github_url} ([{mod.github_commit[:8]}]({mod.github_permalink}))",
+                name=await translate_command_text(
+                    interaction, f"source-{mod.source.type}"
+                ),
+                value=f"{mod.source.url} ([{mod.source.commit[:8]}]({mod.source.permalink}))",
             ),
             skip_falsy=True,
             default_inline=False,

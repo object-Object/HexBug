@@ -17,6 +17,7 @@ from HexBug.data.book import CategoryInfo, EntryInfo, PageInfo, RecipeInfo
 from HexBug.data.hex_math import VALID_SIGNATURE_PATTERN, HexDir
 from HexBug.data.mods import ModInfo, Modloader
 from HexBug.data.patterns import PatternInfo
+from HexBug.data.sources import UserInfo
 from HexBug.data.special_handlers import SpecialHandlerInfo
 from HexBug.db.models import PerWorldPattern
 from HexBug.utils.strings import truncate_str
@@ -78,10 +79,10 @@ class PfzyAutocompleteTransformer(Transformer, ABC):
 
 
 class ModAuthorTransformer(PfzyAutocompleteTransformer):
-    _authors: dict[str, str] = {}
+    _authors: dict[str, UserInfo] = {}
 
     @override
-    async def transform(self, interaction: Interaction, value: str) -> str:
+    async def transform(self, interaction: Interaction, value: str) -> UserInfo:
         author = self._authors.get(value.lower().strip())
         if author is None:
             raise ValueError("Unknown author.")
@@ -94,15 +95,15 @@ class ModAuthorTransformer(PfzyAutocompleteTransformer):
 
         registry = HexBugBot.registry_of(interaction)
         for mod in registry.mods.values():
-            author = mod.github_author
+            author = mod.source.author
             self._words.append(
                 AutocompleteWord(
-                    search_term=author,
-                    name=author,
-                    value=author,
+                    search_term=author.name,
+                    name=author.name,
+                    value=author.name,
                 )
             )
-            self._authors[author.lower().strip()] = author
+            self._authors[author.name.lower().strip()] = author
 
         self._words.sort(key=lambda w: w["name"].lower())
 
@@ -125,7 +126,7 @@ class ModInfoTransformer(PfzyAutocompleteTransformer):
             for search_term in [
                 mod.name,
                 mod.id,
-                f"{mod.github_author}/{mod.github_repo}",
+                mod.source.search_term,
             ]:
                 self._words.append(
                     AutocompleteWord(
@@ -431,7 +432,7 @@ class BetterEnumValueTransformer(EnumValueTransformer):
             choice.name = choice.value
 
 
-ModAuthorOption = Transform[str, ModAuthorTransformer]
+ModAuthorOption = Transform[UserInfo, ModAuthorTransformer]
 
 ModInfoOption = Transform[ModInfo, ModInfoTransformer]
 

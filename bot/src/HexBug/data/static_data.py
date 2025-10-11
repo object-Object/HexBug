@@ -3,6 +3,8 @@ from typing import Any
 from hexdoc.core import ResourceLocation
 from yarl import URL
 
+from HexBug.utils.collections import ResourceSet
+
 from .hex_math import HexDir
 from .mods import Modloader, StaticModInfo
 from .patterns import StaticPatternInfo
@@ -168,9 +170,7 @@ MODS: list[StaticModInfo] = [
         id="hexic",
         name="Hexic",
         description="Miscellaneous neat features and QoL patterns for Hex Casting.",
-        icon_url=URL(
-            "https://codeberg.org/poollovernathan/hexic/raw/commit/1.3.4/src/main/resources/assets/hexic/icon.png"
-        ),
+        icon_url=URL("src/main/resources/assets/hexic/icon.png"),
         curseforge_slug=None,
         modrinth_slug="hexic",
         modloaders=[Modloader.FABRIC, Modloader.QUILT],
@@ -477,30 +477,42 @@ DISABLED_PATTERNS: set[ResourceLocation] = {
 }
 
 # load these, but suppress the warning if we can't find any operators
-UNDOCUMENTED_PATTERNS: set[ResourceLocation] = {
-    # unused
-    ResourceLocation("moreiotas", "altadd"),
-    # undocumented
-    ResourceLocation("complexhex", "chloe/copy"),
-    ResourceLocation("complexhex", "chloe/make"),
-    ResourceLocation("complexhex", "cnarg"),
-    ResourceLocation("ephemera", "hashbits"),
-    ResourceLocation("hexical", "disguise_mage_block"),
-    ResourceLocation("hexical", "tweak_mage_block"),
-    ResourceLocation("hexpose", "entity_name"),
-    ResourceLocation("hextweaks", "you_like_drinking_potions"),
-    ResourceLocation("lapisworks", "empty_prfn"),
-    ResourceLocation("lapisworks", "writable_offhand"),
-    ResourceLocation("oneironaut", "advanceautomaton"),
-    ResourceLocation("oneironaut", "checksignature"),
-    ResourceLocation("oneironaut", "erosionshield"),
-    ResourceLocation("oneironaut", "getsoulprint"),
-    ResourceLocation("oneironaut", "signitem"),
-    # lmao what
-    ResourceLocation("ephemera", "no"),
-    ResourceLocation("hextweaks", "suicide"),
-    ResourceLocation("oneironaut", "circle"),
-}
+UNDOCUMENTED_PATTERNS = ResourceSet(
+    values=[
+        # unused
+        ResourceLocation("moreiotas", "altadd"),
+        # undocumented
+        ResourceLocation("complexhex", "chloe/copy"),
+        ResourceLocation("complexhex", "chloe/make"),
+        ResourceLocation("complexhex", "cnarg"),
+        ResourceLocation("ephemera", "hashbits"),
+        ResourceLocation("hexical", "disguise_mage_block"),
+        ResourceLocation("hexical", "tweak_mage_block"),
+        ResourceLocation("hexpose", "entity_name"),
+        ResourceLocation("hextweaks", "you_like_drinking_potions"),
+        ResourceLocation("lapisworks", "empty_prfn"),
+        ResourceLocation("lapisworks", "writable_offhand"),
+        ResourceLocation("oneironaut", "advanceautomaton"),
+        ResourceLocation("oneironaut", "checksignature"),
+        ResourceLocation("oneironaut", "erosionshield"),
+        ResourceLocation("oneironaut", "getsoulprint"),
+        ResourceLocation("oneironaut", "signitem"),
+        # lmao what
+        ResourceLocation("ephemera", "no"),
+        ResourceLocation("hexic", "empty_map"),
+        ResourceLocation("hexic", "free"),
+        ResourceLocation("hexic", "malloc"),
+        ResourceLocation("hexic", "metatable"),
+        ResourceLocation("hexic", "tripwire"),
+        ResourceLocation("hextweaks", "suicide"),
+        ResourceLocation("oneironaut", "circle"),
+    ],
+    patterns=[
+        # lmao what
+        ResourceLocation("hexic", "jvm/*"),
+        ResourceLocation("hexic", "nbt/*"),
+    ],
+)
 
 # replace the pattern's name entirely
 PATTERN_NAME_OVERRIDES: dict[ResourceLocation, str] = {
