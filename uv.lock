@@ -1287,7 +1287,7 @@ dependencies = [
     { name = "hexdoc-moreiotas" },
 ]
 wheels = [
-    { url = "https://hexic.pool.net.eu.org/v/1.3.4/1.1/hexdoc_hexic-1.3.4.1.1-py3-none-any.whl", hash = "sha256:f0fc7ccabf37e0cb1a25d64e90d147f83131f747b141d68b4ff7e86715f18438" },
+    { url = "https://hexic.pool.net.eu.org/v/1.3.4/1.1/hexdoc_hexic-1.3.4.1.1-py3-none-any.whl", hash = "sha256:00f80719246a3769f23f3401ff4aab354cee779f0c58556f8b327f1ef5b03711" },
 ]
 
 [package.metadata]
