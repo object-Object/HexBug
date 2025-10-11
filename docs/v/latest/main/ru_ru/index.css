@@ -497,3 +497,183 @@ blockquote > h2 {
   position: absolute;
   margin-top: -14px;
 }
+/* mediatransport theming */
+:root {
+  --box-opacity: 1;
+}
+@media screen and (prefers-color-scheme: dark) {
+  :root {
+    --box-opacity: .6;
+  }
+}
+/* for checking that the stylesheet is loaded */
+.mediatransport-hidden {
+  display: none;
+}
+.entry > br:nth-last-child(1), .mediatransport-altn > br:nth-last-child(1) {
+  display: none;
+}
+body {
+  overflow-x: hidden;
+}
+br:has(+ .mediatransport-altn) {
+  display: none;
+}
+@keyframes animated-footer {
+  from {
+    background-position: 0px 0px, 0px 0px;
+  }
+  to {
+    background-position: 128px 64px, 192px -128px;
+  }
+}
+@media screen and (prefers-reduced-motion: reduce) {
+  @keyframes animated-footer {
+    from {}
+    to {}
+  }
+}
+.mediatransport-altn {
+  position: relative;
+  color: #ddd; /* Always dark */
+  margin: 3rem 0;
+}
+.mediatransport-altn > .-decoration {
+  position: absolute;
+  inset: -2rem;
+  background-color: #000000;
+  border-radius: 1rem;
+  /* sync with body ::after */;
+  background-image:
+    url("https://raw.githubusercontent.com/penguinencounter/mediatransport/ced16ac62f1aa8bd90780286291bc93a2677dcc3/doc/resources/assets/mediatransport/textures/gui/background_1.png"),
+    url("https://raw.githubusercontent.com/penguinencounter/mediatransport/ced16ac62f1aa8bd90780286291bc93a2677dcc3/doc/resources/assets/mediatransport/textures/gui/background_2.png");
+  animation: animated-footer 10s linear infinite;
+  animation-play-state: running;
+  /* unique */
+  opacity: var(--box-opacity);
+  z-index: -1;
+  pointer-events: none;
+}
+.mediatransport-altn:hover > .-decoration {
+  animation-play-state: paused;
+}
+.mediatransport-altn code {
+  color: #b8f;
+  background: none;
+}
+.mediatransport-altn pre {
+  color: #dbf;
+  background: var(--diagram-background);
+  border-radius: 8px;
+  padding: 8px;
+  border: 1px solid #b8f;
+  margin: 1rem 0.5rem;
+}
+/* CALLOUTS */
+.mediatransport-callout {
+  padding: .5rem 1rem;
+  margin: 1rem 0;
+}
+.mediatransport-callout.-warning {
+  border-left: 0.5rem solid #fb8;
+  background-color: #fb82;
+}
+.mediatransport-hatnote {
+  font-style: italic;
+}
+/* PROTOCOL DOCS */
+/* definition */
+.protocol-sym-def {
+  color: #8bf; /* match patchi inline formatting */
+  text-decoration: underline dotted;
+  cursor: help;
+}
+/* raw (no link, no def) */
+.protocol-sym-raw{
+  color: #8bf;
+  text-decoration: none;
+}
+/* link */
+.protocol-sym {
+  color: #8bf;
+  text-decoration: underline;
+}
+.protocol-sym:focus, .protocol-sym:hover {
+  color: #bf8;
+}
+.protocol-sym:visited {
+  color: #8bf;
+}
+/* Diagrams */
+:root { /* light */
+  --sized-block-border: #8bf8;
+  --flexible-block-border: #f8b8;
+  --indefinite-block-border: #8884;
+  --diagram-background: #50408020;
+  --block: 7rem;
+  --block-add: calc(var(--block) / 2);
+}
+@media screen and (prefers-color-scheme: dark) {
+  :root {
+  }
+}
+.block-diagram, .block-diagram * {
+  box-sizing: border-box;
+}
+.block-diagram {
+  display: flex;
+  gap: 8px;
+  flex-flow: row wrap;
+  margin: 1rem 0;
+  font-family: monospace;
+  padding: 8px;
+  background-color: var(--diagram-background);
+  flex-grow: 1; /* when in container */
+}
+.block-diagram > .block {
+  height: var(--block);
+  padding: 8px;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  border-width: 2px;
+  border-style: solid;
+  background-color: var(--block-background);
+}
+.block-diagram > .block > .-size {
+  font-size: 1.2rem;
+}
+.block-diagram > .block > .-name {
+  font-size: 2rem;
+}
+.block-diagram > .block.-literal > .-name::before {
+  content: "0x";
+  font-size: 1.2rem;
+  opacity: 75%;
+}
+.block-diagram > .block.-sized {
+  border-color: var(--sized-block-border);
+  width: calc((var(--width) - 1) * var(--block-add) + var(--block));
+}
+.block-diagram > .block.-flexible {
+  border-color: var(--flexible-block-border);
+  min-width: calc(4 * var(--block));
+  border-top-style: dotted;
+  border-bottom-style: dotted;
+}
+.block-diagram > .block.-flexible > .-size {
+  font-style: italic;
+}
+.block-diagram > .block.-indefinite {
+  border-color: var(--indefinite-block-border);
+  min-width: calc(4 * var(--block));
+  border-top-style: dotted;
+  border-bottom-style: dotted;
+  border-right-style: none;
+}
+.diagram-sbs {
+  display: flex;
+  gap: 1rem;
+  flex-flow: row nowrap;
+}
