@@ -165,6 +165,15 @@ MODS: list[StaticModInfo] = [
         modloaders=[Modloader.FABRIC, Modloader.FORGE],
     ),
     StaticModInfo(
+        id="hexic",
+        name="Hexic",
+        description="Miscellaneous neat features and QoL patterns for Hex Casting.",
+        icon_url=URL("https://codeberg.org/poollovernathan/hexic/raw/commit/1.3.4/src/main/resources/assets/hexic/icon.png"),
+        curseforge_slug=None,
+        modrinth_slug="hexic",
+        modloaders=[Modloader.FABRIC, Modloader.QUILT],
+    ),
+    StaticModInfo(
         id="hexical",
         name="Hexical",
         description="A fun addon containing genie lamps, mage blocks, specks, world scrying, and more!",

@@ -910,6 +910,7 @@ data = [
     { name = "hexdoc-hexdim" },
     { name = "hexdoc-hexflow" },
     { name = "hexdoc-hexgender" },
+    { name = "hexdoc-hexic" },
     { name = "hexdoc-hexical" },
     { name = "hexdoc-hexmapping" },
     { name = "hexdoc-hexodus" },
@@ -958,6 +959,7 @@ requires-dist = [
     { name = "hexdoc-hexdim", marker = "extra == 'data'", specifier = "==1.2.1.1.20.*" },
     { name = "hexdoc-hexflow", marker = "extra == 'data'", specifier = "==0.3.1.1.*" },
     { name = "hexdoc-hexgender", marker = "extra == 'data'", specifier = "==1.0.4.*" },
+    { name = "hexdoc-hexic", marker = "extra == 'data'", url = "https://hexic.pool.net.eu.org/v/1.3.4/1.1/hexdoc_hexic-1.3.4.1.1-py3-none-any.whl" },
     { name = "hexdoc-hexical", marker = "extra == 'data'", url = "https://github.com/miyucomics/hexical/raw/9e065b5e7995efc9045ab8cecd1f8838106df171/docs/v/latest/main/dist/hexdoc_hexical-2.0.0.1.0.0-py3-none-any.whl" },
     { name = "hexdoc-hexmapping", marker = "extra == 'data'", specifier = "==0.0.3.*" },
     { name = "hexdoc-hexodus", marker = "extra == 'data'", specifier = "==1.0.0.*" },
@@ -1271,6 +1273,30 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/44/55/bf0f502de470df0a1fed30cf6b01ecc59c8d0aa20dd5a188c3116cb7669d/hexdoc_hexgender-1.0.4.1.0.tar.gz", hash = "sha256:36e381778817532dfd2e737baea385f41608cdbcf6f8412b95e8ccced5a59572", size = 7651 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/c0/32/aaf0fe9f749e565b802939d1da1dcc4b082b2cf1905d871fa89d273189bd/hexdoc_hexgender-1.0.4.1.0-py3-none-any.whl", hash = "sha256:bc32f632b55e61fc08dcad004f5880f446e6a279475a2134c79bf07589098283", size = 10065 },
+]
+
+[[package]]
+name = "hexdoc-hexic"
+version = "1.3.4.1.1"
+source = { url = "https://hexic.pool.net.eu.org/v/1.3.4/1.1/hexdoc_hexic-1.3.4.1.1-py3-none-any.whl" }
+dependencies = [
+    { name = "hexdoc" },
+    { name = "hexdoc-hexal" },
+    { name = "hexdoc-hexcasting" },
+    { name = "hexdoc-minecraft" },
+    { name = "hexdoc-moreiotas" },
+]
+wheels = [
+    { url = "https://hexic.pool.net.eu.org/v/1.3.4/1.1/hexdoc_hexic-1.3.4.1.1-py3-none-any.whl", hash = "sha256:f0fc7ccabf37e0cb1a25d64e90d147f83131f747b141d68b4ff7e86715f18438" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "hexdoc" },
+    { name = "hexdoc-hexal" },
+    { name = "hexdoc-hexcasting" },
+    { name = "hexdoc-minecraft", specifier = "==1.20.1.*" },
+    { name = "hexdoc-moreiotas", specifier = "==0.1.1.*" },
 ]
 
 [[package]]

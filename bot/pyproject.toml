@@ -69,6 +69,7 @@ data = [
     "hexdoc-efhexs",
     "hexdoc-ephemera",
     "hexdoc-hexal",
+    "hexdoc-hexic",
     "hexdoc-hexical",
     "hexdoc-hexstruction",
     "hexdoc-hextended",
@@ -83,6 +84,7 @@ hexdoc-complexhex = { url = "https://github.com/kineticneticat/ComplexHex/raw/51
 hexdoc-efhexs = { url = "https://github.com/miyucomics/special-efhexs/raw/8029ab75e0d42c92795612639d3dae3170520ddd/docs/v/latest/main/dist/hexdoc_efhexs-1.0.0.1.0.0-py3-none-any.whl" }
 hexdoc-ephemera = { url = "https://github.com/beholderface/Ephemera/raw/74e80eddd991059785eede8435981716480b69ae/docs/v/latest/1.20.1/dist/hexdoc_ephemera-0.3.0.1.0.dev0-py3-none-any.whl" }
 hexdoc-hexal = { url = "https://github.com/FallingColors/Hexal/raw/49cf10f0c8586e5887f40cae1d3075b0acfb13e2/docs/v/latest/main/dist/hexdoc_hexal-0.3.0.1.0rc4-py3-none-any.whl" }
+hexdoc-hexic = { url = "https://hexic.pool.net.eu.org/v/1.3.4/1.1/hexdoc_hexic-1.3.4.1.1-py3-none-any.whl" }
 hexdoc-hexical = { url = "https://github.com/miyucomics/hexical/raw/9e065b5e7995efc9045ab8cecd1f8838106df171/docs/v/latest/main/dist/hexdoc_hexical-2.0.0.1.0.0-py3-none-any.whl" }
 hexdoc-hexstruction = { url = "https://github.com/PetersonE1/hexstruction/raw/510da7fea2f52d6497c50753990bbc5919ee71ad/docs/v/latest/main/dist/hexdoc_hexstruction-1.2.1.1.20.1.1.0-py3-none-any.whl" }
 hexdoc-hextended = { url = "https://github.com/abilliontrillionstars/hextended-staves/raw/0e6e0a61b7f4d3e79761b216cfebc1141e19b30b/docs/v/latest/main/dist/hexdoc_hextended-2.0.1.1.0.dev0-py3-none-any.whl" }
