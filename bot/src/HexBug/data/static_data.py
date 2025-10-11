@@ -501,10 +501,6 @@ DISAMBIGUATED_PATTERNS: set[ResourceLocation] = set()
 
 DISABLED_PAGES: set[str] = set()
 
-DISABLED_FLAGS: set[str] = {
-    "!mod:hexical",
-}
-
 HEXDOC_PROPS: dict[str, Any] = {
     "modid": "hexbug",
     "book": "hexcasting:thehexbook",

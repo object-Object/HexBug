@@ -54,7 +54,6 @@ from .special_handlers import (
     SpecialHandlerPattern,
 )
 from .static_data import (
-    DISABLED_FLAGS,
     DISABLED_PAGES,
     DISABLED_PATTERNS,
     DISAMBIGUATED_PATTERNS,
@@ -254,12 +253,6 @@ class HexBugRegistry(BaseModel):
         lapisworks_per_world_shapes = dict[ResourceLocation, HexdocPatternInfo]()
 
         for category in book.categories.values():
-            if category.flag in DISABLED_FLAGS:
-                logger.info(
-                    f"Skipping category {category.id} because of disabled flag {category.flag}"
-                )
-                continue
-
             assert category.resource_dir.modid is not None
             category_mod = registry.mods[category.resource_dir.modid]
 
@@ -275,12 +268,6 @@ class HexBugRegistry(BaseModel):
             )
 
             for entry in category.entries.values():
-                if entry.flag in DISABLED_FLAGS:
-                    logger.info(
-                        f"Skipping entry {entry.id} because of disabled flag {entry.flag}"
-                    )
-                    continue
-
                 assert entry.resource_dir.modid is not None
                 entry_mod = registry.mods[entry.resource_dir.modid]
 
@@ -296,15 +283,10 @@ class HexBugRegistry(BaseModel):
                     )
                 )
 
-                for i, (page, next_page) in enumerate(
-                    zip_longest(entry.pages, entry.pages[1:], fillvalue=None)
+                for page, next_page in zip_longest(
+                    entry.pages, entry.pages[1:], fillvalue=None
                 ):
                     assert page
-                    if page.flag in DISABLED_FLAGS:
-                        logger.info(
-                            f"Skipping page {entry.id}[{i}] because of disabled flag {page.flag}"
-                        )
-                        continue
 
                     if (fragment := page.fragment(entry.fragment)) in DISABLED_PAGES:
                         logger.info(f"Skipping disabled page: {fragment}")
