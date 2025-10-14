@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [UNRELEASED]
 
+### Changed
+
+- Added the ability to check for special handler prefix conflicts with `/pattern check`.
+- Added an optional `direction` argument to `/pattern check`.
+- `/pattern check` now lists conflicts separately by reason.
+
 ### Mods Added
 
 - Hexic: 1.3.4

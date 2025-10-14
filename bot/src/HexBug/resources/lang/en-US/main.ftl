@@ -96,6 +96,14 @@ choice_HexBug-cogs-app-commands-info-InfoMessage =
     .tools =
         Tools
 
+choice_HexBug-cogs-app-commands-pattern-PatternCheckType =
+    .NORMAL =
+        Normal
+    .PER-WORLD =
+        Per-World
+    .SPECIAL-PREFIX =
+        Special Handler Prefix
+
 # /book
 
 group_book =
@@ -460,10 +468,13 @@ command_pattern-check =
     .parameter_signature = {-parameter_signature}
     .parameter_signature_description = {-parameter_signature_description}
 
-    .parameter_is-per-world =
-        is_per_world
-    .parameter_is-per-world_description =
-        Also check for non-per-world patterns with the same shape but a different stroke order.
+    .parameter_pattern-type =
+        type
+    .parameter_pattern-type_description =
+        Treat the pattern as this type when checking for conflicts.
+
+    .parameter_direction = {-parameter_direction}
+    .parameter_direction_description = {-parameter_direction_description}
 
     .parameter_visibility = {-parameter_visibility}
     .parameter_visibility_description = {-parameter_visibility_description}
@@ -474,6 +485,10 @@ command_pattern-check =
             [one]   Conflict found!
            *[other] Conflicts found!
         }
+
+    .text_conflict-signature = Signature
+    .text_conflict-shape = Shape
+    .text_conflict-prefix = Prefix
 
 # /pattern build
 

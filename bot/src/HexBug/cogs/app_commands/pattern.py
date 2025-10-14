@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+from collections import defaultdict
+from enum import Enum
 from typing import Any
 
 from discord import Color, Embed, Interaction, app_commands
+from discord.app_commands import Transform
 from discord.ext.commands import GroupCog
 from hexdoc.core import ResourceLocation
 
@@ -23,8 +26,22 @@ from HexBug.utils.discord.transformers import (
     PatternSignatureOption,
     SpecialHandlerInfoOption,
 )
-from HexBug.utils.discord.translation import translate_command_text
+from HexBug.utils.discord.translation import (
+    LocaleEnumTransformer,
+    translate_command_text,
+)
 from HexBug.utils.discord.visibility import Visibility, VisibilityOption
+
+
+class PatternCheckType(Enum):
+    NORMAL = "normal"
+    PER_WORLD = "per_world"
+    SPECIAL_PREFIX = "special_prefix"
+
+
+PatternCheckTypeOption = Transform[
+    PatternCheckType, LocaleEnumTransformer(PatternCheckType, name="value")
+]
 
 
 class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
@@ -100,20 +117,30 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
         self,
         interaction: Interaction,
         signature: PatternSignatureOption,
-        is_per_world: bool,
+        pattern_type: PatternCheckTypeOption,
+        direction: HexDirOption = HexDir.EAST,
         visibility: VisibilityOption = Visibility.PRIVATE,
     ):
-        pattern = HexPattern(HexDir.EAST, signature)
+        registry = self.bot.registry
+        pattern = HexPattern(direction, signature)
 
-        conflicts = dict[ResourceLocation, PatternMatchResult]()
+        conflicts = dict[ResourceLocation, tuple[str, PatternMatchResult]]()
+        if conflict := registry.try_match_pattern(pattern):
+            conflicts[conflict.id] = ("signature", conflict)
 
-        if conflict := self.bot.registry.try_match_pattern(pattern):
-            conflicts[conflict.id] = conflict
+        match pattern_type:
+            case PatternCheckType.NORMAL:
+                pass
 
-        if is_per_world:
-            segments = pattern.get_aligned_segments()
-            for conflict in self.bot.registry.lookups.segments.get(segments, []):
-                conflicts[conflict.id] = conflict
+            case PatternCheckType.PER_WORLD:
+                segments = pattern.get_aligned_segments()
+                for conflict in registry.lookups.segments.get(segments, []):
+                    conflicts[conflict.id] = ("shape", conflict)
+
+            case PatternCheckType.SPECIAL_PREFIX:
+                for info in registry.patterns.values():
+                    if info.signature.startswith(signature):
+                        conflicts[info.id] = ("prefix", info)
 
         title = await translate_command_text(
             interaction, "title", conflicts=len(conflicts)
@@ -122,12 +149,23 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
         if conflicts:
             embed = Embed(
                 title=title,
-                description="\n".join(
-                    f"- {self.bot.registry.display_pattern(conflict).name} (`{conflict.id}`)"
-                    for conflict in conflicts.values()
-                ),
                 color=Color.red(),
             )
+
+            fields = defaultdict[str, list[str]](list)
+            for conflict_type, conflict in conflicts.values():
+                fields[conflict_type].append(
+                    f"- {registry.display_pattern(conflict).name} (`{conflict.id}`)"
+                )
+
+            for conflict_type, lines in fields.items():
+                embed.add_field(
+                    name=await translate_command_text(
+                        interaction, f"conflict-{conflict_type}"
+                    ),
+                    value="\n".join(lines),
+                    inline=False,
+                )
         else:
             embed = Embed(
                 title=title,
@@ -137,7 +175,7 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
         await EmbedPatternView(
             interaction=interaction,
             patterns=[pattern],
-            hide_stroke_order=is_per_world,
+            hide_stroke_order=pattern_type is PatternCheckType.PER_WORLD,
             embed=embed,
         ).send(interaction, visibility)
 
