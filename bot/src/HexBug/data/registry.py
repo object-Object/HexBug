@@ -67,8 +67,10 @@ from .static_data import (
     HEXDOC_PROPS,
     MODS,
     PATTERN_NAME_OVERRIDES,
+    SPECIAL_HANDLER_CONFLICTS,
     SPECIAL_HANDLERS,
     UNDOCUMENTED_PATTERNS,
+    UNTITLED_PAGES,
 )
 
 logger = logging.getLogger(__name__)
@@ -366,9 +368,10 @@ class HexBugRegistry(BaseModel):
                                 if item := _get_page_item(page):
                                     title = item.name.value
                                 else:
-                                    logger.warning(
-                                        f"Failed to find title for page: {entry.id}#{page.anchor}"
-                                    )
+                                    if (entry.id, page.anchor) not in UNTITLED_PAGES:
+                                        logger.warning(
+                                            f"Failed to find title for page: {entry.id}#{page.anchor}"
+                                        )
                                     title = (
                                         page.anchor.replace("_", " ")
                                         .replace("-", " ")
@@ -545,7 +548,11 @@ class HexBugRegistry(BaseModel):
             for info in registry.patterns.values():
                 if info.is_per_world:
                     continue
-                if (value := special_handler.try_match(info.pattern)) is not None:
+                if (value := special_handler.try_match(info.pattern)) is not None and (
+                    special_handler.id,
+                    info.id,
+                    value,
+                ) not in SPECIAL_HANDLER_CONFLICTS:
                     logger.warning(
                         f"Special handler {special_handler.id} conflicts with pattern {info.id} (value: {value})"
                     )

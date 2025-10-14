@@ -514,6 +514,26 @@ UNDOCUMENTED_PATTERNS = ResourceSet(
     ],
 )
 
+# suppress warnings for these special handler conflicts
+# (special handler, conflicting pattern, conflicting value)
+SPECIAL_HANDLER_CONFLICTS: set[tuple[ResourceLocation, ResourceLocation, Any]] = {
+    (
+        ResourceLocation("complexhex", "long"),
+        ResourceLocation("hexal", "mote/trade/get"),
+        6,
+    ),
+    (
+        ResourceLocation("hextrace", "trace"),
+        ResourceLocation("hexflow", "weak_escape"),
+        "w",
+    ),
+}
+
+# suppress failure to generate page title
+UNTITLED_PAGES: set[tuple[ResourceLocation, str]] = {
+    (ResourceLocation("hexcasting", "items/splicing_table"), "cost"),
+}
+
 # replace the pattern's name entirely
 PATTERN_NAME_OVERRIDES: dict[ResourceLocation, str] = {
     ResourceLocation("hexpose", "read_book"): "Reading Purification (book)",
