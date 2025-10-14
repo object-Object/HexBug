@@ -149,5 +149,5 @@ jobs:
       - name: Merge and deploy to Pages
         uses: hexdoc-dev/actions/deploy-pages@v1
         with:
-          release: ${{ needs.setup.outputs.hexdoc-release }}
+          release: ${{ needs.setup.outputs.hexdoc-release == 'true' }}
           site-url: ${{ needs.build.outputs.pages-url }}
