@@ -30,9 +30,9 @@
 
 choice_HexBug-utils-discord-visibility-Visibility =
     .PUBLIC =
-        public
+        Public
     .PRIVATE =
-        private
+        Private
 
 choice_HexBug-cogs-app-commands-info-InfoMessage =
     .addons =
