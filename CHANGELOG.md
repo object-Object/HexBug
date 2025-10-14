@@ -17,6 +17,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 - Hexic: 1.3.4
 
+### Mods Updated
+
+- mediatransport: 1.0.2+1.20.1
+
 ## `2.2.0` - 2025-10-10
 
 ### Added

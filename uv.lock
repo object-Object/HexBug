@@ -976,7 +976,7 @@ requires-dist = [
     { name = "hexdoc-ioticblocks", marker = "extra == 'data'", specifier = "==1.0.2.1.20.1.*" },
     { name = "hexdoc-lapisworks", marker = "extra == 'data'", specifier = "==1.5.5.*" },
     { name = "hexdoc-lessertp", marker = "extra == 'data'", specifier = "==1.2.1.*" },
-    { name = "hexdoc-mediatransport", marker = "extra == 'data'", specifier = "==1.0.1.1.20.1.*" },
+    { name = "hexdoc-mediatransport", marker = "extra == 'data'", specifier = "==1.0.2.1.20.1.*" },
     { name = "hexdoc-moreiotas", marker = "extra == 'data'", specifier = "==0.1.1.*" },
     { name = "hexdoc-oneironaut", marker = "extra == 'data'", url = "https://github.com/beholderface/oneironaut/raw/99b7c992e2e2230b39ec9adceed4b1b2fed15831/docs/v/latest/1.20.1/dist/hexdoc_oneironaut-0.5.0.1.0-py3-none-any.whl" },
     { name = "hexdoc-overevaluate", marker = "extra == 'data'", url = "https://github.com/miyucomics/overevaluate/raw/6c92a93c51fd966cf3709468f0a126c746ae85ba/docs/v/latest/main/dist/hexdoc_overevaluate-1.0.0.1.0.0-py3-none-any.whl" },
@@ -1513,14 +1513,15 @@ wheels = [
 
 [[package]]
 name = "hexdoc-mediatransport"
-version = "1.0.1.1.20.1.1.0"
+version = "1.0.2.1.20.1.1.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
+    { name = "hexdoc" },
     { name = "hexdoc-hexcasting" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/24/4e/9acd19240a3cf71e4ca555448c6e22e4be526263971feeb0d8cab324ab5f/hexdoc_mediatransport-1.0.1.1.20.1.1.0.tar.gz", hash = "sha256:26b259f1472ba9c0d78a41df3c6b8d1a24a03a82ee05b2a0ffa56d7ed23d60e8", size = 27206 }
+sdist = { url = "https://files.pythonhosted.org/packages/83/7e/da81b97eeba7550bd2cc639a2986101f0dcf61ae87685cd90afa00894fc0/hexdoc_mediatransport-1.0.2.1.20.1.1.0.tar.gz", hash = "sha256:6a3ad042bde8d8fa203369261154121380c79d5c791d8184bf53c6030eca90c5", size = 25890 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/39/ab/15daf08fec31b321f4b77694239ad440f9f18188ba96a6e70c67a708b242/hexdoc_mediatransport-1.0.1.1.20.1.1.0-py3-none-any.whl", hash = "sha256:9d05127f71126202bde9bd88e9658cef2babe87ee6a7e670893d9348fe421786", size = 41380 },
+    { url = "https://files.pythonhosted.org/packages/e2/4e/a57febf7c1faadd20f1bb5b85b8f65a781f58e79f804b00fac21c3ca869d/hexdoc_mediatransport-1.0.2.1.20.1.1.0-py3-none-any.whl", hash = "sha256:bf44d011e73db3854ee4bb4b399d29cb3c56ae5af96c4b363e9aea8e94aec1dc", size = 39779 },
 ]
 
 [[package]]
