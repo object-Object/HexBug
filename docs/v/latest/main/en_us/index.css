@@ -545,8 +545,8 @@ br:has(+ .mediatransport-altn) {
   border-radius: 1rem;
   /* sync with body ::after */;
   background-image:
-    url("https://raw.githubusercontent.com/penguinencounter/mediatransport/ced16ac62f1aa8bd90780286291bc93a2677dcc3/doc/resources/assets/mediatransport/textures/gui/background_1.png"),
-    url("https://raw.githubusercontent.com/penguinencounter/mediatransport/ced16ac62f1aa8bd90780286291bc93a2677dcc3/doc/resources/assets/mediatransport/textures/gui/background_2.png");
+    url("https://raw.githubusercontent.com/penguinencounter/mediatransport/cd289a5fe54eca07f1b99842908c7c5db4d8ed7f/doc/resources/assets/mediatransport/textures/gui/background_1.png"),
+    url("https://raw.githubusercontent.com/penguinencounter/mediatransport/cd289a5fe54eca07f1b99842908c7c5db4d8ed7f/doc/resources/assets/mediatransport/textures/gui/background_2.png");
   animation: animated-footer 10s linear infinite;
   animation-play-state: running;
   /* unique */
