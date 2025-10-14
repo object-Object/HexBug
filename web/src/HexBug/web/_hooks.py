@@ -11,11 +11,10 @@ from hexdoc.plugin import (
     UpdateTemplateArgsImpl,
     hookimpl,
 )
-from hexdoc_hexcasting.__gradle_version__ import GRADLE_VERSION as MOD_VERSION
 from typing_extensions import override
 
 import HexBug.web
-from HexBug.common.__version__ import VERSION as PLUGIN_VERSION
+from HexBug.common.__version__ import VERSION
 from HexBug.data.registry import HexBugRegistry
 from HexBug.utils.hexdoc import monkeypatch_hexdoc_hexcasting
 
@@ -51,17 +50,22 @@ class BookOfHexxyModPlugin(ModPluginWithBook):
     @property
     @override
     def full_version(self) -> str:
-        return f"{MOD_VERSION}.{PLUGIN_VERSION}"
+        return VERSION
 
     @property
     @override
     def mod_version(self) -> str:
-        return MOD_VERSION
+        return VERSION
 
     @property
     @override
     def plugin_version(self) -> str:
-        return PLUGIN_VERSION
+        return VERSION
+
+    @property
+    @override
+    def versioned_site_path(self) -> Path:
+        return self.site_root / VERSION
 
     @override
     def resource_dirs(self) -> HookReturn[Package]:

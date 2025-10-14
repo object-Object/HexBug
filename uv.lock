@@ -943,7 +943,7 @@ requires-dist = [
     { name = "fluent-runtime", specifier = ">=0.4.0" },
     { name = "hex-renderer-py", specifier = ">=0.1.5" },
     { name = "hexbug-common", editable = "common" },
-    { name = "hexdoc", specifier = ">=1!0.1.0a31" },
+    { name = "hexdoc", specifier = ">=1!0.1.0a33" },
     { name = "hexdoc-caduceus", marker = "extra == 'data'", specifier = "==0.1.1.1.20.1.*" },
     { name = "hexdoc-complexhex", marker = "extra == 'data'", url = "https://github.com/kineticneticat/ComplexHex/raw/51cf2bbac7183cd6b4be360f205bd20d99d56952/docs/v/latest/0.1.x/dist/hexdoc_complexhex-0.1.6.1.0.dev0-py3-none-any.whl" },
     { name = "hexdoc-dthexcasting", marker = "extra == 'data'", specifier = "==1.0.1.*" },
@@ -1037,7 +1037,7 @@ requires-dist = [
 
 [[package]]
 name = "hexdoc"
-version = "1!0.1.0a31"
+version = "1!0.1.0a33"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
@@ -1066,9 +1066,9 @@ dependencies = [
     { name = "typing-extensions" },
     { name = "yarl" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/df/ac/1f60aa61bad8597d3fb8f9502191523e245ffd1135ed1c4f19bd1f0731da/hexdoc-1!0.1.0a31.tar.gz", hash = "sha256:d5c49fc4285c9325edb80b44e41477c60b7c8a2b3acd0ee3f4136391c685bd37", size = 153006 }
+sdist = { url = "https://files.pythonhosted.org/packages/fa/bd/054b831155eb398c5d773f0a88d81010c02df173787ec16f51efa10b722a/hexdoc-1!0.1.0a33.tar.gz", hash = "sha256:4f3638156faa171b757a0108b0de66e1cda903a61de748865cc66d12846dd43e", size = 154073 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/1d/fd/cd1722868a3a4c71ac773b1a9a20ea976d317418cf6f23e6c8c8854f7181/hexdoc-1!0.1.0a31-py3-none-any.whl", hash = "sha256:aebc440fcecd0852edbb1ac780dc4c2b083e168aa68ba68518572ceba42220e2", size = 222119 },
+    { url = "https://files.pythonhosted.org/packages/a8/cd/7f3535ba784762052067b3a1f34f7cef82c763aad18b54a8d6494494cc37/hexdoc-1!0.1.0a33-py3-none-any.whl", hash = "sha256:15dc1a1b46179011def196b3578efd76610a054a6f90f5f4f097e0d73e08164b", size = 223288 },
 ]
 
 [[package]]

@@ -15,20 +15,20 @@ on:
         options:
           - beta
           - prod
+      hexdoc-release:
+        description: Force a web book release
+        type: boolean
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: object-object/hexbug
 
 jobs:
-  build:
-    uses: ./.github/workflows/build.yml
-    secrets: inherit
-
   setup:
     runs-on: ubuntu-latest
     outputs:
       stage: ${{ steps.get-stage.outputs.stage }}
+      hexdoc-release: ${{ steps.get-stage.outputs.stage == 'prod' || inputs.hexdoc-release }}
     steps:
       - name: Get deployment stage
         id: get-stage
@@ -43,10 +43,18 @@ jobs:
           echo "Deployment stage: \`$STAGE\`" | tee >> $GITHUB_STEP_SUMMARY
           echo "stage=$STAGE" >> "$GITHUB_OUTPUT"
 
+  build:
+    needs:
+      - setup
+    uses: ./.github/workflows/build.yml
+    secrets: inherit
+    with:
+      hexdoc-release: ${{ needs.setup.outputs.hexdoc-release }}
+
   push-image:
     needs:
-      - build
       - setup
+      - build
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -84,8 +92,8 @@ jobs:
 
   deploy-beta:
     needs:
-      - build
       - setup
+      - build
       - push-image
     uses: ./.github/workflows/deploy-bot.yml
     permissions:
@@ -98,8 +106,8 @@ jobs:
 
   deploy-prod:
     needs:
-      - build
       - setup
+      - build
       - push-image
       - deploy-beta
     if: needs.setup.outputs.stage == 'prod'
@@ -113,10 +121,9 @@ jobs:
       image-digest: ${{ needs.push-image.outputs.digest }}
 
   deploy-pages:
-    if: startsWith(github.ref, 'refs/heads/')
     needs:
-      - build
       - setup
+      - build
     runs-on: ubuntu-latest
     concurrency:
       group: hexdoc-deploy-pages
@@ -142,5 +149,5 @@ jobs:
       - name: Merge and deploy to Pages
         uses: hexdoc-dev/actions/deploy-pages@v1
         with:
-          release: false
+          release: ${{ needs.setup.outputs.hexdoc-release }}
           site-url: ${{ needs.build.outputs.pages-url }}
