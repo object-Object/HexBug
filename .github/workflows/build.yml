@@ -175,5 +175,8 @@ jobs:
       - name: Sync dependencies
         run: uv sync --frozen --no-dev --package HexBug-bot
 
+      - name: Run pre-commit
+        uses: pre-commit/action@v3.0.1
+
       - name: Run unit tests
         run: uv run pytest
