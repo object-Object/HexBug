@@ -959,7 +959,7 @@ requires-dist = [
     { name = "hexdoc-hexdim", marker = "extra == 'data'", specifier = "==1.2.1.1.20.*" },
     { name = "hexdoc-hexflow", marker = "extra == 'data'", specifier = "==0.3.1.1.*" },
     { name = "hexdoc-hexgender", marker = "extra == 'data'", specifier = "==1.0.4.*" },
-    { name = "hexdoc-hexic", marker = "extra == 'data'", url = "https://hexic.pool.net.eu.org/v/1.3.4/1.1/hexdoc_hexic-1.3.4.1.1-py3-none-any.whl" },
+    { name = "hexdoc-hexic", marker = "extra == 'data'", url = "https://codeberg.org/PoolloverNathan/hexic/raw/branch/wheels/hexdoc_hexic-1.4.1.1.1-py3-none-any.whl" },
     { name = "hexdoc-hexical", marker = "extra == 'data'", url = "https://github.com/miyucomics/hexical/raw/9e065b5e7995efc9045ab8cecd1f8838106df171/docs/v/latest/main/dist/hexdoc_hexical-2.0.0.1.0.0-py3-none-any.whl" },
     { name = "hexdoc-hexmapping", marker = "extra == 'data'", specifier = "==0.0.3.*" },
     { name = "hexdoc-hexodus", marker = "extra == 'data'", specifier = "==1.0.0.*" },
@@ -1272,24 +1272,26 @@ wheels = [
 
 [[package]]
 name = "hexdoc-hexic"
-version = "1.3.4.1.1"
-source = { url = "https://hexic.pool.net.eu.org/v/1.3.4/1.1/hexdoc_hexic-1.3.4.1.1-py3-none-any.whl" }
+version = "1.4.1.1.1"
+source = { url = "https://codeberg.org/PoolloverNathan/hexic/raw/branch/wheels/hexdoc_hexic-1.4.1.1.1-py3-none-any.whl" }
 dependencies = [
     { name = "hexdoc" },
     { name = "hexdoc-hexal" },
     { name = "hexdoc-hexcasting" },
+    { name = "hexdoc-hexcellular" },
     { name = "hexdoc-minecraft" },
     { name = "hexdoc-moreiotas" },
 ]
 wheels = [
-    { url = "https://hexic.pool.net.eu.org/v/1.3.4/1.1/hexdoc_hexic-1.3.4.1.1-py3-none-any.whl", hash = "sha256:00f80719246a3769f23f3401ff4aab354cee779f0c58556f8b327f1ef5b03711" },
+    { url = "https://codeberg.org/PoolloverNathan/hexic/raw/branch/wheels/hexdoc_hexic-1.4.1.1.1-py3-none-any.whl", hash = "sha256:69a08ceb3ccb6fe94247b881e3649062359366b7105aea7d170b774c1d879b30" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "hexdoc" },
+    { name = "hexdoc", specifier = ">=1!0.1.0a31" },
     { name = "hexdoc-hexal" },
     { name = "hexdoc-hexcasting" },
+    { name = "hexdoc-hexcellular" },
     { name = "hexdoc-minecraft", specifier = "==1.20.1.*" },
     { name = "hexdoc-moreiotas", specifier = "==0.1.1.*" },
 ]
