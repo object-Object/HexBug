@@ -77,7 +77,7 @@
       <ul class="nav navbar-nav navbar-right">
             <li>
     <a
-      href="https://github.com/object-Object/HexBug/tree/fa485f3d4bb8ecaa5f2efc5958dd09be7081da77"
+      href="https://github.com/object-Object/HexBug/tree/303811ea702d3d79cc629a503acc6a5f5a8a5766"
         target="_blank"
       class="navbar-link"
       role="button"
@@ -135,7 +135,7 @@
       <li><a href="https://petersone1.github.io/hexstruction/v/latest/main/en_us">HexStruction</a> (1.2.1+1.20.1 @ 98ca05a1)</li>
       <li><a href="https://walksanatora.github.io/HexTweaks/v/5.3.3/1.0.dev0/en_us">HexTweaks</a> (5.3.3)</li>
       <li><a href="https://techtastic.github.io/HexWeb/v/1.0.4/1.1/en_us">HexWeb</a> (1.0.4)</li>
-      <li><a href="https://hexal.hexxy.media/v/latest/main/en_us">Hexal</a> (0.3.0-4 @ 16425bdc)</li>
+      <li><a href="https://hexal.hexxy.media/v/0.3.0/1.0/en_us">Hexal</a> (0.3.0)</li>
       <li><a href="https://miyucomics.github.io/hexcassettes/v/1.1.4/1.0.0/en_us">Hexcassettes</a> (1.1.4)</li>
       <li><a href="https://hexcellular.hexxy.media/v/1.1.0/1.0.0/en_us">Hexcellular</a> (1.1.0)</li>
       <li><a href="https://arconyx.github.io/hexchanting/v/1.1.3/1.0.dev0/en_us">Hexchanting</a> (1.1.3)</li>
@@ -156,7 +156,7 @@
       <li><a href="https://miyucomics.github.io/scryglass/v/latest/main/en_us">Scryglass</a> (1.0.0 @ ae42d7b7)</li>
       <li><a href="https://stick404.github.io/SlateWork/v/1.0.3/1.0/en_us">Slate Works</a> (1.0.3)</li>
       <li><a href="https://miyucomics.github.io/special-efhexs/v/latest/main/en_us">Special Efhexs</a> (1.0.0 @ 81157d80)</li>
-      <li><a href="https://penguinencounter.github.io/mediatransport/v/1.0.2+1.20.1/1.0/en_us">mediatransport</a> (1.0.2+1.20.1)</li>
+      <li><a href="https://penguinencounter.github.io/mediatransport/v/1.0.3+1.20.1/2.0/en_us">mediatransport</a> (1.0.3+1.20.1)</li>
   </ul>
   </blockquote>
 </div>
@@ -929,7 +929,7 @@
           <li><a href="#items/relay" class="toc-elem "><img
       title="继链器"
       alt="继链器"
-      src="https://hexal.hexxy.media/v/latest/main/assets/hexal/textures/block/relay.png"
+      src="https://hexal.hexxy.media/v/0.3.0/1.0/assets/hexal/textures/block/relay.png"
       loading="lazy"
       class="item-texture  texture "
     > 继链器</a></li>
@@ -23038,7 +23038,7 @@
     <img
       title="继链器"
       alt="继链器"
-      src="https://hexal.hexxy.media/v/latest/main/assets/hexal/textures/block/relay.png"
+      src="https://hexal.hexxy.media/v/0.3.0/1.0/assets/hexal/textures/block/relay.png"
       loading="lazy"
       class="item-texture  texture "
     >继链器<a
@@ -23141,7 +23141,7 @@
     <img
       title="继链器"
       alt="继链器"
-      src="https://hexal.hexxy.media/v/latest/main/assets/hexal/textures/block/relay.png"
+      src="https://hexal.hexxy.media/v/0.3.0/1.0/assets/hexal/textures/block/relay.png"
       loading="lazy"
       class="item-texture  texture "
     >
@@ -32155,8 +32155,8 @@
 </pre>
 </div>
 <div class="protocoldocs">
-<p><b>This documentation is for protocol <a class="protocol-sym" href="#mediatransport-protocol-protocol_version" title="version&#10;size: 2 bytes">version</a> 1.</b></p>
-<p>As previously described, an iota consists of a single-byte <span class="protocol-sym-def" id="mediatransport-protocol-type" title="type&#10;size: 1 byte">type</span> followed by some amount of <span class="protocol-sym-raw" title="data">data</span>, depending on the type.</p>
+<p><b>This documentation is for protocol <a class="protocol-sym" href="#mediatransport-protocol-protocol_version">version</a> 1.</b></p>
+<p>As previously described, an iota consists of a single-byte <span class="protocol-sym-def" id="mediatransport-protocol-type">type</span> followed by some amount of <span class="protocol-sym-raw">data</span>, depending on the type.</p>
 <div class="block-diagram">
       <div class="block -sized -sym" style="--width: 1">
         <span class="-name">type</span>
@@ -32167,7 +32167,7 @@
         <span class="-size"> ... </span>
       </div>
 </div>
-<p>Each iota type has a different <a class="protocol-sym" href="#mediatransport-protocol-type" title="type&#10;size: 1 byte">type</a> value and has a different format for <span class="protocol-sym-raw" title="data">data</span>.</p>
+<p>Each iota type has a different <a class="protocol-sym" href="#mediatransport-protocol-type">type</a> value and has a different format for <span class="protocol-sym-raw">data</span>.</p>
 <h3>Built-in types</h3>
 <h4><code>ff</code>: Garbage</h4>
 <p>All these types have no data. Also, since Garbage is used to represent decoding failures, it's generally a bad idea to create it on purpose.</p>
@@ -32200,7 +32200,7 @@
       </div>
 </div>
 <h4><code>05</code>: Double</h4>
-<p>Finally, something interesting! Hexcasting uses IEEE 754 double-width floats (that's 8 bytes, 64 bits), so that's what's being used here for <span class="protocol-sym-def" id="mediatransport-protocol-double_value" title="value&#10;size: 8 bytes">value</span>.</p>
+<p>Finally, something interesting! Hexcasting uses IEEE 754 double-width floats (that's 8 bytes, 64 bits), so that's what's being used here for <span class="protocol-sym-def" id="mediatransport-protocol-double_value">value</span>.</p>
 <div class="block-diagram">
       <div class="block -sized -literal" style="--width: 1">
         <span class="-name">05</span>
@@ -32214,9 +32214,9 @@
 <h4><code>06</code>: Pattern</h4>
 <p>In honor of Hexxy, patterns are type 6. They're a bit complicated:</p>
 <ul>
-<li>First is a byte representing the <span class="protocol-sym-def" id="mediatransport-protocol-dir" title="dir&#10;size: 1 byte">dir</span>. This is based on some internal representation, and appears to be as follows: 0 = north east, 1 = east, 2 = south east, 3 = south west, 4 = west, and 5 = north west.</li>
-<li>Next is a four-byte integer holding the number of angles in the pattern (effectively, strokes minus 1, or the <span class="protocol-sym-def" id="mediatransport-protocol-pattern_len" title="length&#10;size: 4 bytes">length</span>)</li>
-<li>Following that are the <span class="protocol-sym-def" id="mediatransport-protocol-angles" title="angles&#10;size: (length) bytes">angles</span>, each 1 byte. Once again this appears to be based on some internal representation, as follows: 0 = forward, 1 = right, 2 = right back, 3 = back, 4 = left back, and 5 = left.</li>
+<li>First is a byte representing the <span class="protocol-sym-def" id="mediatransport-protocol-dir">dir</span>. This is based on some internal representation, and appears to be as follows: 0 = north east, 1 = east, 2 = south east, 3 = south west, 4 = west, and 5 = north west.</li>
+<li>Next is a four-byte integer holding the number of angles in the pattern (effectively, strokes minus 1, or the <span class="protocol-sym-def" id="mediatransport-protocol-pattern_len">length</span>)</li>
+<li>Following that are the <span class="protocol-sym-def" id="mediatransport-protocol-angles">angles</span>, each 1 byte. Once again this appears to be based on some internal representation, as follows: 0 = forward, 1 = right, 2 = right back, 3 = back, 4 = left back, and 5 = left.</li>
 </ul>
 <div class="block-diagram">
       <div class="block -sized -literal" style="--width: 1">
@@ -32237,7 +32237,7 @@
       </div>
 </div>
 <h4><code>07</code>: Vector</h4>
-<p>A vector is three doubles in sequence - <span class="protocol-sym-def" id="mediatransport-protocol-vec_x" title="x&#10;size: 8 bytes">x</span>, <span class="protocol-sym-def" id="mediatransport-protocol-vec_y" title="y&#10;size: 8 bytes">y</span>, and <span class="protocol-sym-def" id="mediatransport-protocol-vec_z" title="z&#10;size: 8 bytes">z</span>.</p>
+<p>A vector is three doubles in sequence - <span class="protocol-sym-def" id="mediatransport-protocol-vec_x">x</span>, <span class="protocol-sym-def" id="mediatransport-protocol-vec_y">y</span>, and <span class="protocol-sym-def" id="mediatransport-protocol-vec_z">z</span>.</p>
 <div class="block-diagram">
       <div class="block -sized -literal" style="--width: 1">
         <span class="-name">07</span>
@@ -32257,7 +32257,7 @@
       </div>
 </div>
 <h4><code>08</code>: List</h4>
-<p>Lists are the primary structuring tool that Hexcasting has, and are similar to patterns - first is a four-byte <span class="protocol-sym-def" id="mediatransport-protocol-list_len" title="length&#10;size: 4 bytes">length</span>, followed by that many iota of any type.</p>
+<p>Lists are the primary structuring tool that Hexcasting has, and are similar to patterns - first is a four-byte <span class="protocol-sym-def" id="mediatransport-protocol-list_len">length</span>, followed by that many iota of any type.</p>
 <div class="block-diagram">
       <div class="block -sized -literal" style="--width: 1">
         <span class="-name">08</span>
@@ -32274,7 +32274,7 @@
 </div>
 <h3>MoreIotas types</h3>
 <h4><code>01</code>: String</h4>
-<p>Strings, like the rest of the variable-length iotas, have a 4-byte <span class="protocol-sym-def" id="mediatransport-protocol-str_len" title="length&#10;size: 4 bytes">length</span> followed by the data (in this case, the <span class="protocol-sym-def" id="mediatransport-protocol-string" title="string&#10;size: (length) bytes">string</span>.) Strings are expected to be encoded in UTF-8.</p>
+<p>Strings, like the rest of the variable-length iotas, have a 4-byte <span class="protocol-sym-def" id="mediatransport-protocol-str_len">length</span> followed by the data (in this case, the <span class="protocol-sym-def" id="mediatransport-protocol-string">string</span>.) Strings are expected to be encoded in UTF-8.</p>
 <div class="block-diagram">
       <div class="block -sized -literal" style="--width: 1">
         <span class="-name">01</span>
@@ -32292,8 +32292,8 @@
 <h4><code>40</code>: Matrix</h4>
 <p>Matrices are two-dimensional arrays of doubles.</p>
 <ul>
-  <li>First is a single byte for the number of <span class="protocol-sym-def" id="mediatransport-protocol-rows" title="rows&#10;size: 1 byte">rows</span>, followed by another byte for the number of <span class="protocol-sym-def" id="mediatransport-protocol-cols" title="cols&#10;size: 1 byte">cols</span>.</li>
-  <li>This is followed by the <span class="protocol-sym-def" id="mediatransport-protocol-matrix_contents" title="contents&#10;size: (rows*cols) bytes">contents</span> of the matrix - one double for each entry. Each row is written out in sequence (ex. for a 2 by 2 matrix, the order would be row 1 column 1, followed by row 1 column 2, and then row 2 after that)</li>
+  <li>First is a single byte for the number of <span class="protocol-sym-def" id="mediatransport-protocol-rows">rows</span>, followed by another byte for the number of <span class="protocol-sym-def" id="mediatransport-protocol-cols">cols</span>.</li>
+  <li>This is followed by the <span class="protocol-sym-def" id="mediatransport-protocol-matrix_contents">contents</span> of the matrix - one double for each entry. Each row is written out in sequence (ex. for a 2 by 2 matrix, the order would be row 1 column 1, followed by row 1 column 2, and then row 2 after that)</li>
 </ul>
 <div class="block-diagram">
       <div class="block -sized -literal" style="--width: 1">
@@ -32335,7 +32335,7 @@
 <h4><code>fe</code>: Configuration Data</h4>
 <p>This glob of information is Nature's repsonse to <a href="#patterns/figura@mediatransport:send_server_info">Query Configuration</a>.</p>
 <ul>
-  <li>First is the protocol's <span class="protocol-sym-def" id="mediatransport-protocol-protocol_version" title="version&#10;size: 2 bytes">version</span> as a two-byte 'short'. This documentation is written for <em>version 1</em>.</li>
+  <li>First is the protocol's <span class="protocol-sym-def" id="mediatransport-protocol-protocol_version">version</span> as a two-byte 'short'. This documentation is written for <em>version 1</em>.</li>
   <li>Next is the maximum amount of data that can be sent with Submit Iota, in bytes.</li>
   <li>That is followed by the maximum amount of data that can be sent with Submit Iota II...</li>
   <li>and the maximum amount of data that can be received from an avatar.</li>
@@ -32497,10 +32497,10 @@ function server_packets.packet_id(data)
 end
 </pre>
 <p>
-  Compared to pings, server_packets receivers always have exactly one parameter, through which a <a class="protocol-sym" href="#mediatransport-protocol-Buffer" title="Buffer">Buffer</a> is passed containing the packet's data.
+  Compared to pings, server_packets receivers always have exactly one parameter, through which a <a class="protocol-sym" href="#mediatransport-protocol-Buffer">Buffer</a> is passed containing the packet's data.
 </p>
 <p class="mediatransport-callout -warning">
-  Make sure to <em>close</em> the <a class="protocol-sym" href="#mediatransport-protocol-Buffer" title="Buffer">Buffer</a> you are given! If you don't, the buffer slot will continue to be considered "used" and you will eventually run out of buffers (from my research, most people are unaware there is a limit on buffer count at all, but it exists as part of the permissions system and this is one of the easiest ways to have latent bugs.)
+  Make sure to <em>close</em> the <a class="protocol-sym" href="#mediatransport-protocol-Buffer">Buffer</a> you are given! If you don't, the buffer slot will continue to be considered "used" and you will eventually run out of buffers (from my research, most people are unaware there is a limit on buffer count at all, but it exists as part of the permissions system and this is one of the easiest ways to have latent bugs.)
 </p>
 <p>
   The other main difference from pings is that sending data is explicit and not activated by calling the receiver function - that means calling <code>server_packets.packet_id()</code> <em>does not send anything</em>. To send packets, use <code>server_packets:sendPacket(id, data)</code>, where <code>id</code> is a <code>string</code> and <code>data</code> is a <code>Buffer</code>.
@@ -32508,7 +32508,7 @@ end
 <p class="mediatransport-callout -warning">
   Make sure to <a href='#mediatransport-setPosition'>rewind the Buffer</a> before sending it.
 </p>
-<h3>Quick Introduction to <span class="protocol-sym-def" id="mediatransport-protocol-Buffer" title="Buffer">Buffer</span>s</h3>
+<h3>Quick Introduction to <span class="protocol-sym-def" id="mediatransport-protocol-Buffer">Buffer</span>s</h3>
 <p class="mediatransport-hatnote">
   The canonical documentation for Buffers is accessible via the incantation <code>/figura docs globals data Buffer</code>.
 </p>
@@ -32568,24 +32568,24 @@ buf:setPosition(0) -- move back to the beginning
   For things described as '<em>x</em>-byte integers', use these names:
 </p>
 <ul>
-  <li><code>:write(n)</code>: 1 byte, such as <a class="protocol-sym" href="#mediatransport-protocol-type" title="type&#10;size: 1 byte">type</a>, <a class="protocol-sym" href="#mediatransport-protocol-dir" title="dir&#10;size: 1 byte">dir</a> for patterns, and <a class="protocol-sym" href="#mediatransport-protocol-rows" title="rows&#10;size: 1 byte">rows</a> and <a class="protocol-sym" href="#mediatransport-protocol-cols" title="cols&#10;size: 1 byte">cols</a> for matrices.</li>
+  <li><code>:write(n)</code>: 1 byte, such as <a class="protocol-sym" href="#mediatransport-protocol-type">type</a>, <a class="protocol-sym" href="#mediatransport-protocol-dir">dir</a> for patterns, and <a class="protocol-sym" href="#mediatransport-protocol-rows">rows</a> and <a class="protocol-sym" href="#mediatransport-protocol-cols">cols</a> for matrices.</li>
   <li><code>:writeInt(n)</code>: 4 bytes, which is primarily used to describe the length of things</li>
 </ul>
 <p>
   For 'doubles', use:
 </p>
 <ul>
-  <li><code>:writeDouble(n)</code>: 8 bytes, used for both the <a class="protocol-sym" href="#mediatransport-protocol-double_value" title="value&#10;size: 8 bytes">value</a> of numbers and the <a class="protocol-sym" href="#mediatransport-protocol-vec_x" title="x&#10;size: 8 bytes">x</a>, <a class="protocol-sym" href="#mediatransport-protocol-vec_y" title="y&#10;size: 8 bytes">y</a>, and <a class="protocol-sym" href="#mediatransport-protocol-vec_z" title="z&#10;size: 8 bytes">z</a> of vectors.</li>
+  <li><code>:writeDouble(n)</code>: 8 bytes, used for both the <a class="protocol-sym" href="#mediatransport-protocol-double_value">value</a> of numbers and the <a class="protocol-sym" href="#mediatransport-protocol-vec_x">x</a>, <a class="protocol-sym" href="#mediatransport-protocol-vec_y">y</a>, and <a class="protocol-sym" href="#mediatransport-protocol-vec_z">z</a> of vectors.</li>
 </ul>
 <h4 id="mediatransport-read">Reading Data</h4>
 <p>
   Similar to writing data, Buffers are versatile in what they can read. Each read method also similarily moves the cursor to the <em>end of the data read</em>.
 </p>
 <ul>
-  <li><code>:read()</code>: 1 byte, such as <a class="protocol-sym" href="#mediatransport-protocol-type" title="type&#10;size: 1 byte">type</a>, <a class="protocol-sym" href="#mediatransport-protocol-dir" title="dir&#10;size: 1 byte">dir</a> for patterns, and <a class="protocol-sym" href="#mediatransport-protocol-rows" title="rows&#10;size: 1 byte">rows</a> and <a class="protocol-sym" href="#mediatransport-protocol-cols" title="cols&#10;size: 1 byte">cols</a> for matrices.</li>
-  <li><code>:readShort()</code>: 2 bytes - the protocol <a class="protocol-sym" href="#mediatransport-protocol-protocol_version" title="version&#10;size: 2 bytes">version</a></li>
+  <li><code>:read()</code>: 1 byte, such as <a class="protocol-sym" href="#mediatransport-protocol-type">type</a>, <a class="protocol-sym" href="#mediatransport-protocol-dir">dir</a> for patterns, and <a class="protocol-sym" href="#mediatransport-protocol-rows">rows</a> and <a class="protocol-sym" href="#mediatransport-protocol-cols">cols</a> for matrices.</li>
+  <li><code>:readShort()</code>: 2 bytes - the protocol <a class="protocol-sym" href="#mediatransport-protocol-protocol_version">version</a></li>
   <li><code>:readInt()</code>: 4 bytes, usually lengths but also quite a few configuration parameters</li>
-  <li><code>:readDouble()</code>: 8 bytes, used for both the <a class="protocol-sym" href="#mediatransport-protocol-double_value" title="value&#10;size: 8 bytes">value</a> of numbers and the <a class="protocol-sym" href="#mediatransport-protocol-vec_x" title="x&#10;size: 8 bytes">x</a>, <a class="protocol-sym" href="#mediatransport-protocol-vec_y" title="y&#10;size: 8 bytes">y</a>, and <a class="protocol-sym" href="#mediatransport-protocol-vec_z" title="z&#10;size: 8 bytes">z</a> of vectors, as well as the sending power-related configuration values.</li>
+  <li><code>:readDouble()</code>: 8 bytes, used for both the <a class="protocol-sym" href="#mediatransport-protocol-double_value">value</a> of numbers and the <a class="protocol-sym" href="#mediatransport-protocol-vec_x">x</a>, <a class="protocol-sym" href="#mediatransport-protocol-vec_y">y</a>, and <a class="protocol-sym" href="#mediatransport-protocol-vec_z">z</a> of vectors, as well as the sending power-related configuration values.</li>
 </ul>
 <br />
 </div>
@@ -32643,7 +32643,7 @@ buf:setPosition(0) -- move back to the beginning
 <br />
     <p>- data is of a type (that&#39;s the first byte) that nature has no representation for<br />- the transmission is missing some data at the end<br />- the data is too large (seems like this could be different limit than the one going in the other direction...)<br />- a variant of the above: the same matrix size restrictions apply (though it&#39;s impossible to have too many rows or columns, the total area could still be too much)</p>
 <br />
-    <p>also note that lists can also partially fail to transfer, leading to the entire decoder potentially derailing and interpreting types as data and vice versa. good luck!</p><p>~t</p>
+    <p>also note that lists can also partially fail to transfer, leading to the entire decoder potentially derailing and interpreting types as data and vice versa. good luck!</p>
 <br />
 </div>
 </div>
@@ -80643,7 +80643,7 @@ buf:setPosition(0) -- move back to the beginning
           <img
       title="物元枢纽"
       alt="物元枢纽"
-      src="https://hexal.hexxy.media/v/latest/main/assets/hexal/textures/block/mediafied_storage.png"
+      src="https://hexal.hexxy.media/v/0.3.0/1.0/assets/hexal/textures/block/mediafied_storage.png"
       loading="lazy"
       class="item-texture  texture "
     >
