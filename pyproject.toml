@@ -5,12 +5,12 @@ dev = [
     "HexBug-bot[data]",
     "hatch>=1.13.0",
     "poethepoet>=0.32.2",
-    "pre-commit",
     "ruff>=0.12.11",
 ]
 test = [
     "pytest>=8.3.5",
     "pytest-describe>=2.2.0",
+    "pre-commit",
 ]
 notebooks = [
     "ipykernel>=6.29.5",

@@ -19,11 +19,11 @@ dev = [
     { name = "hatch", specifier = ">=1.13.0" },
     { name = "hexbug-bot", extras = ["data"], editable = "bot" },
     { name = "poethepoet", specifier = ">=0.32.2" },
-    { name = "pre-commit" },
     { name = "ruff", specifier = ">=0.12.11" },
 ]
 notebooks = [{ name = "ipykernel", specifier = ">=6.29.5" }]
 test = [
+    { name = "pre-commit" },
     { name = "pytest", specifier = ">=8.3.5" },
     { name = "pytest-describe", specifier = ">=2.2.0" },
 ]
