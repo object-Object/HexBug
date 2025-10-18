@@ -499,19 +499,10 @@ UNDOCUMENTED_PATTERNS = ResourceSet(
         ResourceLocation("oneironaut", "signitem"),
         # lmao what
         ResourceLocation("ephemera", "no"),
-        ResourceLocation("hexic", "empty_map"),
-        ResourceLocation("hexic", "free"),
-        ResourceLocation("hexic", "malloc"),
-        ResourceLocation("hexic", "metatable"),
-        ResourceLocation("hexic", "tripwire"),
         ResourceLocation("hextweaks", "suicide"),
         ResourceLocation("oneironaut", "circle"),
     ],
-    patterns=[
-        # lmao what
-        ResourceLocation("hexic", "jvm/*"),
-        ResourceLocation("hexic", "nbt/*"),
-    ],
+    patterns=[],
 )
 
 # suppress warnings for these special handler conflicts
