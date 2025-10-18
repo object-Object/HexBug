@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and [Pydantic's HISTORY.md](https://github.com/pydantic/pydantic/blob/main/HISTORY.md), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [UNRELEASED]
+
+### Mods Updated
+
+- Hexal: 0.3.0
+- mediatransport: 1.0.3+1.20.1
+
 ## `2.3.0` - 2025-10-14
 
 ### Changed
@@ -12,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - Added an optional `direction` argument to `/pattern check`.
 - `/pattern check` now lists conflicts separately by reason.
 - Changed capitalization of `visibility` option.
+- The combined web book at https://book.hexxy.media is now released along with HexBug, instead of just always reflecting the latest commit.
 
 ### Mods Added
 
