@@ -5,6 +5,13 @@ build-backend = "hatchling.build"
 [project]
 dynamic = ["version"]
 name = "HexBug-data"
+description = "Standalone registry code and parsers for HexBug."
+readme = "README.md"
+license = "MIT"
+authors = [
+    { name = "object-Object" },
+]
+keywords = ["hexdoc"]
 requires-python = ">=3.12"
 dependencies = [
     "hexdoc>=1!0.1.0a34",
@@ -57,6 +64,12 @@ full = [
     "hexdoc-overevaluate",
     "hexdoc-scryglass",
 ]
+
+[project.urls]
+Homepage = "https://book.hexxy.media"
+Source = "https://github.com/object-Object/HexBug"
+Issues = "https://github.com/object-Object/HexBug/issues"
+Changelog = "https://github.com/object-Object/HexBug/blob/main/CHANGELOG.md"
 
 [tool.uv.sources]
 hexdoc-complexhex = { url = "https://github.com/kineticneticat/ComplexHex/raw/51cf2bbac7183cd6b4be360f205bd20d99d56952/docs/v/latest/0.1.x/dist/hexdoc_complexhex-0.1.6.1.0.dev0-py3-none-any.whl" }
