@@ -74,11 +74,8 @@ class BookOfHexxyModPlugin(ModPluginWithBook):
         output_dir: Path,
     ) -> None:
         registry_path = Path(props.extra["bookofhexxy"]["registry_path"])
-        dist_path = Path(props.extra["bookofhexxy"]["dist_path"])
 
-        dist_output_path = output_dir / "registry"
-        shutil.copytree(dist_path, dist_output_path)
-        shutil.copyfile(registry_path, dist_output_path / "registry.json")
+        shutil.copyfile(registry_path, output_dir / "registry.json")
 
         registry = HexBugRegistry.load(registry_path)
         for book in books:

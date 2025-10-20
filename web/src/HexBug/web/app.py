@@ -18,7 +18,6 @@ app = Typer(
 @app.command()
 def build_props(
     output_path: Annotated[Path, Option("-o", "--output-path")] = Path("hexdoc.toml"),
-    base_dist_path: Annotated[Path, Option("--dist-path")] = Path("dist"),
     base_registry_path: Annotated[Path, Option("--registry-path")] = Path(
         "registry.json"
     ),
@@ -30,7 +29,6 @@ def build_props(
 
     logger.info(f"Generating hexdoc props: {output_path}")
 
-    dist_path = base_dist_path.relative_to(output_path.parent, walk_up=True).as_posix()
     registry_path = base_registry_path.relative_to(
         output_path.parent, walk_up=True
     ).as_posix()
@@ -77,7 +75,6 @@ def build_props(
         },
         "extra": {
             "bookofhexxy": {
-                "dist_path": dist_path,
                 "registry_path": registry_path,
             },
             "hexcasting": {"pattern_stubs": []},
