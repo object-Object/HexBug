@@ -2,16 +2,26 @@
 
 [dependency-groups]
 dev = [
+    { include-group = "poe" },
+    { include-group = "test" },
+    { include-group = "web" },
     "HexBug-bot[data]",
     "hatch>=1.13.0",
     "poethepoet>=0.32.2",
     "ruff>=0.12.11",
+]
+poe = [
+    "poethepoet>=0.32.2",
 ]
 test = [
     "HexBug-data[full]",
     "pytest>=8.3.5",
     "pytest-describe>=2.2.0",
     "pre-commit",
+]
+web = [
+    { include-group = "poe" },
+    "HexBug-web",
 ]
 notebooks = [
     "ipykernel>=6.29.5",
@@ -20,7 +30,6 @@ notebooks = [
 # uv
 
 [tool.uv]
-default-groups = ["dev", "test"]
 find-links = [
     "./vendor",
 ]
@@ -43,6 +52,7 @@ members = [
 [tool.uv.sources]
 HexBug-bot = { workspace = true }
 HexBug-data = { workspace = true }
+HexBug-web = { workspace = true }
 
 [tool.uv.pip]
 prerelease = "allow"

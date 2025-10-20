@@ -133,7 +133,7 @@ jobs:
       - name: Sync dependencies
         run: |
           export UV_PROJECT_ENVIRONMENT="${pythonLocation}"
-          uv sync --frozen --no-default-groups --package HexBug-web
+          uv sync --frozen --only-group web
 
       - name: Build registry
         run: hexbug build
@@ -176,7 +176,7 @@ jobs:
           python-version-file: .python-version
 
       - name: Sync dependencies
-        run: uv sync --frozen --no-default-groups --only-group test
+        run: uv sync --frozen --only-group test
 
       - name: Run pre-commit
         uses: pre-commit/action@v3.0.1
