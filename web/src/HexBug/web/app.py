@@ -59,7 +59,7 @@ def build_props(
                     "center": [
                         {
                             "text": "registry.json",
-                            "href": "../registry/registry.json",
+                            "href": "../registry.json",
                         },
                         {
                             "text": "GitHub",
