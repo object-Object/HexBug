@@ -12,14 +12,16 @@ Registry dumps are uploaded to the [Book of Hexxy](https://book.hexxy.media) for
 
 ### Building
 
-If you'd rather build the registry yourself, you'll need to install HexBug-data with the `full` extra. Since many addons are not currently published to PyPI, constraint files are uploaded to the [Book of Hexxy](https://book.hexxy.media) for each release:
+If you'd rather build the registry yourself, you'll need to install HexBug-data with the `full` extra. Since many addons are not currently published to PyPI and certain addons have incompatible dependencies, constraint files are uploaded to the [Book of Hexxy](https://book.hexxy.media) for each release:
 - https://book.hexxy.media/v/2.4.0/dist/constraints.txt
 - https://book.hexxy.media/v/2.4.0/dist/pylock.toml
 
 For example:
 
 ```sh
-uv pip install HexBug-data[full] --constraints constraints.txt
+uv pip install HexBug-data[full] --overrides constraints.txt
 ```
 
 Depending on the version, you may also need to install some packages from HexBug's [vendor](https://github.com/object-Object/HexBug/tree/main/vendor) directory.
+
+After installing, you can build the registry from scratch using `HexBugRegistry.build()`.
