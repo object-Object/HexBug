@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [UNRELEASED]
 
+### Changed
+
+- Moved HexBug's registry classes into a standalone Python package.
+- The following files are now generated in the Book of Hexxy:
+  - `registry.json`
+  - Wheel, `constraints.txt`, and `pylock.toml` for `HexBug-data`
+
 ### Mods Updated
 
 - Hexal: 0.3.0
