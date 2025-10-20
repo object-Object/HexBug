@@ -47,10 +47,25 @@ def build_props(
                 *(mod.id for mod in MODS),
                 "hexdoc",
             ],
+            "extend_render": {
+                "../registry.json": "bookofhexxy:registry.json.jinja",
+            },
             "args": {
                 "mod_name": "Book of Hexxy",
                 "author": "object-Object",
                 "show_landing_text": True,
+                "navbar": {
+                    "center": [
+                        {
+                            "text": "registry.json",
+                            "href": "../registry.json",
+                        },
+                        {
+                            "text": "GitHub",
+                            "href": {"variable": "source_url"},
+                        },
+                    ],
+                },
             },
         },
         "lang": {

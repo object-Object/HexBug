@@ -11,6 +11,7 @@ from hexdoc.plugin import (
     UpdateTemplateArgsImpl,
     hookimpl,
 )
+from markupsafe import Markup
 from typing_extensions import override
 
 import HexBug.web
@@ -32,11 +33,13 @@ class BookOfHexxyPlugin(ModPluginImpl, UpdateTemplateArgsImpl):
     @hookimpl
     def hexdoc_update_template_args(template_args: dict[str, Any]) -> None:
         props = Properties.of(template_args)
-        registry = HexBugRegistry.load(
-            Path(props.extra["bookofhexxy"]["registry_path"])
-        )
+
+        path = Path(props.extra["bookofhexxy"]["registry_path"])
+        registry_json = path.read_text("utf-8")
+        registry = HexBugRegistry.model_validate_json(registry_json)
 
         template_args |= {
+            "bookofhexxy_registry_json": Markup(registry_json),
             "bookofhexxy_mods": registry.mods,
         }
 
