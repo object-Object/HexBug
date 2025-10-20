@@ -139,7 +139,7 @@ jobs:
       - name: Sync dependencies
         run: |
           export UV_PROJECT_ENVIRONMENT="${pythonLocation}"
-          uv sync --frozen --no-default-groups --package HexBug-web
+          uv sync --frozen --no-dev --package HexBug-web
 
       - name: Download hexdoc.toml artifact
         uses: actions/download-artifact@v4

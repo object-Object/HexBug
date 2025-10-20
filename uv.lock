@@ -18,7 +18,7 @@ overrides = [{ name = "uv", specifier = ">=0.9.4" }]
 [manifest.dependency-groups]
 dev = [
     { name = "hatch", specifier = ">=1.13.0" },
-    { name = "hexbug-bot", extras = ["data"], editable = "bot" },
+    { name = "hexbug-bot", editable = "bot" },
     { name = "hexbug-data", extras = ["full"], editable = "data" },
     { name = "hexbug-web", editable = "web" },
     { name = "poethepoet", specifier = ">=0.32.2" },
@@ -36,6 +36,8 @@ test = [
     { name = "pytest-describe", specifier = ">=2.2.0" },
 ]
 web = [
+    { name = "hexbug-bot", editable = "bot" },
+    { name = "hexbug-data", extras = ["full"], editable = "data" },
     { name = "hexbug-web", editable = "web" },
     { name = "poethepoet", specifier = ">=0.32.2" },
 ]

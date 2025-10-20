@@ -5,7 +5,7 @@ dev = [
     { include-group = "poe" },
     { include-group = "test" },
     { include-group = "web" },
-    "HexBug-bot[data]",
+    "HexBug-data[full]",
     "hatch>=1.13.0",
     "poethepoet>=0.32.2",
     "ruff>=0.12.11",
@@ -21,6 +21,8 @@ test = [
 ]
 web = [
     { include-group = "poe" },
+    "HexBug-bot",
+    "HexBug-data[full]",
     "HexBug-web",
 ]
 notebooks = [
@@ -76,7 +78,7 @@ uv export \
     --frozen \
     --no-emit-local \
     --no-emit-workspace \
-    --no-default-groups \
+    --no-dev \
     --package HexBug-data \
     --extra full
 """
