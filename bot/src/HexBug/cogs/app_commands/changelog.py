@@ -60,7 +60,7 @@ class ChangelogCog(HexBugCog):
         builder = None
 
         for line in changelog.splitlines():
-            line = line.strip()
+            line = line.rstrip()
 
             if match := _VERSION_PATTERN.match(line):
                 if builder:
