@@ -138,6 +138,9 @@ jobs:
       - name: Build registry
         run: hexbug build
 
+      - name: Build data package
+        run: poe build-data
+
       - name: Generate hexdoc.toml
         run: hexbug web build-props
 

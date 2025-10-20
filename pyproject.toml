@@ -28,6 +28,9 @@ dependency-metadata = [
     { name = "hexdoc-hexdim", version = "1.2.1.1.20.0", requires-dist = [] },
     { name = "hexdoc-hexweb", version = "1.0.4.1.1", requires-dist = [] },
 ]
+override-dependencies = [
+    "uv>=0.9.4", # https://github.com/hexdoc-dev/hexdoc/issues/95
+]
 
 [tool.uv.workspace]
 members = [
@@ -50,6 +53,23 @@ prerelease = "allow"
 aws-cdk = "python -m HexBug.aws_cdk.app"
 outdated.shell = "uv pip list --outdated --no-progress --exclude hexdoc-minecraft | grep hexdoc"
 version = { cmd = "hatch version", cwd = "bot" }
+
+build-data = [
+    { cmd = "uv build --wheel --package HexBug-data" },
+    { cmd = "rm dist/.gitignore" },
+    "_build-data_constraints --output-file dist/constraints.txt",
+    "_build-data_constraints --output-file dist/pylock.toml",
+]
+_build-data_constraints.cmd = """
+uv export \
+    --quiet \
+    --frozen \
+    --no-emit-local \
+    --no-emit-workspace \
+    --no-default-groups \
+    --package HexBug-data \
+    --extra full
+"""
 
 setup = ["_setup_sync", "_setup_pre-commit"]
 _setup_sync = "uv sync"

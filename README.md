@@ -55,6 +55,7 @@ Build and serve the Book of Hexxy:
 
 ```sh
 uv run hexbug build
+uv run poe build-data
 uv run hexbug web build-props
 uv run hexdoc serve
 ```

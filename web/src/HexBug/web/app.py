@@ -18,8 +18,11 @@ app = Typer(
 @app.command()
 def build_props(
     output_path: Annotated[Path, Option("-o", "--output-path")] = Path("hexdoc.toml"),
-    registry_path: Annotated[Path, Option("--registry-path")] = Path("registry.json"),
-    web_path: Annotated[Path, Option("--web-path")] = Path("web"),
+    base_dist_path: Annotated[Path, Option("--dist-path")] = Path("dist"),
+    base_registry_path: Annotated[Path, Option("--registry-path")] = Path(
+        "registry.json"
+    ),
+    base_web_path: Annotated[Path, Option("--web-path")] = Path("web"),
     indent: int = 4,
     verbose: Annotated[bool, Option("-v", "--verbose")] = False,
 ):
@@ -27,13 +30,16 @@ def build_props(
 
     logger.info(f"Generating hexdoc props: {output_path}")
 
-    registry = registry_path.relative_to(output_path.parent, walk_up=True).as_posix()
-    web = web_path.relative_to(output_path.parent, walk_up=True).as_posix()
+    dist_path = base_dist_path.relative_to(output_path.parent, walk_up=True).as_posix()
+    registry_path = base_registry_path.relative_to(
+        output_path.parent, walk_up=True
+    ).as_posix()
+    web_path = base_web_path.relative_to(output_path.parent, walk_up=True).as_posix()
 
     props = HEXDOC_PROPS | {
         "modid": "bookofhexxy",
         "resource_dirs": [
-            f"{web}/resources",
+            f"{web_path}/resources",
             *HEXDOC_PROPS["resource_dirs"],
         ],
         "textures": {
@@ -41,15 +47,12 @@ def build_props(
             "enabled": False,
         },
         "template": {
-            "icon": f"{web}/icon.png",
+            "icon": f"{web_path}/icon.png",
             "include": [
                 "bookofhexxy",
                 *(mod.id for mod in MODS),
                 "hexdoc",
             ],
-            "extend_render": {
-                "../registry.json": "bookofhexxy:registry.json.jinja",
-            },
             "args": {
                 "mod_name": "Book of Hexxy",
                 "author": "object-Object",
@@ -58,7 +61,7 @@ def build_props(
                     "center": [
                         {
                             "text": "registry.json",
-                            "href": "../registry.json",
+                            "href": "../registry/registry.json",
                         },
                         {
                             "text": "GitHub",
@@ -74,7 +77,8 @@ def build_props(
         },
         "extra": {
             "bookofhexxy": {
-                "registry_path": registry,
+                "dist_path": dist_path,
+                "registry_path": registry_path,
             },
             "hexcasting": {"pattern_stubs": []},
         },

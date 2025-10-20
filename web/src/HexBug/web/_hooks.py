@@ -1,7 +1,8 @@
+import shutil
 from importlib.resources import Package
 from pathlib import Path
-from typing import Any
 
+from hexdoc.cli.app import LoadedBookInfo
 from hexdoc.core import Properties
 from hexdoc.plugin import (
     HookReturn,
@@ -11,7 +12,7 @@ from hexdoc.plugin import (
     UpdateTemplateArgsImpl,
     hookimpl,
 )
-from markupsafe import Markup
+from jinja2.sandbox import SandboxedEnvironment
 from typing_extensions import override
 
 import HexBug.web
@@ -28,20 +29,6 @@ class BookOfHexxyPlugin(ModPluginImpl, UpdateTemplateArgsImpl):
         monkeypatch_hexdoc_hexcasting()
 
         return BookOfHexxyModPlugin(branch=branch)
-
-    @staticmethod
-    @hookimpl
-    def hexdoc_update_template_args(template_args: dict[str, Any]) -> None:
-        props = Properties.of(template_args)
-
-        path = Path(props.extra["bookofhexxy"]["registry_path"])
-        registry_json = path.read_text("utf-8")
-        registry = HexBugRegistry.model_validate_json(registry_json)
-
-        template_args |= {
-            "bookofhexxy_registry_json": Markup(registry_json),
-            "bookofhexxy_mods": registry.mods,
-        }
 
 
 class BookOfHexxyModPlugin(ModPluginWithBook):
@@ -77,3 +64,22 @@ class BookOfHexxyModPlugin(ModPluginWithBook):
     @override
     def jinja_template_root(self) -> tuple[Package, str]:
         return HexBug.web, "_templates"
+
+    @override
+    def pre_render_site(
+        self,
+        props: Properties,
+        books: list[LoadedBookInfo],
+        env: SandboxedEnvironment,
+        output_dir: Path,
+    ) -> None:
+        registry_path = Path(props.extra["bookofhexxy"]["registry_path"])
+        dist_path = Path(props.extra["bookofhexxy"]["dist_path"])
+
+        dist_output_path = output_dir / "registry"
+        shutil.copytree(dist_path, dist_output_path)
+        shutil.copyfile(registry_path, dist_output_path / "registry.json")
+
+        registry = HexBugRegistry.load(registry_path)
+        for book in books:
+            book.context["bookofhexxy_mods"] = registry.mods
