@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ### Changed
 
-- Moved HexBug's registry classes into a standalone Python package.
+- Moved HexBug's registry classes into a standalone Python package: https://pypi.org/project/HexBug-data
 - The following files are now generated in the Book of Hexxy:
   - `registry.json`
   - Wheel, `constraints.txt`, and `pylock.toml` for `HexBug-data`

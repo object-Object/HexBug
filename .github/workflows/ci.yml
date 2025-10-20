@@ -151,3 +151,27 @@ jobs:
         with:
           release: ${{ needs.setup.outputs.hexdoc-release == 'true' }}
           site-url: ${{ needs.build.outputs.pages-url }}
+
+  publish-pypi:
+    needs:
+      - setup
+      - build
+      - deploy-pages
+    if: needs.setup.outputs.stage == 'prod'
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/project/HexBug-data
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: hexdoc-build
+          path: dist
+
+      - name: Remove extraneous files
+        run: rm dist/*.txt dist/*.toml
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
