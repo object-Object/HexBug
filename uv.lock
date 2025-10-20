@@ -974,9 +974,9 @@ requires-dist = [
     { name = "hexdoc-hexweb", marker = "extra == 'data'", specifier = "==1.0.4.*" },
     { name = "hexdoc-hierophantics", marker = "extra == 'data'", specifier = "==1.3.3.*" },
     { name = "hexdoc-ioticblocks", marker = "extra == 'data'", specifier = "==1.0.2.1.20.1.*" },
-    { name = "hexdoc-lapisworks", marker = "extra == 'data'", specifier = "==1.5.5.*" },
+    { name = "hexdoc-lapisworks", marker = "extra == 'data'", specifier = "==1.5.6.9.*" },
     { name = "hexdoc-lessertp", marker = "extra == 'data'", specifier = "==1.2.1.*" },
-    { name = "hexdoc-mediatransport", marker = "extra == 'data'", specifier = "==1.0.3.1.20.1.*" },
+    { name = "hexdoc-mediatransport", marker = "extra == 'data'", specifier = "==1.1.0.1.20.1.*" },
     { name = "hexdoc-moreiotas", marker = "extra == 'data'", specifier = "==0.1.1.*" },
     { name = "hexdoc-oneironaut", marker = "extra == 'data'", url = "https://github.com/beholderface/oneironaut/raw/99b7c992e2e2230b39ec9adceed4b1b2fed15831/docs/v/latest/1.20.1/dist/hexdoc_oneironaut-0.5.0.1.0-py3-none-any.whl" },
     { name = "hexdoc-overevaluate", marker = "extra == 'data'", url = "https://github.com/miyucomics/overevaluate/raw/6c92a93c51fd966cf3709468f0a126c746ae85ba/docs/v/latest/main/dist/hexdoc_overevaluate-1.0.0.1.0.0-py3-none-any.whl" },
@@ -1483,7 +1483,7 @@ wheels = [
 
 [[package]]
 name = "hexdoc-lapisworks"
-version = "1.5.5.1.6.dev0"
+version = "1.5.6.9.1.6.dev0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "hexdoc" },
@@ -1491,9 +1491,9 @@ dependencies = [
     { name = "networkx" },
     { name = "scipy" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/03/9f/136f72eef123c2ac70ee370c21ebc4eb7187f5f1f820287efbfa34a9c383/hexdoc_lapisworks-1.5.5.1.6.dev0.tar.gz", hash = "sha256:b81a1fe86cba0e66810c4a21dbf6590b452aa0a0fb51993a09ab52c09abb6a3a", size = 109200 }
+sdist = { url = "https://files.pythonhosted.org/packages/d1/e7/2216b53eab0a67af009104750998afc264388933b438aff0659a9c92f5a8/hexdoc_lapisworks-1.5.6.9.1.6.dev0.tar.gz", hash = "sha256:2ccb21e849a452d2136c14ab85c5b0149c8cde5f36d3540191c1eeae4ae00d10", size = 116446 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/77/ae/2bc4821dc523d7046e81e4931d31ec7492dab028539edf3ea0cc207c7387/hexdoc_lapisworks-1.5.5.1.6.dev0-py3-none-any.whl", hash = "sha256:fe28705227e38f778e582a95bd6f48a9da4b3471a8ce9c78a313ea909956f31e", size = 177945 },
+    { url = "https://files.pythonhosted.org/packages/2e/4d/350bb6602fa3749a669215272b1c02c2a4a92b61448057c678b60ea8b926/hexdoc_lapisworks-1.5.6.9.1.6.dev0-py3-none-any.whl", hash = "sha256:2cabffce7a44e47c0075a12239178a5a96ae79e1804c9831938b381fe59c24a8", size = 193964 },
 ]
 
 [[package]]
@@ -1510,16 +1510,16 @@ wheels = [
 
 [[package]]
 name = "hexdoc-mediatransport"
-version = "1.0.3.1.20.1.2.0"
+version = "1.1.0.1.20.1.2.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "hexdoc" },
     { name = "hexdoc-hexcasting" },
     { name = "pluggy" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/43/47/a2a202e53c39d35eab01ea35f95c459506bf17acffde95d39be44eba8d73/hexdoc_mediatransport-1.0.3.1.20.1.2.0.tar.gz", hash = "sha256:f2359f322cfd19b9d8521c197ddf7f1c11320fcec943abf73a8df0ebc250966e", size = 29207 }
+sdist = { url = "https://files.pythonhosted.org/packages/cf/31/df1c82325e9e40a05584c8c17990b202795e77d907616ab0aba59f1d9436/hexdoc_mediatransport-1.1.0.1.20.1.2.0.tar.gz", hash = "sha256:e951262526e69b98532f2517f844ba7ab109ba9af70d1c68c6f955ccce85fa80", size = 29285 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/14/9f/5fddb8ee320c00260b1f6348ce8292f8a3d41f94c855e1e7d41fd156ee7f/hexdoc_mediatransport-1.0.3.1.20.1.2.0-py3-none-any.whl", hash = "sha256:8310ab89cf18459031bee691c7d1e8eb0526ac7726ca12e37ef6290d42a0c0b4", size = 46869 },
+    { url = "https://files.pythonhosted.org/packages/80/e5/e14b617cbf1093cd62eba83165864be2d1d6c505ee9fe0e69fb0fbbd49ee/hexdoc_mediatransport-1.1.0.1.20.1.2.0-py3-none-any.whl", hash = "sha256:f23b98672239db6551bb5f9db915e4eb0fefc5124fb80d0e5615f780574f8714", size = 46964 },
 ]
 
 [[package]]

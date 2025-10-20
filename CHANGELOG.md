@@ -9,7 +9,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 ### Mods Updated
 
 - Hexal: 0.3.0
-- mediatransport: 1.0.3+1.20.1
+- Lapisworks: 1.5.6.9
+- mediatransport: 1.1.0+1.20.1
 
 ## `2.3.0` - 2025-10-14
 
