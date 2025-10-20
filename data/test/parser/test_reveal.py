@@ -1,7 +1,7 @@
 import pytest
 
 from HexBug.data.hex_math import HexDir
-from HexBug.parser.ast import (
+from HexBug.data.parsers.ast import (
     BooleanIota,
     BubbleIota,
     CallIota,
@@ -16,7 +16,7 @@ from HexBug.parser.ast import (
     UnknownIota,
     VectorIota,
 )
-from HexBug.parser.reveal import parse_reveal
+from HexBug.data.parsers.reveal import parse_reveal
 
 
 @pytest.mark.parametrize(

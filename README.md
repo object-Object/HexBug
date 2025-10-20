@@ -66,3 +66,5 @@ https://alembic.sqlalchemy.org/en/latest/autogenerate.html
 ### Book of Hexxy for addon developers
 
 Gist by penguinencounter: https://gist.github.com/penguinencounter/ace5c45455ea968738a80b8c5e777235
+
+Note that the hexdoc dependencies and static data files have moved from `bot/` to `data/`.

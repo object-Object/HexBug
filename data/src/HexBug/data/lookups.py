@@ -2,12 +2,11 @@ from collections import defaultdict
 from dataclasses import dataclass
 from typing import Callable
 
-from HexBug.core.exceptions import DuplicatePatternError
-from HexBug.utils.shorthand import get_shorthand_names
-
+from .exceptions import DuplicatePatternError
 from .hex_math import HexAngle, HexPattern, HexSegment, align_segments_to_origin
 from .patterns import PatternInfo
 from .special_handlers import SpecialHandlerInfo
+from .utils.shorthand import get_shorthand_names
 
 
 @dataclass

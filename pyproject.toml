@@ -8,6 +8,7 @@ dev = [
     "ruff>=0.12.11",
 ]
 test = [
+    "HexBug-data[full]",
     "pytest>=8.3.5",
     "pytest-describe>=2.2.0",
     "pre-commit",
@@ -31,13 +32,14 @@ dependency-metadata = [
 [tool.uv.workspace]
 members = [
     "bot",
-    "common",
+    "data",
     "infrastructure",
     "web",
 ]
 
 [tool.uv.sources]
 HexBug-bot = { workspace = true }
+HexBug-data = { workspace = true }
 
 [tool.uv.pip]
 prerelease = "allow"
@@ -47,7 +49,7 @@ prerelease = "allow"
 [tool.poe.tasks]
 aws-cdk = "python -m HexBug.aws_cdk.app"
 outdated.shell = "uv pip list --outdated --no-progress --exclude hexdoc-minecraft | grep hexdoc"
-version = { cmd = "hatch version", cwd = "common" }
+version = { cmd = "hatch version", cwd = "bot" }
 
 setup = ["_setup_sync", "_setup_pre-commit"]
 _setup_sync = "uv sync"
@@ -57,7 +59,7 @@ _setup_pre-commit = "pre-commit install"
 
 [tool.pytest.ini_options]
 testpaths = [
-    "bot/test",
+    "data/test",
 ]
 addopts = [
     "--import-mode=importlib",
@@ -112,7 +114,7 @@ pythonPlatform = "All"
 
 include = [
     "bot/*",
-    "common/*",
+    "data/*",
     "infrastructure/*",
     "web/*",
 ]

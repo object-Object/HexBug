@@ -10,11 +10,11 @@ from HexBug.core.exceptions import InvalidInputError
 from HexBug.data.hex_math import HexPattern
 from HexBug.data.patterns import PatternInfo
 from HexBug.data.special_handlers import SpecialHandlerPattern
+from HexBug.data.utils.shorthand import PUNCTUATION
+from HexBug.data.utils.strings import format_number
 from HexBug.ui.views.patterns import EmbedPatternView, NamedPatternView
 from HexBug.utils.discord.visibility import Visibility, VisibilityOption
 from HexBug.utils.numbers import DecomposedNumber
-from HexBug.utils.shorthand import PUNCTUATION
-from HexBug.utils.strings import format_number
 
 MAX_NUMBER = 1e12
 MAX_LENGTH = 48

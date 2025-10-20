@@ -15,12 +15,12 @@ COPY uv.lock ./
 
 RUN --mount=from=uv,source=/uv,target=/bin/uv \
     --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-default-groups --package HexBug-bot --no-install-workspace
+    uv sync --frozen --no-default-groups --package HexBug-bot --extra data --no-install-workspace
 
 # project code
 
-COPY common/ common/
 COPY bot/ bot/
+COPY data/ data/
 COPY CHANGELOG.md bot/src/HexBug/resources/
 
 # sync dependencies with data to build registry

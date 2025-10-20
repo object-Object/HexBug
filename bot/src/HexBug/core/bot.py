@@ -20,10 +20,10 @@ from discord.ext.commands import Bot, Context, NoEntryPointError
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engine
 
 from HexBug import cogs
-from HexBug.common import VERSION
+from HexBug.__version__ import VERSION
 from HexBug.data.mods import Modloader
+from HexBug.data.parsers.pretty_print import IotaPrinter
 from HexBug.data.registry import HexBugRegistry
-from HexBug.parser.pretty_print import IotaPrinter
 from HexBug.utils.imports import iter_modules
 
 from .emoji import CustomEmoji

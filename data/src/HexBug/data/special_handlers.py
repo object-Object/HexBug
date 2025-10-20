@@ -9,10 +9,9 @@ from hexdoc.core import ResourceLocation
 from hexdoc.minecraft import I18n, LocalizedStr
 from pydantic import BaseModel
 
-from HexBug.utils.strings import format_number
-
 from .hex_math import HexAngle, HexDir, HexPattern
 from .patterns import PatternOperator
+from .utils.strings import format_number
 
 if TYPE_CHECKING:
     from .registry import HexBugRegistry

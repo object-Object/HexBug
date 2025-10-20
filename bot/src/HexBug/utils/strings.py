@@ -14,7 +14,3 @@ def truncate_str(text: str, limit: int | None, message: str = "..."):
 
 def join_truthy(joiner: str, *values: Any) -> str:
     return joiner.join(str(v) for v in values if v)
-
-
-def format_number(n: float) -> str:
-    return f"{n:,}".replace(",", " ")

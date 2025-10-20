@@ -2,7 +2,6 @@ from typing import Any, Self, overload
 
 from discord.app_commands import AppCommandError
 from discord.utils import MISSING
-from hexdoc.core import ResourceLocation
 
 from HexBug.utils.discord.embeds import EmbedField
 
@@ -53,9 +52,3 @@ class InvalidInputError(AppCommandError):
     ) -> Self:
         self.fields.append(EmbedField(name=name, value=value, inline=inline))
         return self
-
-
-class DuplicatePatternError(ValueError):
-    def __init__(self, field: str, value: Any, *pattern_ids: ResourceLocation):
-        ids = ", ".join(str(pattern_id) for pattern_id in pattern_ids)
-        super().__init__(f"Multiple patterns found with same {field} ({value}): {ids}")

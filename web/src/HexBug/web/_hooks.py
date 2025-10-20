@@ -15,9 +15,9 @@ from markupsafe import Markup
 from typing_extensions import override
 
 import HexBug.web
-from HexBug.common.__version__ import VERSION
+from HexBug.__version__ import VERSION
 from HexBug.data.registry import HexBugRegistry
-from HexBug.utils.hexdoc import monkeypatch_hexdoc_hexcasting
+from HexBug.data.utils.hexdoc import monkeypatch_hexdoc_hexcasting
 
 
 class BookOfHexxyPlugin(ModPluginImpl, UpdateTemplateArgsImpl):

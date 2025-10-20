@@ -4,10 +4,7 @@ from typing import cast
 import pytest
 
 from HexBug.data.hex_math import HexDir
-from HexBug.data.patterns import PatternInfo
-from HexBug.data.registry import HexBugRegistry
-from HexBug.data.static_data import INTROSPECTION, RETROSPECTION
-from HexBug.parser.ast import (
+from HexBug.data.parsers.ast import (
     BubbleIota,
     Iota,
     ListIota,
@@ -16,7 +13,10 @@ from HexBug.parser.ast import (
     PatternIota,
     VectorIota,
 )
-from HexBug.parser.pretty_print import IotaPrinter
+from HexBug.data.parsers.pretty_print import IotaPrinter
+from HexBug.data.patterns import PatternInfo
+from HexBug.data.registry import HexBugRegistry
+from HexBug.data.static_data import INTROSPECTION, RETROSPECTION
 
 MOCK_PATTERNS = {
     "w": PatternInfo.model_construct(name="Pattern 1"),

@@ -10,12 +10,15 @@ from typing import Annotated, Any, Coroutine
 import httpx
 from discord import Locale
 from hexdoc.utils.logging import repl_readfunc
+from pydantic import TypeAdapter
 from typer import Option, Typer
 
 from HexBug.core.bot import HexBugBot
 from HexBug.core.env import HexBugEnv
+from HexBug.data.hex_math import HexDir, HexPattern, PatternSignature
+from HexBug.data.parsers import load_parsers
 from HexBug.data.registry import HexBugRegistry
-from HexBug.parser import load_parsers
+from HexBug.resources import load_resource
 from HexBug.utils.logging import setup_logging
 
 logger = logging.getLogger(__name__)
@@ -81,7 +84,15 @@ def build(
     verbose: Annotated[bool, Option("-v", "--verbose")] = False,
 ):
     setup_logging(verbose)
-    registry = HexBugRegistry.build()
+
+    ta = TypeAdapter(dict[int, tuple[HexDir, PatternSignature]])
+    data = ta.validate_json(load_resource("numbers_2000.json"))
+    pregenerated_numbers = {
+        n: HexPattern(direction, signature)
+        for n, (direction, signature) in data.items()
+    }
+
+    registry = HexBugRegistry.build(pregenerated_numbers=pregenerated_numbers)
     logger.info(f"Saving registry to file: {output_path}")
     registry.save(output_path, indent=indent)
 

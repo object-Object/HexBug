@@ -3,8 +3,6 @@ from typing import Any
 from hexdoc.core import ResourceLocation
 from yarl import URL
 
-from HexBug.utils.collections import ResourceSet
-
 from .hex_math import HexDir
 from .mods import Modloader, StaticModInfo
 from .patterns import StaticPatternInfo
@@ -17,6 +15,7 @@ from .special_handlers import (
     OverevaluateTailDepthSpecialHandler,
     SpecialHandler,
 )
+from .utils.collections import ResourceSet
 
 MODS: list[StaticModInfo] = [
     StaticModInfo(

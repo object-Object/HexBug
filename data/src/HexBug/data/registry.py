@@ -33,18 +33,11 @@ from hexdoc.patchouli import Book, BookContext, FormatTree
 from hexdoc.patchouli.page import EntityPage, ImagePage, Page, SpotlightPage, TextPage
 from hexdoc.plugin import PluginManager
 from jinja2 import PackageLoader
-from pydantic import BaseModel, PrivateAttr, TypeAdapter, model_validator
+from pydantic import BaseModel, PrivateAttr, model_validator
 from yarl import URL
 
-from HexBug.resources import load_resource
-from HexBug.utils.hexdoc import (
-    HexBugBookContext,
-    HexBugProperties,
-    monkeypatch_hexdoc_hexcasting,
-)
-
 from .book import CategoryInfo, EntryInfo, PageInfo, RecipeInfo
-from .hex_math import HexDir, HexPattern, PatternSignature
+from .hex_math import HexDir, HexPattern
 from .lookups import PatternLookups
 from .mods import DynamicModInfo, ModInfo
 from .patterns import PatternInfo, PatternOperator
@@ -71,6 +64,11 @@ from .static_data import (
     SPECIAL_HANDLERS,
     UNDOCUMENTED_PATTERNS,
     UNTITLED_PAGES,
+)
+from .utils.hexdoc import (
+    HexBugBookContext,
+    HexBugProperties,
+    monkeypatch_hexdoc_hexcasting,
 )
 
 logger = logging.getLogger(__name__)
@@ -115,18 +113,17 @@ class HexBugRegistry(BaseModel):
     and/or `pattern.is_hidden` as necessary.
     """
     special_handlers: dict[ResourceLocation, SpecialHandlerInfo]
+    pregenerated_numbers: dict[int, HexPattern]
+
     categories: dict[ResourceLocation, CategoryInfo]
     entries: dict[ResourceLocation, EntryInfo]
     pages: dict[str, PageInfo]
     recipes: dict[ResourceLocation, list[RecipeInfo]]
 
     _lookups: PatternLookups = PrivateAttr(default_factory=PatternLookups)
-    _pregenerated_numbers: dict[int, HexPattern] = PrivateAttr(
-        default_factory=lambda: {}
-    )
 
     @classmethod
-    def build(cls) -> Self:
+    def build(cls, *, pregenerated_numbers: dict[int, HexPattern]) -> Self:
         logger.info("Building HexBug registry.")
 
         monkeypatch_hexdoc_hexcasting()
@@ -146,6 +143,7 @@ class HexBugRegistry(BaseModel):
             mods={},
             patterns={},
             special_handlers={},
+            pregenerated_numbers=pregenerated_numbers,
             categories={},
             entries={},
             pages={},
@@ -626,10 +624,6 @@ class HexBugRegistry(BaseModel):
     def lookups(self):
         return self._lookups
 
-    @property
-    def pregenerated_numbers(self):
-        return self._pregenerated_numbers
-
     @overload
     def try_match_pattern(
         self,
@@ -789,13 +783,9 @@ class HexBugRegistry(BaseModel):
     def _post_root(self):
         for pattern in self.patterns.values():
             self.lookups.add_pattern(pattern)
+
         for info in self.special_handlers.values():
             self.lookups.add_special_handler(info)
-
-        ta = TypeAdapter(dict[int, tuple[HexDir, PatternSignature]])
-        data = ta.validate_json(load_resource("numbers_2000.json"))
-        for n, (direction, signature) in data.items():
-            self.pregenerated_numbers[n] = HexPattern(direction, signature)
 
         return self
 

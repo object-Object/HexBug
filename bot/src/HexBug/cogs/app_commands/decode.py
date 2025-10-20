@@ -17,7 +17,7 @@ from lark import LarkError
 
 from HexBug.core.cog import HexBugCog
 from HexBug.core.exceptions import InvalidInputError
-from HexBug.parser.reveal import parse_reveal
+from HexBug.data.parsers.reveal import parse_reveal
 from HexBug.utils.discord.visibility import (
     Visibility,
     VisibilityOption,

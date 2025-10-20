@@ -3,7 +3,7 @@ from datetime import datetime
 
 from discord import Color, Embed, Interaction, app_commands
 
-from HexBug.common.__version__ import VERSION
+from HexBug.__version__ import VERSION
 from HexBug.core.cog import HexBugCog
 from HexBug.utils.discord.translation import translate_command_text
 from HexBug.utils.discord.visibility import (

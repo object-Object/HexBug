@@ -5,7 +5,7 @@ from hexdoc.utils.types import PydanticURL
 from pydantic import BaseModel, model_validator
 from yarl import URL
 
-from HexBug.data.sources import SourceInfo
+from .sources import SourceInfo
 
 
 class Modloader(Enum):

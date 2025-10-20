@@ -7,7 +7,7 @@ from typing import Annotated, Any, Iterable, Iterator
 from pydantic import BeforeValidator, Field
 from pydantic.dataclasses import dataclass as pydantic_dataclass
 
-from HexBug.utils.enums import WrappingEnum, pydantic_enum
+from .utils.enums import WrappingEnum, pydantic_enum
 
 VALID_SIGNATURE_PATTERN = re.compile(r"^[aqweds]*$")
 

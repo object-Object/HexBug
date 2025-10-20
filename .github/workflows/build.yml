@@ -173,9 +173,7 @@ jobs:
           python-version-file: .python-version
 
       - name: Sync dependencies
-        run: |
-          uv sync --frozen --no-default-groups --package HexBug-bot
-          uv sync --frozen --no-default-groups --only-group test --inexact
+        run: uv sync --frozen --no-default-groups --only-group test
 
       - name: Run pre-commit
         uses: pre-commit/action@v3.0.1

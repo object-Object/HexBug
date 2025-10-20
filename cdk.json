@@ -2,7 +2,6 @@
     "app": "uv run --no-sync python -m HexBug.aws_cdk.app",
     "watch": {
         "include": [
-            "common/src/**",
             "infrastructure/src/**"
         ],
         "exclude": [
