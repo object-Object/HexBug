@@ -13,6 +13,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
   - `registry.json`
   - Wheel, `constraints.txt`, and `pylock.toml` for `HexBug-data`
 
+### Fixed
+
+- Fixed a bug where indented changelog items were displayed incorrectly in `/changelog`.
+
 ### Mods Updated
 
 - Hexal: 0.3.0
