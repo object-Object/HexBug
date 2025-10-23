@@ -485,6 +485,10 @@ UNDOCUMENTED_PATTERNS = ResourceSet(
         ResourceLocation("complexhex", "chloe/make"),
         ResourceLocation("complexhex", "cnarg"),
         ResourceLocation("ephemera", "hashbits"),
+        ResourceLocation("hexic", "dye_offhand"),
+        ResourceLocation("hexic", "spellmind/restore"),
+        ResourceLocation("hexic", "spellmind/save"),
+        ResourceLocation("hexic", "tripwire"),
         ResourceLocation("hexical", "disguise_mage_block"),
         ResourceLocation("hexical", "tweak_mage_block"),
         ResourceLocation("hexpose", "entity_name"),
@@ -498,15 +502,14 @@ UNDOCUMENTED_PATTERNS = ResourceSet(
         ResourceLocation("oneironaut", "signitem"),
         # lmao what
         ResourceLocation("ephemera", "no"),
-        ResourceLocation("hexic", "empty_map"),
         ResourceLocation("hexic", "free"),
         ResourceLocation("hexic", "malloc"),
-        ResourceLocation("hexic", "metatable"),
-        ResourceLocation("hexic", "tripwire"),
         ResourceLocation("hextweaks", "suicide"),
         ResourceLocation("oneironaut", "circle"),
     ],
     patterns=[
+        # undocumented
+        ResourceLocation("hexic", "prop_*"),
         # lmao what
         ResourceLocation("hexic", "jvm/*"),
         ResourceLocation("hexic", "nbt/*"),

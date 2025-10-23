@@ -14,6 +14,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 - Added a missing translation for the Recipes header in `/book home`.
 
+### Mods Updated
+
+- Hexic: 1.4.2
+
 ## `2.4.1` - 2025-10-20
 
 ### Fixed
