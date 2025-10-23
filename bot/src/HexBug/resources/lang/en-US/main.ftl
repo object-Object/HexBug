@@ -129,6 +129,7 @@ command_book-home =
     .text_categories = Categories
     .text_entries = Entries
     .text_pages = Linkable Pages
+    .text_recipes = Recipes
 
 # /book category
 
