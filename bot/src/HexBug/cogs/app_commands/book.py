@@ -1,6 +1,6 @@
 import random
 
-from discord import Color, Embed, Interaction, app_commands
+from discord import Color, Embed, Interaction, SelectOption, app_commands
 from discord.ext.commands import GroupCog
 from hexdoc.core import ResourceLocation
 from tantivy import Occur, Query
@@ -9,6 +9,7 @@ from yarl import URL
 from HexBug.core.cog import HexBugCog
 from HexBug.core.exceptions import InvalidInputError
 from HexBug.data.registry import BookIndexField
+from HexBug.ui.views.embed_switcher import EmbedSwitcherView
 from HexBug.utils.discord.embeds import set_embed_mod_author
 from HexBug.utils.discord.transformers import (
     CategoryInfoOption,
@@ -23,6 +24,7 @@ from HexBug.utils.discord.visibility import (
     VisibilityOption,
     respond_with_visibility,
 )
+from HexBug.utils.strings import truncate_str
 
 
 class BookCog(HexBugCog, GroupCog, group_name="book"):
@@ -239,10 +241,10 @@ class BookCog(HexBugCog, GroupCog, group_name="book"):
                 value="https://docs.rs/tantivy/latest/tantivy/query/struct.QueryParser.html",
             )
 
-        # FIXME: use a dropdown to select between results instead of showing all of them at once
-
         embeds = list[Embed]()
-        for _, address in search_result.hits[:3]:
+        options = list[SelectOption]()
+
+        for _, address in search_result.hits:
             doc = {
                 name: values[0]
                 for name, values in searcher.doc(address).to_dict().items()
@@ -293,14 +295,29 @@ class BookCog(HexBugCog, GroupCog, group_name="book"):
 
                 embed.set_footer(text=f"{entry_id}#{anchor} ({category.id})")
 
+                option_description = truncate_str(f"{mod.name} — {entry.name}", 100)
+
             else:
                 # category
                 embed.url = str(category.url)
                 embed.set_footer(text=category.id)
+                option_description = mod.name
 
             embeds.append(embed)
+            options.append(
+                SelectOption(
+                    # this placeholder should never be used
+                    label=embed.title or "(internal error)",
+                    description=option_description,
+                )
+            )
 
-        await respond_with_visibility(interaction, visibility, embeds=embeds)
+        await EmbedSwitcherView(
+            user=interaction.user,
+            command=interaction.command,
+            embeds=embeds,
+            options=options,
+        ).send(interaction, visibility)
 
 
 def _set_icon(embed: Embed, icon_urls: list[URL]):

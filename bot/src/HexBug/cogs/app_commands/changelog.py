@@ -1,18 +1,12 @@
 import re
 from dataclasses import dataclass, field
-from typing import Any
 
 from discord import Embed, Interaction, SelectOption, app_commands
-from discord.ui import Select
 
 from HexBug.core.cog import HexBugCog
 from HexBug.resources import load_resource
-from HexBug.utils.discord.components import update_indexed_select_menu
-from HexBug.utils.discord.visibility import (
-    MessageContents,
-    Visibility,
-    VisibilityOption,
-)
+from HexBug.ui.views.embed_switcher import EmbedSwitcherView
+from HexBug.utils.discord.visibility import Visibility, VisibilityOption
 
 _VERSION_PATTERN = re.compile(
     r"## (?:`(?P<version>[^`]+)` - (?P<date>\d{4}-\d{2}-\d{2})|(?P<unknown>.+))"
@@ -86,33 +80,12 @@ class ChangelogCog(HexBugCog):
         if not self._changelog:
             raise NotImplementedError
 
-        select = Select[Any](
-            options=[
-                SelectOption(
-                    label=entry.version,
-                    value=str(i),
-                    description=entry.date,
-                    default=i == 0,
-                )
-                for i, entry in enumerate(self._changelog)
-            ],
-            row=2,
-        )
-
-        contents = MessageContents(
+        await EmbedSwitcherView(
+            user=interaction.user,
             command=interaction.command,
-            embed=self._changelog[0].embed,
-            items=[select],
-        )
-
-        async def callback(interaction: Interaction):
-            index = update_indexed_select_menu(select)[0]
-            contents.embed = self._changelog[index].embed
-            await interaction.response.edit_message(
-                embed=contents.embed,
-                view=select.view,
-            )
-
-        select.callback = callback
-
-        await contents.send_response(interaction, visibility)
+            embeds=(entry.embed for entry in self._changelog),
+            options=(
+                SelectOption(label=entry.version, description=entry.date)
+                for entry in self._changelog
+            ),
+        ).send(interaction, visibility)
