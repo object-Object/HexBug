@@ -18,6 +18,7 @@ from discord.app_commands import (
 from discord.ext import commands
 from discord.ext.commands import Bot, Context, NoEntryPointError
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engine
+from tantivy import Index
 
 from HexBug import cogs
 from HexBug.__version__ import VERSION
@@ -39,6 +40,7 @@ COGS_MODULE = cogs.__name__
 class HexBugBot(Bot):
     env: HexBugEnv
     registry: HexBugRegistry
+    book_index: Index
     should_run: bool
 
     db_engine: AsyncEngine
@@ -50,7 +52,13 @@ class HexBugBot(Bot):
     # late-initialized
     _translator: HexBugTranslator
 
-    def __init__(self, env: HexBugEnv, registry: HexBugRegistry, run: bool):
+    def __init__(
+        self,
+        env: HexBugEnv,
+        registry: HexBugRegistry,
+        book_index: Index,
+        run: bool,
+    ):
         super().__init__(
             command_prefix=commands.when_mentioned,
             intents=Intents.default(),
@@ -63,6 +71,7 @@ class HexBugBot(Bot):
         )
         self.env = env
         self.registry = registry
+        self.book_index = book_index
         self.should_run = run
 
         self.db_engine = create_async_engine(

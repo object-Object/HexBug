@@ -106,6 +106,10 @@ choice_HexBug-cogs-app-commands-pattern-PatternCheckType =
 
 # /book
 
+book-category = Category
+book-entry = Entry
+book-placeholder-page-title = { $entry } — Page { $index }
+
 group_book =
         book
     .description =
@@ -164,7 +168,6 @@ command_book-entry =
     .parameter_visibility_description = {-parameter_visibility_description}
 
     .text_title = [Entry] { $name }
-    .text_category = Category
 
 # /book page
 
@@ -182,8 +185,6 @@ command_book-page =
     .parameter_visibility_description = {-parameter_visibility_description}
 
     .text_title = [Page] { $title }
-    .text_category = Category
-    .text_entry = Entry
 
 # /book recipe
 
@@ -201,9 +202,27 @@ command_book-recipe =
     .parameter_visibility_description = {-parameter_visibility_description}
 
     .text_title = [Recipe] { $title }
-    .text_category = Category
-    .text_entry = Entry
     .text_page = Page
+
+# /book search
+
+command_book-search =
+        search
+    .description =
+        Search for text across all mod books, using Tantivy's query language.
+
+    .parameter_query =
+        query
+    .parameter_query_description =
+        Query to search for.
+
+    .parameter_mod =
+        mod
+    .parameter_mod_description =
+        Only show results from this mod.
+
+    .parameter_visibility = {-parameter_visibility}
+    .parameter_visibility_description = {-parameter_visibility_description}
 
 # /changelog
 

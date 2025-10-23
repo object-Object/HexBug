@@ -17,6 +17,7 @@ dependencies = [
     "hexdoc>=1!0.1.0a34",
     "lark[interegular]>=1.3.0",
     "pydantic>=2.10.6",
+    "tantivy>=0.25.0",
 ]
 
 [project.optional-dependencies]

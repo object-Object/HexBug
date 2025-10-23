@@ -7,6 +7,7 @@ import logging
 import os
 import re
 from collections import defaultdict
+from enum import StrEnum
 from itertools import zip_longest
 from pathlib import Path
 from typing import Any, Self, overload
@@ -34,6 +35,8 @@ from hexdoc.patchouli.page import EntityPage, ImagePage, Page, SpotlightPage, Te
 from hexdoc.plugin import PluginManager
 from jinja2 import PackageLoader
 from pydantic import BaseModel, PrivateAttr, model_validator
+from tantivy import Document, Index, SchemaBuilder
+from tantivy.tantivy import Schema
 from yarl import URL
 
 from .book import CategoryInfo, EntryInfo, PageInfo, RecipeInfo
@@ -123,7 +126,20 @@ class HexBugRegistry(BaseModel):
     _lookups: PatternLookups = PrivateAttr(default_factory=PatternLookups)
 
     @classmethod
-    def build(cls, *, pregenerated_numbers: dict[int, HexPattern]) -> Self:
+    def build(
+        cls,
+        *,
+        pregenerated_numbers: dict[int, HexPattern],
+        book_index: Index | None = None,
+    ) -> Self:
+        """Build the HexBug registry from scratch.
+
+        Requires the `full` extra.
+
+        If `book_index` is provided, also populates it with the book contents. The index
+        must have been created/loaded using `HexBugRegistry.load_book_index()`.
+        """
+
         logger.info("Building HexBug registry.")
 
         monkeypatch_hexdoc_hexcasting()
@@ -205,7 +221,7 @@ class HexBugRegistry(BaseModel):
         jinja_env.autoescape = False
         styled_template = jinja_env.from_string(
             r"""
-            {%- import "macros/formatting.md.jinja" as fmt with context -%}
+            {%- import "macros/formatting."~extension~".jinja" as fmt with context -%}
             {{- fmt.styled(text) if text else "" -}}
             """,
             globals={
@@ -213,10 +229,11 @@ class HexBugRegistry(BaseModel):
             },
         )
 
-        def _style_text(text: FormatTree, mod: ModInfo):
+        def _style_text(text: FormatTree, mod: ModInfo, plain: bool = False):
             return styled_template.render(
                 text=text,
                 page_url=str(mod.book_url),
+                extension="txt" if plain else "md",
             ).strip()
 
         # load mods
@@ -274,17 +291,21 @@ class HexBugRegistry(BaseModel):
                 )
             )
 
-        # get pattern book info
+        # get book info
 
-        logger.info("Finding pattern pages.")
+        logger.info("Scraping Patchouli books.")
 
         id_ops = defaultdict[ResourceLocation, list[PatternOperator]](list)
         signature_ops = defaultdict[str, list[PatternOperator]](list)
         lapisworks_per_world_shapes = dict[ResourceLocation, HexdocPatternInfo]()
 
+        book_index_writer = book_index.writer() if book_index else None
+
         for category in book.categories.values():
             assert category.resource_dir.modid is not None
             category_mod = registry.mods[category.resource_dir.modid]
+
+            category_description = _style_text(category.description, category_mod)
 
             registry._register_category(
                 CategoryInfo(
@@ -293,9 +314,28 @@ class HexBugRegistry(BaseModel):
                     url=book_context.book_links[category.book_link_key],
                     icon_urls=_get_texture_urls(category.icon.texture),
                     name=category.name.value,
-                    description=_style_text(category.description, category_mod),
+                    description=category_description,
                 )
             )
+
+            if book_index and book_index_writer:
+                book_index_writer.add_document(
+                    cls._create_book_document(
+                        book_index,
+                        title=category.name.value,
+                        text=_style_text(
+                            category.description, category_mod, plain=True
+                        ),
+                        text_markdown=category_description,
+                        category=category.name.value,
+                        entry=None,
+                        mod_id=category_mod.id,
+                        category_id=category.id,
+                        entry_id=None,
+                        page_anchor=None,
+                        page_index=None,
+                    )
+                )
 
             for entry in category.entries.values():
                 assert entry.resource_dir.modid is not None
@@ -313,8 +353,8 @@ class HexBugRegistry(BaseModel):
                     )
                 )
 
-                for page, next_page in zip_longest(
-                    entry.pages, entry.pages[1:], fillvalue=None
+                for page_index, (page, next_page) in enumerate(
+                    zip_longest(entry.pages, entry.pages[1:], fillvalue=None)
                 ):
                     assert page
 
@@ -322,12 +362,45 @@ class HexBugRegistry(BaseModel):
                         logger.info(f"Skipping disabled page: {fragment}")
                         continue
 
+                    # title
+                    match page:
+                        case (
+                            Page(title=LocalizedStr(value=title))
+                            | Page(header=LocalizedStr(value=title))
+                            | Page(name=LocalizedStr(value=title))
+                        ):
+                            pass
+                        case _:
+                            if item := _get_page_item(page):
+                                title = item.name.value
+                            else:
+                                title = None
+
                     # text
                     match page:
                         case Page(text=FormatTree() as text):
+                            text_plain = _style_text(text, entry_mod, plain=True)
                             text = _style_text(text, entry_mod)
                         case _:
+                            text_plain = None
                             text = None
+
+                    if book_index and book_index_writer and (title or text):
+                        book_index_writer.add_document(
+                            cls._create_book_document(
+                                book_index,
+                                title=title,
+                                text=text_plain,
+                                text_markdown=text,
+                                category=category.name.value,
+                                entry=entry.name.value,
+                                mod_id=entry_mod.id,
+                                category_id=category.id,
+                                entry_id=entry.id,
+                                page_anchor=page.anchor,
+                                page_index=page_index,
+                            )
+                        )
 
                     # TODO: this should probably work like operators
                     for recipe in _get_page_recipes(page):
@@ -354,29 +427,15 @@ class HexBugRegistry(BaseModel):
                     if book_url is not None:
                         assert page.anchor is not None
 
-                        # title
-                        match page:
-                            case (
-                                Page(title=LocalizedStr(value=title))
-                                | Page(header=LocalizedStr(value=title))
-                                | Page(name=LocalizedStr(value=title))
-                            ):
-                                pass
-                            case _:
-                                if item := _get_page_item(page):
-                                    title = item.name.value
-                                else:
-                                    if (entry.id, page.anchor) not in UNTITLED_PAGES:
-                                        logger.warning(
-                                            f"Failed to find title for page: {entry.id}#{page.anchor}"
-                                        )
-                                    title = (
-                                        page.anchor.replace("_", " ")
-                                        .replace("-", " ")
-                                        .title()
-                                    )
+                        if title is None:
+                            if (entry.id, page.anchor) not in UNTITLED_PAGES:
+                                logger.warning(
+                                    f"Failed to find title for page: {entry.id}#{page.anchor}"
+                                )
+                            title = (
+                                page.anchor.replace("_", " ").replace("-", " ").title()
+                            )
 
-                        # icon
                         icon = _get_page_icon(page)
 
                         registry._register_page(
@@ -426,6 +485,10 @@ class HexBugRegistry(BaseModel):
                     # lapisworks per-world shapes
                     if isinstance(page, LookupPWShapePage):
                         lapisworks_per_world_shapes[page.op_id] = page.patterns[0]
+
+        if book_index_writer:
+            logger.info("Committing book index.")
+            book_index_writer.commit()
 
         # load patterns
 
@@ -607,18 +670,109 @@ class HexBugRegistry(BaseModel):
             for recipe in recipes:
                 registry.mods[recipe.mod_id].recipe_count += 1
 
+        if book_index_writer:
+            logger.info("Finalizing book index.")
+            book_index_writer.wait_merging_threads()
+
         logger.info("Done.")
         return registry
 
     @classmethod
-    def load(cls, path: Path) -> Self:
+    def load_book_index(cls, path: str | Path | None, reuse: bool = True) -> Index:
+        if path:
+            Path(path).mkdir(parents=True, exist_ok=True)
+            path = str(path)
+        return Index(cls._build_book_schema(), path, reuse)
+
+    @classmethod
+    def _build_book_schema(cls) -> Schema:
+        return (
+            SchemaBuilder()
+            .add_text_field(BookIndexField.TITLE, stored=True, tokenizer_name="en_stem")
+            .add_text_field(BookIndexField.TEXT, tokenizer_name="en_stem")
+            .add_text_field(
+                BookIndexField.TEXT_MARKDOWN,
+                stored=True,
+                tokenizer_name="raw",
+                index_option="basic",
+            )
+            .add_text_field(BookIndexField.CATEGORY, tokenizer_name="en_stem")
+            .add_text_field(BookIndexField.ENTRY, tokenizer_name="en_stem")
+            .add_text_field(
+                BookIndexField.MOD_ID,
+                stored=True,
+                fast=True,
+                tokenizer_name="raw",
+                index_option="basic",
+            )
+            .add_text_field(
+                BookIndexField.CATEGORY_ID,
+                stored=True,
+                tokenizer_name="raw",
+                index_option="basic",
+            )
+            .add_text_field(
+                BookIndexField.ENTRY_ID,
+                stored=True,
+                tokenizer_name="raw",
+                index_option="basic",
+            )
+            .add_text_field(
+                BookIndexField.PAGE_ANCHOR,
+                stored=True,
+                tokenizer_name="raw",
+                index_option="basic",
+            )
+            .add_unsigned_field(BookIndexField.PAGE_INDEX, stored=True)
+            .build()
+        )
+
+    @classmethod
+    def _create_book_document(
+        cls,
+        index: Index,
+        *,
+        title: str | None,
+        text: str | None,
+        text_markdown: str | None,
+        category: str | None,
+        entry: str | None,
+        mod_id: str,
+        category_id: ResourceLocation,
+        entry_id: ResourceLocation | None,
+        page_anchor: str | None,
+        page_index: int | None,
+    ):
+        data: dict[BookIndexField, str | int | None] = {
+            BookIndexField.TITLE: title,
+            BookIndexField.TEXT: text,
+            BookIndexField.TEXT_MARKDOWN: text_markdown,
+            BookIndexField.CATEGORY: category,
+            BookIndexField.ENTRY: entry,
+            BookIndexField.MOD_ID: mod_id,
+            BookIndexField.CATEGORY_ID: str(category_id),
+            BookIndexField.ENTRY_ID: str(entry_id) if entry_id else None,
+            BookIndexField.PAGE_ANCHOR: page_anchor,
+            BookIndexField.PAGE_INDEX: page_index,
+        }
+        if not (title or text_markdown):
+            raise ValueError(
+                f"Undisplayable document, both title and text_markdown are falsy: {mod_id=}, {category_id=}, {entry_id=}"
+            )
+        return Document.from_dict(  # pyright: ignore[reportUnknownMemberType]
+            {k: v for k, v in data.items() if v is not None},
+            index.schema,
+        )
+
+    @classmethod
+    def load(cls, path: str | Path) -> Self:
         logger.info(f"Loading registry from file: {path}")
-        data = path.read_text(encoding="utf-8")
+        data = Path(path).read_text(encoding="utf-8")
         return cls.model_validate_json(data)
 
-    def save(self, path: Path, *, indent: int | None = None):
+    def save(self, path: str | Path, *, indent: int | None = None):
         data = self.model_dump_json(round_trip=True, indent=indent)
-        path.write_text(data, encoding="utf-8")
+        Path(path).write_text(data, encoding="utf-8")
 
     @property
     def lookups(self):
@@ -788,6 +942,19 @@ class HexBugRegistry(BaseModel):
             self.lookups.add_special_handler(info)
 
         return self
+
+
+class BookIndexField(StrEnum):
+    TITLE = "title"
+    TEXT = "text"
+    TEXT_MARKDOWN = "text_markdown"
+    CATEGORY = "category"
+    ENTRY = "entry"
+    MOD_ID = "mod_id"
+    CATEGORY_ID = "category_id"
+    ENTRY_ID = "entry_id"
+    PAGE_ANCHOR = "page_anchor"
+    PAGE_INDEX = "page_index"
 
 
 def _get_page_icon(page: Page) -> Texture | None:

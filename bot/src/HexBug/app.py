@@ -38,6 +38,7 @@ except ImportError:
 @app.command()
 def bot(
     registry_path: Path = Path("registry.json"),
+    index_path: Path = Path("book_index"),
     run: bool = True,  # disable for CI checks
     verbose: Annotated[bool, Option("-v", "--verbose")] = False,
 ):
@@ -54,7 +55,9 @@ def bot(
 
         registry = HexBugRegistry.load(registry_path)
 
-        async with HexBugBot(env, registry, run) as bot:
+        book_index = HexBugRegistry.load_book_index(index_path)
+
+        async with HexBugBot(env, registry, book_index, run) as bot:
             await bot.load()
             if run:
                 await bot.start(env.token.get_secret_value())
@@ -80,6 +83,8 @@ def bot(
 @app.command()
 def build(
     output_path: Annotated[Path, Option("-o", "--output-path")] = Path("registry.json"),
+    index_path: Annotated[Path, Option("--index-path")] = Path("book_index"),
+    build_index: Annotated[bool, Option("--index/--no-index")] = True,
     indent: int | None = None,
     verbose: Annotated[bool, Option("-v", "--verbose")] = False,
 ):
@@ -92,7 +97,16 @@ def build(
         for n, (direction, signature) in data.items()
     }
 
-    registry = HexBugRegistry.build(pregenerated_numbers=pregenerated_numbers)
+    if build_index:
+        book_index = HexBugRegistry.load_book_index(index_path, reuse=False)
+    else:
+        book_index = None
+
+    registry = HexBugRegistry.build(
+        pregenerated_numbers=pregenerated_numbers,
+        book_index=book_index,
+    )
+
     logger.info(f"Saving registry to file: {output_path}")
     registry.save(output_path, indent=indent)
 

@@ -2,9 +2,13 @@ import random
 
 from discord import Color, Embed, Interaction, app_commands
 from discord.ext.commands import GroupCog
+from hexdoc.core import ResourceLocation
+from tantivy import Occur, Query
 from yarl import URL
 
 from HexBug.core.cog import HexBugCog
+from HexBug.core.exceptions import InvalidInputError
+from HexBug.data.registry import BookIndexField
 from HexBug.utils.discord.embeds import set_embed_mod_author
 from HexBug.utils.discord.transformers import (
     CategoryInfoOption,
@@ -13,7 +17,7 @@ from HexBug.utils.discord.transformers import (
     PageInfoOption,
     RecipeInfoOption,
 )
-from HexBug.utils.discord.translation import translate_command_text
+from HexBug.utils.discord.translation import translate, translate_command_text
 from HexBug.utils.discord.visibility import (
     Visibility,
     VisibilityOption,
@@ -103,7 +107,7 @@ class BookCog(HexBugCog, GroupCog, group_name="book"):
                 text=f"{entry.id} ({entry.category_id})",
             )
             .add_field(
-                name=await translate_command_text(interaction, "category"),
+                name=await translate(interaction, "book-category"),
                 value=f"[{category.name}]({category.url})",
             )
         )
@@ -135,11 +139,11 @@ class BookCog(HexBugCog, GroupCog, group_name="book"):
                 text=f"{page.key} ({category.id})",
             )
             .add_field(
-                name=await translate_command_text(interaction, "category"),
+                name=await translate(interaction, "book-category"),
                 value=f"[{category.name}]({category.url})",
             )
             .add_field(
-                name=await translate_command_text(interaction, "entry"),
+                name=await translate(interaction, "book-entry"),
                 value=f"[{entry.name}]({entry.url})",
             )
         )
@@ -175,11 +179,11 @@ class BookCog(HexBugCog, GroupCog, group_name="book"):
                     text=f"{recipe.id} ({recipe.type})",
                 )
                 .add_field(
-                    name=await translate_command_text(interaction, "category"),
+                    name=await translate(interaction, "book-category"),
                     value=f"[{category.name}]({category.url})",
                 )
                 .add_field(
-                    name=await translate_command_text(interaction, "entry"),
+                    name=await translate(interaction, "book-entry"),
                     value=f"[{entry.name}]({entry.url})",
                 )
             )
@@ -191,6 +195,108 @@ class BookCog(HexBugCog, GroupCog, group_name="book"):
 
             set_embed_mod_author(embed, self.bot.registry.mods[recipe.mod_id])
             _set_icon(embed, recipe.icon_urls)
+
+            embeds.append(embed)
+
+        await respond_with_visibility(interaction, visibility, embeds=embeds)
+
+    @app_commands.command()
+    async def search(
+        self,
+        interaction: Interaction,
+        query: str,
+        mod: ModInfoOption | None = None,
+        visibility: VisibilityOption = Visibility.PRIVATE,
+    ):
+        registry = self.bot.registry
+        index = self.bot.book_index
+        searcher = index.searcher()
+
+        try:
+            parsed_query = index.parse_query(
+                query=query,
+                default_field_names=[BookIndexField.TITLE, BookIndexField.TEXT],
+            )
+        except Exception as e:
+            raise InvalidInputError("Invalid query.", value=query).add_field(
+                name="Tantivy Query Info",
+                value="https://docs.rs/tantivy/latest/tantivy/query/struct.QueryParser.html",
+            ) from e
+
+        if mod:
+            parsed_query = Query.boolean_query([
+                (Occur.Must, parsed_query),
+                (
+                    Occur.Must,
+                    Query.term_query(index.schema, BookIndexField.MOD_ID, mod.id),
+                ),
+            ])
+
+        search_result = searcher.search(parsed_query, limit=25)
+        if not search_result.hits:
+            raise InvalidInputError("No results found.", value=query).add_field(
+                name="Tantivy Query Info",
+                value="https://docs.rs/tantivy/latest/tantivy/query/struct.QueryParser.html",
+            )
+
+        # FIXME: use a dropdown to select between results instead of showing all of them at once
+
+        embeds = list[Embed]()
+        for _, address in search_result.hits[:3]:
+            doc = {
+                name: values[0]
+                for name, values in searcher.doc(address).to_dict().items()
+                if values
+            }
+
+            mod = registry.mods[doc[BookIndexField.MOD_ID]]
+
+            category_id = ResourceLocation.from_str(doc[BookIndexField.CATEGORY_ID])
+            category = registry.categories[category_id]
+
+            embed = Embed(
+                title=doc.get(BookIndexField.TITLE),
+                description=doc.get(BookIndexField.TEXT_MARKDOWN),
+            )
+            set_embed_mod_author(embed, mod)
+
+            if (page_index := doc.get(BookIndexField.PAGE_INDEX)) is not None:
+                # page
+                entry_id = ResourceLocation.from_str(doc[BookIndexField.ENTRY_ID])
+                entry = registry.entries[entry_id]
+
+                if not embed.title:
+                    embed.title = await translate(
+                        interaction,
+                        "book-placeholder-page-title",
+                        entry=entry.name,
+                        index=page_index + 1,
+                    )
+
+                (
+                    embed.add_field(
+                        name=await translate(interaction, "book-category"),
+                        value=f"[{category.name}]({category.url})",
+                    ).add_field(
+                        name=await translate(interaction, "book-entry"),
+                        value=f"[{entry.name}]({entry.url})",
+                    )
+                )
+
+                if (anchor := doc.get(BookIndexField.PAGE_ANCHOR)) and (
+                    page := registry.pages.get(f"{entry_id}#{anchor}")
+                ):
+                    embed.url = str(page.url)
+                else:
+                    anchor = page_index
+                    embed.url = str(entry.url)
+
+                embed.set_footer(text=f"{entry_id}#{anchor} ({category.id})")
+
+            else:
+                # category
+                embed.url = str(category.url)
+                embed.set_footer(text=category.id)
 
             embeds.append(embed)
 

@@ -6,6 +6,9 @@ registry.json
 hexdoc.toml
 _site/
 
+# tantivy index
+/book_index/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

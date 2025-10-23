@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [UNRELEASED]
 
+### Added
+
+- Added a new command `/book search` to perform full-text search across all mod books using [Tantivy](https://github.com/quickwit-oss/tantivy)'s [query language](https://docs.rs/tantivy/latest/tantivy/query/struct.QueryParser.html).
+
 ### Fixed
 
 - Added a missing translation for the Recipes header in `/book home`.

@@ -136,7 +136,7 @@ jobs:
           uv sync --frozen --only-group web
 
       - name: Build registry
-        run: hexbug build
+        run: hexbug build --no-index
 
       - name: Build data package
         run: poe build-data
