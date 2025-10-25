@@ -17,4 +17,7 @@
       <li><a href="{{ mod.book_url }}">{{ mod.name }}</a> ({{ mod.pretty_version }})</li>
     {% endfor %}
   </ul>
+
+  {# the hexdoc js expects this to exist and breaks if it doesn't #}
+  <div id="old-version-notice" class="hidden"></div>
 {% endblock content %}
