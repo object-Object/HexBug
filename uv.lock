@@ -985,7 +985,7 @@ full = [
 
 [package.metadata]
 requires-dist = [
-    { name = "hexdoc", specifier = ">=1!0.1.0a34" },
+    { name = "hexdoc", specifier = ">=1!0.1.0a35" },
     { name = "hexdoc-caduceus", marker = "extra == 'full'", specifier = "==0.1.1.1.20.1.*" },
     { name = "hexdoc-complexhex", marker = "extra == 'full'", url = "https://github.com/kineticneticat/ComplexHex/raw/51cf2bbac7183cd6b4be360f205bd20d99d56952/docs/v/latest/0.1.x/dist/hexdoc_complexhex-0.1.6.1.0.dev0-py3-none-any.whl" },
     { name = "hexdoc-dthexcasting", marker = "extra == 'full'", specifier = "==1.0.1.*" },
@@ -1064,7 +1064,7 @@ requires-dist = [
 
 [[package]]
 name = "hexdoc"
-version = "1!0.1.0a34"
+version = "1!0.1.0a35"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
@@ -1093,9 +1093,9 @@ dependencies = [
     { name = "typing-extensions" },
     { name = "yarl" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/85/fd/59d34c1c31093866abf8676b3025624c572deb6e87bab8057d084b09e51e/hexdoc-1!0.1.0a34.tar.gz", hash = "sha256:9f9ccbfc70443519d2b7b23f556109e37827a18ffc1c68d7d8672b12e6f0bd0d", size = 154377, upload-time = "2025-10-20T19:10:03.493Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ad/9e/406aa0c66dab8ccd178173ba0a56da86cb506222b20f3bafcd1b75e2f93c/hexdoc-1!0.1.0a35.tar.gz", hash = "sha256:dce830ef27653f7aecb71f889256a43b59dc72be08fbfab7d5f9f0091edda0ad", size = 154409, upload-time = "2025-10-25T02:50:48.156Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/2e/02/dbafefd7171dbd99f3ffe518a5b7142eeeb265d4c3acfa7a5fdeab19d887/hexdoc-1!0.1.0a34-py3-none-any.whl", hash = "sha256:27a5aa322ac54cf8787cad46e68fbc5e44b5725f95f728cd1cc6e14d652f3120", size = 223646, upload-time = "2025-10-20T19:10:01.93Z" },
+    { url = "https://files.pythonhosted.org/packages/48/24/e0dbc6ad8210f40eb3ffe0d07afae1f2e0ac7d16c3676d53955843e47877/hexdoc-1!0.1.0a35-py3-none-any.whl", hash = "sha256:149dceb2bcf7215fef6ae20e52b65b984df9a88306a2e2c2cb2572ae644d4e58", size = 223678, upload-time = "2025-10-25T02:50:46.534Z" },
 ]
 
 [[package]]
