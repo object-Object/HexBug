@@ -171,9 +171,9 @@ hatchling==1.25.0 \
     --hash=sha256:7064631a512610b52250a4d3ff1bd81551d6d1431c4eb7b72e734df6c74f4262 \
     --hash=sha256:b47948e45d4d973034584dd4cb39c14b6a70227cf287ab7ec0ad7983408a882c
     # via hatch
-hexdoc==1!0.1.0a34 \
-    --hash=sha256:27a5aa322ac54cf8787cad46e68fbc5e44b5725f95f728cd1cc6e14d652f3120 \
-    --hash=sha256:9f9ccbfc70443519d2b7b23f556109e37827a18ffc1c68d7d8672b12e6f0bd0d
+hexdoc==1!0.1.0a35 \
+    --hash=sha256:149dceb2bcf7215fef6ae20e52b65b984df9a88306a2e2c2cb2572ae644d4e58 \
+    --hash=sha256:dce830ef27653f7aecb71f889256a43b59dc72be08fbfab7d5f9f0091edda0ad
     # via
     #   hexbug-data
     #   hexdoc-hexcasting
@@ -280,8 +280,8 @@ hexdoc-hexgender==1.0.4.1.0 \
     --hash=sha256:36e381778817532dfd2e737baea385f41608cdbcf6f8412b95e8ccced5a59572 \
     --hash=sha256:bc32f632b55e61fc08dcad004f5880f446e6a279475a2134c79bf07589098283
     # via hexbug-data
-hexdoc-hexic @ https://codeberg.org/PoolloverNathan/hexic/raw/branch/wheels/hexdoc_hexic-1.4.1.1.1-py3-none-any.whl \
-    --hash=sha256:69a08ceb3ccb6fe94247b881e3649062359366b7105aea7d170b774c1d879b30
+hexdoc-hexic @ https://codeberg.org/PoolloverNathan/hexic/raw/branch/wheels/hexdoc_hexic-1.4.2.1.0-py3-none-any.whl \
+    --hash=sha256:5f203cd90af49ccb7d0514726a182ed020cbe047edcf8f0a06e98e01f36b4e91
     # via hexbug-data
 hexdoc-hexical @ https://github.com/miyucomics/hexical/raw/9e065b5e7995efc9045ab8cecd1f8838106df171/docs/v/latest/main/dist/hexdoc_hexical-2.0.0.1.0.0-py3-none-any.whl \
     --hash=sha256:2089d91d74e18e057199ede29949ce682d337dc6346e68be9e4d692f015dc380
