@@ -11,10 +11,11 @@ from discord.app_commands import (
 from discord.app_commands.models import Choice
 from discord.app_commands.transformers import EnumNameTransformer, EnumValueTransformer
 from hexdoc.core import ResourceLocation
+from pydantic import TypeAdapter
 
 from HexBug.core.bot import HexBugBot
 from HexBug.data.book import CategoryInfo, EntryInfo, PageInfo, RecipeInfo
-from HexBug.data.hex_math import VALID_SIGNATURE_PATTERN, HexDir
+from HexBug.data.hex_math import PATTERN_SIGNATURE_MAX_LENGTH, HexDir, PatternSignature
 from HexBug.data.mods import ModInfo, Modloader
 from HexBug.data.patterns import PatternInfo
 from HexBug.data.sources import UserInfo
@@ -409,15 +410,16 @@ class RecipeInfoTransformer(PfzyAutocompleteTransformer):
 
 
 class PatternSignatureTransformer(Transformer):
+    @property
+    def max_value(self):
+        return PATTERN_SIGNATURE_MAX_LENGTH
+
     async def transform(self, interaction: Interaction, value: str) -> Any:
         signature = value.lower()
         if signature in ["-", '"-"']:
-            signature = ""
-        elif not VALID_SIGNATURE_PATTERN.fullmatch(signature):
-            raise ValueError(
-                "Invalid signature, must only contain the characters `aqweds`."
-            )
-        return signature
+            return ""
+        ta = TypeAdapter[PatternSignature](PatternSignature)
+        return ta.validate_python(signature)
 
 
 class ResourceLocationTransformer(Transformer):

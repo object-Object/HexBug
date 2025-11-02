@@ -9,7 +9,9 @@ from pydantic.dataclasses import dataclass as pydantic_dataclass
 
 from .utils.enums import WrappingEnum, pydantic_enum
 
-VALID_SIGNATURE_PATTERN = re.compile(r"^[aqweds]*$")
+PATTERN_SIGNATURE_MAX_LENGTH = 512
+
+_VALID_SIGNATURE_PATTERN = re.compile(r"^[aqweds]*$")
 
 
 @pydantic_enum
@@ -181,7 +183,10 @@ def _before_validator_PatternSignature(value: Any):
 type PatternSignature = Annotated[
     str,
     BeforeValidator(_before_validator_PatternSignature),
-    Field(pattern=VALID_SIGNATURE_PATTERN),
+    Field(
+        pattern=_VALID_SIGNATURE_PATTERN,
+        max_length=PATTERN_SIGNATURE_MAX_LENGTH,  # :/
+    ),
 ]
 
 

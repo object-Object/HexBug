@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [UNRELEASED]
 
+### Changed
+
+- Added a length limit of 512 characters for pattern angle signatures, and disabled Hexic's Suffering pattern.
+
 ### Fixed
 
 - Fixed older versions of the Book of Hexxy being overwritten by redirect loops.

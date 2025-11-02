@@ -547,17 +547,21 @@ class HexBugRegistry(BaseModel):
                 )
                 name += f" ({mod.name})"
 
-            pattern = PatternInfo(
-                id=pattern_info.id,
-                # don't want to use the book-specific translation here
-                name=name,
-                direction=HexDir[pattern_info.startdir.name],
-                signature=pattern_info.signature,
-                is_per_world=pattern_info.is_per_world,
-                display_only=display_only,
-                display_as=display_as,
-                operators=[],
-            )
+            try:
+                pattern = PatternInfo(
+                    id=pattern_info.id,
+                    # don't want to use the book-specific translation here
+                    name=name,
+                    direction=HexDir[pattern_info.startdir.name],
+                    signature=pattern_info.signature,
+                    is_per_world=pattern_info.is_per_world,
+                    display_only=display_only,
+                    display_as=display_as,
+                    operators=[],
+                )
+            except Exception:
+                logger.error(f"Failed to validate pattern info: {pattern_info.id}")
+                raise
 
             known_inputs = dict[str | None, PatternOperator]()
             for op in id_ops[pattern.id] + signature_ops[pattern.signature]:
