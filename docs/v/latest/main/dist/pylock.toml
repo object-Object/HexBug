@@ -273,10 +273,10 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/9a/3c/6da6360ae75a8c0
 
 [[packages]]
 name = "hexdoc-hexal"
-version = "0.3.0.1.0"
+version = "0.3.1.1.0"
 index = "https://pypi.org/simple"
-sdist = { url = "https://files.pythonhosted.org/packages/bc/68/90f46bb380f52de8b2d6a10236bd796d4f71474b6c471e1fed34381dfab1/hexdoc_hexal-0.3.0.1.0.tar.gz", upload-time = 2025-10-14T17:45:06Z, size = 41049, hashes = { sha256 = "7a687792efaa3f0a4a51cf5405fda8e03c331b354112c6f118bf273e2964c9a4" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/ba/70/999a3fbc07641a3b66ed55a63130acff33eecd1c58b6d40dc768ea5b77bb/hexdoc_hexal-0.3.0.1.0-py3-none-any.whl", upload-time = 2025-10-14T17:45:05Z, size = 52285, hashes = { sha256 = "a72c726265c6788fba8ced34c5c2a050477f806382227d7ae37b9eec06030e5b" } }]
+sdist = { url = "https://files.pythonhosted.org/packages/8f/4b/4f14654389974610a56781087108aa6bfb6552e37716578279dfac6c0287/hexdoc_hexal-0.3.1.1.0.tar.gz", upload-time = 2025-10-30T20:24:03Z, size = 41512, hashes = { sha256 = "17f66f2101cff87399697546e0aaf78acaee5d90500f6e579e782429a07a0995" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/50/7d/232823a2613fc966f839862e6b6c53810c11f82eb7ebff59123e9f2938a2/hexdoc_hexal-0.3.1.1.0-py3-none-any.whl", upload-time = 2025-10-30T20:24:01Z, size = 52736, hashes = { sha256 = "e19f9a1fdeef92f6d60634303029adf6734585183d2fba10950b8d894c9609c1" } }]
 
 [[packages]]
 name = "hexdoc-hexcassettes"
@@ -367,10 +367,10 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/85/86/843210850852f4a
 
 [[packages]]
 name = "hexdoc-hexparse"
-version = "1.4.0.1.1"
+version = "1.5.0.1.1"
 index = "https://pypi.org/simple"
-sdist = { url = "https://files.pythonhosted.org/packages/8b/91/b668a0026414fca7bfae6559eb6e8cd1f4e286338fc711017fbaaaefb9c7/hexdoc_hexparse-1.4.0.1.1.tar.gz", upload-time = 2025-09-25T17:06:45Z, size = 12073, hashes = { sha256 = "4b0d902869928525abb21e9afabffda01d954374109d0175bfed68f2c9dc027b" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/da/15/b48086cb7251ab3405528a651e92f1b0f7b830ed59f7da2c5b3dc9e0f788/hexdoc_hexparse-1.4.0.1.1-py3-none-any.whl", upload-time = 2025-09-25T17:06:44Z, size = 17020, hashes = { sha256 = "a0c5be6bb92479cb19b3905fc290d573978e03a4923a253be4af42df31d7b415" } }]
+sdist = { url = "https://files.pythonhosted.org/packages/c7/fc/d1aca125c3142835bbf00c225231e472558799ed9d4d7544f1435429b671/hexdoc_hexparse-1.5.0.1.1.tar.gz", upload-time = 2025-10-26T15:01:11Z, size = 12098, hashes = { sha256 = "bdaef20e4701bb1e55a9204450c1bf8bb222d3403c9bd96df48bbb75f47cce6e" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/ee/fa/70cafdfa9444b9adb786e46314af1bdce2f370f8bf6fd2fac7de87f5773e/hexdoc_hexparse-1.5.0.1.1-py3-none-any.whl", upload-time = 2025-10-26T15:01:10Z, size = 17122, hashes = { sha256 = "34c1d3fab38f490cb88a963d1a07fc216208c9a612e2ed4a0287333d757b95c4" } }]
 
 [[packages]]
 name = "hexdoc-hexpose"
@@ -432,10 +432,10 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/b9/6b/6c8c79dc3926bfc
 
 [[packages]]
 name = "hexdoc-lapisworks"
-version = "1.5.6.9.1.6.dev0"
+version = "1.5.6.9.1.7.dev0"
 index = "https://pypi.org/simple"
-sdist = { url = "https://files.pythonhosted.org/packages/d1/e7/2216b53eab0a67af009104750998afc264388933b438aff0659a9c92f5a8/hexdoc_lapisworks-1.5.6.9.1.6.dev0.tar.gz", upload-time = 2025-10-20T11:32:49Z, size = 116446, hashes = { sha256 = "2ccb21e849a452d2136c14ab85c5b0149c8cde5f36d3540191c1eeae4ae00d10" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/2e/4d/350bb6602fa3749a669215272b1c02c2a4a92b61448057c678b60ea8b926/hexdoc_lapisworks-1.5.6.9.1.6.dev0-py3-none-any.whl", upload-time = 2025-10-20T11:32:47Z, size = 193964, hashes = { sha256 = "2cabffce7a44e47c0075a12239178a5a96ae79e1804c9831938b381fe59c24a8" } }]
+sdist = { url = "https://files.pythonhosted.org/packages/73/9b/cfa2deb90a326f21774472ecf9a134de8a70976c9be3dd3b27b8fdbe7c5b/hexdoc_lapisworks-1.5.6.9.1.7.dev0.tar.gz", upload-time = 2025-10-25T15:18:47Z, size = 114183, hashes = { sha256 = "19f348474e6c33a70a5cce1c46584bc549a69d2a738ce4dd5b3b1939c8d02625" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/93/28/1dfd9c12d7de3d6da4bfce7f757804d0fcdd00a37068ed28695aec75ec05/hexdoc_lapisworks-1.5.6.9.1.7.dev0-py3-none-any.whl", upload-time = 2025-10-25T15:18:45Z, size = 191801, hashes = { sha256 = "01adefa432baec95185dc4fbf7425de1051d7fda87f67b2c1563a574511de999" } }]
 
 [[packages]]
 name = "hexdoc-lessertp"

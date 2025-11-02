@@ -204,9 +204,9 @@ hexdoc-hex-ars-link==0.9.2.4.1.0.1 \
     --hash=sha256:69cd6ca6613b670c162b7b58ea9cf206ca69d587ae169c3290744e40cfd8127d \
     --hash=sha256:e8fbeef55e4ab9d992182c5a13b1cfe679543794bce119493a05049d950853b8
     # via hexbug-data
-hexdoc-hexal==0.3.0.1.0 \
-    --hash=sha256:7a687792efaa3f0a4a51cf5405fda8e03c331b354112c6f118bf273e2964c9a4 \
-    --hash=sha256:a72c726265c6788fba8ced34c5c2a050477f806382227d7ae37b9eec06030e5b
+hexdoc-hexal==0.3.1.1.0 \
+    --hash=sha256:17f66f2101cff87399697546e0aaf78acaee5d90500f6e579e782429a07a0995 \
+    --hash=sha256:e19f9a1fdeef92f6d60634303029adf6734585183d2fba10950b8d894c9609c1
     # via
     #   hexbug-data
     #   hexdoc-hexic
@@ -298,9 +298,9 @@ hexdoc-hexoverpowered==0.8.2.1.0 \
     --hash=sha256:a785c4b1f64dd93cdf7f637d0cf79b481aceed3d5e09b333fe62595c396b152b \
     --hash=sha256:cd0d3966dd9a42a35ec74586a0c1143ff4b7e40b2b6c75a6721c1a94b72bb909
     # via hexbug-data
-hexdoc-hexparse==1.4.0.1.1 \
-    --hash=sha256:4b0d902869928525abb21e9afabffda01d954374109d0175bfed68f2c9dc027b \
-    --hash=sha256:a0c5be6bb92479cb19b3905fc290d573978e03a4923a253be4af42df31d7b415
+hexdoc-hexparse==1.5.0.1.1 \
+    --hash=sha256:34c1d3fab38f490cb88a963d1a07fc216208c9a612e2ed4a0287333d757b95c4 \
+    --hash=sha256:bdaef20e4701bb1e55a9204450c1bf8bb222d3403c9bd96df48bbb75f47cce6e
     # via hexbug-data
 hexdoc-hexpose==1.0.0.1.0.0+hexbug
     # via
@@ -339,9 +339,9 @@ hexdoc-ioticblocks==1.0.2.1.20.1.1.0 \
     # via
     #   hexbug-data
     #   hexdoc-hexdebug
-hexdoc-lapisworks==1.5.6.9.1.6.dev0 \
-    --hash=sha256:2cabffce7a44e47c0075a12239178a5a96ae79e1804c9831938b381fe59c24a8 \
-    --hash=sha256:2ccb21e849a452d2136c14ab85c5b0149c8cde5f36d3540191c1eeae4ae00d10
+hexdoc-lapisworks==1.5.6.9.1.7.dev0 \
+    --hash=sha256:01adefa432baec95185dc4fbf7425de1051d7fda87f67b2c1563a574511de999 \
+    --hash=sha256:19f348474e6c33a70a5cce1c46584bc549a69d2a738ce4dd5b3b1939c8d02625
     # via hexbug-data
 hexdoc-lessertp==1.2.1.1.2.dev0 \
     --hash=sha256:4fc620fcacff9a699bb30182b191b68a8353a82103abeab7e4757c0a3cf537d9 \
