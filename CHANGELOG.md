@@ -14,6 +14,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 - Fixed older versions of the Book of Hexxy being overwritten by redirect loops.
 
+### Mods Updated
+
+- Hexal: 0.3.1
+- HexParse: 1.5.0
+
 ## `2.5.0` - 2025-10-23
 
 ### Added

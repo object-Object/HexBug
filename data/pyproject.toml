@@ -28,7 +28,7 @@ full = [
     "hexdoc-efhexs==1.0.0.*",
     "hexdoc-ephemera==0.3.0.*",
     "hexdoc-hex-ars-link==0.9.2.4.*",
-    "hexdoc-hexal==0.3.0.*",
+    "hexdoc-hexal==0.3.1.*",
     "hexdoc-hexcassettes==1.1.4.*",
     "hexdoc-hexcasting==0.11.2.*",
     "hexdoc-hexcellular==1.1.0.*",
@@ -42,7 +42,7 @@ full = [
     "hexdoc-hexmapping==0.0.3.*",
     "hexdoc-hexodus==1.0.0.*",
     "hexdoc-hexoverpowered==0.8.2.*",
-    "hexdoc-hexparse==1.4.0.*",
+    "hexdoc-hexparse==1.5.0.*",
     "hexdoc-hexpose==1.0.0.1.0.0+hexbug", # workaround for https://github.com/miyucomics/hexpose/commit/26709051b306e70982cb904ac2776eb7f9da9f4d until the next release
     "hexdoc-hexstruction==1.2.1.1.20.1.*",
     "hexdoc-hextended==2.0.1.*",
