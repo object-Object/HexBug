@@ -1510,7 +1510,7 @@ wheels = [
 
 [[package]]
 name = "hexdoc-lapisworks"
-version = "1.5.6.9.1.6.dev0"
+version = "1.5.6.9.1.7.dev0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "hexdoc" },
@@ -1518,9 +1518,9 @@ dependencies = [
     { name = "networkx" },
     { name = "scipy" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/d1/e7/2216b53eab0a67af009104750998afc264388933b438aff0659a9c92f5a8/hexdoc_lapisworks-1.5.6.9.1.6.dev0.tar.gz", hash = "sha256:2ccb21e849a452d2136c14ab85c5b0149c8cde5f36d3540191c1eeae4ae00d10", size = 116446, upload-time = "2025-10-20T11:32:49.335Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/73/9b/cfa2deb90a326f21774472ecf9a134de8a70976c9be3dd3b27b8fdbe7c5b/hexdoc_lapisworks-1.5.6.9.1.7.dev0.tar.gz", hash = "sha256:19f348474e6c33a70a5cce1c46584bc549a69d2a738ce4dd5b3b1939c8d02625", size = 114183, upload-time = "2025-10-25T15:18:47.67Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/2e/4d/350bb6602fa3749a669215272b1c02c2a4a92b61448057c678b60ea8b926/hexdoc_lapisworks-1.5.6.9.1.6.dev0-py3-none-any.whl", hash = "sha256:2cabffce7a44e47c0075a12239178a5a96ae79e1804c9831938b381fe59c24a8", size = 193964, upload-time = "2025-10-20T11:32:47.597Z" },
+    { url = "https://files.pythonhosted.org/packages/93/28/1dfd9c12d7de3d6da4bfce7f757804d0fcdd00a37068ed28695aec75ec05/hexdoc_lapisworks-1.5.6.9.1.7.dev0-py3-none-any.whl", hash = "sha256:01adefa432baec95185dc4fbf7425de1051d7fda87f67b2c1563a574511de999", size = 191801, upload-time = "2025-10-25T15:18:45.62Z" },
 ]
 
 [[package]]
