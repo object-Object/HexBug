@@ -178,7 +178,6 @@ hexdoc==1!0.1.0a35 \
     #   hexbug-data
     #   hexdoc-hexcasting
     #   hexdoc-hexdebug
-    #   hexdoc-hexic
     #   hexdoc-hextweaks
     #   hexdoc-lapisworks
     #   hexdoc-mediatransport
@@ -207,9 +206,7 @@ hexdoc-hex-ars-link==0.9.2.4.1.0.1 \
 hexdoc-hexal==0.3.1.1.0 \
     --hash=sha256:17f66f2101cff87399697546e0aaf78acaee5d90500f6e579e782429a07a0995 \
     --hash=sha256:e19f9a1fdeef92f6d60634303029adf6734585183d2fba10950b8d894c9609c1
-    # via
-    #   hexbug-data
-    #   hexdoc-hexic
+    # via hexbug-data
 hexdoc-hexcassettes==1.1.4.1.0.0 \
     --hash=sha256:1fbed8efc71d30620c1a52780f3cc7d6706274285d07a8340f872974f3fcddaf \
     --hash=sha256:8e0fbdb799d80c73336d08e854175cb951b4f7175a35cf0b5c0d5a26e805eb19
@@ -232,7 +229,6 @@ hexdoc-hexcasting==0.11.2.1.0 \
     #   hexdoc-hexdebug
     #   hexdoc-hexflow
     #   hexdoc-hexgender
-    #   hexdoc-hexic
     #   hexdoc-hexical
     #   hexdoc-hexmapping
     #   hexdoc-hexodus
@@ -257,9 +253,7 @@ hexdoc-hexcasting==0.11.2.1.0 \
 hexdoc-hexcellular==1.1.0.1.0.0 \
     --hash=sha256:7d673d161b0e79d24ba61e0488b08a1d0eeb58390c383b233f80612d982579f0 \
     --hash=sha256:8714b959cc56b88c1e1ea673e91149cd638b1d30f452f42084576acf510f875d
-    # via
-    #   hexbug-data
-    #   hexdoc-hexic
+    # via hexbug-data
 hexdoc-hexchanting==1.1.3.1.0.dev0 \
     --hash=sha256:af77a6ef45f6a67b7020104905692b5e088fb370f721c1c742605fd3878f4f87 \
     --hash=sha256:fee1d9bbddd18c0d314f82047a07d64f0c4759b35ae2c30b0bf3ebd7b985e481
@@ -279,9 +273,6 @@ hexdoc-hexflow==0.3.1.1.0.1 \
 hexdoc-hexgender==1.0.4.1.0 \
     --hash=sha256:36e381778817532dfd2e737baea385f41608cdbcf6f8412b95e8ccced5a59572 \
     --hash=sha256:bc32f632b55e61fc08dcad004f5880f446e6a279475a2134c79bf07589098283
-    # via hexbug-data
-hexdoc-hexic @ https://codeberg.org/PoolloverNathan/hexic/raw/branch/wheels/hexdoc_hexic-1.4.2.1.0-py3-none-any.whl \
-    --hash=sha256:5f203cd90af49ccb7d0514726a182ed020cbe047edcf8f0a06e98e01f36b4e91
     # via hexbug-data
 hexdoc-hexical @ https://github.com/miyucomics/hexical/raw/9e065b5e7995efc9045ab8cecd1f8838106df171/docs/v/latest/main/dist/hexdoc_hexical-2.0.0.1.0.0-py3-none-any.whl \
     --hash=sha256:2089d91d74e18e057199ede29949ce682d337dc6346e68be9e4d692f015dc380
@@ -354,16 +345,13 @@ hexdoc-mediatransport==1.1.0.1.20.1.2.0 \
 hexdoc-minecraft==1.20.1.1.0.dev1 \
     --hash=sha256:bbcec07bcd5391345b7542057bbe5443d7acd4481bb559e623354cc860ba53c6 \
     --hash=sha256:d5bf87f5b4f736dddb96531568b8596b550fa29c8da503f2e6a872967241aaf7
-    # via
-    #   hexdoc-hexcasting
-    #   hexdoc-hexic
+    # via hexdoc-hexcasting
 hexdoc-moreiotas==0.1.1.1.0 \
     --hash=sha256:2e9dfdbc2d969ce2c13e806237723188e35c6f029b99a1143fbb077786116211 \
     --hash=sha256:830d0fde94a0ea4a773605c67fd943ad977b438a1a4bb44d62751333b9a9662a
     # via
     #   hexbug-data
     #   hexdoc-hexal
-    #   hexdoc-hexic
 hexdoc-oneironaut @ https://github.com/beholderface/oneironaut/raw/99b7c992e2e2230b39ec9adceed4b1b2fed15831/docs/v/latest/1.20.1/dist/hexdoc_oneironaut-0.5.0.1.0-py3-none-any.whl \
     --hash=sha256:9efe0f641dc6115c25953884d214b3f55631db08ab2fafedeb63d77f93d16b48
     # via hexbug-data

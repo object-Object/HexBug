@@ -335,11 +335,6 @@ sdist = { url = "https://files.pythonhosted.org/packages/44/55/bf0f502de470df0a1
 wheels = [{ url = "https://files.pythonhosted.org/packages/c0/32/aaf0fe9f749e565b802939d1da1dcc4b082b2cf1905d871fa89d273189bd/hexdoc_hexgender-1.0.4.1.0-py3-none-any.whl", upload-time = 2025-02-24T13:27:12Z, size = 10065, hashes = { sha256 = "bc32f632b55e61fc08dcad004f5880f446e6a279475a2134c79bf07589098283" } }]
 
 [[packages]]
-name = "hexdoc-hexic"
-version = "1.4.2.1.0"
-archive = { url = "https://codeberg.org/PoolloverNathan/hexic/raw/branch/wheels/hexdoc_hexic-1.4.2.1.0-py3-none-any.whl", hashes = { sha256 = "5f203cd90af49ccb7d0514726a182ed020cbe047edcf8f0a06e98e01f36b4e91" } }
-
-[[packages]]
 name = "hexdoc-hexical"
 version = "2.0.0.1.0.0"
 archive = { url = "https://github.com/miyucomics/hexical/raw/9e065b5e7995efc9045ab8cecd1f8838106df171/docs/v/latest/main/dist/hexdoc_hexical-2.0.0.1.0.0-py3-none-any.whl", hashes = { sha256 = "2089d91d74e18e057199ede29949ce682d337dc6346e68be9e4d692f015dc380" } }
