@@ -166,15 +166,6 @@ MODS: list[StaticModInfo] = [
         modloaders=[Modloader.FABRIC, Modloader.FORGE],
     ),
     StaticModInfo(
-        id="hexic",
-        name="Hexic",
-        description="Miscellaneous neat features and QoL patterns for Hex Casting.",
-        icon_url=URL("src/main/resources/assets/hexic/icon.png"),
-        curseforge_slug=None,
-        modrinth_slug="hexic",
-        modloaders=[Modloader.FABRIC, Modloader.QUILT],
-    ),
-    StaticModInfo(
         id="hexical",
         name="Hexical",
         description="A fun addon containing genie lamps, mage blocks, specks, world scrying, and more!",
@@ -469,8 +460,6 @@ DISABLED_PATTERNS: set[ResourceLocation] = {
     # conflicts
     ResourceLocation("hexstruction", "bounding_box"),  # shape: hexical:greater_blink
     ResourceLocation("lapisworks", "empty_prfn"),  # signature: hexal:mote/storage/get
-    # unreasonably long angle signature
-    ResourceLocation("hexic", "whatthefuck"),
     # not real patterns
     ResourceLocation("hexcasting", "const/vec/x"),
     ResourceLocation("hexcasting", "const/vec/y"),
@@ -487,10 +476,6 @@ UNDOCUMENTED_PATTERNS = ResourceSet(
         ResourceLocation("complexhex", "chloe/make"),
         ResourceLocation("complexhex", "cnarg"),
         ResourceLocation("ephemera", "hashbits"),
-        ResourceLocation("hexic", "dye_offhand"),
-        ResourceLocation("hexic", "spellmind/restore"),
-        ResourceLocation("hexic", "spellmind/save"),
-        ResourceLocation("hexic", "tripwire"),
         ResourceLocation("hexical", "disguise_mage_block"),
         ResourceLocation("hexical", "tweak_mage_block"),
         ResourceLocation("hexpose", "entity_name"),
@@ -504,18 +489,10 @@ UNDOCUMENTED_PATTERNS = ResourceSet(
         ResourceLocation("oneironaut", "signitem"),
         # lmao what
         ResourceLocation("ephemera", "no"),
-        ResourceLocation("hexic", "free"),
-        ResourceLocation("hexic", "malloc"),
         ResourceLocation("hextweaks", "suicide"),
         ResourceLocation("oneironaut", "circle"),
     ],
-    patterns=[
-        # undocumented
-        ResourceLocation("hexic", "prop_*"),
-        # lmao what
-        ResourceLocation("hexic", "jvm/*"),
-        ResourceLocation("hexic", "nbt/*"),
-    ],
+    patterns=[],
 )
 
 # suppress warnings for these special handler conflicts
