@@ -1002,7 +1002,7 @@ requires-dist = [
     { name = "hexdoc-hexcasting", marker = "extra == 'full'", specifier = "==0.11.2.*" },
     { name = "hexdoc-hexcellular", marker = "extra == 'full'", specifier = "==1.1.0.*" },
     { name = "hexdoc-hexchanting", marker = "extra == 'full'", specifier = "==1.1.3.*" },
-    { name = "hexdoc-hexdebug", marker = "extra == 'full'", specifier = "==0.7.0.1.20.1.*" },
+    { name = "hexdoc-hexdebug", marker = "extra == 'full'", specifier = "==0.8.0.1.20.1.*" },
     { name = "hexdoc-hexdim", marker = "extra == 'full'", specifier = "==1.2.1.1.20.*" },
     { name = "hexdoc-hexflow", marker = "extra == 'full'", specifier = "==0.3.1.1.*" },
     { name = "hexdoc-hexgender", marker = "extra == 'full'", specifier = "==1.0.4.*" },
@@ -1256,16 +1256,16 @@ wheels = [
 
 [[package]]
 name = "hexdoc-hexdebug"
-version = "0.7.0.1.20.1.1.1"
+version = "0.8.0.1.20.1.1.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "hexdoc" },
     { name = "hexdoc-hexcasting" },
     { name = "hexdoc-ioticblocks" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ac/21/62c6f15dbc12b9bfdb8b67c747d95518d1e036989367c1fe46eed3b9fbf2/hexdoc_hexdebug-0.7.0.1.20.1.1.1.tar.gz", hash = "sha256:b0baa16e499d7ad6109510f31d606a9f6ba6204109c78a40b32f880803340381", size = 85536, upload-time = "2025-10-03T03:50:28.523Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/31/94/e817f7fcfc3b46c254ac2d3ba79eeba436c0f61ed2928c48ced951555f0a/hexdoc_hexdebug-0.8.0.1.20.1.1.1.tar.gz", hash = "sha256:47cb8decb81090ebfe286e32ff3b57bfdf079b95edb98328259f0632a9f2dab2", size = 89484, upload-time = "2025-11-07T21:48:05.425Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f7/4e/b1eba7758c5e593c48e64b33ba0749d35ba2666a2f14c34c6f9beeee8f5c/hexdoc_hexdebug-0.7.0.1.20.1.1.1-py3-none-any.whl", hash = "sha256:f9f017a62e70c16f7994695dbaeddfa345237409d7b7a70eb1fbfe967a207aea", size = 123642, upload-time = "2025-10-03T03:50:27.151Z" },
+    { url = "https://files.pythonhosted.org/packages/e9/6f/d7c621fef388cdcb026f6c1a55f4a0011b4d9a6b3c28313a88b68761f30b/hexdoc_hexdebug-0.8.0.1.20.1.1.1-py3-none-any.whl", hash = "sha256:281c2ded5e5f21ae42a16978befe9448d8e61267cc99e6b8d6145c9963f7c6a1", size = 140829, upload-time = "2025-11-07T21:48:03.852Z" },
 ]
 
 [[package]]

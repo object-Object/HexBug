@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 ### Mods Updated
 
 - Hexal: 0.3.1
+- HexDebug: 0.8.0+1.20.1
 - HexParse: 1.5.0
 
 ## `2.5.0` - 2025-10-23
