@@ -53,7 +53,7 @@ full = [
     "hexdoc-ioticblocks==1.0.2.1.20.1.*",
     "hexdoc-lapisworks==1.5.6.9.*",
     "hexdoc-lessertp==1.2.1.*",
-    "hexdoc-mediatransport==1.1.0.1.20.1.*",
+    "hexdoc-mediatransport==1.1.1.1.20.1.*",
     "hexdoc-moreiotas==0.1.1.*",
     "hexdoc-oneironaut==0.5.0.*",
     "hexdoc-overevaluate==1.0.0.*",
