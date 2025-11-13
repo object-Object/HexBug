@@ -258,9 +258,9 @@ hexdoc-hexchanting==1.1.3.1.0.dev0 \
     --hash=sha256:af77a6ef45f6a67b7020104905692b5e088fb370f721c1c742605fd3878f4f87 \
     --hash=sha256:fee1d9bbddd18c0d314f82047a07d64f0c4759b35ae2c30b0bf3ebd7b985e481
     # via hexbug-data
-hexdoc-hexdebug==0.7.0.1.20.1.1.1 \
-    --hash=sha256:b0baa16e499d7ad6109510f31d606a9f6ba6204109c78a40b32f880803340381 \
-    --hash=sha256:f9f017a62e70c16f7994695dbaeddfa345237409d7b7a70eb1fbfe967a207aea
+hexdoc-hexdebug==0.8.0.1.20.1.1.1 \
+    --hash=sha256:281c2ded5e5f21ae42a16978befe9448d8e61267cc99e6b8d6145c9963f7c6a1 \
+    --hash=sha256:47cb8decb81090ebfe286e32ff3b57bfdf079b95edb98328259f0632a9f2dab2
     # via hexbug-data
 hexdoc-hexdim==1.2.1.1.20.0 \
     --hash=sha256:68795a8aec5e22aa2b2d1f32c2b2e0d08484432e378e552aa80a69656360344d \
@@ -338,9 +338,9 @@ hexdoc-lessertp==1.2.1.1.2.dev0 \
     --hash=sha256:4fc620fcacff9a699bb30182b191b68a8353a82103abeab7e4757c0a3cf537d9 \
     --hash=sha256:7d004d217c535adc549ed673095f7e9661d33dffc23ce32f0416156e7d4439a0
     # via hexbug-data
-hexdoc-mediatransport==1.1.0.1.20.1.2.0 \
-    --hash=sha256:e951262526e69b98532f2517f844ba7ab109ba9af70d1c68c6f955ccce85fa80 \
-    --hash=sha256:f23b98672239db6551bb5f9db915e4eb0fefc5124fb80d0e5615f780574f8714
+hexdoc-mediatransport==1.1.1.1.20.1.2.0 \
+    --hash=sha256:a544d6ceaf4bcaef91f22257e12b5f81bb7bf92e11067a426f4b77fba130f252 \
+    --hash=sha256:b79752e4cbfef74601f2d30b7f4af18caf5a2390408a2dc2721c35feebdddad6
     # via hexbug-data
 hexdoc-minecraft==1.20.1.1.0.dev1 \
     --hash=sha256:bbcec07bcd5391345b7542057bbe5443d7acd4481bb559e623354cc860ba53c6 \
