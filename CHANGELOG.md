@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [UNRELEASED]
 
+### Mods Added
+
+- HexThings: 0.1.1+1.20.1
+
 ### Mods Updated
 
 - mediatransport: 1.1.1+1.20.1

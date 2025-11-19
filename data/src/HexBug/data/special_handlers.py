@@ -418,10 +418,12 @@ class HexFlowNumberSpecialHandler(PrefixSpecialHandler[float, int]):
 
 
 class HexTraceSpecialHandler(PrefixSpecialHandler[str, Any]):
+    prefix = "qqqaw"
+
     @property
     @override
     def prefix_map(self):
-        return {"qqqaw": None}
+        return {self.prefix: None}
 
     @override
     def try_match_suffix(self, _: Any, suffix: str) -> str | None:
@@ -433,7 +435,7 @@ class HexTraceSpecialHandler(PrefixSpecialHandler[str, Any]):
         registry: HexBugRegistry,
         value: str,
     ) -> tuple[str, HexPattern]:
-        return value, HexPattern(HexDir.WEST, "qqqaw" + value)
+        return value, HexPattern(HexDir.WEST, self.prefix + value)
 
     @override
     def get_name(self, raw_name: str, value: str | None) -> str:
@@ -447,3 +449,30 @@ class HexTraceSpecialHandler(PrefixSpecialHandler[str, Any]):
             return super().localize(i18n)
         except ValueError:
             return i18n.localize(f"hexcasting.action.{self.id}")
+
+
+class HexThingsNoopSpecialHandler(PrefixSpecialHandler[str, Any]):
+    prefix = "dade"
+
+    @property
+    @override
+    def prefix_map(self):
+        return {self.prefix: None}
+
+    @override
+    def try_match_suffix(self, _: Any, suffix: str):
+        return suffix
+
+    @override
+    def generate_pattern(
+        self,
+        registry: HexBugRegistry,
+        value: str,
+    ) -> tuple[str, HexPattern]:
+        if value in ["-", '"-"']:
+            value = ""
+        return value, HexPattern(HexDir.NORTH_EAST, self.prefix + value)
+
+    @override
+    def get_name(self, raw_name: str, value: str | None) -> str:
+        return raw_name

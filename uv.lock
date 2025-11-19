@@ -972,6 +972,7 @@ full = [
     { name = "hexdoc-hexpose" },
     { name = "hexdoc-hexstruction" },
     { name = "hexdoc-hextended" },
+    { name = "hexdoc-hexthings" },
     { name = "hexdoc-hextrace" },
     { name = "hexdoc-hextrogen" },
     { name = "hexdoc-hextweaks" },
@@ -1014,6 +1015,7 @@ requires-dist = [
     { name = "hexdoc-hexpose", marker = "extra == 'full'", specifier = "==1.0.0.1.0.0+hexbug" },
     { name = "hexdoc-hexstruction", marker = "extra == 'full'", url = "https://github.com/PetersonE1/hexstruction/raw/510da7fea2f52d6497c50753990bbc5919ee71ad/docs/v/latest/main/dist/hexdoc_hexstruction-1.2.1.1.20.1.1.0-py3-none-any.whl" },
     { name = "hexdoc-hextended", marker = "extra == 'full'", url = "https://github.com/abilliontrillionstars/hextended-staves/raw/0e6e0a61b7f4d3e79761b216cfebc1141e19b30b/docs/v/latest/main/dist/hexdoc_hextended-2.0.1.1.0.dev0-py3-none-any.whl" },
+    { name = "hexdoc-hexthings", marker = "extra == 'full'", url = "https://github.com/Real-Septicake/HexThings/raw/778414a632a0dd305a3a72b5d380d82e7c02a4b2/docs/v/latest/main/dist/hexdoc_hexthings-0.1.1.1.20.1.1.0-py3-none-any.whl" },
     { name = "hexdoc-hextrace", marker = "extra == 'full'", specifier = "==0.1.0.1.20.1.*" },
     { name = "hexdoc-hextrogen", marker = "extra == 'full'", specifier = "==1.1.0.*" },
     { name = "hexdoc-hextweaks", marker = "extra == 'full'", specifier = "==5.3.3.*" },
@@ -1415,6 +1417,20 @@ requires-dist = [
     { name = "ruff", marker = "extra == 'dev'", specifier = "~=0.1.4" },
 ]
 provides-extras = ["dev"]
+
+[[package]]
+name = "hexdoc-hexthings"
+version = "0.1.1.1.20.1.1.0"
+source = { url = "https://github.com/Real-Septicake/HexThings/raw/778414a632a0dd305a3a72b5d380d82e7c02a4b2/docs/v/latest/main/dist/hexdoc_hexthings-0.1.1.1.20.1.1.0-py3-none-any.whl" }
+dependencies = [
+    { name = "hexdoc-hexcasting" },
+]
+wheels = [
+    { url = "https://github.com/Real-Septicake/HexThings/raw/778414a632a0dd305a3a72b5d380d82e7c02a4b2/docs/v/latest/main/dist/hexdoc_hexthings-0.1.1.1.20.1.1.0-py3-none-any.whl", hash = "sha256:0b25851a1fb380074f7830b54339ea07bd625d3e0bd5d55a897256667d7b8000" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "hexdoc-hexcasting", specifier = "~=0.11.2.1.0" }]
 
 [[package]]
 name = "hexdoc-hextrace"

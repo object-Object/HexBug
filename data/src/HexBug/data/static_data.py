@@ -9,6 +9,7 @@ from .patterns import StaticPatternInfo
 from .special_handlers import (
     ComplexHexLongSpecialHandler,
     HexFlowNumberSpecialHandler,
+    HexThingsNoopSpecialHandler,
     HexTraceSpecialHandler,
     MaskSpecialHandler,
     NumberSpecialHandler,
@@ -240,6 +241,15 @@ MODS: list[StaticModInfo] = [
         modloaders=[Modloader.FABRIC, Modloader.FORGE, Modloader.QUILT],
     ),
     StaticModInfo(
+        id="hexthings",
+        name="HexThings",
+        description="Adds miscellaneous patterns related to staff-casting.",
+        icon_url=URL("common/src/main/resources/assets/hexthings/icon.png"),
+        curseforge_slug="hexthings",
+        modrinth_slug="hexthings",
+        modloaders=[Modloader.FABRIC, Modloader.FORGE],
+    ),
+    StaticModInfo(
         id="hextrace",
         name="Hex Trace",
         description="Allows adding tracers to iotas to help with debugging.",
@@ -404,6 +414,11 @@ EXTRA_PATTERNS: list[StaticPatternInfo] = [
         startdir=HexDir.EAST,
         signature="eeedw",
     ),
+    StaticPatternInfo(
+        id=ResourceLocation("hexthings", "unquote"),
+        startdir=HexDir.NORTH_EAST,
+        signature="aqqq",
+    ),
 ]
 
 SPECIAL_HANDLERS: dict[ResourceLocation, SpecialHandler[Any]] = {
@@ -451,6 +466,9 @@ SPECIAL_HANDLERS: dict[ResourceLocation, SpecialHandler[Any]] = {
         ),
         HexTraceSpecialHandler(
             id=ResourceLocation("hextrace", "trace"),
+        ),
+        HexThingsNoopSpecialHandler(
+            id=ResourceLocation("hexthings", "noop"),
         ),
     ]
 }
