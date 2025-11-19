@@ -237,6 +237,7 @@ hexdoc-hexcasting==0.11.2.1.0 \
     #   hexdoc-hexpose
     #   hexdoc-hexstruction
     #   hexdoc-hextended
+    #   hexdoc-hexthings
     #   hexdoc-hextrace
     #   hexdoc-hextrogen
     #   hexdoc-hextweaks
@@ -303,6 +304,9 @@ hexdoc-hexstruction @ https://github.com/PetersonE1/hexstruction/raw/510da7fea2f
     # via hexbug-data
 hexdoc-hextended @ https://github.com/abilliontrillionstars/hextended-staves/raw/0e6e0a61b7f4d3e79761b216cfebc1141e19b30b/docs/v/latest/main/dist/hexdoc_hextended-2.0.1.1.0.dev0-py3-none-any.whl \
     --hash=sha256:7c5daa174205d3cf44663f391222fd67f70076704f165302561b44c56577c708
+    # via hexbug-data
+hexdoc-hexthings @ https://github.com/Real-Septicake/HexThings/raw/778414a632a0dd305a3a72b5d380d82e7c02a4b2/docs/v/latest/main/dist/hexdoc_hexthings-0.1.1.1.20.1.1.0-py3-none-any.whl \
+    --hash=sha256:0b25851a1fb380074f7830b54339ea07bd625d3e0bd5d55a897256667d7b8000
     # via hexbug-data
 hexdoc-hextrace==0.1.0.1.20.1.1.0 \
     --hash=sha256:8487d6fec5eda717197d395a197c1adc644decb2194fc52579237ba204ce9a60 \
