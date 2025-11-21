@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 ### Mods Updated
 
 - Hexal: 0.3.1
+- Hexic: 1.4.6
 - HexParse: 1.5.0
 
 ## `2.5.0` - 2025-10-23
