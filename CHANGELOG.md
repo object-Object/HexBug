@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [UNRELEASED]
 
+### Mods Added
+
+- HexThings: 0.1.1+1.20.1
+- Hexic (again): 1.4.6
+
+### Mods Updated
+
+- mediatransport: 1.1.1+1.20.1
+- Hexic: 1.4.6
+
+## `2.5.1` - 2025-11-13
+
 ### Changed
 
 - Added a length limit of 512 characters for pattern angle signatures, and disabled Hexic's Suffering pattern.
@@ -17,7 +29,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 ### Mods Updated
 
 - Hexal: 0.3.1
-- Hexic: 1.4.6
+- HexDebug: 0.8.0+1.20.1
 - HexParse: 1.5.0
 
 ## `2.5.0` - 2025-10-23

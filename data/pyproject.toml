@@ -33,7 +33,7 @@ full = [
     "hexdoc-hexcasting==0.11.2.*",
     "hexdoc-hexcellular==1.1.0.*",
     "hexdoc-hexchanting==1.1.3.*",
-    "hexdoc-hexdebug==0.7.0.1.20.1.*",
+    "hexdoc-hexdebug==0.8.0.1.20.1.*",
     "hexdoc-hexdim==1.2.1.1.20.*",
     "hexdoc-hexflow==0.3.1.1.*",
     "hexdoc-hexgender==1.0.4.*",
@@ -46,6 +46,7 @@ full = [
     "hexdoc-hexpose==1.0.0.1.0.0+hexbug", # workaround for https://github.com/miyucomics/hexpose/commit/26709051b306e70982cb904ac2776eb7f9da9f4d until the next release
     "hexdoc-hexstruction==1.2.1.1.20.1.*",
     "hexdoc-hextended==2.0.1.*",
+    "hexdoc-hexthings==0.1.1.1.20.1.*",
     "hexdoc-hextrace==0.1.0.1.20.1.*",
     "hexdoc-hextrogen==1.1.0.*",
     "hexdoc-hextweaks==5.3.3.*",
@@ -54,7 +55,7 @@ full = [
     "hexdoc-ioticblocks==1.0.2.1.20.1.*",
     "hexdoc-lapisworks==1.5.6.9.*",
     "hexdoc-lessertp==1.2.1.*",
-    "hexdoc-mediatransport==1.1.0.1.20.1.*",
+    "hexdoc-mediatransport==1.1.1.1.20.1.*",
     "hexdoc-moreiotas==0.1.1.*",
     "hexdoc-oneironaut==0.5.0.*",
     "hexdoc-overevaluate==1.0.0.*",
@@ -75,6 +76,7 @@ hexdoc-ephemera = { url = "https://github.com/beholderface/Ephemera/raw/74e80edd
 hexdoc-hexical = { url = "https://github.com/miyucomics/hexical/raw/9e065b5e7995efc9045ab8cecd1f8838106df171/docs/v/latest/main/dist/hexdoc_hexical-2.0.0.1.0.0-py3-none-any.whl" }
 hexdoc-hexstruction = { url = "https://github.com/PetersonE1/hexstruction/raw/510da7fea2f52d6497c50753990bbc5919ee71ad/docs/v/latest/main/dist/hexdoc_hexstruction-1.2.1.1.20.1.1.0-py3-none-any.whl" }
 hexdoc-hextended = { url = "https://github.com/abilliontrillionstars/hextended-staves/raw/0e6e0a61b7f4d3e79761b216cfebc1141e19b30b/docs/v/latest/main/dist/hexdoc_hextended-2.0.1.1.0.dev0-py3-none-any.whl" }
+hexdoc-hexthings = { url = "https://github.com/Real-Septicake/HexThings/raw/778414a632a0dd305a3a72b5d380d82e7c02a4b2/docs/v/latest/main/dist/hexdoc_hexthings-0.1.1.1.20.1.1.0-py3-none-any.whl" }
 hexdoc-oneironaut = { url = "https://github.com/beholderface/oneironaut/raw/99b7c992e2e2230b39ec9adceed4b1b2fed15831/docs/v/latest/1.20.1/dist/hexdoc_oneironaut-0.5.0.1.0-py3-none-any.whl" }
 hexdoc-overevaluate = { url = "https://github.com/miyucomics/overevaluate/raw/6c92a93c51fd966cf3709468f0a126c746ae85ba/docs/v/latest/main/dist/hexdoc_overevaluate-1.0.0.1.0.0-py3-none-any.whl" }
 hexdoc-scryglass = { url = "https://github.com/miyucomics/scryglass/raw/2b414d0ba9e9c0770c8b13bb01a67398630a4690/docs/v/latest/main/dist/hexdoc_scryglass-1.0.0.1.0.0-py3-none-any.whl" }

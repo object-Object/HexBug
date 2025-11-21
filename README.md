@@ -6,7 +6,7 @@ A Discord bot for Hex Casting.
 
 ### Setup
 
-Install [uv](https://docs.astral.sh/uv/), then run the following commands to set up your dev environment:
+Install [uv](https://docs.astral.sh/uv/) and clone this repository, then run the following commands in this repository to set up your dev environment:
 
 ```sh
 # set up environment

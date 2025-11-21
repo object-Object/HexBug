@@ -566,6 +566,9 @@ class HexBugRegistry(BaseModel):
             known_inputs = dict[str | None, PatternOperator]()
             for op in id_ops[pattern.id] + signature_ops[pattern.signature]:
                 if other := known_inputs.get(op.inputs):
+                    # hexthings:unquote shows up in both id_ops and signature_ops
+                    if op == other:
+                        continue
                     raise ValueError(
                         f"Multiple operators found for pattern {pattern.id} with inputs {op.inputs}:\n  {op}\n  {other}"
                     )
