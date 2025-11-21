@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 ### Mods Added
 
 - HexThings: 0.1.1+1.20.1
+- Hexic (again): 1.4.6
 
 ### Mods Updated
 

@@ -264,13 +264,6 @@ class HexBugRegistry(BaseModel):
                         repo=repo,
                         commit=commit,
                     )
-                case "example.com" if mod_id == "hexic":  # :/
-                    _, author, repo, commit = asset_url.parts
-                    source = CodebergSourceInfo(
-                        author=CodebergUserInfo(author),
-                        repo=repo,
-                        commit=commit,
-                    )
                 case _:
                     raise ValueError(
                         f"Unhandled asset url host for {mod_id}: {asset_url}"
