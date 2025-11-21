@@ -14,20 +14,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 ### Mods Updated
 
 - mediatransport: 1.1.1+1.20.1
+- Hexic: 1.4.6
 
 ## `2.5.1` - 2025-11-13
 
 ### Changed
 
-- Added a length limit of 512 characters for pattern angle signatures.
+- Added a length limit of 512 characters for pattern angle signatures, and disabled Hexic's Suffering pattern.
 
 ### Fixed
 
 - Fixed older versions of the Book of Hexxy being overwritten by redirect loops.
-
-### Removed
-
-- Removed Hexic due to GPL license, and because malicious code was included in the mod.
 
 ### Mods Updated
 

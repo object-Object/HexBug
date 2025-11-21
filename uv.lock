@@ -1307,7 +1307,7 @@ wheels = [
 
 [[package]]
 name = "hexdoc-hexic"
-version = "1.4.6.1.0"
+version = "1.4.6.1.1.post1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "hexdoc" },
@@ -1318,7 +1318,7 @@ dependencies = [
     { name = "hexdoc-moreiotas" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e2/ad/39ea691cee55c2656c3cd8bcc4a2065691fea1f8540191c47a1b1530135d/hexdoc_hexic-1.4.6.1.0-py3-none-any.whl", hash = "sha256:0db5300f7e8f17f6b1d3cd9834281476c91b659e9971b2d018961e1a91a6106a", size = 572979, upload-time = "2025-11-20T17:14:51.499Z" },
+    { url = "https://files.pythonhosted.org/packages/39/ff/203604b9473e0bad3868d76b8a0fc56b5cac16eea0e112d1b06e64908abd/hexdoc_hexic-1.4.6.1.1.post1-py3-none-any.whl", hash = "sha256:7932301b3fb6522abac8591289875827fd86da6e3878483cfd98c0b40f9b933f", size = 574439, upload-time = "2025-11-21T05:40:44.664Z" },
 ]
 
 [[package]]
