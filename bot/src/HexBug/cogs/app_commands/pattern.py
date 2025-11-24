@@ -150,7 +150,13 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
 
             case PatternCheckType.REGEX:
                 start_time = time.time()
-                pat = regex.compile(signature)
+                try:
+                    pat = regex.compile(signature)
+                except Exception as e:
+                    raise InvalidInputError(
+                        "Failed to parse regular expression.", value=f"`{signature}`"
+                    ) from e
+
                 for info in registry.patterns.values():
                     try:
                         if pat.match(info.signature, timeout=0.5):  # no ReDoS for you
