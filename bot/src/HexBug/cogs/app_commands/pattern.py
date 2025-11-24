@@ -159,7 +159,8 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
 
                 for info in registry.patterns.values():
                     try:
-                        if pat.match(info.signature, timeout=0.5):  # no ReDoS for you
+                        # no ReDoS for you
+                        if pat.fullmatch(info.signature, timeout=0.5):
                             conflicts[info.id] = ("regex", info)
                     except TimeoutError:
                         pass
