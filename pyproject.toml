@@ -41,6 +41,7 @@ dependency-metadata = [
 ]
 override-dependencies = [
     "uv>=0.9.4", # https://github.com/hexdoc-dev/hexdoc/issues/95
+    "hexdoc-hexcasting==0.11.3.*", # lots of addons depend on hex ~= 0.11.2.1.0, which prevents us from updating it :/
 ]
 
 [tool.uv.workspace]

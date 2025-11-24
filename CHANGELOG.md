@@ -8,11 +8,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ### Mods Added
 
-- HexThings: 0.1.1+1.20.1
+- HexThings: 0.1.4+1.20.1
 - Hexic (again): 1.4.6
 
 ### Mods Updated
 
+- Hex Casting: 0.11.3
+- HexFlow: 0.3.2
+- HexOverpowered: 0.10.1
 - mediatransport: 1.1.1+1.20.1
 
 ## `2.5.1` - 2025-11-13
