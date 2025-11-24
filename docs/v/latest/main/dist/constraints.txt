@@ -214,9 +214,9 @@ hexdoc-hexcassettes==1.1.4.1.0.0 \
     --hash=sha256:1fbed8efc71d30620c1a52780f3cc7d6706274285d07a8340f872974f3fcddaf \
     --hash=sha256:8e0fbdb799d80c73336d08e854175cb951b4f7175a35cf0b5c0d5a26e805eb19
     # via hexbug-data
-hexdoc-hexcasting==0.11.2.1.0 \
-    --hash=sha256:4f844db6ed064ecd630f300385420f17956684cdca09eb9a3022051f4b42e2cf \
-    --hash=sha256:6882fafba644f1c1717dc631580ca94f0cbe1ba816d84b46b6e1f5ef733c189c
+hexdoc-hexcasting==0.11.3.1.0 \
+    --hash=sha256:1cca00f1699fdf2e7b6b0440120fbbcb960125a158161a94cdd8b1c3746b34a3 \
+    --hash=sha256:ced6958edb72f3e9666019aa2d1dc0d812ae31db5236e0836ec1bbb42b4a8a0e
     # via
     #   hexbug-data
     #   hexdoc-caduceus
@@ -273,16 +273,16 @@ hexdoc-hexdim==1.2.1.1.20.0 \
     --hash=sha256:68795a8aec5e22aa2b2d1f32c2b2e0d08484432e378e552aa80a69656360344d \
     --hash=sha256:c6fdf8e335b573e75b6598d20536efe771be7d4c75e2ab44f3656184de7c6a5e
     # via hexbug-data
-hexdoc-hexflow==0.3.1.1.0.1 \
-    --hash=sha256:27fa3727f4bbd52964bbdbb2ab834eb9b6d746794b5851bc667dc7e53402f744 \
-    --hash=sha256:aca71f4319265bd3c8b29b711a97db7e94b7bf9788eff06532fe4c618122544f
+hexdoc-hexflow==0.3.2.1.0.1 \
+    --hash=sha256:2517bcedb24bf40715f47ae1d3c37725fc645f73303d5084eb274ea8789a4069 \
+    --hash=sha256:fe1fb0d80fcb79649ecfc3f0160054f33186a86e9d7b954524e7e4a2d3e470cf
     # via hexbug-data
 hexdoc-hexgender==1.0.4.1.0 \
     --hash=sha256:36e381778817532dfd2e737baea385f41608cdbcf6f8412b95e8ccced5a59572 \
     --hash=sha256:bc32f632b55e61fc08dcad004f5880f446e6a279475a2134c79bf07589098283
     # via hexbug-data
-hexdoc-hexic==1.4.6.1.0 \
-    --hash=sha256:0db5300f7e8f17f6b1d3cd9834281476c91b659e9971b2d018961e1a91a6106a
+hexdoc-hexic==1.4.6.1.1.post1 \
+    --hash=sha256:7932301b3fb6522abac8591289875827fd86da6e3878483cfd98c0b40f9b933f
     # via hexbug-data
 hexdoc-hexical @ https://github.com/miyucomics/hexical/raw/9e065b5e7995efc9045ab8cecd1f8838106df171/docs/v/latest/main/dist/hexdoc_hexical-2.0.0.1.0.0-py3-none-any.whl \
     --hash=sha256:2089d91d74e18e057199ede29949ce682d337dc6346e68be9e4d692f015dc380
@@ -295,9 +295,9 @@ hexdoc-hexodus==1.0.0.1.0.0 \
     --hash=sha256:79262023e6297b9ace2a785b2623cf474f22b537fa9c2c400fa98fa5cec8602b \
     --hash=sha256:9e4b518fb86c2c78e341b383aca057542e8476dd69ced5608939c38a2cc47762
     # via hexbug-data
-hexdoc-hexoverpowered==0.8.2.1.0 \
-    --hash=sha256:a785c4b1f64dd93cdf7f637d0cf79b481aceed3d5e09b333fe62595c396b152b \
-    --hash=sha256:cd0d3966dd9a42a35ec74586a0c1143ff4b7e40b2b6c75a6721c1a94b72bb909
+hexdoc-hexoverpowered==0.10.1.1.1 \
+    --hash=sha256:6f0be5a93758c11dd90acfe436906919ddc2bf27b7350e54ae6367a831261464 \
+    --hash=sha256:b1fea39311b6e0e4ca7dc683296301772fbc401f54fa03d8c15d4d6af62ea006
     # via hexbug-data
 hexdoc-hexparse==1.5.0.1.1 \
     --hash=sha256:34c1d3fab38f490cb88a963d1a07fc216208c9a612e2ed4a0287333d757b95c4 \
@@ -314,8 +314,9 @@ hexdoc-hexstruction @ https://github.com/PetersonE1/hexstruction/raw/510da7fea2f
 hexdoc-hextended @ https://github.com/abilliontrillionstars/hextended-staves/raw/0e6e0a61b7f4d3e79761b216cfebc1141e19b30b/docs/v/latest/main/dist/hexdoc_hextended-2.0.1.1.0.dev0-py3-none-any.whl \
     --hash=sha256:7c5daa174205d3cf44663f391222fd67f70076704f165302561b44c56577c708
     # via hexbug-data
-hexdoc-hexthings @ https://github.com/Real-Septicake/HexThings/raw/778414a632a0dd305a3a72b5d380d82e7c02a4b2/docs/v/latest/main/dist/hexdoc_hexthings-0.1.1.1.20.1.1.0-py3-none-any.whl \
-    --hash=sha256:0b25851a1fb380074f7830b54339ea07bd625d3e0bd5d55a897256667d7b8000
+hexdoc-hexthings==0.1.4.1.20.1.1.2 \
+    --hash=sha256:486bc520bf818539a0c82ec2c9acbcd686502e7658e78973f64c4a4f06bb919a \
+    --hash=sha256:6a4d4620e178ce2e7b3c2282e17da79c4a037bf9469a249858e6cfd3302c1b21
     # via hexbug-data
 hexdoc-hextrace==0.1.0.1.20.1.1.0 \
     --hash=sha256:8487d6fec5eda717197d395a197c1adc644decb2194fc52579237ba204ce9a60 \
