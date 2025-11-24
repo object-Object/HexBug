@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+import time
 from collections import defaultdict
 from enum import Enum
 from typing import Any
 
+import regex
 from discord import Color, Embed, Interaction, app_commands
 from discord.app_commands import Transform
 from discord.ext.commands import GroupCog
@@ -31,11 +33,13 @@ from HexBug.utils.discord.translation import (
     translate_command_text,
 )
 from HexBug.utils.discord.visibility import Visibility, VisibilityOption
+from HexBug.utils.strings import truncate_str
 
 
 class PatternCheckType(Enum):
     NORMAL = "normal"
     PER_WORLD = "per_world"
+    REGEX = "regex"
     SPECIAL_PREFIX = "special_prefix"
 
 
@@ -116,26 +120,46 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
     async def check(
         self,
         interaction: Interaction,
-        signature: PatternSignatureOption,
+        signature: str,
         pattern_type: PatternCheckTypeOption,
         direction: HexDirOption = HexDir.EAST,
         visibility: VisibilityOption = Visibility.PRIVATE,
     ):
         registry = self.bot.registry
-        pattern = HexPattern(direction, signature)
 
         conflicts = dict[ResourceLocation, tuple[str, PatternMatchResult]]()
-        if conflict := registry.try_match_pattern(pattern):
-            conflicts[conflict.id] = ("signature", conflict)
+
+        if pattern_type is PatternCheckType.REGEX:
+            pattern = None
+        else:
+            pattern = HexPattern(direction, signature)
+            if conflict := registry.try_match_pattern(pattern):
+                conflicts[conflict.id] = ("signature", conflict)
+
+        timeout_time = None
 
         match pattern_type:
             case PatternCheckType.NORMAL:
                 pass
 
             case PatternCheckType.PER_WORLD:
+                assert pattern
                 segments = pattern.get_aligned_segments()
                 for conflict in registry.lookups.segments.get(segments, []):
                     conflicts[conflict.id] = ("shape", conflict)
+
+            case PatternCheckType.REGEX:
+                start_time = time.time()
+                pat = regex.compile(signature)
+                for info in registry.patterns.values():
+                    try:
+                        if pat.match(info.signature, timeout=0.5):  # no ReDoS for you
+                            conflicts[info.id] = ("regex", info)
+                    except TimeoutError:
+                        pass
+                    if (elapsed := time.time() - start_time) >= 0.5:
+                        timeout_time = elapsed
+                        break
 
             case PatternCheckType.SPECIAL_PREFIX:
                 for info in registry.patterns.values():
@@ -163,18 +187,26 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
                     name=await translate_command_text(
                         interaction, f"conflict-{conflict_type}"
                     ),
-                    value="\n".join(lines),
+                    value=truncate_str("\n".join(lines), 1024),
                     inline=False,
                 )
         else:
             embed = Embed(
                 title=title,
-                color=Color.green(),
+                color=Color.green() if timeout_time is None else Color.orange(),
+            )
+
+        if pattern_type is PatternCheckType.REGEX:
+            embed.set_footer(text=signature)
+
+        if timeout_time is not None:
+            embed.description = await translate_command_text(
+                interaction, "timeout", time=timeout_time
             )
 
         await EmbedPatternView(
             interaction=interaction,
-            patterns=[pattern],
+            patterns=[pattern] if pattern else [],
             hide_stroke_order=pattern_type is PatternCheckType.PER_WORLD,
             embed=embed,
         ).send(interaction, visibility)

@@ -101,6 +101,8 @@ choice_HexBug-cogs-app-commands-pattern-PatternCheckType =
         Normal
     .PER-WORLD =
         Per-World
+    .REGEX =
+        Regular Expression
     .SPECIAL-PREFIX =
         Special Handler Prefix
 
@@ -506,9 +508,12 @@ command_pattern-check =
            *[other] Conflicts found!
         }
 
+    .text_timeout = ⚠️ Timed out after { $time } seconds.
+
     .text_conflict-signature = Signature
     .text_conflict-shape = Shape
     .text_conflict-prefix = Prefix
+    .text_conflict-regex = Regular Expression
 
 # /pattern build
 

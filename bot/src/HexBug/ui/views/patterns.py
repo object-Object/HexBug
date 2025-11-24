@@ -92,13 +92,15 @@ class BasePatternView(ui.View, ABC):
         )
 
     def get_attachments(self) -> list[File]:
-        return [
-            self.options.render_discord_file(
-                self.get_patterns(),
-                hide_stroke_order=self.hide_stroke_order,
-                filename=PATTERN_FILENAME,
-            )
-        ]
+        if patterns := list(self.get_patterns()):
+            return [
+                self.options.render_discord_file(
+                    patterns,
+                    hide_stroke_order=self.hide_stroke_order,
+                    filename=PATTERN_FILENAME,
+                )
+            ]
+        return []
 
     def add_items(
         self,
@@ -144,6 +146,9 @@ class EmbedPatternView(BasePatternView):
 
     @override
     async def get_embeds(self, interaction: Interaction) -> list[Embed]:
+        if not self.patterns:
+            return [self.embed]
+
         return [
             self.embed.set_image(
                 url=f"attachment://{PATTERN_FILENAME}",
