@@ -563,9 +563,7 @@ PATTERN_NAME_OVERRIDES: dict[ResourceLocation, str] = {
 }
 
 # append the mod's name to the pattern's name
-DISAMBIGUATED_PATTERNS: set[ResourceLocation] = {
-    ResourceLocation("hexflow", "pure_map"),  # conflicts with overevaluate:maat
-}
+DISAMBIGUATED_PATTERNS: set[ResourceLocation] = set()
 
 DISABLED_PAGES: set[str] = set()
 

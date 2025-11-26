@@ -35,7 +35,7 @@ full = [
     "hexdoc-hexchanting==1.1.3.*",
     "hexdoc-hexdebug==0.8.0.1.20.1.*",
     "hexdoc-hexdim==1.2.1.1.20.*",
-    "hexdoc-hexflow==0.3.2.*",
+    "hexdoc-hexflow==0.3.3.*",
     "hexdoc-hexgender==1.0.4.*",
     "hexdoc-hexic==1.4.6.*",
     "hexdoc-hexical==2.0.0.*",

@@ -18,7 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 ### Mods Updated
 
 - Hex Casting: 0.11.3
-- HexFlow: 0.3.2
+- HexFlow: 0.3.3
 - HexOverpowered: 0.10.1
 - mediatransport: 1.1.1+1.20.1
 
