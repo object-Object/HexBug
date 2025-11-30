@@ -388,6 +388,15 @@ MODS: list[StaticModInfo] = [
         modrinth_slug="slate-works",
         modloaders=[Modloader.FABRIC],
     ),
+    StaticModInfo(
+        id="yaha",
+        name="Yet Another Hex Addon",
+        description="Adds an assorted handful of spells, patterns, and items.",
+        icon_url=URL("src/main/resources/assets/yaha/icon.png"),
+        curseforge_slug=None,
+        modrinth_slug="yaha",
+        modloaders=[Modloader.FABRIC],
+    ),
 ]
 """The master list of mods supported by HexBug.
 
