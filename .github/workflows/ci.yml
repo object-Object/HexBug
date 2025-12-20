@@ -22,6 +22,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: object-object/hexbug
+  VERSION_REGEX: 'v[0-9]+(\.[0-9]+)+'
 
 jobs:
   setup:
@@ -35,7 +36,7 @@ jobs:
         run: |
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             STAGE="${{ inputs.stage }}"
-          elif [[ "${{ github.ref }}" =~ ^refs/tags/v[0-9]+(\.[0-9]+)+$ ]]; then
+          elif [[ "${{ github.ref }}" =~ ^refs/tags/${{ env.VERSION_REGEX }}$ ]]; then
             STAGE="prod"
           else
             STAGE="beta"
@@ -51,10 +52,52 @@ jobs:
     with:
       hexdoc-release: ${{ needs.setup.outputs.hexdoc-release == 'true' }}
 
+  check:
+    needs:
+      - setup
+      - build
+    runs-on: ubuntu-latest
+    outputs:
+      deploy-bot: ${{ steps.check-workflows.outputs.result == 'ok' }}
+    steps:
+      - name: Check for active prod deployments triggered by tag push
+        id: check-workflows
+        uses: actions/github-script@v8
+        env:
+          STAGE: ${{ needs.setup.outputs.stage }}
+        with:
+          result-encoding: string
+          script: |
+            if (process.env.STAGE === "prod") {
+              return "ok"
+            }
+
+            const runs = await github.rest.actions.listWorkflowRuns({
+              ...context.repo,
+              workflow_id: process.env.GITHUB_WORKFLOW_REF.match(/\/([^/]+\.ya?ml)@/)[1],
+              event: "push",
+              status: "in_progress",
+              exclude_pull_requests: true,
+            })
+
+            for (const run in runs) {
+              if (
+                run.head_branch.match(/^${{ env.VERSION_REGEX }}$/) != null
+                && run.id !== context.runId
+              ) {
+                console.log("Found active deployment:", run.html_url)
+                return "not_ok"
+              }
+            }
+
+            return "ok"
+
   push-image:
     needs:
       - setup
       - build
+      - check
+    if: needs.check.outputs.deploy-bot == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
