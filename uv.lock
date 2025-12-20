@@ -1001,7 +1001,7 @@ requires-dist = [
     { name = "hexdoc", specifier = ">=1!0.1.0a35" },
     { name = "hexdoc-caduceus", marker = "extra == 'full'", specifier = "==0.1.1.1.20.1.*" },
     { name = "hexdoc-complexhex", marker = "extra == 'full'", url = "https://github.com/kineticneticat/ComplexHex/raw/51cf2bbac7183cd6b4be360f205bd20d99d56952/docs/v/latest/0.1.x/dist/hexdoc_complexhex-0.1.6.1.0.dev0-py3-none-any.whl" },
-    { name = "hexdoc-dthexcasting", marker = "extra == 'full'", specifier = "==1.0.1.*" },
+    { name = "hexdoc-dthexcasting", marker = "extra == 'full'", specifier = "==1.0.2.*" },
     { name = "hexdoc-efhexs", marker = "extra == 'full'", url = "https://github.com/miyucomics/special-efhexs/raw/8029ab75e0d42c92795612639d3dae3170520ddd/docs/v/latest/main/dist/hexdoc_efhexs-1.0.0.1.0.0-py3-none-any.whl" },
     { name = "hexdoc-ephemera", marker = "extra == 'full'", url = "https://github.com/beholderface/Ephemera/raw/74e80eddd991059785eede8435981716480b69ae/docs/v/latest/1.20.1/dist/hexdoc_ephemera-0.3.0.1.0.dev0-py3-none-any.whl" },
     { name = "hexdoc-hex-ars-link", marker = "extra == 'full'", specifier = "==0.9.2.4.*" },
@@ -1019,11 +1019,11 @@ requires-dist = [
     { name = "hexdoc-hexmapping", marker = "extra == 'full'", specifier = "==0.0.3.*" },
     { name = "hexdoc-hexodus", marker = "extra == 'full'", specifier = "==1.0.0.*" },
     { name = "hexdoc-hexoverpowered", marker = "extra == 'full'", specifier = "==0.10.1.*" },
-    { name = "hexdoc-hexparse", marker = "extra == 'full'", specifier = "==1.5.0.*" },
+    { name = "hexdoc-hexparse", marker = "extra == 'full'", specifier = "==1.6.0.*" },
     { name = "hexdoc-hexpose", marker = "extra == 'full'", specifier = "==1.0.0.1.0.0+hexbug" },
     { name = "hexdoc-hexstruction", marker = "extra == 'full'", url = "https://github.com/PetersonE1/hexstruction/raw/510da7fea2f52d6497c50753990bbc5919ee71ad/docs/v/latest/main/dist/hexdoc_hexstruction-1.2.1.1.20.1.1.0-py3-none-any.whl" },
     { name = "hexdoc-hextended", marker = "extra == 'full'", url = "https://github.com/abilliontrillionstars/hextended-staves/raw/0e6e0a61b7f4d3e79761b216cfebc1141e19b30b/docs/v/latest/main/dist/hexdoc_hextended-2.0.1.1.0.dev0-py3-none-any.whl" },
-    { name = "hexdoc-hexthings", marker = "extra == 'full'", specifier = "==0.1.4.1.20.1.*" },
+    { name = "hexdoc-hexthings", marker = "extra == 'full'", specifier = "==0.1.5.1.20.1.*" },
     { name = "hexdoc-hextrace", marker = "extra == 'full'", specifier = "==0.1.0.1.20.1.*" },
     { name = "hexdoc-hextrogen", marker = "extra == 'full'", specifier = "==1.1.0.*" },
     { name = "hexdoc-hextweaks", marker = "extra == 'full'", specifier = "==5.3.3.*" },
@@ -1145,14 +1145,14 @@ provides-extras = ["dev"]
 
 [[package]]
 name = "hexdoc-dthexcasting"
-version = "1.0.1.1.0"
+version = "1.0.2.1.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "hexdoc-hexcasting" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/c1/b3/da772c5268c62d7a9d9e871553147f1dd89f72676e2bbaf24f3dfa8bf4fc/hexdoc_dthexcasting-1.0.1.1.0.tar.gz", hash = "sha256:f329cfdf3b51aa488a3e246ecb35a6deb2a80ad7eaf379a5136fa26738de6ccf", size = 10817, upload-time = "2025-02-24T13:24:23.711Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b4/a0/7b4e1c61c3194765fda59fd51a181b6af2b960cd928d7ef02db1878e0d9f/hexdoc_dthexcasting-1.0.2.1.0.tar.gz", hash = "sha256:c90e9419e4b6ba689c0a4e8720c1651a0b78b7d719b277f6c6bb99ec17130137", size = 10808, upload-time = "2025-12-08T05:04:10.143Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f4/24/600eee087dc8e11d1ba3ce7be91b55c9e41db4c4b64d8c2e0bfad34c5dc5/hexdoc_dthexcasting-1.0.1.1.0-py3-none-any.whl", hash = "sha256:f561362f5408095b1a0c5aa0b475ae7483789701ab425b9814da482e67630d36", size = 18114, upload-time = "2025-02-24T13:24:21.886Z" },
+    { url = "https://files.pythonhosted.org/packages/ea/b4/74557622032d705581ad94a6f71907cd8e67945030d43b410fd72966485b/hexdoc_dthexcasting-1.0.2.1.0-py3-none-any.whl", hash = "sha256:6af2d1d6b2a4af6fe706d4dd27abccdaeb66f2dbb2d7361dc7d6fbe86ffc5a10", size = 18089, upload-time = "2025-12-08T05:04:09.089Z" },
 ]
 
 [[package]]
@@ -1386,14 +1386,14 @@ wheels = [
 
 [[package]]
 name = "hexdoc-hexparse"
-version = "1.5.0.1.1"
+version = "1.6.0.1.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "hexdoc-hexcasting" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/c7/fc/d1aca125c3142835bbf00c225231e472558799ed9d4d7544f1435429b671/hexdoc_hexparse-1.5.0.1.1.tar.gz", hash = "sha256:bdaef20e4701bb1e55a9204450c1bf8bb222d3403c9bd96df48bbb75f47cce6e", size = 12098, upload-time = "2025-10-26T15:01:11.778Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/13/e9/d2f41593d3319880ce97948ffe49cdf46f8901530677781c4e513b6e3da4/hexdoc_hexparse-1.6.0.1.1.tar.gz", hash = "sha256:acdfd0d985189bc3996c16316cb7a074a2f756a70dc7b8545f7ff84ff2a98557", size = 12252, upload-time = "2025-12-13T16:10:18.91Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ee/fa/70cafdfa9444b9adb786e46314af1bdce2f370f8bf6fd2fac7de87f5773e/hexdoc_hexparse-1.5.0.1.1-py3-none-any.whl", hash = "sha256:34c1d3fab38f490cb88a963d1a07fc216208c9a612e2ed4a0287333d757b95c4", size = 17122, upload-time = "2025-10-26T15:01:10.602Z" },
+    { url = "https://files.pythonhosted.org/packages/89/bd/26684082eb6bf6214962f324de4cd477f689bd32320d1bba86b029e43314/hexdoc_hexparse-1.6.0.1.1-py3-none-any.whl", hash = "sha256:019259394824f2f5f4d2718c14be3f4d9492dd4f108b343ccbb11f0c3a495421", size = 17296, upload-time = "2025-12-13T16:10:17.664Z" },
 ]
 
 [[package]]
@@ -1445,14 +1445,14 @@ provides-extras = ["dev"]
 
 [[package]]
 name = "hexdoc-hexthings"
-version = "0.1.4.1.20.1.1.2"
+version = "0.1.5.1.20.1.1.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "hexdoc-hexcasting" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/41/05/86158d6999f13f03c46a0dd0477cc86fac1c44349a8fe68039c2c8ccbf2e/hexdoc_hexthings-0.1.4.1.20.1.1.2.tar.gz", hash = "sha256:486bc520bf818539a0c82ec2c9acbcd686502e7658e78973f64c4a4f06bb919a", size = 9659, upload-time = "2025-11-22T03:54:21.871Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/db/42/9b6b3e2b41a0af166cfbe82acf6ddac8563b8f7a027f84c220471a43d452/hexdoc_hexthings-0.1.5.1.20.1.1.2.tar.gz", hash = "sha256:f524b4ee03f1f18d83a5d277b02d8eb8f8ba78ba396b79b1e2a5cf452664bf8c", size = 10886, upload-time = "2025-12-01T17:28:25.59Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/17/b4/2184ab7123c27d7f1cc3beb5f67a49d25519b0f18943ae6ad559507625d0/hexdoc_hexthings-0.1.4.1.20.1.1.2-py3-none-any.whl", hash = "sha256:6a4d4620e178ce2e7b3c2282e17da79c4a037bf9469a249858e6cfd3302c1b21", size = 12559, upload-time = "2025-11-22T03:54:20.676Z" },
+    { url = "https://files.pythonhosted.org/packages/7f/a5/612fd7a34b5d2cbf918b3babbc4fdf8d1eeca1649b144b2eb1dd25263d20/hexdoc_hexthings-0.1.5.1.20.1.1.2-py3-none-any.whl", hash = "sha256:6d5a43ff264e62f9c43c14e6a85e78b209246087f8bd92a00cfa3b0faeb03375", size = 14206, upload-time = "2025-12-01T17:28:24.336Z" },
 ]
 
 [[package]]

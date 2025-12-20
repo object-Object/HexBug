@@ -498,6 +498,10 @@ DISABLED_PATTERNS: set[ResourceLocation] = {
     ResourceLocation("lapisworks", "empty_prfn"),  # signature: hexal:mote/storage/get
     # unreasonably long angle signature
     ResourceLocation("hexic", "whatthefuck"),
+    # "hexic is being digested from the inside"
+    ResourceLocation("hexic", "drop"),
+    ResourceLocation("hexic", "rotate"),
+    ResourceLocation("hexic", "take"),
     # not real patterns
     ResourceLocation("hexcasting", "const/vec/x"),
     ResourceLocation("hexcasting", "const/vec/y"),

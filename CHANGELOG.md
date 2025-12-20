@@ -12,6 +12,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ### Mods Updated
 
+- Dynamic Trees - Hexcasting: 1.0.2
+- HexParse: 1.6.0
+- HexThings: 0.1.5+1.20.1
 - Lapisworks: 1.5.7
 
 ## `2.6.0` - 2025-11-25
