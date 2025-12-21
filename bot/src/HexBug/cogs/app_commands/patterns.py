@@ -4,6 +4,7 @@ from fractions import Fraction
 
 from discord import Embed, Interaction, app_commands
 from discord.ext.commands import GroupCog
+from hex_renderer_py import PatternVariant
 
 from HexBug.core.cog import HexBugCog
 from HexBug.core.exceptions import InvalidInputError
@@ -29,7 +30,7 @@ class PatternsCog(HexBugCog, GroupCog, group_name="patterns"):
         show_signatures: bool = False,
         visibility: VisibilityOption = Visibility.PRIVATE,
     ):
-        patterns = list[HexPattern]()
+        patterns = list[PatternVariant]()
 
         # allow eg. { mind } compass
         for punctuation in PUNCTUATION:
@@ -41,12 +42,10 @@ class PatternsCog(HexBugCog, GroupCog, group_name="patterns"):
                 continue
 
             match self.bot.registry.try_match_shorthand(shorthand):
-                case (
-                    PatternInfo(pattern=pattern)
-                    | SpecialHandlerPattern(pattern=pattern)
-                    | (HexPattern() as pattern)
-                ):
-                    patterns.append(pattern)
+                case PatternInfo(pattern=pattern, is_per_world=is_per_world):
+                    patterns.append(pattern.pattern_variant(is_per_world))
+                case SpecialHandlerPattern(pattern=pattern) | (HexPattern() as pattern):
+                    patterns.append(pattern.pattern_variant())
                 case None:
                     raise InvalidInputError("Unrecognized pattern.", value=shorthand)
 

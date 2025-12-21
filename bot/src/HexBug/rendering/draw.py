@@ -1,5 +1,5 @@
 from io import BytesIO
-from typing import Iterable
+from typing import Iterable, Iterator
 
 from discord import File
 from hex_renderer_py import (
@@ -30,6 +30,10 @@ DEFAULT_LINE_WIDTH = 0.08
 DEFAULT_MAX_OVERLAPS = 3
 DEFAULT_MAX_GRID_WIDTH = 50
 
+type RenderablePattern = HexPattern | PatternVariant
+type RenderablePatterns = Iterable[HexPattern | PatternVariant]
+type RenderablePatternOrPatterns = RenderablePattern | RenderablePatterns
+
 
 class PatternRenderingOptions(BaseModel):
     model_config = {
@@ -52,7 +56,7 @@ class PatternRenderingOptions(BaseModel):
 
     def render_discord_file(
         self,
-        patterns: HexPattern | Iterable[HexPattern],
+        patterns: RenderablePatternOrPatterns,
         hide_stroke_order: bool,
         filename: str,
     ):
@@ -61,7 +65,7 @@ class PatternRenderingOptions(BaseModel):
 
     def render_image(
         self,
-        patterns: HexPattern | Iterable[HexPattern],
+        patterns: RenderablePatternOrPatterns,
         hide_stroke_order: bool,
     ):
         return draw_patterns(
@@ -139,7 +143,7 @@ class PatternRenderingOptions(BaseModel):
 
 
 def draw_patterns(
-    patterns: HexPattern | Iterable[HexPattern],
+    patterns: RenderablePatternOrPatterns,
     options: GridOptions,
     *,
     scale: float | None = DEFAULT_SCALE,
@@ -147,12 +151,9 @@ def draw_patterns(
     max_grid_width: int = DEFAULT_MAX_GRID_WIDTH,
     trim_padding: bool = True,
 ) -> Image.Image:
-    if isinstance(patterns, HexPattern):
-        patterns = [patterns]
-
     grid = HexGrid(
-        [PatternVariant(p.direction.name, p.signature) for p in patterns],
-        max_grid_width,
+        patterns=list(parse_patterns(patterns)),
+        max_width=max_grid_width,
     )
 
     if isinstance(max_size, int):
@@ -169,6 +170,17 @@ def draw_patterns(
         if trim_padding:
             im = im.crop(im.getbbox())
         return im
+
+
+def parse_patterns(patterns: RenderablePatternOrPatterns) -> Iterator[PatternVariant]:
+    match patterns:
+        case HexPattern(direction=direction, signature=signature):
+            yield PatternVariant(direction=direction.name, angle_sigs=signature)
+        case PatternVariant():
+            yield patterns
+        case _:
+            for pattern in patterns:
+                yield from parse_patterns(pattern)
 
 
 def image_to_buffer(im: Image.Image):

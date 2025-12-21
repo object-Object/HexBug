@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import InitVar, dataclass, field
-from typing import Any, Iterable, Self, override
+from typing import Any, Self, override
 
 from discord import (
     ButtonStyle,
@@ -15,6 +15,7 @@ from discord import (
     ui,
 )
 from discord.app_commands import Command
+from hex_renderer_py import PatternVariant
 from hexdoc.core import ResourceLocation
 
 from HexBug.core.bot import HexBugBot
@@ -23,7 +24,7 @@ from HexBug.data.patterns import PatternInfo, PatternOperator
 from HexBug.data.registry import HexBugRegistry, PatternMatchResult
 from HexBug.data.special_handlers import SpecialHandlerMatch
 from HexBug.db.models import PerWorldPattern
-from HexBug.rendering.draw import PatternRenderingOptions
+from HexBug.rendering.draw import PatternRenderingOptions, RenderablePatterns
 from HexBug.rendering.types import Palette, Theme
 from HexBug.utils.discord.commands import AnyCommand
 from HexBug.utils.discord.components import update_indexed_select_menu
@@ -61,7 +62,7 @@ class BasePatternView(ui.View, ABC):
             self.command = interaction.command
 
     @abstractmethod
-    def get_patterns(self) -> Iterable[HexPattern]: ...
+    def get_patterns(self) -> RenderablePatterns: ...
 
     @abstractmethod
     async def get_embeds(self, interaction: Interaction) -> list[Embed]: ...
@@ -138,11 +139,11 @@ class BasePatternView(ui.View, ABC):
 @dataclass(kw_only=True)
 class EmbedPatternView(BasePatternView):
     embed: Embed
-    patterns: Iterable[HexPattern]
+    patterns: RenderablePatterns
     add_footer: bool = True
 
     @override
-    def get_patterns(self) -> Iterable[HexPattern]:
+    def get_patterns(self) -> RenderablePatterns:
         return self.patterns
 
     @override
@@ -154,7 +155,12 @@ class EmbedPatternView(BasePatternView):
             self.embed.set_image(
                 url=f"attachment://{PATTERN_FILENAME}",
             ).set_footer(
-                text=", ".join(p.display() for p in self.patterns)
+                text=", ".join(
+                    "???"
+                    if isinstance(p, PatternVariant) and p.great_spell
+                    else HexPattern.from_renderable(p).display()
+                    for p in self.patterns
+                )
                 if self.add_footer and not self.hide_stroke_order
                 else None,
             )

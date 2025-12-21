@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 - Added an optional `show_signatures` argument to `/patterns hex` (default `False`) to control whether the angle signatures in the footer are shown.
 
+### Fixed
+
+- Fixed `/patterns hex` not hiding the stroke order of per-world patterns.
+
 ### Mods Added
 
 - HexxyPlanes: 0.2.0+1.20.1
