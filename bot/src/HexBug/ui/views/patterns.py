@@ -26,7 +26,11 @@ from HexBug.data.patterns import PatternInfo, PatternOperator
 from HexBug.data.registry import HexBugRegistry, PatternMatchResult
 from HexBug.data.special_handlers import SpecialHandlerMatch
 from HexBug.db.models import PerWorldPattern
-from HexBug.rendering.draw import PatternRenderingOptions, RenderablePatterns
+from HexBug.rendering.draw import (
+    PatternRenderingOptions,
+    RenderablePatterns,
+    from_renderable_pattern,
+)
 from HexBug.rendering.types import Palette, Theme
 from HexBug.utils.discord.commands import AnyCommand
 from HexBug.utils.discord.components import update_indexed_select_menu
@@ -160,7 +164,7 @@ class EmbedPatternView(BasePatternView):
                 text=", ".join(
                     "???"
                     if isinstance(p, PatternVariant) and p.great_spell
-                    else HexPattern.from_renderable(p).display()
+                    else from_renderable_pattern(p).display()
                     for p in self.patterns
                 )
                 if self.add_footer and not self.hide_stroke_order

@@ -19,7 +19,7 @@ from hex_renderer_py import (
 from PIL import Image
 from pydantic import BaseModel, Field
 
-from HexBug.data.hex_math import HexPattern
+from HexBug.data.hex_math import HexDir, HexPattern
 
 from .types import Palette, Theme
 
@@ -188,3 +188,26 @@ def image_to_buffer(im: Image.Image):
     im.save(buf, format="png")
     buf.seek(0)
     return buf
+
+
+def to_pattern_variant(
+    pattern: HexPattern,
+    great_spell: bool = False,
+) -> PatternVariant:
+    """Converts a `HexPattern` to a `PatternVariant` for use with hex_renderer_py."""
+    return PatternVariant(
+        direction=pattern.direction.name,
+        angle_sigs=pattern.signature,
+        great_spell=great_spell,
+    )
+
+
+def from_renderable_pattern(renderable: RenderablePattern) -> HexPattern:
+    match renderable:
+        case HexPattern():
+            return renderable
+        case PatternVariant():
+            return HexPattern(
+                direction=HexDir[renderable.direction],
+                signature=renderable.angle_sigs,
+            )

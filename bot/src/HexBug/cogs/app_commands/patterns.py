@@ -13,6 +13,7 @@ from HexBug.data.patterns import PatternInfo
 from HexBug.data.special_handlers import SpecialHandlerPattern
 from HexBug.data.utils.shorthand import PUNCTUATION
 from HexBug.data.utils.strings import format_number
+from HexBug.rendering.draw import to_pattern_variant
 from HexBug.ui.views.patterns import EmbedPatternView, NamedPatternView
 from HexBug.utils.discord.visibility import Visibility, VisibilityOption
 from HexBug.utils.numbers import DecomposedNumber
@@ -43,9 +44,9 @@ class PatternsCog(HexBugCog, GroupCog, group_name="patterns"):
 
             match self.bot.registry.try_match_shorthand(shorthand):
                 case PatternInfo(pattern=pattern, is_per_world=is_per_world):
-                    patterns.append(pattern.pattern_variant(is_per_world))
+                    patterns.append(to_pattern_variant(pattern, is_per_world))
                 case SpecialHandlerPattern(pattern=pattern) | (HexPattern() as pattern):
-                    patterns.append(pattern.pattern_variant())
+                    patterns.append(to_pattern_variant(pattern))
                 case None:
                     raise InvalidInputError("Unrecognized pattern.", value=shorthand)
 

@@ -2,16 +2,12 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Annotated, Any, Iterable, Iterator
+from typing import Annotated, Any, Iterable, Iterator
 
-from hex_renderer_py import PatternVariant
 from pydantic import BeforeValidator, Field
 from pydantic.dataclasses import dataclass as pydantic_dataclass
 
 from .utils.enums import WrappingEnum, pydantic_enum
-
-if TYPE_CHECKING:
-    from HexBug.rendering.draw import RenderablePattern
 
 PATTERN_SIGNATURE_MAX_LENGTH = 512
 
@@ -198,25 +194,6 @@ type PatternSignature = Annotated[
 class HexPattern:
     direction: HexDir
     signature: PatternSignature
-
-    @classmethod
-    def from_renderable(cls, renderable: RenderablePattern) -> HexPattern:
-        match renderable:
-            case HexPattern():
-                return renderable
-            case PatternVariant():
-                return cls(
-                    direction=HexDir[renderable.direction],
-                    signature=renderable.angle_sigs,
-                )
-
-    def pattern_variant(self, great_spell: bool = False) -> PatternVariant:
-        """Converts this pattern to a `PatternVariant` for use with hex_renderer_py."""
-        return PatternVariant(
-            direction=self.direction.name,
-            angle_sigs=self.signature,
-            great_spell=great_spell,
-        )
 
     def display(self) -> str:
         return f"{self.direction.name} {self.signature}".rstrip()
