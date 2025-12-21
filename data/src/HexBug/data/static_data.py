@@ -301,7 +301,7 @@ MODS: list[StaticModInfo] = [
     StaticModInfo(
         id="hexxyplanes",
         name="HexxyPlanes",
-        description="Adds miscellaneous patterns related to staff-casting.",
+        description="Mini personal dimensions for all your hexcasting secrets.",
         icon_url=URL("common/src/main/resources/assets/hexxyplanes/icon.png"),
         curseforge_slug="hexxyplanes",
         modrinth_slug="hexxyplanes",
