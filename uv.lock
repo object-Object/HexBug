@@ -983,6 +983,7 @@ full = [
     { name = "hexdoc-hextrogen" },
     { name = "hexdoc-hextweaks" },
     { name = "hexdoc-hexweb" },
+    { name = "hexdoc-hexxyplanes" },
     { name = "hexdoc-hierophantics" },
     { name = "hexdoc-ioticblocks" },
     { name = "hexdoc-lapisworks" },
@@ -1028,6 +1029,7 @@ requires-dist = [
     { name = "hexdoc-hextrogen", marker = "extra == 'full'", specifier = "==1.1.0.*" },
     { name = "hexdoc-hextweaks", marker = "extra == 'full'", specifier = "==5.3.3.*" },
     { name = "hexdoc-hexweb", marker = "extra == 'full'", specifier = "==1.0.4.*" },
+    { name = "hexdoc-hexxyplanes", marker = "extra == 'full'", specifier = "==0.2.0.1.20.1.*" },
     { name = "hexdoc-hierophantics", marker = "extra == 'full'", specifier = "==1.3.3.*" },
     { name = "hexdoc-ioticblocks", marker = "extra == 'full'", specifier = "==1.0.2.1.20.1.*" },
     { name = "hexdoc-lapisworks", marker = "extra == 'full'", specifier = "==1.5.7.*" },
@@ -1499,6 +1501,18 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/57/71/ffefa6d85be341673810da1e19562582b994c45c5223391b11e687d80985/hexdoc_hexweb-1.0.4.1.1.tar.gz", hash = "sha256:b8ee8b908c14e72aaba2c2c7ec805cdc9c0c81ecc6f203e0f51c6ae31f72a4b1", size = 8501, upload-time = "2025-02-22T03:37:20.201Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/d2/b8/67012b495c14ddc2cc74d355e70b645b8485789254288a65c575f4ba2e26/hexdoc_hexweb-1.0.4.1.1-py3-none-any.whl", hash = "sha256:53ef341faa8ffc280fe80a0b1635e66f32c94b58c5f6f9ec15e3dc0677dd916e", size = 11082, upload-time = "2025-02-22T03:37:16.532Z" },
+]
+
+[[package]]
+name = "hexdoc-hexxyplanes"
+version = "0.2.0.1.20.1.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "hexdoc-hexcasting" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/94/b4/23a58fbcf3a333654441aaf3d36826fccc85b9b210e0207394784f5f79d4/hexdoc_hexxyplanes-0.2.0.1.20.1.1.0.tar.gz", hash = "sha256:4b27229c67dfbf1b7f96c98c0f0a5bb61f461c2bed30c39929bcc137c8c548fb", size = 10824, upload-time = "2025-12-14T18:10:24.612Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/03/71/021f188ada4ac3e590fcc5f9c7809f44571ec29c35582a1a59f8699cab4f/hexdoc_hexxyplanes-0.2.0.1.20.1.1.0-py3-none-any.whl", hash = "sha256:4ebb696e74a50e3c188a7a324dcf1bbe880fcce8e59ab1d343833742ab9509c1", size = 15855, upload-time = "2025-12-14T18:10:23.558Z" },
 ]
 
 [[package]]

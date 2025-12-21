@@ -299,6 +299,15 @@ MODS: list[StaticModInfo] = [
         modloaders=[Modloader.FABRIC, Modloader.FORGE, Modloader.QUILT],
     ),
     StaticModInfo(
+        id="hexxyplanes",
+        name="HexxyPlanes",
+        description="Adds miscellaneous patterns related to staff-casting.",
+        icon_url=URL("common/src/main/resources/assets/hexxyplanes/icon.png"),
+        curseforge_slug="hexxyplanes",
+        modrinth_slug="hexxyplanes",
+        modloaders=[Modloader.FABRIC, Modloader.FORGE],
+    ),
+    StaticModInfo(
         id="hierophantics",
         name="Hierophantics",
         description="Addon for Hex Casting that lets you work with extracted minds to create conditional hexes, merge villagers, and cast spells for less media.",
