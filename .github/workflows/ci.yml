@@ -69,7 +69,7 @@ jobs:
           result-encoding: string
           script: |
             if (process.env.STAGE === "prod") {
-              return "ok"
+              return "ok";
             }
 
             const runs = await github.rest.actions.listWorkflowRuns({
@@ -78,19 +78,20 @@ jobs:
               event: "push",
               status: "in_progress",
               exclude_pull_requests: true,
-            })
+            });
 
             for (const run in runs) {
+              console.log(run);
               if (
                 run.head_branch.match(/^${{ env.VERSION_REGEX }}$/) != null
                 && run.id !== context.runId
               ) {
-                console.log("Found active deployment:", run.html_url)
-                return "not_ok"
+                console.log("Found active deployment:", run.html_url);
+                return "not_ok";
               }
             }
 
-            return "ok"
+            return "ok";
 
   push-image:
     needs:
