@@ -26,6 +26,7 @@ class PatternsCog(HexBugCog, GroupCog, group_name="patterns"):
         self,
         interaction: Interaction,
         hex: str,
+        show_signatures: bool = False,
         visibility: VisibilityOption = Visibility.PRIVATE,
     ):
         patterns = list[HexPattern]()
@@ -54,6 +55,7 @@ class PatternsCog(HexBugCog, GroupCog, group_name="patterns"):
             patterns=patterns,
             hide_stroke_order=False,
             embed=Embed(),
+            add_footer=show_signatures,
         ).send(interaction, visibility)
 
     @app_commands.command()

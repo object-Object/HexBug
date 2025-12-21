@@ -139,6 +139,7 @@ class BasePatternView(ui.View, ABC):
 class EmbedPatternView(BasePatternView):
     embed: Embed
     patterns: Iterable[HexPattern]
+    add_footer: bool = True
 
     @override
     def get_patterns(self) -> Iterable[HexPattern]:
@@ -154,7 +155,7 @@ class EmbedPatternView(BasePatternView):
                 url=f"attachment://{PATTERN_FILENAME}",
             ).set_footer(
                 text=", ".join(p.display() for p in self.patterns)
-                if not self.hide_stroke_order
+                if self.add_footer and not self.hide_stroke_order
                 else None,
             )
         ]

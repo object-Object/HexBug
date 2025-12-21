@@ -544,6 +544,11 @@ command_patterns-hex =
     .parameter_hex_description =
         One or more comma-separated patterns to display. Shorthand is allowed.
 
+    .parameter_show-signatures =
+        show_signatures
+    .parameter_show-signatures_description =
+        Show the patterns' angle signatures in the embed footer.
+
     .parameter_visibility = {-parameter_visibility}
     .parameter_visibility_description = {-parameter_visibility_description}
 
