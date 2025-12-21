@@ -72,7 +72,7 @@ jobs:
               return "ok";
             }
 
-            const { data: runs } = await github.rest.actions.listWorkflowRuns({
+            const { data: { workflow_runs } } = await github.rest.actions.listWorkflowRuns({
               ...context.repo,
               workflow_id: process.env.GITHUB_WORKFLOW_REF.match(/\/([^/]+\.ya?ml)@/)[1],
               event: "push",
@@ -80,7 +80,7 @@ jobs:
               exclude_pull_requests: true,
             });
 
-            for (const run in runs) {
+            for (const run in workflow_runs) {
               if (
                 run.head_branch.match(/^${{ env.VERSION_REGEX }}$/) != null
                 && run.id !== context.runId
