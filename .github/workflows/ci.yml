@@ -82,7 +82,7 @@ jobs:
 
             for (const run in workflow_runs) {
               if (
-                run.head_branch.match(/^${{ env.VERSION_REGEX }}$/) != null
+                run.head_branch?.match(/^${{ env.VERSION_REGEX }}$/) != null
                 && run.id !== context.runId
               ) {
                 console.log("Found active deployment:", run.html_url);
