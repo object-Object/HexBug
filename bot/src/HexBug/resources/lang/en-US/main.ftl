@@ -522,6 +522,16 @@ command_pattern-build =
     .description =
         Draw a pattern incrementally using directional buttons.
 
+    .parameter_direction =
+            direction
+    .parameter_direction_description =
+            The initial starting direction of the pattern (eg. SOUTH_EAST).
+
+    .parameter_signature =
+            signature
+    .parameter_signature_description =
+            The initial angle signature of the pattern (eg. deaqq).
+
     .parameter_hide-stroke-order = {-parameter_hide-stroke-order}
     .parameter_hide-stroke-order_description = {-parameter_hide-stroke-order_description}
 

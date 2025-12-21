@@ -219,8 +219,15 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
         ).send(interaction, visibility)
 
     @app_commands.command()
-    async def build(self, interaction: Interaction, hide_stroke_order: bool = False):
+    async def build(
+        self,
+        interaction: Interaction,
+        direction: HexDirOption = HexDir.EAST,
+        signature: PatternSignatureOption = "",
+        hide_stroke_order: bool = False,
+    ):
         await PatternBuilderView(
             interaction=interaction,
+            pattern=HexPattern(direction, signature),
             hide_stroke_order=hide_stroke_order,
         ).send(interaction, Visibility.PRIVATE)

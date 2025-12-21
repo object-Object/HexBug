@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 ### Changed
 
 - Added an optional `show_signatures` argument to `/patterns hex` (default `False`) to control whether the angle signatures in the footer are shown.
+- Added the ability to specify a starting pattern for `/pattern build`.
 
 ### Fixed
 

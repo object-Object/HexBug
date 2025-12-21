@@ -1,3 +1,5 @@
+# pyright: reportIncompatibleVariableOverride=information
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
@@ -334,30 +336,47 @@ class PerWorldPatternView(NamedPatternView):
 
 @dataclass(kw_only=True)
 class PatternBuilderView(NamedPatternView):
-    pattern: HexPattern = HexPattern(HexDir.EAST, "")
+    interaction: InitVar[Interaction]
+
+    pattern: HexPattern | None = None
     info: PatternMatchResult | None = None
     add_visibility_buttons: bool = False
 
-    _start_direction: HexDir | None = field(default=None, init=False)
     current_direction: HexDir = field(default=HexDir.EAST, init=False)
+
+    def __post_init__(self, interaction: Interaction):
+        super().__post_init__(interaction)
+
+        if self.pattern:
+            self.current_direction = self.pattern.direction
+            for c in self.pattern.signature:
+                angle = HexAngle[c]
+                self.current_direction = self.current_direction.rotated_by(angle)
+
+            self.refresh_pattern()
 
     @property
     def start_direction(self):
-        return self._start_direction
+        if self.pattern:
+            return self.pattern.direction
 
     @start_direction.setter
     def start_direction(self, direction: HexDir | None):
-        self._start_direction = direction
         if direction:
-            self.pattern = HexPattern(direction, self.pattern.signature)
+            self.pattern = HexPattern(direction, self.signature)
+        else:
+            self.pattern = None
 
     @property
     def signature(self):
-        return self.pattern.signature
+        if self.pattern:
+            return self.pattern.signature
+        return ""
 
     @signature.setter
     def signature(self, signature: str):
-        self.pattern = HexPattern(self.pattern.direction, signature)
+        if self.pattern:
+            self.pattern = HexPattern(self.pattern.direction, signature)
 
     async def append_direction(self, interaction: Interaction, direction: HexDir):
         if self.start_direction is None:
@@ -402,21 +421,23 @@ class PatternBuilderView(NamedPatternView):
             return []
         return super().get_attachments()
 
+    def refresh_pattern(self):
+        disabled = self.pattern is None
+        self.done_button.disabled = disabled
+        self.undo_button.disabled = disabled
+        self.clear_button.disabled = disabled
+
+        if disabled:
+            self.info = self.display_info = None
+        else:
+            assert self.pattern is not None
+            self.info = info = self.registry.try_match_pattern(self.pattern)
+            self.display_info = self.registry.display_pattern(info) if info else None
+
     @override
     async def refresh(self, interaction: Interaction, *, view: ui.View | None = None):
         if not view:
-            disabled = self.start_direction is None
-            self.done_button.disabled = disabled
-            self.undo_button.disabled = disabled
-            self.clear_button.disabled = disabled
-
-            if disabled:
-                self.info = self.display_info = None
-            else:
-                self.info = info = self.registry.try_match_pattern(self.pattern)
-                self.display_info = (
-                    self.registry.display_pattern(info) if info else None
-                )
+            self.refresh_pattern()
 
         await (
             interaction.edit_original_response
