@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 ### Mods Updated
 
 - HexxyPlanes: 0.2.1+1.20.1
+- Yet Another Hex Addon: 0.2.0
 
 ## `2.7.0` - 2025-12-20
 

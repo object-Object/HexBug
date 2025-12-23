@@ -62,7 +62,7 @@ full = [
     "hexdoc-overevaluate==1.0.0.*",
     "hexdoc-scryglass==1.0.0.*",
     "hexdoc-slate-work==1.0.3.*",
-    "hexdoc-yaha==0.1.0.*",
+    "hexdoc-yaha==0.2.0.*",
 ]
 
 [project.urls]
