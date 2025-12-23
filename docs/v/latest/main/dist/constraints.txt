@@ -336,9 +336,9 @@ hexdoc-hexweb==1.0.4.1.1 \
     --hash=sha256:53ef341faa8ffc280fe80a0b1635e66f32c94b58c5f6f9ec15e3dc0677dd916e \
     --hash=sha256:b8ee8b908c14e72aaba2c2c7ec805cdc9c0c81ecc6f203e0f51c6ae31f72a4b1
     # via hexbug-data
-hexdoc-hexxyplanes==0.2.0.1.20.1.1.0 \
-    --hash=sha256:4b27229c67dfbf1b7f96c98c0f0a5bb61f461c2bed30c39929bcc137c8c548fb \
-    --hash=sha256:4ebb696e74a50e3c188a7a324dcf1bbe880fcce8e59ab1d343833742ab9509c1
+hexdoc-hexxyplanes==0.2.1.1.20.1.1.0 \
+    --hash=sha256:19a185f6f63fa3a4c9d9bf995c02e026f664b1e267d0789b80eb501cf17ad2dd \
+    --hash=sha256:fa4b5b203640ed5cbf4dcbe7e59fb4042a49c0e136638787f300febf803178ab
     # via hexbug-data
 hexdoc-hierophantics==1.3.3.1.0 \
     --hash=sha256:c75eda1b5e5d3007d655b1f7eb03c8ae2909305c8e776ef507c96de22a4b87d2 \
