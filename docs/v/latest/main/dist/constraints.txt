@@ -388,9 +388,9 @@ hexdoc-slate-work==1.0.3.1.0 \
     --hash=sha256:479b10af539c8ee5f7c7eb7a380a868167546cbbd94a20e605b6cf032c2aed94 \
     --hash=sha256:9a1399893097cbec19b5ef1eade8486328f582d4681384cbb81f41b787f7b206
     # via hexbug-data
-hexdoc-yaha==0.1.0.1.0 \
-    --hash=sha256:7a4387d6079af19a7274fe357875198de235db590a464dacd01cf623fabb36b0 \
-    --hash=sha256:8a88ea7f645eccf6fc476fc535c855956510d836673b1bee37bd7a1193deb79d
+hexdoc-yaha==0.2.0.1.0 \
+    --hash=sha256:8a2f5fee74493dab82df0cbd8316f982dfc05c428fbac04b029239e230793412 \
+    --hash=sha256:bdc09641608f1ea7accb3d8660a3d97073bcc085ce737570188e9af1a425cb55
     # via hexbug-data
 httpcore==1.0.7 \
     --hash=sha256:8551cb62a169ec7162ac7be8d4817d561f60e08eaa485234898414bb5a8a0b4c \
