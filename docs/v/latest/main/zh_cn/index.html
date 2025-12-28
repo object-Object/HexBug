@@ -87,7 +87,7 @@
   </li>
             <li>
     <a
-      href="https://github.com/object-Object/HexBug/tree/3300b01a22ccea15c0af5bd9a48c957dc317e1a5"
+      href="https://github.com/object-Object/HexBug/tree/2f0fe0141d54d8e00378c1c7ecf6bff7eefa9507"
         target="_blank"
       class="navbar-link"
       role="button"
@@ -160,7 +160,7 @@
       <li><a href="https://walksanatora.github.io/hexxy-dimensions/v/1.2.1/1.20.0/en_us">Hexxy Dimensions</a> (1.2.1)</li>
       <li><a href="https://real-septicake.github.io/HexxyPlanes/v/0.2.1+1.20.1/1.0/en_us">HexxyPlanes</a> (0.2.1+1.20.1)</li>
       <li><a href="https://robotgiggle.github.io/hierophantics/v/1.3.4/1.0/en_us">Hierophantics</a> (1.3.4)</li>
-      <li><a href="https://janipen.github.io/hyper_hexcast/v/0.1.0/1.0/en_us">Hyper&#39;s Hexcast Addon</a> (0.1.0)</li>
+      <li><a href="https://janipen.github.io/hyper_hexcast/v/0.1.1/1.0/en_us">Hyper&#39;s Hexcast Addon</a> (0.1.1)</li>
       <li><a href="https://ioticblocks.hexxy.media/v/1.0.2+1.20.1/1.0/en_us">IoticBlocks</a> (1.0.2+1.20.1)</li>
       <li><a href="https://real-luxof.github.io/Lapisworks/v/1.5.7/1.7dev0/en_us">Lapisworks</a> (1.5.7)</li>
       <li><a href="https://real-luxof.github.io/Lesser-Teleport/v/1.2.1/1.2.dev0/en_us">Lesser Teleport</a> (1.2.1)</li>
@@ -38356,7 +38356,7 @@ buf:setPosition(0) -- 移回开头
         data-per-world="False"
       >浏览器不支持图案的可视化。图案代码见此：qedd</canvas>
   </details>
-      <p>Returns a sorted list of integers below the input. Mishaps if the input is less than 0.</p>
+      <p>Returns a list of nonnegative integers below the input. Mishaps if the input is less than 0.</p>
   </div>
 <br />
 </div>
@@ -51554,7 +51554,7 @@ buf:setPosition(0) -- 移回开头
     <small class="text-muted">来源：Hyper&#39;s Hexcast Addon</small>
   </div>
   <div id="patterns/mounts@hyperhexcast:getmt" class="">
-<h4 class="pattern-title">Jockey&#39;s Purification (entity → entity)<a
+<h4 class="pattern-title">Rider&#39;s Purification (entity → entity | null)<a
     href="#patterns/mounts@hyperhexcast:getmt"
     class="permalink small"
     title="Permalink"
@@ -51610,7 +51610,7 @@ buf:setPosition(0) -- 移回开头
   </div>
 <br />
   <div id="patterns/mounts@hyperhexcast:getpsgr" class="">
-<h4 class="pattern-title">Ferryman&#39;s Purification (entity → [entity])<a
+<h4 class="pattern-title">Jockey&#39;s Purification (entity → [entity])<a
     href="#patterns/mounts@hyperhexcast:getpsgr"
     class="permalink small"
     title="Permalink"
@@ -51666,7 +51666,7 @@ buf:setPosition(0) -- 移回开头
   </div>
 <br />
   <div id="patterns/mounts@hyperhexcast:isdrvr" class="">
-<h4 class="pattern-title">Controller&#39;s Purification (entity → bool | null)<a
+<h4 class="pattern-title">Driver&#39;s Purification (entity → bool | null)<a
     href="#patterns/mounts@hyperhexcast:isdrvr"
     class="permalink small"
     title="Permalink"
@@ -81644,7 +81644,7 @@ buf:setPosition(0) -- 移回开头
     <small class="text-muted">来源：Hyper&#39;s Hexcast Addon</small>
   </div>
   <div id="patterns/spl_mounts@hyperhexcast:mount" class="">
-<h4 class="pattern-title">Mount Entity (entity, entity → entity)<a
+<h4 class="pattern-title">Mount Entity (entity, entity →)<a
     href="#patterns/spl_mounts@hyperhexcast:mount"
     class="permalink small"
     title="Permalink"
@@ -81696,10 +81696,10 @@ buf:setPosition(0) -- 移回开头
         data-per-world="False"
       >浏览器不支持图案的可视化。图案代码见此：eadewde</canvas>
   </details>
-      <p>Make an entity ride another entity. Costs about 2 <a href="#items/amethyst"><span style="color: #b0b">Amethyst Dust</span></a>, or 1 if you are at the top of the stack.</p>
+      <p>Make an entity ride another entity. Costs about 2 <a href="#items/amethyst"><span style="color: #b0b">Amethyst Dust</span></a> if the top of the stack is a non-player entity, 1 if it is you, and about a crystal&#39;s worth if is it another player.</p>
   </div>
 <br />
-    <p>It seems that there are cases where nature won&#39;t allow this spell to execute, but also won&#39;t mishap? This seems very interesting...</p>
+    <p>It seems that there are cases (e.g. where the second stack item is a player) where media is still consumed, but no action is taken or mishap released? This is very curious, but doesn&#39;t seem like behaviour I should rely on...</p>
 <br />
   <div id="patterns/spl_mounts@hyperhexcast:dismount" class="">
 <h4 class="pattern-title">Dismount Entity (entity →)<a
@@ -81754,7 +81754,7 @@ buf:setPosition(0) -- 移回开头
         data-per-world="False"
       >浏览器不支持图案的可视化。图案代码见此：qawqadq</canvas>
   </details>
-      <p>Make an entity stop riding the entity they are riding. Costs about 2 <a href="#items/amethyst"><span style="color: #b0b">Amethyst Dust</span></a>, or 1 when cast on yourself (but why would you).</p>
+      <p>Make an entity stop riding the entity they are riding. Costs about 1 <a href="#items/amethyst"><span style="color: #b0b">Amethyst Dust</span></a>, or a negligible amount when cast on yourself (but why would you).</p>
   </div>
 <br />
 </div>

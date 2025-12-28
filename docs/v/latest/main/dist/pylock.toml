@@ -447,10 +447,10 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/79/6d/5605e210e8bbb4b
 
 [[packages]]
 name = "hexdoc-hyperhexcast"
-version = "0.1.0.1.0"
+version = "0.1.1.1.0"
 index = "https://pypi.org/simple"
-sdist = { url = "https://files.pythonhosted.org/packages/83/f6/8346c18a3ba6bce4fb670c19c7545e7aa9da7829a297b87144bdeab48a7a/hexdoc_hyperhexcast-0.1.0.1.0.tar.gz", upload-time = 2025-12-27T22:09:52Z, size = 6657, hashes = { sha256 = "97d82f790441bcb906af81701dec26e6f9e742bcc8eed6ed9fd1d795911b8d73" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/9b/82/23cce4d4daf2eea7aa48bf581c2ee99fc6b98bee843580dd41414928e612/hexdoc_hyperhexcast-0.1.0.1.0-py3-none-any.whl", upload-time = 2025-12-27T22:09:51Z, size = 9572, hashes = { sha256 = "b06fe712b1d64776ac7284a871a8bc7cbf2bdd0096b7c263e65737d1b9ed812e" } }]
+sdist = { url = "https://files.pythonhosted.org/packages/b3/a2/d80d69ecebe4258950702d183e03a263cb3d4304a865de1ccbff481cb5e4/hexdoc_hyperhexcast-0.1.1.1.0.tar.gz", upload-time = 2025-12-28T20:24:21Z, size = 6769, hashes = { sha256 = "24de45cd04a6eb5043ea6f3ab8e49a1dc417733d0555275d9f876bc6bdf5f299" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/e3/67/7f7e4cce271f903d2918d6f9956bdc3f30eecf70d4d631a25a210c46b40e/hexdoc_hyperhexcast-0.1.1.1.0-py3-none-any.whl", upload-time = 2025-12-28T20:24:19Z, size = 9685, hashes = { sha256 = "09147e03e80b74ebe5b498d783d7fd0a2522e674992e061ed14f3215b83d59b9" } }]
 
 [[packages]]
 name = "hexdoc-ioticblocks"
