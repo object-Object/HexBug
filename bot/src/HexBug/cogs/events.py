@@ -4,6 +4,7 @@ from discord import Interaction
 from discord.ext.commands import Cog
 
 from HexBug.core.cog import HexBugCog
+from HexBug.ui.views.sync import SyncButton
 from HexBug.utils.discord.commands import get_command, print_command
 from HexBug.utils.discord.visibility import DeleteButton
 
@@ -16,7 +17,10 @@ class EventsCog(HexBugCog):
     @Cog.listener()
     async def on_ready(self):
         logger.info(f"Logged in as {self.bot.user}")
-        self.bot.add_dynamic_items(DeleteButton)
+        self.bot.add_dynamic_items(
+            DeleteButton,
+            SyncButton,
+        )
         await self.bot.fetch_custom_emojis()
 
     @Cog.listener()
