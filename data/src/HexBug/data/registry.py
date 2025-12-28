@@ -914,18 +914,24 @@ class HexBugRegistry(BaseModel):
         self.lookups.add_special_handler(info)
 
     def _register_category(self, category: CategoryInfo):
-        if category.id in self.categories:
-            raise ValueError(f"Category is already registered: {category.id}")
+        if other := self.categories.get(category.id):
+            raise ValueError(
+                f"Category is already registered: {category.id} ({category.mod_id}, {other.mod_id})"
+            )
         self.categories[category.id] = category
 
     def _register_entry(self, entry: EntryInfo):
-        if entry.id in self.entries:
-            raise ValueError(f"Entry is already registered: {entry.id}")
+        if other := self.entries.get(entry.id):
+            raise ValueError(
+                f"Entry is already registered: {entry.id} ({entry.mod_id}, {other.mod_id})"
+            )
         self.entries[entry.id] = entry
 
     def _register_page(self, page: PageInfo):
-        if page.key in self.pages:
-            raise ValueError(f"Page is already registered: {page.key}")
+        if other := self.pages.get(page.key):
+            raise ValueError(
+                f"Page is already registered: {page.key} ({page.mod_id}, {other.mod_id})"
+            )
         self.pages[page.key] = page
 
     def _register_recipe(self, recipe: RecipeInfo):
