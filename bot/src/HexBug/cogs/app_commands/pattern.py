@@ -222,12 +222,17 @@ class PatternCog(HexBugCog, GroupCog, group_name="pattern"):
     async def build(
         self,
         interaction: Interaction,
-        direction: HexDirOption = HexDir.EAST,
+        direction: HexDirOption | None = None,
         signature: PatternSignatureOption = "",
         hide_stroke_order: bool = False,
     ):
+        if direction is not None:
+            pattern = HexPattern(direction, signature)
+        else:
+            pattern = None
+
         await PatternBuilderView(
             interaction=interaction,
-            pattern=HexPattern(direction, signature),
+            pattern=pattern,
             hide_stroke_order=hide_stroke_order,
         ).send(interaction, Visibility.PRIVATE)

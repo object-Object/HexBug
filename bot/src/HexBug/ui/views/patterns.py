@@ -483,7 +483,7 @@ class PatternBuilderView(NamedPatternView):
     @ui.button(emoji="↩️", row=3, disabled=True)
     async def undo_button(self, interaction: Interaction, button: ui.Button[Any]):
         await interaction.response.defer()
-        if self.pattern:
+        if self.signature:
             angle = HexAngle[self.signature[-1]]
             self.current_direction = self.current_direction.rotated_by(-angle)
             self.signature = self.signature[:-1]
