@@ -13,6 +13,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - Fixed `/pattern build` defaulting to `EAST` instead of an empty grid.
 - Fixed `/pattern build` not deleting the original message when clicking the ✅ button.
 
+### Mods Added
+
+- Hex Ways: 1.0.0
+- Hyper's Hexcast Addon: 0.1.0
+
 ### Mods Updated
 
 - HexxyPlanes: 0.2.1+1.20.1

@@ -288,6 +288,15 @@ MODS: list[StaticModInfo] = [
         modloaders=[Modloader.FABRIC, Modloader.FORGE],
     ),
     StaticModInfo(
+        id="hexways",
+        name="Hex Ways",
+        description="An addon for Hex Casting that lets you make portals with Immersive Portals.",
+        icon_url=URL("src/main/resources/assets/hexways/icon.png"),
+        curseforge_slug=None,
+        modrinth_slug=None,
+        modloaders=[Modloader.FABRIC],
+    ),
+    StaticModInfo(
         id="hexweb",
         name="HexWeb",
         description="Adds patterns for making HTTP requests via OkHTTP, as well as creating and manipulating JSON objects.",
@@ -315,6 +324,15 @@ MODS: list[StaticModInfo] = [
         curseforge_slug="hierophantics",
         modrinth_slug="hierophantics",
         modloaders=[Modloader.FABRIC, Modloader.FORGE],
+    ),
+    StaticModInfo(
+        id="hyperhexcast",
+        name="Hyper's Hexcast Addon",
+        description="Adds miscellaneous patterns related to entity mounting and math.",
+        icon_url=None,
+        curseforge_slug=None,
+        modrinth_slug="hypers-hexcast-addon",
+        modloaders=[Modloader.FABRIC, Modloader.FORGE, Modloader.QUILT],
     ),
     StaticModInfo(
         id="ioticblocks",

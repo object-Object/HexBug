@@ -982,9 +982,11 @@ full = [
     { name = "hexdoc-hextrace" },
     { name = "hexdoc-hextrogen" },
     { name = "hexdoc-hextweaks" },
+    { name = "hexdoc-hexways" },
     { name = "hexdoc-hexweb" },
     { name = "hexdoc-hexxyplanes" },
     { name = "hexdoc-hierophantics" },
+    { name = "hexdoc-hyperhexcast" },
     { name = "hexdoc-ioticblocks" },
     { name = "hexdoc-lapisworks" },
     { name = "hexdoc-lessertp" },
@@ -1028,9 +1030,11 @@ requires-dist = [
     { name = "hexdoc-hextrace", marker = "extra == 'full'", specifier = "==0.1.0.1.20.1.*" },
     { name = "hexdoc-hextrogen", marker = "extra == 'full'", specifier = "==1.1.0.*" },
     { name = "hexdoc-hextweaks", marker = "extra == 'full'", specifier = "==5.3.3.*" },
+    { name = "hexdoc-hexways", marker = "extra == 'full'", specifier = "==1.0.0.*" },
     { name = "hexdoc-hexweb", marker = "extra == 'full'", specifier = "==1.0.4.*" },
     { name = "hexdoc-hexxyplanes", marker = "extra == 'full'", specifier = "==0.2.1.1.20.1.*" },
     { name = "hexdoc-hierophantics", marker = "extra == 'full'", specifier = "==1.3.4.*" },
+    { name = "hexdoc-hyperhexcast", marker = "extra == 'full'", specifier = "==0.1.0.*" },
     { name = "hexdoc-ioticblocks", marker = "extra == 'full'", specifier = "==1.0.2.1.20.1.*" },
     { name = "hexdoc-lapisworks", marker = "extra == 'full'", specifier = "==1.5.7.*" },
     { name = "hexdoc-lessertp", marker = "extra == 'full'", specifier = "==1.2.1.*" },
@@ -1495,6 +1499,18 @@ wheels = [
 ]
 
 [[package]]
+name = "hexdoc-hexways"
+version = "1.0.0.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "hexdoc-hexcasting" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/9c/c7/6f80099643197c8fa324e004356f1a9247ebb670e72f15825c7a4e18ef10/hexdoc_hexways-1.0.0.1.0.tar.gz", hash = "sha256:537ecb57cf682c16133b83b026bfe777562f4385a1971b7745321a82b30481c2", size = 17575, upload-time = "2025-12-27T04:03:53.783Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d1/78/a7a93c735f448da9ef7e4dd432a52ab22df99d2935f54d9fffa9e2223c40/hexdoc_hexways-1.0.0.1.0-py3-none-any.whl", hash = "sha256:81c68d1bb3e07acfd65552c64210446da3a6805bcd452db6a1bfbadeceeb3d16", size = 19365, upload-time = "2025-12-27T04:03:52.73Z" },
+]
+
+[[package]]
 name = "hexdoc-hexweb"
 version = "1.0.4.1.1"
 source = { registry = "https://pypi.org/simple" }
@@ -1525,6 +1541,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/89/84/1246260fea7dec4a424e08d48bbdeef85162f6bf0e7acd46fa79896cde9d/hexdoc_hierophantics-1.3.4.1.0.tar.gz", hash = "sha256:5ff82804a837abe84a6f5804475a9d9bd1c22ca263475a3f71cae439b223aced", size = 60131, upload-time = "2025-12-23T19:24:28.513Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/79/6d/5605e210e8bbb4bc5f74c3a958f6469f6c6c3b529c96c384412c7b4f1eef/hexdoc_hierophantics-1.3.4.1.0-py3-none-any.whl", hash = "sha256:7b59978107198f3b1a9a970c2f9418c9e6491374b9e5b61711ba73535f0b2ba7", size = 78545, upload-time = "2025-12-23T19:24:27.246Z" },
+]
+
+[[package]]
+name = "hexdoc-hyperhexcast"
+version = "0.1.0.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "hexdoc-hexcasting" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/83/f6/8346c18a3ba6bce4fb670c19c7545e7aa9da7829a297b87144bdeab48a7a/hexdoc_hyperhexcast-0.1.0.1.0.tar.gz", hash = "sha256:97d82f790441bcb906af81701dec26e6f9e742bcc8eed6ed9fd1d795911b8d73", size = 6657, upload-time = "2025-12-27T22:09:52.438Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/9b/82/23cce4d4daf2eea7aa48bf581c2ee99fc6b98bee843580dd41414928e612/hexdoc_hyperhexcast-0.1.0.1.0-py3-none-any.whl", hash = "sha256:b06fe712b1d64776ac7284a871a8bc7cbf2bdd0096b7c263e65737d1b9ed812e", size = 9572, upload-time = "2025-12-27T22:09:51.145Z" },
 ]
 
 [[package]]
