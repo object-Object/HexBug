@@ -351,6 +351,8 @@ class PatternBuilderView(NamedPatternView):
     def __post_init__(self, interaction: Interaction):
         super().__post_init__(interaction)
 
+        self.original_interaction: Interaction = interaction
+
         if self.pattern:
             self.current_direction = self.pattern.direction
             for c in self.pattern.signature:
@@ -468,6 +470,7 @@ class PatternBuilderView(NamedPatternView):
     @ui.button(emoji="✅", row=2, disabled=True)
     async def done_button(self, interaction: Interaction, button: ui.Button[Any]):
         self.add_visibility_buttons = True
+        await self.original_interaction.delete_original_response()
         await self.send(interaction, Visibility.PUBLIC, show_usage=True)
 
     @ui.button(emoji="⬅️", row=3)

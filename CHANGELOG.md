@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - Fixed HexxyPlanes description.
 - Fixed an internal error in `/pattern build` when attempting to undo the first line drawn.
 - Fixed `/pattern build` defaulting to `EAST` instead of an empty grid.
+- Fixed `/pattern build` not deleting the original message when clicking the ✅ button.
 
 ### Mods Updated
 
