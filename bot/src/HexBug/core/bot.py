@@ -123,7 +123,8 @@ class HexBugBot(Bot):
         await self._check_database()
         await self._load_translator()
         await self._load_cogs()
-        await self._check_translations()
+        if not self.should_run:
+            await self._check_translations()
 
     async def _check_database(self):
         logger.info("Checking database connection")
