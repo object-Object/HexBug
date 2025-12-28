@@ -293,7 +293,7 @@ MODS: list[StaticModInfo] = [
         description="An addon for Hex Casting that lets you make portals with Immersive Portals.",
         icon_url=URL("src/main/resources/assets/hexways/icon.png"),
         curseforge_slug=None,
-        modrinth_slug=None,
+        modrinth_slug="hex-ways-1.20",
         modloaders=[Modloader.FABRIC],
     ),
     StaticModInfo(
