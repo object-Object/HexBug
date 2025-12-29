@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ### Mods Updated
 
+- Hexchanting: 1.1.5
 - HexxyPlanes: 0.2.1+1.20.1
 - Hierophantics: 1.3.4
 - Yet Another Hex Addon: 0.2.1
