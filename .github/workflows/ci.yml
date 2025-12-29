@@ -81,7 +81,7 @@ jobs:
             });
             console.dir(response, { depth: null })
 
-            for (const run in response.data.workflow_runs) {
+            for (const run of response.data.workflow_runs) {
               if (
                 run.head_branch?.match(/^${{ env.VERSION_REGEX }}$/) != null
                 && run.id !== context.runId
