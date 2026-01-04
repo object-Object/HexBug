@@ -522,7 +522,6 @@ SPECIAL_HANDLERS: dict[ResourceLocation, SpecialHandler[Any]] = {
 DISABLED_PATTERNS: set[ResourceLocation] = {
     # conflicts
     ResourceLocation("hexstruction", "bounding_box"),  # shape: hexical:greater_blink
-    ResourceLocation("lapisworks", "empty_prfn"),  # signature: hexal:mote/storage/get
     # unreasonably long angle signature
     ResourceLocation("hexic", "whatthefuck"),
     # "hexic is being digested from the inside"
