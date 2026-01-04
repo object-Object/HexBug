@@ -237,10 +237,10 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/48/24/e0dbc6ad8210f40
 
 [[packages]]
 name = "hexdoc-caduceus"
-version = "0.1.1.1.20.1.1.0"
+version = "0.2.0.1.20.1.1.0"
 index = "https://pypi.org/simple"
-sdist = { url = "https://files.pythonhosted.org/packages/e8/62/8f7a8ac6176619352544e2b007f847f4eefaf8deed199d7efba6d426d7f0/hexdoc_caduceus-0.1.1.1.20.1.1.0.tar.gz", upload-time = 2025-06-30T16:56:38Z, size = 11896, hashes = { sha256 = "ec193df2b7c4e005dbe2340fd3ab4e3922bd3784e6a40218c045eb55bc1fc7e5" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/81/b8/ed0f6be9e07457dc93c732657160cc172268cccbf478e8c8e2a7cf0ea11b/hexdoc_caduceus-0.1.1.1.20.1.1.0-py3-none-any.whl", upload-time = 2025-06-30T16:56:36Z, size = 15649, hashes = { sha256 = "e0384cdb8badb178bc926da0f45d19f03cf545b74cecca546ea080a7c39ab642" } }]
+sdist = { url = "https://files.pythonhosted.org/packages/ea/93/ad33bfdf11452e4e9711f451f595ebe8102c9556a10e05fb3b74995602b8/hexdoc_caduceus-0.2.0.1.20.1.1.0.tar.gz", upload-time = 2026-01-04T21:38:16Z, size = 12087, hashes = { sha256 = "7de6e1745b9774385cc4aca62d34c3213509af0a6e5bba05f864cf513b2b5749" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/b8/ab/686917fcdaa5cb38f951150367c0f915e199168ae328b40aa200b5fee1b1/hexdoc_caduceus-0.2.0.1.20.1.1.0-py3-none-any.whl", upload-time = 2026-01-04T21:38:14Z, size = 15847, hashes = { sha256 = "6f843134815f71ae58273a1b95a02bd63da01a5dc400d95dab4e21259a9462b7" } }]
 
 [[packages]]
 name = "hexdoc-complexhex"
@@ -301,10 +301,10 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/8e/cf/dae8aa5f27c921d
 
 [[packages]]
 name = "hexdoc-hexchanting"
-version = "1.1.5.1.0"
+version = "1.1.6.1.0"
 index = "https://pypi.org/simple"
-sdist = { url = "https://files.pythonhosted.org/packages/bd/92/0e815872289cb6ad990a67f5f83c65dd373d4b28cd1922038825d6c5f117/hexdoc_hexchanting-1.1.5.1.0.tar.gz", upload-time = 2025-12-29T05:39:56Z, size = 19348, hashes = { sha256 = "230d95bd3d10fed62a0c8c6ab537c5248e7154b9de48db8ee48ff475ad694216" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/66/c7/00f2030b70a96d9bf571501944cd8e04edc088cfe18834f0ab619cb01ab1/hexdoc_hexchanting-1.1.5.1.0-py3-none-any.whl", upload-time = 2025-12-29T05:39:55Z, size = 49548, hashes = { sha256 = "3b7b25ce76800ceffa331d473dbb6ea611956a7f2b70c86e1cea4e0d407296de" } }]
+sdist = { url = "https://files.pythonhosted.org/packages/49/a3/f7ee22971d59207af59e5c0156ac51f3d18ab486b67b5821928160bb2fe4/hexdoc_hexchanting-1.1.6.1.0.tar.gz", upload-time = 2025-12-30T06:09:49Z, size = 19498, hashes = { sha256 = "82b1fec912c9cf350e054aaee77a52d1306b40c95c3b3418ed0260925859170d" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/e6/d6/7a3279f3586247756cde1982c2324ae91be5c93b8cd4acd173b6eb29e8fa/hexdoc_hexchanting-1.1.6.1.0-py3-none-any.whl", upload-time = 2025-12-30T06:09:47Z, size = 49996, hashes = { sha256 = "57bc29e0fccd5470eab1133a4c548acef4fc9cedf13ab08b818d6f5359fe6a5f" } }]
 
 [[packages]]
 name = "hexdoc-hexdebug"
@@ -381,8 +381,10 @@ wheels = [{ url = "file:///home/runner/work/HexBug/HexBug/vendor/hexdoc_hexpose-
 
 [[packages]]
 name = "hexdoc-hexstruction"
-version = "1.2.1.1.20.1.1.0"
-archive = { url = "https://github.com/PetersonE1/hexstruction/raw/510da7fea2f52d6497c50753990bbc5919ee71ad/docs/v/latest/main/dist/hexdoc_hexstruction-1.2.1.1.20.1.1.0-py3-none-any.whl", hashes = { sha256 = "1780640fc0e2b9f39e62bdb558807b3959165bc03700894833c546728c318fd1" } }
+version = "1.3.1.1.20.1.1.1"
+index = "https://pypi.org/simple"
+sdist = { url = "https://files.pythonhosted.org/packages/51/8a/ff52b7f82a618b4d53fa8114ecd947542da2f8c6c574ebced8be37dfcc0f/hexdoc_hexstruction-1.3.1.1.20.1.1.1.tar.gz", upload-time = 2026-01-02T04:28:16Z, size = 10081, hashes = { sha256 = "d2365dc94b18003aca16774c97d2e1e43cc976a7e3fabda572dc7d4ce8468e37" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/1e/5a/5a2b1a77e2b87dc40a5ce55f85a4b65fa4b5bdd1fb42647d18f7639c2509/hexdoc_hexstruction-1.3.1.1.20.1.1.1-py3-none-any.whl", upload-time = 2026-01-02T04:28:15Z, size = 12853, hashes = { sha256 = "c64d5bdce8585fbcad02071ebea616f62ee192ea9eb963b9a678eb5500f64c66" } }]
 
 [[packages]]
 name = "hexdoc-hextended"

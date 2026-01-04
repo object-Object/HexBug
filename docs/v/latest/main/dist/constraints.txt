@@ -183,9 +183,9 @@ hexdoc==1!0.1.0a35 \
     #   hexdoc-lapisworks
     #   hexdoc-mediatransport
     #   hexdoc-minecraft
-hexdoc-caduceus==0.1.1.1.20.1.1.0 \
-    --hash=sha256:e0384cdb8badb178bc926da0f45d19f03cf545b74cecca546ea080a7c39ab642 \
-    --hash=sha256:ec193df2b7c4e005dbe2340fd3ab4e3922bd3784e6a40218c045eb55bc1fc7e5
+hexdoc-caduceus==0.2.0.1.20.1.1.0 \
+    --hash=sha256:6f843134815f71ae58273a1b95a02bd63da01a5dc400d95dab4e21259a9462b7 \
+    --hash=sha256:7de6e1745b9774385cc4aca62d34c3213509af0a6e5bba05f864cf513b2b5749
     # via hexbug-data
 hexdoc-complexhex @ https://github.com/kineticneticat/ComplexHex/raw/51cf2bbac7183cd6b4be360f205bd20d99d56952/docs/v/latest/0.1.x/dist/hexdoc_complexhex-0.1.6.1.0.dev0-py3-none-any.whl \
     --hash=sha256:adbb3026dcd7eb2967876e23b1e7ecf334ce2dcdf3c3990c4ce8c63a8d5feae6
@@ -265,9 +265,9 @@ hexdoc-hexcellular==1.1.0.1.0.0 \
     # via
     #   hexbug-data
     #   hexdoc-hexic
-hexdoc-hexchanting==1.1.5.1.0 \
-    --hash=sha256:230d95bd3d10fed62a0c8c6ab537c5248e7154b9de48db8ee48ff475ad694216 \
-    --hash=sha256:3b7b25ce76800ceffa331d473dbb6ea611956a7f2b70c86e1cea4e0d407296de
+hexdoc-hexchanting==1.1.6.1.0 \
+    --hash=sha256:57bc29e0fccd5470eab1133a4c548acef4fc9cedf13ab08b818d6f5359fe6a5f \
+    --hash=sha256:82b1fec912c9cf350e054aaee77a52d1306b40c95c3b3418ed0260925859170d
     # via hexbug-data
 hexdoc-hexdebug==0.8.0.1.20.1.1.1 \
     --hash=sha256:281c2ded5e5f21ae42a16978befe9448d8e61267cc99e6b8d6145c9963f7c6a1 \
@@ -312,8 +312,9 @@ hexdoc-hexpose==1.0.0.1.0.0+hexbug
     #   hexbug-data
     #   hexdoc-hexical
     #   hexdoc-slate-work
-hexdoc-hexstruction @ https://github.com/PetersonE1/hexstruction/raw/510da7fea2f52d6497c50753990bbc5919ee71ad/docs/v/latest/main/dist/hexdoc_hexstruction-1.2.1.1.20.1.1.0-py3-none-any.whl \
-    --hash=sha256:1780640fc0e2b9f39e62bdb558807b3959165bc03700894833c546728c318fd1
+hexdoc-hexstruction==1.3.1.1.20.1.1.1 \
+    --hash=sha256:c64d5bdce8585fbcad02071ebea616f62ee192ea9eb963b9a678eb5500f64c66 \
+    --hash=sha256:d2365dc94b18003aca16774c97d2e1e43cc976a7e3fabda572dc7d4ce8468e37
     # via hexbug-data
 hexdoc-hextended @ https://github.com/abilliontrillionstars/hextended-staves/raw/0e6e0a61b7f4d3e79761b216cfebc1141e19b30b/docs/v/latest/main/dist/hexdoc_hextended-2.0.1.1.0.dev0-py3-none-any.whl \
     --hash=sha256:7c5daa174205d3cf44663f391222fd67f70076704f165302561b44c56577c708
