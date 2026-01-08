@@ -30,6 +30,8 @@ class HexBugEnv(BaseSettings):
     api_port: int
     api_root_path: str
 
+    metrics_port: int = 6500
+
     db_url: str = "postgresql+psycopg://postgres:postgres@localhost:6543/postgres"
 
     deployment: DeploymentSettings | None = None

@@ -10,6 +10,7 @@ dependencies = [
     "HexBug-data",
     "alembic>=1.16.5",
     # 2.6.3: github.com/Rapptz/discord.py/issues/10291
+    "discord-ext-prometheus>=0.2.1",
     "discord-py>=2.6.2,!=2.6.3",
     "fastapi>=0.115.12",
     "fluent-runtime>=0.4.0",

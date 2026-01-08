@@ -18,6 +18,7 @@ def setup_logging(verbose: bool = False):
             "HexBug": logging.DEBUG,
             "hexdoc.minecraft.assets.textures": logging.ERROR,
             "httpx": logging.WARNING,
+            "prometheus": logging.DEBUG,
         }
 
     # :/

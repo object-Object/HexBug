@@ -84,6 +84,7 @@ jobs:
           IMAGE="${{ inputs.image-digest }}"
           ENVIRONMENT="${{ inputs.stage }}"
           TOKEN="${{ secrets.DISCORD_TOKEN }}"
+          METRICS_PORT="${{ vars.METRICS_PORT }}"
           DEPLOYMENT="{}"
           DEPLOYMENT__COMMIT_SHA="${{ github.sha }}"
           DEPLOYMENT__COMMIT_TIMESTAMP="$(git show --no-patch --format=%at ${{ github.sha }})"

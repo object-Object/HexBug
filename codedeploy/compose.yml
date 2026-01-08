@@ -7,6 +7,10 @@ services:
     secrets:
       - source: env  # created in overrides to fix relative path issues
         target: /app/.env
+    ports:
+      - host_ip: 127.0.0.1
+        published: "${METRICS_PORT:-6500}"
+        target: "${METRICS_PORT:-6500}"
     environment:
       API_PORT: 5000
       API_ROOT_PATH: ''

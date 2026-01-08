@@ -603,6 +603,19 @@ wheels = [
 ]
 
 [[package]]
+name = "discord-ext-prometheus"
+version = "0.2.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "discord-py" },
+    { name = "prometheus-client" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/a8/e4/553725e355e632a73dc27f251f40c8b57400c9ffb496504013f7b02f5741/discord_ext_prometheus-0.2.1.tar.gz", hash = "sha256:a65c176d2205868bfa6cf0ad01633cc3846939696d59c21dcc4a27c949dec368", size = 10191, upload-time = "2025-02-20T01:21:45.514Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/2d/01/41648aaa4eb04f0be18ce5565ab7034c4dbf3b9fcc970222d24bb226a8bb/discord_ext_prometheus-0.2.1-py3-none-any.whl", hash = "sha256:c2e13115c3f0fbb1a3fd3d67bff2711604742fb8742cc5e9eb80488854bf12f8", size = 5978, upload-time = "2025-02-20T01:21:43.677Z" },
+]
+
+[[package]]
 name = "discord-py"
 version = "2.6.2"
 source = { registry = "https://pypi.org/simple" }
@@ -896,6 +909,7 @@ name = "hexbug-bot"
 source = { editable = "bot" }
 dependencies = [
     { name = "alembic" },
+    { name = "discord-ext-prometheus" },
     { name = "discord-py" },
     { name = "fastapi" },
     { name = "fluent-runtime" },
@@ -922,6 +936,7 @@ data = [
 [package.metadata]
 requires-dist = [
     { name = "alembic", specifier = ">=1.16.5" },
+    { name = "discord-ext-prometheus", specifier = ">=0.2.1" },
     { name = "discord-py", specifier = ">=2.6.2,!=2.6.3" },
     { name = "fastapi", specifier = ">=0.115.12" },
     { name = "fluent-runtime", specifier = ">=0.4.0" },
@@ -2601,6 +2616,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/2a/13/b62d075317d8686071eb843f0bb1f195eb332f48869d3c31a4c6f1e063ac/pre_commit-4.1.0.tar.gz", hash = "sha256:ae3f018575a588e30dfddfab9a05448bfbd6b73d78709617b5a2b853549716d4", size = 193330, upload-time = "2025-01-20T18:31:48.681Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/43/b3/df14c580d82b9627d173ceea305ba898dca135feb360b6d84019d0803d3b/pre_commit-4.1.0-py2.py3-none-any.whl", hash = "sha256:d29e7cb346295bcc1cc75fc3e92e343495e3ea0196c9ec6ba53f49f10ab6ae7b", size = 220560, upload-time = "2025-01-20T18:31:47.319Z" },
+]
+
+[[package]]
+name = "prometheus-client"
+version = "0.23.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/23/53/3edb5d68ecf6b38fcbcc1ad28391117d2a322d9a1a3eff04bfdb184d8c3b/prometheus_client-0.23.1.tar.gz", hash = "sha256:6ae8f9081eaaaf153a2e959d2e6c4f4fb57b12ef76c8c7980202f1e57b48b2ce", size = 80481, upload-time = "2025-09-18T20:47:25.043Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/b8/db/14bafcb4af2139e046d03fd00dea7873e48eafe18b7d2797e73d6681f210/prometheus_client-0.23.1-py3-none-any.whl", hash = "sha256:dd1913e6e76b59cfe44e7a4b83e01afc9873c1bdfd2ed8739f1e76aeca115f99", size = 61145, upload-time = "2025-09-18T20:47:23.875Z" },
 ]
 
 [[package]]
