@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and [Pydantic's HISTORY.md](https://github.com/pydantic/pydantic/blob/main/HISTORY.md), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## `2.7.4` - 2026-01-15
+
+### Mods Updated
+
+- Caduceus: 0.2.1+1.20.1
+- HexOverpowered: 0.11.0
+- Hex Ways: 1.0.1
+- Hierophantics: 1.3.5
+- Lesser Teleport: 1.2.4
+
 ## `2.7.3` - 2026-01-08
 
 ### Changed
