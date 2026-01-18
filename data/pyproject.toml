@@ -63,7 +63,7 @@ full = [
     "hexdoc-oneironaut==0.5.0.*",
     "hexdoc-overevaluate==1.0.0.*",
     "hexdoc-scryglass==1.0.0.*",
-    "hexdoc-slate-work==1.0.3.*",
+    "hexdoc-slate-work==1.0.7.*",
     "hexdoc-yaha==0.2.1.*",
 ]
 
