@@ -513,10 +513,10 @@ archive = { url = "https://github.com/miyucomics/scryglass/raw/2b414d0ba9e9c0770
 
 [[packages]]
 name = "hexdoc-slate-work"
-version = "1.0.3.1.0"
+version = "1.0.7.1.0"
 index = "https://pypi.org/simple"
-sdist = { url = "https://files.pythonhosted.org/packages/e2/24/ddea89da0f7008ea3718aebfbbce012eef0d01ead5cec79cea90cb7a4324/hexdoc_slate_work-1.0.3.1.0.tar.gz", upload-time = 2025-09-06T03:06:30Z, size = 86680, hashes = { sha256 = "479b10af539c8ee5f7c7eb7a380a868167546cbbd94a20e605b6cf032c2aed94" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/22/f9/66303659252f6952861804ae1b6229ceca05b52c95a32c373a717dbcdf6f/hexdoc_slate_work-1.0.3.1.0-py3-none-any.whl", upload-time = 2025-09-06T03:06:28Z, size = 131390, hashes = { sha256 = "9a1399893097cbec19b5ef1eade8486328f582d4681384cbb81f41b787f7b206" } }]
+sdist = { url = "https://files.pythonhosted.org/packages/b6/87/b236a74cae64c632dd49396ba8511022364da0eb00fb626114d10aba9c6e/hexdoc_slate_work-1.0.7.1.0.tar.gz", upload-time = 2026-01-17T05:48:10Z, size = 86838, hashes = { sha256 = "933cf22c5d7da27e7cfe2dd5055c7a3ac5aa6d3be922b6ef63ae3ae60f02830d" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/c7/3d/c525dc85e282cc6def9f6fe28396a82451c21fecef07ee435002e1081ab2/hexdoc_slate_work-1.0.7.1.0-py3-none-any.whl", upload-time = 2026-01-17T05:48:08Z, size = 131513, hashes = { sha256 = "f3fd2adbe7aa210100bfe493bee4a1dbb5020c2a92b92ab07f2ae7fbbcc3d95c" } }]
 
 [[packages]]
 name = "hexdoc-yaha"

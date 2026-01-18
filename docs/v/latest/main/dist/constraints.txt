@@ -395,9 +395,9 @@ hexdoc-overevaluate @ https://github.com/miyucomics/overevaluate/raw/6c92a93c51f
 hexdoc-scryglass @ https://github.com/miyucomics/scryglass/raw/2b414d0ba9e9c0770c8b13bb01a67398630a4690/docs/v/latest/main/dist/hexdoc_scryglass-1.0.0.1.0.0-py3-none-any.whl \
     --hash=sha256:64e26279ae1ab780bbafd217c74761dec48cd8e10c02f56c142884eea7a5f095
     # via hexbug-data
-hexdoc-slate-work==1.0.3.1.0 \
-    --hash=sha256:479b10af539c8ee5f7c7eb7a380a868167546cbbd94a20e605b6cf032c2aed94 \
-    --hash=sha256:9a1399893097cbec19b5ef1eade8486328f582d4681384cbb81f41b787f7b206
+hexdoc-slate-work==1.0.7.1.0 \
+    --hash=sha256:933cf22c5d7da27e7cfe2dd5055c7a3ac5aa6d3be922b6ef63ae3ae60f02830d \
+    --hash=sha256:f3fd2adbe7aa210100bfe493bee4a1dbb5020c2a92b92ab07f2ae7fbbcc3d95c
     # via hexbug-data
 hexdoc-yaha==0.2.1.1.0 \
     --hash=sha256:05c0f962e0a9294fedf1fb130f5991e8c4f7a5e2504e85ee2f9bb728312980a5 \
