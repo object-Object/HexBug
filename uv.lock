@@ -1020,7 +1020,7 @@ requires-dist = [
     { name = "hexdoc-caduceus", marker = "extra == 'full'", specifier = "==0.2.1.1.20.1.*" },
     { name = "hexdoc-complexhex", marker = "extra == 'full'", url = "https://github.com/kineticneticat/ComplexHex/raw/51cf2bbac7183cd6b4be360f205bd20d99d56952/docs/v/latest/0.1.x/dist/hexdoc_complexhex-0.1.6.1.0.dev0-py3-none-any.whl" },
     { name = "hexdoc-dthexcasting", marker = "extra == 'full'", specifier = "==1.0.2.*" },
-    { name = "hexdoc-efhexs", marker = "extra == 'full'", url = "https://github.com/miyucomics/special-efhexs/raw/8029ab75e0d42c92795612639d3dae3170520ddd/docs/v/latest/main/dist/hexdoc_efhexs-1.0.0.1.0.0-py3-none-any.whl" },
+    { name = "hexdoc-efhexs", marker = "extra == 'full'", url = "https://github.com/miyucomics/efhexs/raw/4c3503aac60e7c0ab4b21b1aafddbb00a0ccfcb4/docs/v/latest/main/dist/hexdoc_efhexs-1.0.0.1.0.0-py3-none-any.whl" },
     { name = "hexdoc-ephemera", marker = "extra == 'full'", url = "https://github.com/beholderface/Ephemera/raw/74e80eddd991059785eede8435981716480b69ae/docs/v/latest/1.20.1/dist/hexdoc_ephemera-0.3.0.1.0.dev0-py3-none-any.whl" },
     { name = "hexdoc-hex-ars-link", marker = "extra == 'full'", specifier = "==0.9.2.4.*" },
     { name = "hexdoc-hexal", marker = "extra == 'full'", specifier = "==0.3.1.*" },
@@ -1179,12 +1179,12 @@ wheels = [
 [[package]]
 name = "hexdoc-efhexs"
 version = "1.0.0.1.0.0"
-source = { url = "https://github.com/miyucomics/special-efhexs/raw/8029ab75e0d42c92795612639d3dae3170520ddd/docs/v/latest/main/dist/hexdoc_efhexs-1.0.0.1.0.0-py3-none-any.whl" }
+source = { url = "https://github.com/miyucomics/efhexs/raw/4c3503aac60e7c0ab4b21b1aafddbb00a0ccfcb4/docs/v/latest/main/dist/hexdoc_efhexs-1.0.0.1.0.0-py3-none-any.whl" }
 dependencies = [
     { name = "hexdoc-hexcasting" },
 ]
 wheels = [
-    { url = "https://github.com/miyucomics/special-efhexs/raw/8029ab75e0d42c92795612639d3dae3170520ddd/docs/v/latest/main/dist/hexdoc_efhexs-1.0.0.1.0.0-py3-none-any.whl", hash = "sha256:f7a568efe77752b6b247997a57d96c32253d9d1b84bccd436e5b779f5d566023" },
+    { url = "https://github.com/miyucomics/efhexs/raw/4c3503aac60e7c0ab4b21b1aafddbb00a0ccfcb4/docs/v/latest/main/dist/hexdoc_efhexs-1.0.0.1.0.0-py3-none-any.whl", hash = "sha256:1305d671c18de8263af5c29af9997282afd4e49840aac029f88147b8dbb4f7d7" },
 ]
 
 [package.metadata]
