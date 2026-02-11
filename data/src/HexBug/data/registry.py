@@ -634,7 +634,7 @@ class HexBugRegistry(BaseModel):
                 and pattern_id not in registry.special_handlers
                 and pattern_id not in DISABLED_PATTERNS
             ):
-                logger.warning(f"Unregistered pattern: {pattern_id}")
+                logger.error(f"Unregistered pattern: {pattern_id}")
 
         logger.info("Calculating registry stats.")
 
