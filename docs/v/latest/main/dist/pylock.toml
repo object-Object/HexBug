@@ -257,7 +257,7 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/ea/b4/74557622032d705
 [[packages]]
 name = "hexdoc-efhexs"
 version = "1.0.0.1.0.0"
-archive = { url = "https://github.com/miyucomics/special-efhexs/raw/8029ab75e0d42c92795612639d3dae3170520ddd/docs/v/latest/main/dist/hexdoc_efhexs-1.0.0.1.0.0-py3-none-any.whl", hashes = { sha256 = "f7a568efe77752b6b247997a57d96c32253d9d1b84bccd436e5b779f5d566023" } }
+archive = { url = "https://github.com/miyucomics/efhexs/raw/4c3503aac60e7c0ab4b21b1aafddbb00a0ccfcb4/docs/v/latest/main/dist/hexdoc_efhexs-1.0.0.1.0.0-py3-none-any.whl", hashes = { sha256 = "1305d671c18de8263af5c29af9997282afd4e49840aac029f88147b8dbb4f7d7" } }
 
 [[packages]]
 name = "hexdoc-ephemera"

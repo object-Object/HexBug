@@ -194,8 +194,8 @@ hexdoc-dthexcasting==1.0.2.1.0 \
     --hash=sha256:6af2d1d6b2a4af6fe706d4dd27abccdaeb66f2dbb2d7361dc7d6fbe86ffc5a10 \
     --hash=sha256:c90e9419e4b6ba689c0a4e8720c1651a0b78b7d719b277f6c6bb99ec17130137
     # via hexbug-data
-hexdoc-efhexs @ https://github.com/miyucomics/special-efhexs/raw/8029ab75e0d42c92795612639d3dae3170520ddd/docs/v/latest/main/dist/hexdoc_efhexs-1.0.0.1.0.0-py3-none-any.whl \
-    --hash=sha256:f7a568efe77752b6b247997a57d96c32253d9d1b84bccd436e5b779f5d566023
+hexdoc-efhexs @ https://github.com/miyucomics/efhexs/raw/4c3503aac60e7c0ab4b21b1aafddbb00a0ccfcb4/docs/v/latest/main/dist/hexdoc_efhexs-1.0.0.1.0.0-py3-none-any.whl \
+    --hash=sha256:1305d671c18de8263af5c29af9997282afd4e49840aac029f88147b8dbb4f7d7
     # via hexbug-data
 hexdoc-ephemera @ https://github.com/beholderface/Ephemera/raw/74e80eddd991059785eede8435981716480b69ae/docs/v/latest/1.20.1/dist/hexdoc_ephemera-0.3.0.1.0.dev0-py3-none-any.whl \
     --hash=sha256:cd6e2164448ac4f6dad92f17e56cfb524d87774f63c81492243776b4ea9570e1
