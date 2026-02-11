@@ -8,6 +8,7 @@ from .mods import Modloader, StaticModInfo
 from .patterns import StaticPatternInfo
 from .special_handlers import (
     ComplexHexLongSpecialHandler,
+    HexFlowCopyMaskSpecialHandler,
     HexFlowNumberSpecialHandler,
     HexThingsNoopSpecialHandler,
     HexTraceSpecialHandler,
@@ -508,6 +509,9 @@ SPECIAL_HANDLERS: dict[ResourceLocation, SpecialHandler[Any]] = {
         ),
         HexFlowNumberSpecialHandler(
             id=ResourceLocation("hexflow", "noob_num"),
+        ),
+        HexFlowCopyMaskSpecialHandler(
+            id=ResourceLocation("hexflow", "copy_mask"),
         ),
         HexTraceSpecialHandler(
             id=ResourceLocation("hextrace", "trace"),

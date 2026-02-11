@@ -8,6 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ### Mods Updated
 
+- Hexchanting: 1.1.7
+- HexFlow: 0.4.1
+- HexOverpowered: 0.11.4
+- HexParse: 1.8.1
+- HexThings: 0.1.6.1+1.20.1
 - Slate Works: 1.0.7
 
 ## `2.7.4` - 2026-01-15

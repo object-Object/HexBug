@@ -17,6 +17,7 @@ if TYPE_CHECKING:
     from .registry import HexBugRegistry
 
 VALID_MASK_PATTERN = re.compile(r"[-v]+")
+VALID_HEXFLOW_COPY_MASK_PATTERN = re.compile(r"[-n]+")
 
 
 class SpecialHandlerInfo(BaseModel):
@@ -398,23 +399,74 @@ class HexFlowNumberSpecialHandler(PrefixSpecialHandler[float, int]):
     ) -> tuple[float, HexPattern]:
         raise NotImplementedError
 
-    # TODO: remove localize and get_name when yukkuri fixes the lang entry
+
+class HexFlowCopyMaskSpecialHandler(PrefixSpecialHandler[str, Any]):
+    prefix = "aadaq"
+
+    @property
+    @override
+    def prefix_map(self):
+        return {self.prefix: None}
 
     @override
-    def localize(self, i18n: I18n):
-        try:
-            return super().localize(i18n)
-        except ValueError:
-            return i18n.localize(f"hexcasting.action.{self.id}")
+    def try_match_suffix(self, _: Any, suffix: str) -> str | None:
+        if not suffix:
+            return
+
+        match suffix[0]:
+            case HexAngle.LEFT_BACK.letter:
+                direction = HexDir.NORTH_EAST
+            case HexAngle.LEFT.letter:
+                direction = HexDir.EAST
+            case _:
+                return
+
+        result = ""
+        is_on_baseline = True
+
+        for direction in HexPattern(direction, suffix[1:]).iter_directions():
+            match direction.angle_from(HexDir.EAST):
+                case HexAngle.FORWARD if is_on_baseline:
+                    result += "-"
+                case HexAngle.LEFT if is_on_baseline:
+                    is_on_baseline = False
+                case HexAngle.RIGHT if not is_on_baseline:
+                    result += "n"
+                    is_on_baseline = True
+                case _:
+                    return None
+
+        if not is_on_baseline:
+            return None
+
+        return result
 
     @override
-    def get_name(self, raw_name: str, value: float | None) -> str:
-        if ":" in raw_name:
-            return super().get_name(raw_name, value)
+    def generate_pattern(self, registry: HexBugRegistry, value: str):
+        value = value.lower().strip()
+        if not VALID_HEXFLOW_COPY_MASK_PATTERN.fullmatch(value):
+            raise ValueError(f"Invalid mask (expected only - and n): {value}")
 
-        if value is None:
-            return raw_name
-        return f"{raw_name}: {value}"
+        signature = self.prefix
+        if value[0] == "n":
+            signature += "ad"
+        else:
+            signature += "q"
+
+        for previous, current in itertools.pairwise(value):
+            match previous, current:
+                case "-", "-":
+                    signature += "w"
+                case "-", "n":
+                    signature += "qd"
+                case "n", "-":
+                    signature += "q"
+                case "n", "n":
+                    signature += "ad"
+                case _:
+                    raise RuntimeError("unreachable")
+
+        return value, HexPattern(HexDir.EAST, signature)
 
 
 class HexTraceSpecialHandler(PrefixSpecialHandler[str, Any]):
