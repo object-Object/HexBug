@@ -1016,7 +1016,7 @@ full = [
 
 [package.metadata]
 requires-dist = [
-    { name = "hexdoc", specifier = ">=1!0.1.0a36" },
+    { name = "hexdoc", specifier = ">=1!0.1.0a37" },
     { name = "hexdoc-caduceus", marker = "extra == 'full'", specifier = "==0.2.1.1.20.1.*" },
     { name = "hexdoc-complexhex", marker = "extra == 'full'", url = "https://github.com/kineticneticat/ComplexHex/raw/51cf2bbac7183cd6b4be360f205bd20d99d56952/docs/v/latest/0.1.x/dist/hexdoc_complexhex-0.1.6.1.0.dev0-py3-none-any.whl" },
     { name = "hexdoc-dthexcasting", marker = "extra == 'full'", specifier = "==1.0.2.*" },
@@ -1047,7 +1047,7 @@ requires-dist = [
     { name = "hexdoc-hextweaks", marker = "extra == 'full'", specifier = "==5.3.3.*" },
     { name = "hexdoc-hexways", marker = "extra == 'full'", specifier = "==1.0.1.*" },
     { name = "hexdoc-hexweb", marker = "extra == 'full'", specifier = "==1.0.4.*" },
-    { name = "hexdoc-hexxyplanes", marker = "extra == 'full'", specifier = "==0.2.1.1.20.1.*" },
+    { name = "hexdoc-hexxyplanes", marker = "extra == 'full'", url = "https://github.com/Real-Septicake/HexxyPlanes/raw/b848a2d13fd5f3801664d879b0964659f350f0e6/docs/v/latest/main/dist/hexdoc_hexxyplanes-0.2.1.1.20.1.1.0-py3-none-any.whl" },
     { name = "hexdoc-hierophantics", marker = "extra == 'full'", specifier = "==1.3.5.*" },
     { name = "hexdoc-hyperhexcast", marker = "extra == 'full'", specifier = "==0.1.1.*" },
     { name = "hexdoc-ioticblocks", marker = "extra == 'full'", specifier = "==1.0.2.1.20.1.*" },
@@ -1100,7 +1100,7 @@ requires-dist = [
 
 [[package]]
 name = "hexdoc"
-version = "1!0.1.0a36"
+version = "1!0.1.0a37"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
@@ -1130,9 +1130,9 @@ dependencies = [
     { name = "typing-extensions" },
     { name = "yarl" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/85/3e/5d1a0901f2b58a12bde4d729fe33a5d3878e949a6e2bdcaf91a79911c336/hexdoc-1!0.1.0a36.tar.gz", hash = "sha256:9450b678d9161e44e9c2a59ecb0e3903fab2d8f6446f9dd7a29e44072c7d4838", size = 154505, upload-time = "2026-02-01T20:37:13.033Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/6e/ad/1ca98c44562fea4ec3848755d8efdf2a2aa11614ed0232532d0dbc71006d/hexdoc-1!0.1.0a37.tar.gz", hash = "sha256:fff581759afdff1249995b50f674407e7f3baf8a7f1f38ba86bf8593d4021b08", size = 154619, upload-time = "2026-02-15T21:26:57.812Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e5/db/a59838c65aff2bfff454d510fbe4307abd57f5f9fec29ed86e24322e77e8/hexdoc-1!0.1.0a36-py3-none-any.whl", hash = "sha256:9ae84851bada159625862003583a36152a7b1a11cc425393b9b50c899b63d536", size = 223780, upload-time = "2026-02-01T20:37:10.971Z" },
+    { url = "https://files.pythonhosted.org/packages/5b/77/a2064f39a2033d3015bd0cc7910da1d740d29c9e20040214bdbd06ea94da/hexdoc-1!0.1.0a37-py3-none-any.whl", hash = "sha256:0c46a56617803f39dea7b47eba63137b670d72c2e2a8a558451290adced7ca0c", size = 223930, upload-time = "2026-02-15T21:26:55.976Z" },
 ]
 
 [[package]]
@@ -1532,14 +1532,16 @@ wheels = [
 [[package]]
 name = "hexdoc-hexxyplanes"
 version = "0.2.1.1.20.1.1.0"
-source = { registry = "https://pypi.org/simple" }
+source = { url = "https://github.com/Real-Septicake/HexxyPlanes/raw/b848a2d13fd5f3801664d879b0964659f350f0e6/docs/v/latest/main/dist/hexdoc_hexxyplanes-0.2.1.1.20.1.1.0-py3-none-any.whl" }
 dependencies = [
     { name = "hexdoc-hexcasting" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/d5/05/267e2aff4eae644aca82fac677466dfc6bc5bd330f8456d8a5c7f38a2235/hexdoc_hexxyplanes-0.2.1.1.20.1.1.0.tar.gz", hash = "sha256:fa4b5b203640ed5cbf4dcbe7e59fb4042a49c0e136638787f300febf803178ab", size = 10945, upload-time = "2025-12-22T08:45:27.394Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/86/59/fd1f2fa8bda4ce9a5b15208cb3bf3d1d1862f1c0b0ae8c1f0fcff1eaf0ea/hexdoc_hexxyplanes-0.2.1.1.20.1.1.0-py3-none-any.whl", hash = "sha256:19a185f6f63fa3a4c9d9bf995c02e026f664b1e267d0789b80eb501cf17ad2dd", size = 16018, upload-time = "2025-12-22T08:45:26.1Z" },
+    { url = "https://github.com/Real-Septicake/HexxyPlanes/raw/b848a2d13fd5f3801664d879b0964659f350f0e6/docs/v/latest/main/dist/hexdoc_hexxyplanes-0.2.1.1.20.1.1.0-py3-none-any.whl", hash = "sha256:101e4cfcad2b052c71dce3014b385f7cfe3faae21b6ff7b6a3792daf92f2e846" },
 ]
+
+[package.metadata]
+requires-dist = [{ name = "hexdoc-hexcasting", specifier = "~=0.11.2.1.0" }]
 
 [[package]]
 name = "hexdoc-hierophantics"
