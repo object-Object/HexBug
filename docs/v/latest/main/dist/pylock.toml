@@ -439,6 +439,11 @@ version = "0.2.1.1.20.1.1.0"
 archive = { url = "https://github.com/Real-Septicake/HexxyPlanes/raw/b848a2d13fd5f3801664d879b0964659f350f0e6/docs/v/latest/main/dist/hexdoc_hexxyplanes-0.2.1.1.20.1.1.0-py3-none-any.whl", hashes = { sha256 = "101e4cfcad2b052c71dce3014b385f7cfe3faae21b6ff7b6a3792daf92f2e846" } }
 
 [[packages]]
+name = "hexdoc-hexxyskies"
+version = "2.0.2.2.0"
+archive = { url = "https://github.com/TechTastic/HexxySkies/raw/8ff07da666f74a334264c449a42e4e237cc3da7a/docs/v/latest/master/dist/hexdoc_hexxyskies-2.0.2.2.0-py3-none-any.whl", hashes = { sha256 = "d3a889f337c27d68a02d2517f420ff1bb6747ffd822a8e201fda4fc3d5c05d11" } }
+
+[[packages]]
 name = "hexdoc-hierophantics"
 version = "1.3.5.1.0"
 index = "https://pypi.org/simple"

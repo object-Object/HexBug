@@ -180,6 +180,7 @@ hexdoc==1!0.1.0a37 \
     #   hexdoc-hexdebug
     #   hexdoc-hexic
     #   hexdoc-hextweaks
+    #   hexdoc-hexxyskies
     #   hexdoc-lapisworks
     #   hexdoc-mediatransport
     #   hexdoc-minecraft
@@ -247,6 +248,7 @@ hexdoc-hexcasting==0.11.3.1.0 \
     #   hexdoc-hextweaks
     #   hexdoc-hexways
     #   hexdoc-hexxyplanes
+    #   hexdoc-hexxyskies
     #   hexdoc-hierophantics
     #   hexdoc-hyperhexcast
     #   hexdoc-ioticblocks
@@ -298,7 +300,9 @@ hexdoc-hexmapping==0.0.3.1.0.dev0 \
 hexdoc-hexodus==1.0.0.1.0.0 \
     --hash=sha256:79262023e6297b9ace2a785b2623cf474f22b537fa9c2c400fa98fa5cec8602b \
     --hash=sha256:9e4b518fb86c2c78e341b383aca057542e8476dd69ced5608939c38a2cc47762
-    # via hexbug-data
+    # via
+    #   hexbug-data
+    #   hexdoc-hexxyskies
 hexdoc-hexoverpowered==0.11.4.1.1 \
     --hash=sha256:0cdd7eed5bef3c4b60a6e72ddc5caec47030a209ec1e809bc033bdd8ee6fa360 \
     --hash=sha256:cd6f160ca145fd7ab0d30a4f602f6b3cbfa5ecde84c3a77374250eed54f43097
@@ -346,6 +350,9 @@ hexdoc-hexweb==1.0.4.1.1 \
 hexdoc-hexxyplanes @ https://github.com/Real-Septicake/HexxyPlanes/raw/b848a2d13fd5f3801664d879b0964659f350f0e6/docs/v/latest/main/dist/hexdoc_hexxyplanes-0.2.1.1.20.1.1.0-py3-none-any.whl \
     --hash=sha256:101e4cfcad2b052c71dce3014b385f7cfe3faae21b6ff7b6a3792daf92f2e846
     # via hexbug-data
+hexdoc-hexxyskies @ https://github.com/TechTastic/HexxySkies/raw/8ff07da666f74a334264c449a42e4e237cc3da7a/docs/v/latest/master/dist/hexdoc_hexxyskies-2.0.2.2.0-py3-none-any.whl \
+    --hash=sha256:d3a889f337c27d68a02d2517f420ff1bb6747ffd822a8e201fda4fc3d5c05d11
+    # via hexbug-data
 hexdoc-hierophantics==1.3.5.1.0 \
     --hash=sha256:30ca1372e2209fd085f41018a783cabf7877a5d2f6f121fa3d586c8a12fd7497 \
     --hash=sha256:a6e39f744adf81187b9aaa39febbf42b6508418126f1f8abcdb6f31c0c6d6953
@@ -378,6 +385,7 @@ hexdoc-minecraft==1.20.1.1.0.dev1 \
     # via
     #   hexdoc-hexcasting
     #   hexdoc-hexic
+    #   hexdoc-hexxyskies
 hexdoc-moreiotas==0.1.1.1.0 \
     --hash=sha256:2e9dfdbc2d969ce2c13e806237723188e35c6f029b99a1143fbb077786116211 \
     --hash=sha256:830d0fde94a0ea4a773605c67fd943ad977b438a1a4bb44d62751333b9a9662a
@@ -385,6 +393,7 @@ hexdoc-moreiotas==0.1.1.1.0 \
     #   hexbug-data
     #   hexdoc-hexal
     #   hexdoc-hexic
+    #   hexdoc-hexxyskies
 hexdoc-oneironaut @ https://github.com/beholderface/oneironaut/raw/99b7c992e2e2230b39ec9adceed4b1b2fed15831/docs/v/latest/1.20.1/dist/hexdoc_oneironaut-0.5.0.1.0-py3-none-any.whl \
     --hash=sha256:9efe0f641dc6115c25953884d214b3f55631db08ab2fafedeb63d77f93d16b48
     # via hexbug-data
