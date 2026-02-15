@@ -53,6 +53,7 @@ full = [
     "hexdoc-hexways==1.0.1.*",
     "hexdoc-hexweb==1.0.4.*",
     "hexdoc-hexxyplanes==0.2.1.1.20.1.*",
+    "hexdoc-hexxyskies==2.0.2.*",
     "hexdoc-hierophantics==1.3.5.*",
     "hexdoc-hyperhexcast==0.1.1.*",
     "hexdoc-ioticblocks==1.0.2.1.20.1.*",
@@ -81,6 +82,7 @@ hexdoc-hexical = { url = "https://github.com/miyucomics/hexical/raw/9e065b5e7995
 hexdoc-hextended = { url = "https://github.com/abilliontrillionstars/hextended-staves/raw/0e6e0a61b7f4d3e79761b216cfebc1141e19b30b/docs/v/latest/main/dist/hexdoc_hextended-2.0.1.1.0.dev0-py3-none-any.whl" }
 # workaround for "zh_cn,flatten.json" in 0.2.1+1.20.1
 hexdoc-hexxyplanes = { url = "https://github.com/Real-Septicake/HexxyPlanes/raw/b848a2d13fd5f3801664d879b0964659f350f0e6/docs/v/latest/main/dist/hexdoc_hexxyplanes-0.2.1.1.20.1.1.0-py3-none-any.whl" }
+hexdoc-hexxyskies = { url = "https://github.com/TechTastic/HexxySkies/raw/8ff07da666f74a334264c449a42e4e237cc3da7a/docs/v/latest/master/dist/hexdoc_hexxyskies-2.0.2.2.0-py3-none-any.whl" }
 hexdoc-oneironaut = { url = "https://github.com/beholderface/oneironaut/raw/99b7c992e2e2230b39ec9adceed4b1b2fed15831/docs/v/latest/1.20.1/dist/hexdoc_oneironaut-0.5.0.1.0-py3-none-any.whl" }
 hexdoc-overevaluate = { url = "https://github.com/miyucomics/overevaluate/raw/6c92a93c51fd966cf3709468f0a126c746ae85ba/docs/v/latest/main/dist/hexdoc_overevaluate-1.0.0.1.0.0-py3-none-any.whl" }
 hexdoc-scryglass = { url = "https://github.com/miyucomics/scryglass/raw/2b414d0ba9e9c0770c8b13bb01a67398630a4690/docs/v/latest/main/dist/hexdoc_scryglass-1.0.0.1.0.0-py3-none-any.whl" }

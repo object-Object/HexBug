@@ -318,6 +318,15 @@ MODS: list[StaticModInfo] = [
         modloaders=[Modloader.FABRIC, Modloader.FORGE],
     ),
     StaticModInfo(
+        id="hexxyskies",
+        name="Hexxy Skies",
+        description="Adds interop with Valkyrien Skies.",
+        icon_url=URL("fabric/src/main/resources/assets/hexxyskies/icon.png"),
+        curseforge_slug="hexxyskies",
+        modrinth_slug="hexxyskies",
+        modloaders=[Modloader.FABRIC, Modloader.FORGE, Modloader.QUILT],
+    ),
+    StaticModInfo(
         id="hierophantics",
         name="Hierophantics",
         description="Addon for Hex Casting that lets you work with extracted minds to create conditional hexes, merge villagers, and cast spells for less media.",
@@ -526,6 +535,8 @@ SPECIAL_HANDLERS: dict[ResourceLocation, SpecialHandler[Any]] = {
 DISABLED_PATTERNS: set[ResourceLocation] = {
     # conflicts
     ResourceLocation("hexstruction", "bounding_box"),  # shape: hexical:greater_blink
+    # commented out
+    ResourceLocation("hexxyskies", "ship/structure"),  # as of 2.0.2
     # unreasonably long angle signature
     ResourceLocation("hexic", "whatthefuck"),
     # "hexic is being digested from the inside"
@@ -597,6 +608,11 @@ SPECIAL_HANDLER_CONFLICTS: set[tuple[ResourceLocation, ResourceLocation, Any]] =
 # suppress failure to generate page title
 UNTITLED_PAGES: set[tuple[ResourceLocation, str]] = {
     (ResourceLocation("hexcasting", "items/splicing_table"), "cost"),
+    # TODO: maybe we should add an override for this
+    (
+        ResourceLocation("hexcasting", "basics/navimancy"),
+        "hexxyskies:page/space/model_body",
+    ),
 }
 
 # replace the pattern's name entirely

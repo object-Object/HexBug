@@ -1000,6 +1000,7 @@ full = [
     { name = "hexdoc-hexways" },
     { name = "hexdoc-hexweb" },
     { name = "hexdoc-hexxyplanes" },
+    { name = "hexdoc-hexxyskies" },
     { name = "hexdoc-hierophantics" },
     { name = "hexdoc-hyperhexcast" },
     { name = "hexdoc-ioticblocks" },
@@ -1048,6 +1049,7 @@ requires-dist = [
     { name = "hexdoc-hexways", marker = "extra == 'full'", specifier = "==1.0.1.*" },
     { name = "hexdoc-hexweb", marker = "extra == 'full'", specifier = "==1.0.4.*" },
     { name = "hexdoc-hexxyplanes", marker = "extra == 'full'", url = "https://github.com/Real-Septicake/HexxyPlanes/raw/b848a2d13fd5f3801664d879b0964659f350f0e6/docs/v/latest/main/dist/hexdoc_hexxyplanes-0.2.1.1.20.1.1.0-py3-none-any.whl" },
+    { name = "hexdoc-hexxyskies", marker = "extra == 'full'", url = "https://github.com/TechTastic/HexxySkies/raw/8ff07da666f74a334264c449a42e4e237cc3da7a/docs/v/latest/master/dist/hexdoc_hexxyskies-2.0.2.2.0-py3-none-any.whl" },
     { name = "hexdoc-hierophantics", marker = "extra == 'full'", specifier = "==1.3.5.*" },
     { name = "hexdoc-hyperhexcast", marker = "extra == 'full'", specifier = "==0.1.1.*" },
     { name = "hexdoc-ioticblocks", marker = "extra == 'full'", specifier = "==1.0.2.1.20.1.*" },
@@ -1542,6 +1544,32 @@ wheels = [
 
 [package.metadata]
 requires-dist = [{ name = "hexdoc-hexcasting", specifier = "~=0.11.2.1.0" }]
+
+[[package]]
+name = "hexdoc-hexxyskies"
+version = "2.0.2.2.0"
+source = { url = "https://github.com/TechTastic/HexxySkies/raw/8ff07da666f74a334264c449a42e4e237cc3da7a/docs/v/latest/master/dist/hexdoc_hexxyskies-2.0.2.2.0-py3-none-any.whl" }
+dependencies = [
+    { name = "hexdoc" },
+    { name = "hexdoc-hexcasting" },
+    { name = "hexdoc-hexodus" },
+    { name = "hexdoc-minecraft" },
+    { name = "hexdoc-moreiotas" },
+]
+wheels = [
+    { url = "https://github.com/TechTastic/HexxySkies/raw/8ff07da666f74a334264c449a42e4e237cc3da7a/docs/v/latest/master/dist/hexdoc_hexxyskies-2.0.2.2.0-py3-none-any.whl", hash = "sha256:d3a889f337c27d68a02d2517f420ff1bb6747ffd822a8e201fda4fc3d5c05d11" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "hexdoc", specifier = "~=1!0.1.0a24" },
+    { name = "hexdoc-hexcasting", specifier = "~=0.11.2.1.0.dev21" },
+    { name = "hexdoc-hexodus", specifier = "~=1.0.0.1.0.dev0" },
+    { name = "hexdoc-minecraft", specifier = "~=1.20.1.1.0.dev0" },
+    { name = "hexdoc-moreiotas", specifier = "~=0.1.1.1.0.dev0" },
+    { name = "ruff", marker = "extra == 'dev'", specifier = "~=0.11.2" },
+]
+provides-extras = ["dev"]
 
 [[package]]
 name = "hexdoc-hierophantics"
