@@ -106,6 +106,12 @@ choice_HexBug-cogs-app-commands-pattern-PatternCheckType =
     .SPECIAL-PREFIX =
         Special Handler Prefix
 
+choice_HexBug-cogs-app-commands-patterns-StackOrder =
+    .BOTTOM-TO-TOP =
+        Bottom-to-Top
+    .TOP-TO-BOTTOM =
+        Top-to-Bottom
+
 # /book
 
 book-category = Category
@@ -573,6 +579,31 @@ command_patterns-number =
         number
     .parameter_number_description =
         The number to generate. May be a decimal or fraction.
+
+    .parameter_visibility = {-parameter_visibility}
+    .parameter_visibility_description = {-parameter_visibility_description}
+
+# /patterns swindler
+
+command_patterns-swindler =
+        swindler
+    .description =
+        Generate and display a Lehmer code for rearranging the stack using Swindler's Gambit.
+
+    .parameter_order =
+        order
+    .parameter_order_description =
+        Whether to interpret the before and after parameters as top-to-bottom or bottom-to-top.
+
+    .parameter_before =
+        before
+    .parameter_before_description =
+        A comma-separated or space-separated list of stack elements before rearranging.
+
+    .parameter_after =
+        after
+    .parameter_after_description =
+        A comma-separated or space-separated list of stack elements after rearranging.
 
     .parameter_visibility = {-parameter_visibility}
     .parameter_visibility_description = {-parameter_visibility_description}
