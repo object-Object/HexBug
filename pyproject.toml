@@ -210,3 +210,7 @@ reportDuplicateImport = "none"
 [[tool.pyright.executionEnvironments]]
 root = "bot/test"
 reportUnusedFunction = "none"
+
+[[tool.pyright.executionEnvironments]]
+root = "data/test"
+reportUnusedFunction = "none"
