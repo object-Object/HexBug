@@ -1,0 +1,12 @@
+{
+    "Command Parameter": {
+        "prefix": "param",
+        "body": [
+            ".parameter_$1 =",
+            "    $1",
+            ".parameter_$1_description =",
+            "    $0",
+        ],
+        "scope": "fluent",
+    }
+}
