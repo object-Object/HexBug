@@ -1058,7 +1058,7 @@ requires-dist = [
     { name = "hexdoc-oneironaut", marker = "extra == 'full'", url = "https://github.com/beholderface/oneironaut/raw/99b7c992e2e2230b39ec9adceed4b1b2fed15831/docs/v/latest/1.20.1/dist/hexdoc_oneironaut-0.5.0.1.0-py3-none-any.whl" },
     { name = "hexdoc-overevaluate", marker = "extra == 'full'", url = "https://github.com/miyucomics/overevaluate/raw/6c92a93c51fd966cf3709468f0a126c746ae85ba/docs/v/latest/main/dist/hexdoc_overevaluate-1.0.0.1.0.0-py3-none-any.whl" },
     { name = "hexdoc-scryglass", marker = "extra == 'full'", url = "https://github.com/miyucomics/scryglass/raw/2b414d0ba9e9c0770c8b13bb01a67398630a4690/docs/v/latest/main/dist/hexdoc_scryglass-1.0.0.1.0.0-py3-none-any.whl" },
-    { name = "hexdoc-slate-work", marker = "extra == 'full'", specifier = "==1.0.7.*" },
+    { name = "hexdoc-slate-work", marker = "extra == 'full'", specifier = "==1.2.2.*" },
     { name = "hexdoc-yaha", marker = "extra == 'full'", specifier = "==0.2.1.*" },
     { name = "lark", extras = ["interegular"], specifier = ">=1.3.0" },
     { name = "pydantic", specifier = ">=2.10.6" },
@@ -1698,15 +1698,15 @@ provides-extras = ["dev"]
 
 [[package]]
 name = "hexdoc-slate-work"
-version = "1.0.7.1.0"
+version = "1.2.2.1.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "hexdoc-hexcasting" },
     { name = "hexdoc-hexpose" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/b6/87/b236a74cae64c632dd49396ba8511022364da0eb00fb626114d10aba9c6e/hexdoc_slate_work-1.0.7.1.0.tar.gz", hash = "sha256:933cf22c5d7da27e7cfe2dd5055c7a3ac5aa6d3be922b6ef63ae3ae60f02830d", size = 86838, upload-time = "2026-01-17T05:48:10.212Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/d1/ac/fb6e11ae467ca9e7febffae4d6b1b04b924b228386f4f71f809f1443dfe7/hexdoc_slate_work-1.2.2.1.0.tar.gz", hash = "sha256:df3897ed0c026619b8ba1f5f6132402eaf1e997288522002bf72638242ac7d98", size = 90668, upload-time = "2026-02-13T23:43:21.372Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c7/3d/c525dc85e282cc6def9f6fe28396a82451c21fecef07ee435002e1081ab2/hexdoc_slate_work-1.0.7.1.0-py3-none-any.whl", hash = "sha256:f3fd2adbe7aa210100bfe493bee4a1dbb5020c2a92b92ab07f2ae7fbbcc3d95c", size = 131513, upload-time = "2026-01-17T05:48:08.545Z" },
+    { url = "https://files.pythonhosted.org/packages/d0/18/ce0ce478a022ec51152684eb22d76c6634a92cda0cc044b4f97e3f82bee7/hexdoc_slate_work-1.2.2.1.0-py3-none-any.whl", hash = "sha256:76c8240491c1d8bf40aa897a6988ac84b1cdd9c1cf1dbdb35923177244eb1d41", size = 138543, upload-time = "2026-02-13T23:43:19.938Z" },
 ]
 
 [[package]]
