@@ -105,7 +105,7 @@ jobs:
           npm-packages: aws-cdk
 
       - name: Sync dependencies
-        run: uv sync --frozen --no-dev --package HexBug-infrastructure
+        run: uv sync --locked --no-dev --package HexBug-infrastructure
 
       - name: Synth aws-cdk stack
         run: cdk synth --ci --no-lookups --strict
@@ -133,7 +133,7 @@ jobs:
       - name: Sync dependencies
         run: |
           export UV_PROJECT_ENVIRONMENT="${pythonLocation}"
-          uv sync --frozen --only-group web
+          uv sync --locked --only-group web
 
       - name: Build registry
         run: hexbug build --no-index
@@ -176,7 +176,7 @@ jobs:
           python-version-file: .python-version
 
       - name: Sync dependencies
-        run: uv sync --frozen --only-group test
+        run: uv sync --locked --only-group test
 
       - name: Run pre-commit
         uses: pre-commit/action@v3.0.1
