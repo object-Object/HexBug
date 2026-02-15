@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ### Added
 
-- Added a command `/patterns lehmer` to generate and display a Lehmer code for rearranging the stack using Swindler's Gambit.
+- Added a command `/patterns swindler` to generate and display a Lehmer code for rearranging the stack using Swindler's Gambit.
 
 ### Mods Added
 
