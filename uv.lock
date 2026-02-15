@@ -1016,7 +1016,7 @@ full = [
 
 [package.metadata]
 requires-dist = [
-    { name = "hexdoc", specifier = ">=1!0.1.0a35" },
+    { name = "hexdoc", specifier = ">=1!0.1.0a36" },
     { name = "hexdoc-caduceus", marker = "extra == 'full'", specifier = "==0.2.1.1.20.1.*" },
     { name = "hexdoc-complexhex", marker = "extra == 'full'", url = "https://github.com/kineticneticat/ComplexHex/raw/51cf2bbac7183cd6b4be360f205bd20d99d56952/docs/v/latest/0.1.x/dist/hexdoc_complexhex-0.1.6.1.0.dev0-py3-none-any.whl" },
     { name = "hexdoc-dthexcasting", marker = "extra == 'full'", specifier = "==1.0.2.*" },
@@ -1100,7 +1100,7 @@ requires-dist = [
 
 [[package]]
 name = "hexdoc"
-version = "1!0.1.0a35"
+version = "1!0.1.0a36"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
@@ -1108,6 +1108,7 @@ dependencies = [
     { name = "hatch" },
     { name = "importlib-resources" },
     { name = "jinja2" },
+    { name = "langcodes" },
     { name = "minecraft-render" },
     { name = "moderngl", extra = ["headless"] },
     { name = "moderngl-window" },
@@ -1129,9 +1130,9 @@ dependencies = [
     { name = "typing-extensions" },
     { name = "yarl" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ad/9e/406aa0c66dab8ccd178173ba0a56da86cb506222b20f3bafcd1b75e2f93c/hexdoc-1!0.1.0a35.tar.gz", hash = "sha256:dce830ef27653f7aecb71f889256a43b59dc72be08fbfab7d5f9f0091edda0ad", size = 154409, upload-time = "2025-10-25T02:50:48.156Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/85/3e/5d1a0901f2b58a12bde4d729fe33a5d3878e949a6e2bdcaf91a79911c336/hexdoc-1!0.1.0a36.tar.gz", hash = "sha256:9450b678d9161e44e9c2a59ecb0e3903fab2d8f6446f9dd7a29e44072c7d4838", size = 154505, upload-time = "2026-02-01T20:37:13.033Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/48/24/e0dbc6ad8210f40eb3ffe0d07afae1f2e0ac7d16c3676d53955843e47877/hexdoc-1!0.1.0a35-py3-none-any.whl", hash = "sha256:149dceb2bcf7215fef6ae20e52b65b984df9a88306a2e2c2cb2572ae644d4e58", size = 223678, upload-time = "2025-10-25T02:50:46.534Z" },
+    { url = "https://files.pythonhosted.org/packages/e5/db/a59838c65aff2bfff454d510fbe4307abd57f5f9fec29ed86e24322e77e8/hexdoc-1!0.1.0a36-py3-none-any.whl", hash = "sha256:9ae84851bada159625862003583a36152a7b1a11cc425393b9b50c899b63d536", size = 223780, upload-time = "2026-02-01T20:37:10.971Z" },
 ]
 
 [[package]]
@@ -2105,6 +2106,15 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/05/f9/27e94c1b3eb29e6933b6986ffc5fa1177d2cd1f0c8efc5f02c91c9ac61de/kiwisolver-1.4.8-cp313-cp313t-musllinux_1_2_ppc64le.whl", hash = "sha256:151dffc4865e5fe6dafce5480fab84f950d14566c480c08a53c663a0020504b6", size = 2390661, upload-time = "2024-12-24T18:30:34.939Z" },
     { url = "https://files.pythonhosted.org/packages/d9/d4/3c9735faa36ac591a4afcc2980d2691000506050b7a7e80bcfe44048daa7/kiwisolver-1.4.8-cp313-cp313t-musllinux_1_2_s390x.whl", hash = "sha256:577facaa411c10421314598b50413aa1ebcf5126f704f1e5d72d7e4e9f020d90", size = 2546710, upload-time = "2024-12-24T18:30:37.281Z" },
     { url = "https://files.pythonhosted.org/packages/4c/fa/be89a49c640930180657482a74970cdcf6f7072c8d2471e1babe17a222dc/kiwisolver-1.4.8-cp313-cp313t-musllinux_1_2_x86_64.whl", hash = "sha256:be4816dc51c8a471749d664161b434912eee82f2ea66bd7628bd14583a833e85", size = 2349213, upload-time = "2024-12-24T18:30:40.019Z" },
+]
+
+[[package]]
+name = "langcodes"
+version = "3.5.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/a9/75/f9edc5d72945019312f359e69ded9f82392a81d49c5051ed3209b100c0d2/langcodes-3.5.1.tar.gz", hash = "sha256:40bff315e01b01d11c2ae3928dd4f5cbd74dd38f9bd912c12b9a3606c143f731", size = 191084, upload-time = "2025-12-02T16:22:01.627Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/dd/c1/d10b371bcba7abce05e2b33910e39c33cfa496a53f13640b7b8e10bb4d2b/langcodes-3.5.1-py3-none-any.whl", hash = "sha256:b6a9c25c603804e2d169165091d0cdb23934610524a21d226e4f463e8e958a72", size = 183050, upload-time = "2025-12-02T16:21:59.954Z" },
 ]
 
 [[package]]
