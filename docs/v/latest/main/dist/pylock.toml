@@ -368,10 +368,10 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/77/d3/638cc70364686b2
 
 [[packages]]
 name = "hexdoc-hexparse"
-version = "1.8.1.1.1"
+version = "1.9.0.1.1"
 index = "https://pypi.org/simple"
-sdist = { url = "https://files.pythonhosted.org/packages/c6/d4/2abe138d8556cdb6507d91977f3c6dcf82abcce63c4b615db2ec685e8ef8/hexdoc_hexparse-1.8.1.1.1.tar.gz", upload-time = 2026-02-02T16:25:21Z, size = 12343, hashes = { sha256 = "b571e3676fe2dc9fec0e522d0939c8a60509501616f161159f9f0f4b5b531bf5" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/e4/1b/0bd782065cb95f96d66b2aa5ae30ed19dcc3414aea05346c40ee8dbc6659/hexdoc_hexparse-1.8.1.1.1-py3-none-any.whl", upload-time = 2026-02-02T16:25:19Z, size = 17398, hashes = { sha256 = "5666d8745ba096c881e520cb7cb7442140694ba59d7f2ebf8438e9f4661eb8c7" } }]
+sdist = { url = "https://files.pythonhosted.org/packages/4c/4f/efdd20132dfc6efb6a150591308586972f520d19842ca31e4060b2a47643/hexdoc_hexparse-1.9.0.1.1.tar.gz", upload-time = 2026-02-25T14:59:32Z, size = 12411, hashes = { sha256 = "e3dbfd3e0c9acfdd8882c44aea8bfd86c1ce913961d62ccfad0741e670fb43dc" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/df/e4/be7c9b6655a93c844ddbff0b3787230bbea56fc01eed7d712330ccd8da8d/hexdoc_hexparse-1.9.0.1.1-py3-none-any.whl", upload-time = 2026-02-25T14:59:31Z, size = 17469, hashes = { sha256 = "80d4974e77c53d64ddb6698b3fc5910a8ab3c2a3cc22182a196e7783c31f3b43" } }]
 
 [[packages]]
 name = "hexdoc-hexpose"
@@ -445,10 +445,10 @@ archive = { url = "https://github.com/TechTastic/HexxySkies/raw/8ff07da666f74a33
 
 [[packages]]
 name = "hexdoc-hierophantics"
-version = "1.3.5.1.0"
+version = "1.3.6.1.0"
 index = "https://pypi.org/simple"
-sdist = { url = "https://files.pythonhosted.org/packages/44/d8/a0ab3b90f2796edd093014a5997de4168f3e03659522489c1ed482747955/hexdoc_hierophantics-1.3.5.1.0.tar.gz", upload-time = 2026-01-16T00:20:57Z, size = 61416, hashes = { sha256 = "30ca1372e2209fd085f41018a783cabf7877a5d2f6f121fa3d586c8a12fd7497" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/45/0e/804687c9ba0bd996f8566b60b37b332a1149a0906903e4988311381f8304/hexdoc_hierophantics-1.3.5.1.0-py3-none-any.whl", upload-time = 2026-01-16T00:20:56Z, size = 80374, hashes = { sha256 = "a6e39f744adf81187b9aaa39febbf42b6508418126f1f8abcdb6f31c0c6d6953" } }]
+sdist = { url = "https://files.pythonhosted.org/packages/e9/38/56b00a6b8358d06455e9b4c9c51cce1aa662655e1addd0d6a3b255a5630c/hexdoc_hierophantics-1.3.6.1.0.tar.gz", upload-time = 2026-02-17T19:20:58Z, size = 70175, hashes = { sha256 = "1d9c0691171b11bc516dfeb9f44812d2072a38122989c31b2a4bb844a86e184c" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/87/a5/169d602ab0c060f0d554cdeefee83e9342cc2c08ebe9e5e3e70ea040a2f5/hexdoc_hierophantics-1.3.6.1.0-py3-none-any.whl", upload-time = 2026-02-17T19:20:56Z, size = 90897, hashes = { sha256 = "d1ef0e59179c5b37d274364494a6637a723f8c70343564e638cbc681d8180239" } }]
 
 [[packages]]
 name = "hexdoc-hyperhexcast"
@@ -498,6 +498,13 @@ version = "0.1.1.1.0"
 index = "https://pypi.org/simple"
 sdist = { url = "https://files.pythonhosted.org/packages/79/6d/741307c0f82d2dcd2cf69e1881f352a510ab80c7a7fb8ee42279ff9763f1/hexdoc_moreiotas-0.1.1.1.0.tar.gz", upload-time = 2025-10-10T17:49:20Z, size = 16337, hashes = { sha256 = "830d0fde94a0ea4a773605c67fd943ad977b438a1a4bb44d62751333b9a9662a" } }
 wheels = [{ url = "https://files.pythonhosted.org/packages/14/65/dbdfc25f2bbfd1b0bff5f7a12e7a7ec595deb69176028dfd6cc00479c79d/hexdoc_moreiotas-0.1.1.1.0-py3-none-any.whl", upload-time = 2025-10-10T17:49:18Z, size = 20660, hashes = { sha256 = "2e9dfdbc2d969ce2c13e806237723188e35c6f029b99a1143fbb077786116211" } }]
+
+[[packages]]
+name = "hexdoc-movesthemind"
+version = "1.1.0.1.0"
+index = "https://pypi.org/simple"
+sdist = { url = "https://files.pythonhosted.org/packages/13/a4/39f2090645121d14f75a6f9e697402638bd491e3d44c3f3040a0ff246bb8/hexdoc_movesthemind-1.1.0.1.0.tar.gz", upload-time = 2026-02-25T22:17:21Z, size = 11756, hashes = { sha256 = "6be9e25685822656679baf236454242ff35f2c290af68d4501ecc1a113f1ec55" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/ab/2e/41a504ff0776810531f82ca04a224530083de473f434945aceb512bf4360/hexdoc_movesthemind-1.1.0.1.0-py3-none-any.whl", upload-time = 2026-02-25T22:17:20Z, size = 14640, hashes = { sha256 = "63e42c8861f92f1a88f8f792c9662c41f6ad92542e7d7bc6eec5673448b1a72f" } }]
 
 [[packages]]
 name = "hexdoc-oneironaut"
