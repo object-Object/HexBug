@@ -3,12 +3,14 @@ from __future__ import annotations
 import logging
 from functools import cached_property
 from pathlib import Path
-from typing import override
+from typing import Any, override
 
-from hexdoc.core import Properties
+from hexdoc.core import Properties, ResourceLocation
 from hexdoc.core.resource_dir import PathResourceDir
+from hexdoc.minecraft.i18n import I18n, LocalizedStr
 from hexdoc.patchouli import BookContext
-from hexdoc.utils import TRACE, classproperty
+from hexdoc.patchouli.entry import Entry
+from hexdoc.utils import TRACE, JSONDict, classproperty
 from yarl import URL
 
 logger = logging.getLogger(__name__)
@@ -53,7 +55,49 @@ class HexBugBookContext(BookContext):
         return book_url
 
 
-# FIXME: hack
+# TODO: remove if hexic is removed
+# terrible awful bad
+def monkeypatch_hexdoc():
+    currently_loading_hexic_content = False
+
+    original_load = Entry.load
+    original_localize = I18n.localize
+
+    def load_patched(
+        cls: type[Entry],
+        resource_dir: PathResourceDir,
+        id: ResourceLocation,
+        data: JSONDict,
+        context: dict[str, Any],
+    ) -> Any:
+        nonlocal currently_loading_hexic_content
+
+        if resource_dir.modid == "hexic":
+            currently_loading_hexic_content = True
+
+        try:
+            return original_load(resource_dir, id, data, context)
+        finally:
+            currently_loading_hexic_content = False
+
+    def localize_patched(
+        self: I18n,
+        *keys: str,
+        default: str | None = None,
+        silent: bool = False,
+    ) -> LocalizedStr:
+        return original_localize(
+            self,
+            *keys,
+            default=default,
+            silent=silent or currently_loading_hexic_content,
+        )
+
+    Entry.load = classmethod(load_patched)  # pyright: ignore[reportAttributeAccessIssue]
+    I18n.localize = localize_patched
+
+
+# TODO: remove when the next Hex version is released (FallingColors/HexMod#1007)
 def monkeypatch_hexdoc_hexcasting():
     from hexdoc_hexcasting.metadata import HexContext
     from hexdoc_hexcasting.utils.pattern import PatternInfo

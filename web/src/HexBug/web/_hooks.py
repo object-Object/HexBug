@@ -18,7 +18,7 @@ from typing_extensions import override
 import HexBug.web
 from HexBug.__version__ import VERSION
 from HexBug.data.registry import HexBugRegistry
-from HexBug.data.utils.hexdoc import monkeypatch_hexdoc_hexcasting
+from HexBug.data.utils.hexdoc import monkeypatch_hexdoc, monkeypatch_hexdoc_hexcasting
 
 
 class BookOfHexxyPlugin(ModPluginImpl, UpdateTemplateArgsImpl):
@@ -26,6 +26,7 @@ class BookOfHexxyPlugin(ModPluginImpl, UpdateTemplateArgsImpl):
     @hookimpl(tryfirst=True)
     def hexdoc_mod_plugin(branch: str) -> ModPlugin:
         # this SHOULD run early enough...
+        monkeypatch_hexdoc()
         monkeypatch_hexdoc_hexcasting()
 
         return BookOfHexxyModPlugin(branch=branch)

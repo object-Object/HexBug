@@ -71,6 +71,7 @@ from .static_data import (
 from .utils.hexdoc import (
     HexBugBookContext,
     HexBugProperties,
+    monkeypatch_hexdoc,
     monkeypatch_hexdoc_hexcasting,
 )
 
@@ -142,6 +143,7 @@ class HexBugRegistry(BaseModel):
 
         logger.info("Building HexBug registry.")
 
+        monkeypatch_hexdoc()
         monkeypatch_hexdoc_hexcasting()
 
         # lazy imports because these won't be available when the bot runs
