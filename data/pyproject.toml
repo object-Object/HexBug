@@ -61,6 +61,7 @@ full = [
     "hexdoc-lessertp==1.2.4.*",
     "hexdoc-mediatransport==1.1.1.1.20.1.*",
     "hexdoc-moreiotas==0.1.1.*",
+    "hexdoc-movesthemind==1.1.0.*",
     "hexdoc-oneironaut==0.5.0.*",
     "hexdoc-overevaluate==1.0.0.*",
     "hexdoc-scryglass==1.0.0.*",

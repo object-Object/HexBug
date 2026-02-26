@@ -390,6 +390,15 @@ MODS: list[StaticModInfo] = [
         modloaders=[Modloader.FABRIC, Modloader.FORGE],
     ),
     StaticModInfo(
+        id="movesthemind",
+        name="Moves the Mind",
+        description="Adds a suite of patterns for summoning and controlling player-like entities, provided by the Carpet mod.",
+        icon_url=None,
+        curseforge_slug="moves-the-mind",
+        modrinth_slug="moves-the-mind",
+        modloaders=[Modloader.FABRIC],
+    ),
+    StaticModInfo(
         id="oneironaut",
         name="Oneironaut",
         description="An addon for Hex Casting centered around exploration and use of the Noosphere.",

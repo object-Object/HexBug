@@ -1008,6 +1008,7 @@ full = [
     { name = "hexdoc-lessertp" },
     { name = "hexdoc-mediatransport" },
     { name = "hexdoc-moreiotas" },
+    { name = "hexdoc-movesthemind" },
     { name = "hexdoc-oneironaut" },
     { name = "hexdoc-overevaluate" },
     { name = "hexdoc-scryglass" },
@@ -1057,6 +1058,7 @@ requires-dist = [
     { name = "hexdoc-lessertp", marker = "extra == 'full'", specifier = "==1.2.4.*" },
     { name = "hexdoc-mediatransport", marker = "extra == 'full'", specifier = "==1.1.1.1.20.1.*" },
     { name = "hexdoc-moreiotas", marker = "extra == 'full'", specifier = "==0.1.1.*" },
+    { name = "hexdoc-movesthemind", marker = "extra == 'full'", specifier = "==1.1.0.*" },
     { name = "hexdoc-oneironaut", marker = "extra == 'full'", url = "https://github.com/beholderface/oneironaut/raw/99b7c992e2e2230b39ec9adceed4b1b2fed15831/docs/v/latest/1.20.1/dist/hexdoc_oneironaut-0.5.0.1.0-py3-none-any.whl" },
     { name = "hexdoc-overevaluate", marker = "extra == 'full'", url = "https://github.com/miyucomics/overevaluate/raw/6c92a93c51fd966cf3709468f0a126c746ae85ba/docs/v/latest/main/dist/hexdoc_overevaluate-1.0.0.1.0.0-py3-none-any.whl" },
     { name = "hexdoc-scryglass", marker = "extra == 'full'", url = "https://github.com/miyucomics/scryglass/raw/2b414d0ba9e9c0770c8b13bb01a67398630a4690/docs/v/latest/main/dist/hexdoc_scryglass-1.0.0.1.0.0-py3-none-any.whl" },
@@ -1670,6 +1672,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/79/6d/741307c0f82d2dcd2cf69e1881f352a510ab80c7a7fb8ee42279ff9763f1/hexdoc_moreiotas-0.1.1.1.0.tar.gz", hash = "sha256:830d0fde94a0ea4a773605c67fd943ad977b438a1a4bb44d62751333b9a9662a", size = 16337, upload-time = "2025-10-10T17:49:20.172Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/14/65/dbdfc25f2bbfd1b0bff5f7a12e7a7ec595deb69176028dfd6cc00479c79d/hexdoc_moreiotas-0.1.1.1.0-py3-none-any.whl", hash = "sha256:2e9dfdbc2d969ce2c13e806237723188e35c6f029b99a1143fbb077786116211", size = 20660, upload-time = "2025-10-10T17:49:18.776Z" },
+]
+
+[[package]]
+name = "hexdoc-movesthemind"
+version = "1.1.0.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "hexdoc-hexcasting" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/13/a4/39f2090645121d14f75a6f9e697402638bd491e3d44c3f3040a0ff246bb8/hexdoc_movesthemind-1.1.0.1.0.tar.gz", hash = "sha256:6be9e25685822656679baf236454242ff35f2c290af68d4501ecc1a113f1ec55", size = 11756, upload-time = "2026-02-25T22:17:21.887Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ab/2e/41a504ff0776810531f82ca04a224530083de473f434945aceb512bf4360/hexdoc_movesthemind-1.1.0.1.0-py3-none-any.whl", hash = "sha256:63e42c8861f92f1a88f8f792c9662c41f6ad92542e7d7bc6eec5673448b1a72f", size = 14640, upload-time = "2026-02-25T22:17:20.544Z" },
 ]
 
 [[package]]
