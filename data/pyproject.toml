@@ -42,7 +42,7 @@ full = [
     "hexdoc-hexmapping==0.0.3.*",
     "hexdoc-hexodus==1.0.0.*",
     "hexdoc-hexoverpowered==0.11.4.*",
-    "hexdoc-hexparse==1.8.1.*",
+    "hexdoc-hexparse==1.9.0.*",
     "hexdoc-hexpose==1.0.0.1.0.0+hexbug", # workaround for https://github.com/miyucomics/hexpose/commit/26709051b306e70982cb904ac2776eb7f9da9f4d until the next release
     "hexdoc-hexstruction==1.3.1.1.20.1.*",
     "hexdoc-hextended==2.0.1.*",
@@ -54,7 +54,7 @@ full = [
     "hexdoc-hexweb==1.0.4.*",
     "hexdoc-hexxyplanes==0.2.1.1.20.1.*",
     "hexdoc-hexxyskies==2.0.2.*",
-    "hexdoc-hierophantics==1.3.5.*",
+    "hexdoc-hierophantics==1.3.6.*",
     "hexdoc-hyperhexcast==0.1.1.*",
     "hexdoc-ioticblocks==1.0.2.1.20.1.*",
     "hexdoc-lapisworks==1.5.7.*",
