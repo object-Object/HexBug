@@ -48,6 +48,7 @@ full = [
     "hexdoc-hextended==2.0.1.*",
     "hexdoc-hexthings==0.1.6.1.1.20.1.*",
     "hexdoc-hextrace==0.1.0.1.20.1.*",
+    "hexdoc-hextrapats==1.0.2.*",
     "hexdoc-hextrogen==1.1.0.*",
     "hexdoc-hextweaks==5.3.3.*",
     "hexdoc-hexways==1.0.1.*",

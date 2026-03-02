@@ -12,6 +12,7 @@ from .special_handlers import (
     HexFlowNumberSpecialHandler,
     HexThingsNoopSpecialHandler,
     HexTraceSpecialHandler,
+    HextrapatsVectorSpecialHandler,
     MaskSpecialHandler,
     NumberSpecialHandler,
     OverevaluateTailDepthSpecialHandler,
@@ -267,6 +268,15 @@ MODS: list[StaticModInfo] = [
         curseforge_slug=None,
         modrinth_slug=None,
         modloaders=[Modloader.FABRIC, Modloader.FORGE],
+    ),
+    StaticModInfo(
+        id="hextrapats",
+        name="Hextra Patterns",
+        description="Random pattern ideas, mostly just shorthands for groups of patterns.",
+        icon_url=URL("src/main/resources/assets/hextrapats/icon.png"),
+        curseforge_slug=None,
+        modrinth_slug=None,
+        modloaders=[Modloader.FABRIC],
     ),
     StaticModInfo(
         id="hextrogen",
@@ -537,6 +547,34 @@ SPECIAL_HANDLERS: dict[ResourceLocation, SpecialHandler[Any]] = {
         HexThingsNoopSpecialHandler(
             id=ResourceLocation("hexthings", "noop"),
         ),
+        HextrapatsVectorSpecialHandler(
+            id=ResourceLocation("hextrapats", "scaled_vec_x"),
+            positive_prefix="aeqqqqqaw",
+            negative_prefix="aqeeeeedw",
+            components=1,
+            axis="X",
+        ),
+        HextrapatsVectorSpecialHandler(
+            id=ResourceLocation("hextrapats", "scaled_vec_y"),
+            positive_prefix="weqqqqqaw",
+            negative_prefix="wqeeeeedw",
+            components=1,
+            axis="Y",
+        ),
+        HextrapatsVectorSpecialHandler(
+            id=ResourceLocation("hextrapats", "scaled_vec_z"),
+            positive_prefix="deqqqqqaw",
+            negative_prefix="dqeeeeedw",
+            components=1,
+            axis="Z",
+        ),
+        HextrapatsVectorSpecialHandler(
+            id=ResourceLocation("hextrapats", "scaled_vec_all"),
+            positive_prefix="qeqqqqqaw",
+            negative_prefix="qqeeeeedw",
+            components=3,
+            axis="1",
+        ),
     ]
 }
 
@@ -611,6 +649,11 @@ SPECIAL_HANDLER_CONFLICTS: set[tuple[ResourceLocation, ResourceLocation, Any]] =
         ResourceLocation("hextrace", "trace"),
         ResourceLocation("hexflow", "weak_escape"),
         "w",
+    ),
+    (
+        ResourceLocation("hextrapats", "scaled_vec_x"),
+        ResourceLocation("hexal", "link/get_index"),
+        0.5,
     ),
 }
 

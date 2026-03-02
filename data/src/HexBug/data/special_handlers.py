@@ -3,7 +3,7 @@ from __future__ import annotations
 import itertools
 import re
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, override
+from typing import TYPE_CHECKING, Any, Literal, override
 
 from hexdoc.core import ResourceLocation
 from hexdoc.minecraft import I18n, LocalizedStr
@@ -71,7 +71,7 @@ class SpecialHandlerPattern[T](SpecialHandlerMatch[T]):
 
 
 class SpecialHandler[T](ABC):
-    def __init__(self, id: ResourceLocation):
+    def __init__(self, *, id: ResourceLocation):
         super().__init__()
         self.id = id
 
@@ -106,7 +106,7 @@ class SpecialHandler[T](ABC):
         """Given the raw name from the lang file and a value, returns a formatted
         pattern name."""
         if value is None:
-            return raw_name.removesuffix(": %s")
+            return raw_name.split(": ")[0]
         try:
             return raw_name % str(value)
         except TypeError as e:
@@ -133,21 +133,8 @@ class PrefixSpecialHandler[T, P](SpecialHandler[T]):
 
 
 class NumberSpecialHandler(PrefixSpecialHandler[float, int]):
-    @property
-    @override
-    def supports_unprefixed_shorthand(self) -> bool:
-        return True
-
-    @property
-    @override
-    def prefix_map(self):
-        return {
-            "aqaa": 1,
-            "dedd": -1,
-        }
-
-    @override
-    def try_match_suffix(self, sign: int, suffix: str) -> float | None:
+    @classmethod
+    def match(cls, sign: int, suffix: str) -> float:
         accumulator = 0
         for c in suffix:
             match c:
@@ -165,6 +152,23 @@ class NumberSpecialHandler(PrefixSpecialHandler[float, int]):
                     pass
 
         return sign * accumulator
+
+    @property
+    @override
+    def supports_unprefixed_shorthand(self) -> bool:
+        return True
+
+    @property
+    @override
+    def prefix_map(self):
+        return {
+            "aqaa": 1,
+            "dedd": -1,
+        }
+
+    @override
+    def try_match_suffix(self, sign: int, suffix: str):
+        return self.match(sign, suffix)
 
     @override
     def generate_pattern(self, registry: HexBugRegistry, value: str):
@@ -250,13 +254,14 @@ class MaskSpecialHandler(SpecialHandler[str]):
 class OverevaluateTailDepthSpecialHandler(PrefixSpecialHandler[int, Any]):
     def __init__(
         self,
+        *,
         id: ResourceLocation,
         direction: HexDir,
         prefix: str,
         initial_depth: int,
         tail_chars: str,
     ):
-        super().__init__(id)
+        super().__init__(id=id)
         self.direction = direction
         self.prefix = prefix
         self.initial_depth = initial_depth
@@ -528,3 +533,47 @@ class HexThingsNoopSpecialHandler(PrefixSpecialHandler[str, Any]):
     @override
     def get_name(self, raw_name: str, value: str | None) -> str:
         return raw_name
+
+
+class HextrapatsVectorSpecialHandler(PrefixSpecialHandler[float, int]):
+    def __init__(
+        self,
+        *,
+        id: ResourceLocation,
+        positive_prefix: str,
+        negative_prefix: str,
+        components: Literal[1, 3],
+        axis: str,
+    ):
+        super().__init__(id=id)
+        self.positive_prefix = positive_prefix
+        self.negative_prefix = negative_prefix
+        self.components = components
+        self.axis = axis
+
+    @property
+    @override
+    def prefix_map(self):
+        return {
+            self.positive_prefix: 1,
+            self.negative_prefix: -1,
+        }
+
+    @override
+    def try_match_suffix(self, sign: int, suffix: str):
+        return NumberSpecialHandler.match(sign, suffix)
+
+    @override
+    def generate_pattern(
+        self,
+        registry: HexBugRegistry,
+        value: str,
+    ) -> tuple[float, HexPattern]:
+        raise NotImplementedError
+
+    @override
+    def get_name(self, raw_name: str, value: float | None):
+        if value is None:
+            # FIXME: hack
+            return super().get_name(raw_name, value) + f" +{self.axis}/-{self.axis} II"
+        return raw_name % ((value,) * self.components)
