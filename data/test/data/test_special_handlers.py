@@ -14,7 +14,7 @@ from HexBug.data.special_handlers import (
 def describe_MaskSpecialHandler():
     @pytest.fixture()
     def special_handler() -> MaskSpecialHandler:
-        return MaskSpecialHandler(ResourceLocation("hexcasting", "mask"))
+        return MaskSpecialHandler(id=ResourceLocation("hexcasting", "mask"))
 
     patterns = [
         ("", "-"),
@@ -77,7 +77,9 @@ def describe_MaskSpecialHandler():
 def describe_HexFlowCopyMaskSpecialHandler():
     @pytest.fixture()
     def special_handler() -> HexFlowCopyMaskSpecialHandler:
-        return HexFlowCopyMaskSpecialHandler(ResourceLocation("hexflow", "copy_mask"))
+        return HexFlowCopyMaskSpecialHandler(
+            id=ResourceLocation("hexflow", "copy_mask"),
+        )
 
     patterns = [
         ("aadaqq", "-"),
