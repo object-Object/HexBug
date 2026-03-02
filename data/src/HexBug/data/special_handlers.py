@@ -79,7 +79,14 @@ class SpecialHandler[T](ABC):
     def try_match(self, pattern: HexPattern) -> T | None:
         """Attempts to match the given pattern against this special handler."""
 
-    @abstractmethod
+    @property
+    def supports_unprefixed_shorthand(self) -> bool:
+        return False
+
+    @property
+    def supports_generate_pattern(self) -> bool:
+        return type(self).generate_pattern != SpecialHandler.generate_pattern  # pyright: ignore[reportUnknownMemberType]
+
     def generate_pattern(
         self,
         registry: HexBugRegistry,
@@ -88,12 +95,9 @@ class SpecialHandler[T](ABC):
         """Attempts to generate a valid pattern for this special handler from the given
         value.
 
-        Raises ValueError on failure.
+        Raises ValueError on failure, or NotImplementedError if not implemented.
         """
-
-    @property
-    def supports_unprefixed_shorthand(self) -> bool:
-        return False
+        raise NotImplementedError
 
     def localize(self, i18n: I18n) -> LocalizedStr:
         """Returns the raw name of this handler from the lang file."""
@@ -342,15 +346,6 @@ class ComplexHexLongSpecialHandler(PrefixSpecialHandler[int, int]):
 
         return sign * accumulator
 
-    @override
-    def generate_pattern(self, registry: HexBugRegistry, value: str):
-        value = value.strip()
-        if not value.removeprefix("-").isnumeric():
-            raise ValueError(f"Invalid integer: {value}")
-
-        # TODO: implement?
-        raise NotImplementedError
-
     # TODO: remove localize and get_name when kinetic fixes the lang entry
 
     @override
@@ -395,14 +390,6 @@ class HexFlowNumberSpecialHandler(PrefixSpecialHandler[float, int]):
                 case _:
                     pass
         return res * sign
-
-    @override
-    def generate_pattern(
-        self,
-        registry: HexBugRegistry,
-        value: str,
-    ) -> tuple[float, HexPattern]:
-        raise NotImplementedError
 
 
 class HexFlowCopyMaskSpecialHandler(PrefixSpecialHandler[str, Any]):
@@ -562,14 +549,6 @@ class HextrapatsVectorSpecialHandler(PrefixSpecialHandler[float, int]):
     @override
     def try_match_suffix(self, sign: int, suffix: str):
         return NumberSpecialHandler.match(sign, suffix)
-
-    @override
-    def generate_pattern(
-        self,
-        registry: HexBugRegistry,
-        value: str,
-    ) -> tuple[float, HexPattern]:
-        raise NotImplementedError
 
     @override
     def get_name(self, raw_name: str, value: float | None):

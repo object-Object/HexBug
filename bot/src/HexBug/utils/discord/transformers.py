@@ -20,6 +20,7 @@ from HexBug.data.mods import ModInfo, Modloader
 from HexBug.data.patterns import PatternInfo
 from HexBug.data.sources import UserInfo
 from HexBug.data.special_handlers import SpecialHandlerInfo
+from HexBug.data.static_data import SPECIAL_HANDLERS
 from HexBug.db.models import PerWorldPattern
 from HexBug.utils.strings import truncate_str
 
@@ -191,6 +192,8 @@ class SpecialHandlerInfoTransformer(PfzyAutocompleteTransformer):
 
         registry = HexBugBot.registry_of(interaction)
         for info in registry.special_handlers.values():
+            if not SPECIAL_HANDLERS[info.id].supports_generate_pattern:
+                continue
             for search_term in [
                 info.base_name,
                 str(info.id),

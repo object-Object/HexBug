@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [UNRELEASED]
 
+### Changed
+
+- Special handlers that don't support generating patterns will no longer show up in the autocomplete for `/pattern special`.
+
 ### Mods Added
 
 - Hextra Patterns: 1.0.2
