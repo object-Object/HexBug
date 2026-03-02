@@ -87,7 +87,7 @@
   </li>
             <li>
     <a
-      href="https://github.com/object-Object/HexBug/tree/566d97618d8abd8ce1b8c6baff6c9720b0e8ca4e"
+      href="https://github.com/object-Object/HexBug/tree/f99457ee60392925ea353e231116dbae5bc0d7a4"
         target="_blank"
       class="navbar-link"
       role="button"
@@ -156,6 +156,7 @@
       <li><a href="https://miyucomics.github.io/hexodus/v/1.0.0/1.0.0/en_us">Hexodus</a> (1.0.0)</li>
       <li><a href="https://miyucomics.github.io/hexpose/v/1.0.0/1.0.0/en_us">Hexpose</a> (1.0.0)</li>
       <li><a href="https://hextended.hexxy.media/v/latest/main/en_us">Hextended Staves</a> (2.0.1 @ 1d5e5386)</li>
+      <li><a href="https://meepoffaith.github.io/hextra-patterns/v/1.0.2/1.0.2/en_us">Hextra Patterns</a> (1.0.2)</li>
       <li><a href="https://miyucomics.github.io/hextrogen/v/1.1.0/1.0.0/en_us">Hextrogen</a> (1.1.0)</li>
       <li><a href="https://walksanatora.github.io/hexxy-dimensions/v/1.2.1/1.20.0/en_us">Hexxy Dimensions</a> (1.2.1)</li>
       <li><a href="https://techtastic.github.io/HexxySkies/v/latest/master/en_us">Hexxy Skies</a> (2.0.2 @ 038580c4)</li>
@@ -1800,6 +1801,20 @@
       loading="lazy"
       class="item-texture  texture pixelated"
     > Number Literals</a></li>
+          <li><a href="#patterns/hextrapats_vec_literals" class="toc-elem "><img
+      title="Arrow"
+      alt="Arrow"
+      src="https://raw.githubusercontent.com/PrismarineJS/minecraft-assets/a14c64362abe4a12c2dfd87f8d1673af9d1b09f4/data/1.20.2/items/arrow.png"
+      loading="lazy"
+      class="item-texture  texture pixelated"
+    > Vector Literals</a></li>
+          <li><a href="#patterns/hextrapats_math" class="toc-elem "><img
+      title="Popped Chorus Fruit"
+      alt="Popped Chorus Fruit"
+      src="https://raw.githubusercontent.com/PrismarineJS/minecraft-assets/a14c64362abe4a12c2dfd87f8d1673af9d1b09f4/data/1.20.2/items/popped_chorus_fruit.png"
+      loading="lazy"
+      class="item-texture  texture pixelated"
+    > Hextra Math</a></li>
           <li><a href="#patterns/math" class="toc-elem "><img
       title="Blaze Rod"
       alt="Blaze Rod"
@@ -1828,6 +1843,13 @@
       loading="lazy"
       class="item-texture  texture pixelated"
     > Hexal Maths</a></li>
+          <li><a href="#patterns/hextrapats_consts" class="toc-elem "><img
+      title="Obsidian"
+      alt="Obsidian"
+      src="https://hexdoc-dev.github.io/hexdoc-minecraft/v/1.20.1/1.0.dev1/assets/minecraft/textures/block/obsidian.png"
+      loading="lazy"
+      class="item-texture  texture "
+    > Hextra Constants</a></li>
           <li><a href="#patterns/hextweaks_utility" class="toc-elem "><img
       title="Stick"
       alt="Stick"
@@ -1898,6 +1920,13 @@
       loading="lazy"
       class="item-texture  texture pixelated"
     > Viewforming</a></li>
+          <li><a href="#patterns/hextrapats_logic" class="toc-elem "><img
+      title="Redstone Lamp"
+      alt="Redstone Lamp"
+      src="https://hexdoc-dev.github.io/hexdoc-minecraft/v/1.20.1/1.0.dev1/assets/minecraft/textures/block/redstone_lamp.png"
+      loading="lazy"
+      class="item-texture  texture "
+    > Hextra Logic</a></li>
           <li><a href="#patterns/logic" class="toc-elem "><img
       title="Redstone Comparator"
       alt="Redstone Comparator"
@@ -45487,6 +45516,1013 @@ buf:setPosition(0) -- move back to the beginning
     <p>In certain cases it might be easier to just use an <a href="#items/abacus"><span style="color: #b0b">Abacus</span></a>. But, it&#39;s worth knowing the &#34;proper&#34; way to do things.</p>
 <br />
 </div>
+<div id="patterns/hextrapats_vec_literals" class="entry">
+    <h3 class="entry-title page-header">
+    <img
+      title="Arrow"
+      alt="Arrow"
+      src="https://raw.githubusercontent.com/PrismarineJS/minecraft-assets/a14c64362abe4a12c2dfd87f8d1673af9d1b09f4/data/1.20.2/items/arrow.png"
+      loading="lazy"
+      class="item-texture  texture pixelated"
+    >Vector Literals<a
+    href="#table-of-contents"
+    class="permalink small"
+    title="Jump to top"
+  ><i class="bi bi-box-arrow-up"></i></a><a
+    href="#patterns/hextrapats_vec_literals"
+    class="permalink small"
+    title="Permalink"
+  ><i class="bi bi-link-45deg"></i></a></h3>
+    <div class="bookofhexxy-mod-attribution">
+    <small class="text-muted">Source: Hextra Patterns</small>
+  </div>
+  <h4>Vector Literals</h4>
+    <p>Interestingly, flipping any Vector Reflection horizontally allows it to be subject to the same rules as <a href="#patterns/numbers"><span style="color: #fc77be">Number Reflection</span></a>. The direction of the head determines the direction, much like the tail of Vector Reflection.</p>
+<br />
+  <div id="patterns/hextrapats_vec_literals@hextrapats:scaled_vec_x" class="">
+<h4>Vector Rfln. +X/-X II (→ vector)<a
+    href="#patterns/hextrapats_vec_literals@hextrapats:scaled_vec_x"
+    class="permalink small"
+    title="Permalink"
+  ><i class="bi bi-link-45deg"></i></a></h4>
+  <details class="details-collapsible">
+    <summary class="collapse-details collapse-spell"></summary>
+    <div class="dropdown spell-settings-dropdown">
+      <span
+        href=""
+        class="dropdown-toggle spell-settings-toggle"
+        data-toggle="dropdown"
+        role="button"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <i class="bi bi-gear-fill"></i>
+      </span>
+      <ul class="dropdown-menu">
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Renders</a>
+          <ul class="dropdown-menu dropdown-menu-left render-dropdowns"></ul>
+        </li>
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Palettes</a>
+          <ul class="dropdown-menu dropdown-menu-left palette-dropdowns"></ul>
+        </li>
+      </ul>
+    </div>
+      <canvas
+        class="spell-viz"
+        width="216"
+        height="216"
+        data-string="aeqqqqqaw"
+        data-start="south_west"
+        data-per-world="False"
+      >Your browser does not support visualizing patterns. Pattern code: aeqqqqqaw</canvas>
+      <canvas
+        class="spell-viz"
+        width="216"
+        height="216"
+        data-string="aqeeeeedw"
+        data-start="south_west"
+        data-per-world="False"
+      >Your browser does not support visualizing patterns. Pattern code: aqeeeeedw</canvas>
+  </details>
+      <p>A head that sharply bends to the left will output a vector along the <a href="#patterns/consts@hexcasting:const/vec/x"><span style="color: #fc77be">X axis</span></a>.</p>
+  </div>
+<br />
+  <div id="patterns/hextrapats_vec_literals@hextrapats:scaled_vec_y" class="">
+<h4>Vector Rfln. +Y/-Y II (→ vector)<a
+    href="#patterns/hextrapats_vec_literals@hextrapats:scaled_vec_y"
+    class="permalink small"
+    title="Permalink"
+  ><i class="bi bi-link-45deg"></i></a></h4>
+  <details class="details-collapsible">
+    <summary class="collapse-details collapse-spell"></summary>
+    <div class="dropdown spell-settings-dropdown">
+      <span
+        href=""
+        class="dropdown-toggle spell-settings-toggle"
+        data-toggle="dropdown"
+        role="button"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <i class="bi bi-gear-fill"></i>
+      </span>
+      <ul class="dropdown-menu">
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Renders</a>
+          <ul class="dropdown-menu dropdown-menu-left render-dropdowns"></ul>
+        </li>
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Palettes</a>
+          <ul class="dropdown-menu dropdown-menu-left palette-dropdowns"></ul>
+        </li>
+      </ul>
+    </div>
+      <canvas
+        class="spell-viz"
+        width="216"
+        height="216"
+        data-string="weqqqqqaw"
+        data-start="east"
+        data-per-world="False"
+      >Your browser does not support visualizing patterns. Pattern code: weqqqqqaw</canvas>
+      <canvas
+        class="spell-viz"
+        width="216"
+        height="216"
+        data-string="wqeeeeedw"
+        data-start="east"
+        data-per-world="False"
+      >Your browser does not support visualizing patterns. Pattern code: wqeeeeedw</canvas>
+  </details>
+      <p>A head that doesn&#39;t bend will output a vector along the <a href="#patterns/consts@hexcasting:const/vec/y"><span style="color: #fc77be">Y axis</span></a>.</p>
+  </div>
+<br />
+  <div id="patterns/hextrapats_vec_literals@hextrapats:scaled_vec_z" class="">
+<h4>Vector Rfln. +Z/-Z II (→ vector)<a
+    href="#patterns/hextrapats_vec_literals@hextrapats:scaled_vec_z"
+    class="permalink small"
+    title="Permalink"
+  ><i class="bi bi-link-45deg"></i></a></h4>
+  <details class="details-collapsible">
+    <summary class="collapse-details collapse-spell"></summary>
+    <div class="dropdown spell-settings-dropdown">
+      <span
+        href=""
+        class="dropdown-toggle spell-settings-toggle"
+        data-toggle="dropdown"
+        role="button"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <i class="bi bi-gear-fill"></i>
+      </span>
+      <ul class="dropdown-menu">
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Renders</a>
+          <ul class="dropdown-menu dropdown-menu-left render-dropdowns"></ul>
+        </li>
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Palettes</a>
+          <ul class="dropdown-menu dropdown-menu-left palette-dropdowns"></ul>
+        </li>
+      </ul>
+    </div>
+      <canvas
+        class="spell-viz"
+        width="216"
+        height="216"
+        data-string="deqqqqqaw"
+        data-start="north_west"
+        data-per-world="False"
+      >Your browser does not support visualizing patterns. Pattern code: deqqqqqaw</canvas>
+      <canvas
+        class="spell-viz"
+        width="216"
+        height="216"
+        data-string="dqeeeeedw"
+        data-start="north_west"
+        data-per-world="False"
+      >Your browser does not support visualizing patterns. Pattern code: dqeeeeedw</canvas>
+  </details>
+      <p>A head that sharply bends to the right will output a vector along the <a href="#patterns/consts@hexcasting:const/vec/z"><span style="color: #fc77be">Z axis</span></a>.</p>
+  </div>
+<br />
+  <div id="patterns/hextrapats_vec_literals@hextrapats:scaled_vec_all" class="">
+<h4>Vector Rfln. +1/-1 II (→ vector)<a
+    href="#patterns/hextrapats_vec_literals@hextrapats:scaled_vec_all"
+    class="permalink small"
+    title="Permalink"
+  ><i class="bi bi-link-45deg"></i></a></h4>
+  <details class="details-collapsible">
+    <summary class="collapse-details collapse-spell"></summary>
+    <div class="dropdown spell-settings-dropdown">
+      <span
+        href=""
+        class="dropdown-toggle spell-settings-toggle"
+        data-toggle="dropdown"
+        role="button"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <i class="bi bi-gear-fill"></i>
+      </span>
+      <ul class="dropdown-menu">
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Renders</a>
+          <ul class="dropdown-menu dropdown-menu-left render-dropdowns"></ul>
+        </li>
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Palettes</a>
+          <ul class="dropdown-menu dropdown-menu-left palette-dropdowns"></ul>
+        </li>
+      </ul>
+    </div>
+      <canvas
+        class="spell-viz"
+        width="216"
+        height="216"
+        data-string="qeqqqqqaw"
+        data-start="south_east"
+        data-per-world="False"
+      >Your browser does not support visualizing patterns. Pattern code: qeqqqqqaw</canvas>
+      <canvas
+        class="spell-viz"
+        width="216"
+        height="216"
+        data-string="qqeeeeedw"
+        data-start="south_east"
+        data-per-world="False"
+      >Your browser does not support visualizing patterns. Pattern code: qqeeeeedw</canvas>
+  </details>
+      <p>A head that slightly bends to the left will output a vector where <a href="#patterns/hextrapats_consts@hextrapats:haha_ha_one"><span style="color: #fc77be">all 3 components are the same</span></a>.</p>
+  </div>
+<br />
+    <p>First, I draw one of the eight shapes shown on the prior pages. Next, the <i>angles</i> following will modify a running count starting at 0.</p><p class="fake-li " style="--level: 1;">Forward: Add 1</p><p class="fake-li " style="--level: 1;">Left: Add 5</p><p class="fake-li " style="--level: 1;">Right: Add 10</p><p class="fake-li " style="--level: 1;">Sharp Left: Multiply by 2</p><p class="fake-li " style="--level: 1;">Sharp Right: Divide by 2.<br />The clockwise version of the pattern, on the right of the other page, will negate the value at the very end. (The left-hand counter-clockwise version keeps the number positive).</p><p>Once I finish drawing, the a vector&#39;s pushed to the top of the stack.</p>
+<br />
+  <h4>Example 1</h4>
+  <details class="details-collapsible">
+    <summary class="collapse-details collapse-spell"></summary>
+    <div class="dropdown spell-settings-dropdown">
+      <span
+        href=""
+        class="dropdown-toggle spell-settings-toggle"
+        data-toggle="dropdown"
+        role="button"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <i class="bi bi-gear-fill"></i>
+      </span>
+      <ul class="dropdown-menu">
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Renders</a>
+          <ul class="dropdown-menu dropdown-menu-left render-dropdowns"></ul>
+        </li>
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Palettes</a>
+          <ul class="dropdown-menu dropdown-menu-left palette-dropdowns"></ul>
+        </li>
+      </ul>
+    </div>
+      <canvas
+        class="spell-viz"
+        width="216"
+        height="216"
+        data-string="aeqqqqqawe"
+        data-start="south_west"
+        data-per-world="False"
+      >Your browser does not support visualizing patterns. Pattern code: aeqqqqqawe</canvas>
+  </details>
+      <p>This pattern pushes (10, 0, 0).</p>
+<br />
+  <h4>Example 2</h4>
+  <details class="details-collapsible">
+    <summary class="collapse-details collapse-spell"></summary>
+    <div class="dropdown spell-settings-dropdown">
+      <span
+        href=""
+        class="dropdown-toggle spell-settings-toggle"
+        data-toggle="dropdown"
+        role="button"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <i class="bi bi-gear-fill"></i>
+      </span>
+      <ul class="dropdown-menu">
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Renders</a>
+          <ul class="dropdown-menu dropdown-menu-left render-dropdowns"></ul>
+        </li>
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Palettes</a>
+          <ul class="dropdown-menu dropdown-menu-left palette-dropdowns"></ul>
+        </li>
+      </ul>
+    </div>
+      <canvas
+        class="spell-viz"
+        width="216"
+        height="216"
+        data-string="weqqqqqawqww"
+        data-start="east"
+        data-per-world="False"
+      >Your browser does not support visualizing patterns. Pattern code: weqqqqqawqww</canvas>
+  </details>
+      <p>This pattern pushes (0, 7, 0): 5 + 1 + 1.</p>
+<br />
+  <h4>Example 3</h4>
+  <details class="details-collapsible">
+    <summary class="collapse-details collapse-spell"></summary>
+    <div class="dropdown spell-settings-dropdown">
+      <span
+        href=""
+        class="dropdown-toggle spell-settings-toggle"
+        data-toggle="dropdown"
+        role="button"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <i class="bi bi-gear-fill"></i>
+      </span>
+      <ul class="dropdown-menu">
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Renders</a>
+          <ul class="dropdown-menu dropdown-menu-left render-dropdowns"></ul>
+        </li>
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Palettes</a>
+          <ul class="dropdown-menu dropdown-menu-left palette-dropdowns"></ul>
+        </li>
+      </ul>
+    </div>
+      <canvas
+        class="spell-viz"
+        width="216"
+        height="216"
+        data-string="dqeeeeedwwqea"
+        data-start="north_west"
+        data-per-world="False"
+      >Your browser does not support visualizing patterns. Pattern code: dqeeeeedwwqea</canvas>
+  </details>
+      <p>This pattern pushes (0, 0, -32): negate 1 + 5 + 10 * 2.</p>
+<br />
+  <h4>Example 4</h4>
+  <details class="details-collapsible">
+    <summary class="collapse-details collapse-spell"></summary>
+    <div class="dropdown spell-settings-dropdown">
+      <span
+        href=""
+        class="dropdown-toggle spell-settings-toggle"
+        data-toggle="dropdown"
+        role="button"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <i class="bi bi-gear-fill"></i>
+      </span>
+      <ul class="dropdown-menu">
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Renders</a>
+          <ul class="dropdown-menu dropdown-menu-left render-dropdowns"></ul>
+        </li>
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Palettes</a>
+          <ul class="dropdown-menu dropdown-menu-left palette-dropdowns"></ul>
+        </li>
+      </ul>
+    </div>
+      <canvas
+        class="spell-viz"
+        width="216"
+        height="216"
+        data-string="qeqqqqqawqdww"
+        data-start="south_east"
+        data-per-world="False"
+      >Your browser does not support visualizing patterns. Pattern code: qeqqqqqawqdww</canvas>
+  </details>
+      <p>This pattern pushes (4.5, 4.5, 4.5): 5 / 2 + 1 + 1.</p>
+<br />
+</div>
+<div id="patterns/hextrapats_math" class="entry">
+    <h3 class="entry-title page-header">
+    <img
+      title="Popped Chorus Fruit"
+      alt="Popped Chorus Fruit"
+      src="https://raw.githubusercontent.com/PrismarineJS/minecraft-assets/a14c64362abe4a12c2dfd87f8d1673af9d1b09f4/data/1.20.2/items/popped_chorus_fruit.png"
+      loading="lazy"
+      class="item-texture  texture pixelated"
+    >Hextra Math<a
+    href="#table-of-contents"
+    class="permalink small"
+    title="Jump to top"
+  ><i class="bi bi-box-arrow-up"></i></a><a
+    href="#patterns/hextrapats_math"
+    class="permalink small"
+    title="Permalink"
+  ><i class="bi bi-link-45deg"></i></a></h3>
+    <div class="bookofhexxy-mod-attribution">
+    <small class="text-muted">Source: Hextra Patterns</small>
+  </div>
+  <div id="patterns/hextrapats_math@hextrapats:deg_to_rad" class="">
+<h4 class="pattern-title">Radian Purification (number → number)<a
+    href="#patterns/hextrapats_math@hextrapats:deg_to_rad"
+    class="permalink small"
+    title="Permalink"
+  ><i class="bi bi-link-45deg"></i></a></h4>
+  <details class="details-collapsible">
+    <summary class="collapse-details collapse-spell"></summary>
+    <div class="dropdown spell-settings-dropdown">
+      <span
+        href=""
+        class="dropdown-toggle spell-settings-toggle"
+        data-toggle="dropdown"
+        role="button"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <i class="bi bi-gear-fill"></i>
+      </span>
+      <ul class="dropdown-menu">
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Renders</a>
+          <ul class="dropdown-menu dropdown-menu-left render-dropdowns"></ul>
+        </li>
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Palettes</a>
+          <ul class="dropdown-menu dropdown-menu-left palette-dropdowns"></ul>
+        </li>
+      </ul>
+    </div>
+      <canvas
+        class="spell-viz"
+        width="216"
+        height="216"
+        data-string="qqqqqdwdq"
+        data-start="west"
+        data-per-world="False"
+      >Your browser does not support visualizing patterns. Pattern code: qqqqqdwdq</canvas>
+  </details>
+      <p>Converts an angle in degrees to an angle in radians. Essentially multiplies by <a href="#patterns/consts@hexcasting:const/double/pi"><span style="color: #fc77be">pi</span></a> then divides by 180.</p>
+  </div>
+<br />
+  <div id="patterns/hextrapats_math@hextrapats:rad_to_deg" class="">
+<h4 class="pattern-title">Degree Purification (number → number)<a
+    href="#patterns/hextrapats_math@hextrapats:rad_to_deg"
+    class="permalink small"
+    title="Permalink"
+  ><i class="bi bi-link-45deg"></i></a></h4>
+  <details class="details-collapsible">
+    <summary class="collapse-details collapse-spell"></summary>
+    <div class="dropdown spell-settings-dropdown">
+      <span
+        href=""
+        class="dropdown-toggle spell-settings-toggle"
+        data-toggle="dropdown"
+        role="button"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <i class="bi bi-gear-fill"></i>
+      </span>
+      <ul class="dropdown-menu">
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Renders</a>
+          <ul class="dropdown-menu dropdown-menu-left render-dropdowns"></ul>
+        </li>
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Palettes</a>
+          <ul class="dropdown-menu dropdown-menu-left palette-dropdowns"></ul>
+        </li>
+      </ul>
+    </div>
+      <canvas
+        class="spell-viz"
+        width="216"
+        height="216"
+        data-string="qdwdqqqqq"
+        data-start="north_east"
+        data-per-world="False"
+      >Your browser does not support visualizing patterns. Pattern code: qdwdqqqqq</canvas>
+  </details>
+      <p>Converts an angle in radians to an angle in degrees. Essentially multiplies by 180 then divides by <a href="#patterns/consts@hexcasting:const/double/pi"><span style="color: #fc77be">pi</span></a>.</p>
+  </div>
+<br />
+  <div id="patterns/hextrapats_math@hextrapats:normalize" class="">
+<h4 class="pattern-title">Norm Purification (vector → vector)<a
+    href="#patterns/hextrapats_math@hextrapats:normalize"
+    class="permalink small"
+    title="Permalink"
+  ><i class="bi bi-link-45deg"></i></a></h4>
+  <details class="details-collapsible">
+    <summary class="collapse-details collapse-spell"></summary>
+    <div class="dropdown spell-settings-dropdown">
+      <span
+        href=""
+        class="dropdown-toggle spell-settings-toggle"
+        data-toggle="dropdown"
+        role="button"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <i class="bi bi-gear-fill"></i>
+      </span>
+      <ul class="dropdown-menu">
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Renders</a>
+          <ul class="dropdown-menu dropdown-menu-left render-dropdowns"></ul>
+        </li>
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Palettes</a>
+          <ul class="dropdown-menu dropdown-menu-left palette-dropdowns"></ul>
+        </li>
+      </ul>
+    </div>
+      <canvas
+        class="spell-viz"
+        width="216"
+        height="216"
+        data-string="eeeeedww"
+        data-start="south_west"
+        data-per-world="False"
+      >Your browser does not support visualizing patterns. Pattern code: eeeeedww</canvas>
+  </details>
+      <p>Sets the length of the vector to one.</p>
+  </div>
+<br />
+  <div id="patterns/hextrapats_math@hextrapats:rot_about_x" class="">
+<h4 class="pattern-title">Pitch Distillation (vector, number → vector)<a
+    href="#patterns/hextrapats_math@hextrapats:rot_about_x"
+    class="permalink small"
+    title="Permalink"
+  ><i class="bi bi-link-45deg"></i></a></h4>
+  <details class="details-collapsible">
+    <summary class="collapse-details collapse-spell"></summary>
+    <div class="dropdown spell-settings-dropdown">
+      <span
+        href=""
+        class="dropdown-toggle spell-settings-toggle"
+        data-toggle="dropdown"
+        role="button"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <i class="bi bi-gear-fill"></i>
+      </span>
+      <ul class="dropdown-menu">
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Renders</a>
+          <ul class="dropdown-menu dropdown-menu-left render-dropdowns"></ul>
+        </li>
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Palettes</a>
+          <ul class="dropdown-menu dropdown-menu-left palette-dropdowns"></ul>
+        </li>
+      </ul>
+    </div>
+      <canvas
+        class="spell-viz"
+        width="216"
+        height="216"
+        data-string="aaqqqqqea"
+        data-start="south_west"
+        data-per-world="False"
+      >Your browser does not support visualizing patterns. Pattern code: aaqqqqqea</canvas>
+  </details>
+      <p>Rotates the vector by the given angle in radians around the X axis.</p>
+  </div>
+<br />
+  <div id="patterns/hextrapats_math@hextrapats:rot_about_y" class="">
+<h4 class="pattern-title">Yaw Distillation (vector, number → vector)<a
+    href="#patterns/hextrapats_math@hextrapats:rot_about_y"
+    class="permalink small"
+    title="Permalink"
+  ><i class="bi bi-link-45deg"></i></a></h4>
+  <details class="details-collapsible">
+    <summary class="collapse-details collapse-spell"></summary>
+    <div class="dropdown spell-settings-dropdown">
+      <span
+        href=""
+        class="dropdown-toggle spell-settings-toggle"
+        data-toggle="dropdown"
+        role="button"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <i class="bi bi-gear-fill"></i>
+      </span>
+      <ul class="dropdown-menu">
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Renders</a>
+          <ul class="dropdown-menu dropdown-menu-left render-dropdowns"></ul>
+        </li>
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Palettes</a>
+          <ul class="dropdown-menu dropdown-menu-left palette-dropdowns"></ul>
+        </li>
+      </ul>
+    </div>
+      <canvas
+        class="spell-viz"
+        width="216"
+        height="216"
+        data-string="aaqqqqqew"
+        data-start="south_west"
+        data-per-world="False"
+      >Your browser does not support visualizing patterns. Pattern code: aaqqqqqew</canvas>
+  </details>
+      <p>Rotates the vector by the given angle in radians around the Y axis.</p>
+  </div>
+<br />
+  <div id="patterns/hextrapats_math@hextrapats:rot_about_z" class="">
+<h4 class="pattern-title">Roll Distillation (vector, number → vector)<a
+    href="#patterns/hextrapats_math@hextrapats:rot_about_z"
+    class="permalink small"
+    title="Permalink"
+  ><i class="bi bi-link-45deg"></i></a></h4>
+  <details class="details-collapsible">
+    <summary class="collapse-details collapse-spell"></summary>
+    <div class="dropdown spell-settings-dropdown">
+      <span
+        href=""
+        class="dropdown-toggle spell-settings-toggle"
+        data-toggle="dropdown"
+        role="button"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <i class="bi bi-gear-fill"></i>
+      </span>
+      <ul class="dropdown-menu">
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Renders</a>
+          <ul class="dropdown-menu dropdown-menu-left render-dropdowns"></ul>
+        </li>
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Palettes</a>
+          <ul class="dropdown-menu dropdown-menu-left palette-dropdowns"></ul>
+        </li>
+      </ul>
+    </div>
+      <canvas
+        class="spell-viz"
+        width="216"
+        height="216"
+        data-string="aaqqqqqed"
+        data-start="south_west"
+        data-per-world="False"
+      >Your browser does not support visualizing patterns. Pattern code: aaqqqqqed</canvas>
+  </details>
+      <p>Rotates the vector by the given angle in radians around the Z axis.</p>
+  </div>
+<br />
+  <div id="patterns/hextrapats_math@hextrapats:cons_about_x" class="">
+<h4 class="pattern-title">Pitch Purification (number → vector)<a
+    href="#patterns/hextrapats_math@hextrapats:cons_about_x"
+    class="permalink small"
+    title="Permalink"
+  ><i class="bi bi-link-45deg"></i></a></h4>
+  <details class="details-collapsible">
+    <summary class="collapse-details collapse-spell"></summary>
+    <div class="dropdown spell-settings-dropdown">
+      <span
+        href=""
+        class="dropdown-toggle spell-settings-toggle"
+        data-toggle="dropdown"
+        role="button"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <i class="bi bi-gear-fill"></i>
+      </span>
+      <ul class="dropdown-menu">
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Renders</a>
+          <ul class="dropdown-menu dropdown-menu-left render-dropdowns"></ul>
+        </li>
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Palettes</a>
+          <ul class="dropdown-menu dropdown-menu-left palette-dropdowns"></ul>
+        </li>
+      </ul>
+    </div>
+      <canvas
+        class="spell-viz"
+        width="216"
+        height="216"
+        data-string="daqqqqqea"
+        data-start="north_west"
+        data-per-world="False"
+      >Your browser does not support visualizing patterns. Pattern code: daqqqqqea</canvas>
+  </details>
+      <p>Converts an angle in radians to a unit vector where X=0. +Z at 0 radians and +Y at pi/4 radians.</p>
+  </div>
+<br />
+  <div id="patterns/hextrapats_math@hextrapats:cons_about_y" class="">
+<h4 class="pattern-title">Yaw Purification (number → vector)<a
+    href="#patterns/hextrapats_math@hextrapats:cons_about_y"
+    class="permalink small"
+    title="Permalink"
+  ><i class="bi bi-link-45deg"></i></a></h4>
+  <details class="details-collapsible">
+    <summary class="collapse-details collapse-spell"></summary>
+    <div class="dropdown spell-settings-dropdown">
+      <span
+        href=""
+        class="dropdown-toggle spell-settings-toggle"
+        data-toggle="dropdown"
+        role="button"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <i class="bi bi-gear-fill"></i>
+      </span>
+      <ul class="dropdown-menu">
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Renders</a>
+          <ul class="dropdown-menu dropdown-menu-left render-dropdowns"></ul>
+        </li>
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Palettes</a>
+          <ul class="dropdown-menu dropdown-menu-left palette-dropdowns"></ul>
+        </li>
+      </ul>
+    </div>
+      <canvas
+        class="spell-viz"
+        width="216"
+        height="216"
+        data-string="daqqqqqew"
+        data-start="north_west"
+        data-per-world="False"
+      >Your browser does not support visualizing patterns. Pattern code: daqqqqqew</canvas>
+  </details>
+      <p>Converts an angle in radians to a unit vector where Y=0. +Z at 0 radians and -X at pi/4 radians. Some texts have mentioned something called <span style="color: #8d6acc">F3</span>, but I haven&#39;t been able to tell what that means.</p>
+  </div>
+<br />
+  <div id="patterns/hextrapats_math@hextrapats:cons_about_z" class="">
+<h4 class="pattern-title">Roll Purification (number → vector)<a
+    href="#patterns/hextrapats_math@hextrapats:cons_about_z"
+    class="permalink small"
+    title="Permalink"
+  ><i class="bi bi-link-45deg"></i></a></h4>
+  <details class="details-collapsible">
+    <summary class="collapse-details collapse-spell"></summary>
+    <div class="dropdown spell-settings-dropdown">
+      <span
+        href=""
+        class="dropdown-toggle spell-settings-toggle"
+        data-toggle="dropdown"
+        role="button"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <i class="bi bi-gear-fill"></i>
+      </span>
+      <ul class="dropdown-menu">
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Renders</a>
+          <ul class="dropdown-menu dropdown-menu-left render-dropdowns"></ul>
+        </li>
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Palettes</a>
+          <ul class="dropdown-menu dropdown-menu-left palette-dropdowns"></ul>
+        </li>
+      </ul>
+    </div>
+      <canvas
+        class="spell-viz"
+        width="216"
+        height="216"
+        data-string="daqqqqqed"
+        data-start="north_west"
+        data-per-world="False"
+      >Your browser does not support visualizing patterns. Pattern code: daqqqqqed</canvas>
+  </details>
+      <p>Converts an angle in radians to a unit vector where Z=0. -X at 0 radians and +Y at pi/4 radians.</p>
+  </div>
+<br />
+</div>
 <div id="patterns/math" class="entry">
     <h3 class="entry-title page-header">
     <img
@@ -47401,6 +48437,91 @@ buf:setPosition(0) -- move back to the beginning
       >Your browser does not support visualizing patterns. Pattern code: qaawaaq</canvas>
   </details>
       <p>Takes a list from the stack and computes its running product, for example inputting [1,2,5] would return [1,2,10].</p>
+  </div>
+<br />
+</div>
+<div id="patterns/hextrapats_consts" class="entry">
+    <h3 class="entry-title page-header">
+    <img
+      title="Obsidian"
+      alt="Obsidian"
+      src="https://hexdoc-dev.github.io/hexdoc-minecraft/v/1.20.1/1.0.dev1/assets/minecraft/textures/block/obsidian.png"
+      loading="lazy"
+      class="item-texture  texture "
+    >Hextra Constants<a
+    href="#table-of-contents"
+    class="permalink small"
+    title="Jump to top"
+  ><i class="bi bi-box-arrow-up"></i></a><a
+    href="#patterns/hextrapats_consts"
+    class="permalink small"
+    title="Permalink"
+  ><i class="bi bi-link-45deg"></i></a></h3>
+    <div class="bookofhexxy-mod-attribution">
+    <small class="text-muted">Source: Hextra Patterns</small>
+  </div>
+  <div id="patterns/hextrapats_consts@hextrapats:haha_ha_one" class="">
+<h4>Vector Rfln. +1/-1 (→ vector)<a
+    href="#patterns/hextrapats_consts@hextrapats:haha_ha_one"
+    class="permalink small"
+    title="Permalink"
+  ><i class="bi bi-link-45deg"></i></a></h4>
+  <details class="details-collapsible">
+    <summary class="collapse-details collapse-spell"></summary>
+    <div class="dropdown spell-settings-dropdown">
+      <span
+        href=""
+        class="dropdown-toggle spell-settings-toggle"
+        data-toggle="dropdown"
+        role="button"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <i class="bi bi-gear-fill"></i>
+      </span>
+      <ul class="dropdown-menu">
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Renders</a>
+          <ul class="dropdown-menu dropdown-menu-left render-dropdowns"></ul>
+        </li>
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Palettes</a>
+          <ul class="dropdown-menu dropdown-menu-left palette-dropdowns"></ul>
+        </li>
+      </ul>
+    </div>
+      <canvas
+        class="spell-viz"
+        width="216"
+        height="216"
+        data-string="qqqqqeq"
+        data-start="north_west"
+        data-per-world="False"
+      >Your browser does not support visualizing patterns. Pattern code: qqqqqeq</canvas>
+      <canvas
+        class="spell-viz"
+        width="216"
+        height="216"
+        data-string="eeeeeqq"
+        data-start="north_east"
+        data-per-world="False"
+      >Your browser does not support visualizing patterns. Pattern code: eeeeeqq</canvas>
+  </details>
+      <p>The left-hand counter-clockwise pattern adds (1, 1, 1) to the stack; the right-hand clockwise pattern adds (-1, -1, -1).</p>
   </div>
 <br />
 </div>
@@ -51818,6 +52939,363 @@ buf:setPosition(0) -- move back to the beginning
       >Your browser does not support visualizing patterns. Pattern code: aaqdwdwdeww</canvas>
   </details>
       <p>Takes an index, a position, a size, and a color. Conjures an <span style="color: #8d6acc">Icon</span> that joins between the two with a thin line.</p>
+  </div>
+<br />
+</div>
+<div id="patterns/hextrapats_logic" class="entry">
+    <h3 class="entry-title page-header">
+    <img
+      title="Redstone Lamp"
+      alt="Redstone Lamp"
+      src="https://hexdoc-dev.github.io/hexdoc-minecraft/v/1.20.1/1.0.dev1/assets/minecraft/textures/block/redstone_lamp.png"
+      loading="lazy"
+      class="item-texture  texture "
+    >Hextra Logic<a
+    href="#table-of-contents"
+    class="permalink small"
+    title="Jump to top"
+  ><i class="bi bi-box-arrow-up"></i></a><a
+    href="#patterns/hextrapats_logic"
+    class="permalink small"
+    title="Permalink"
+  ><i class="bi bi-link-45deg"></i></a></h3>
+    <div class="bookofhexxy-mod-attribution">
+    <small class="text-muted">Source: Hextra Patterns</small>
+  </div>
+  <div id="patterns/hextrapats_logic@hexcasting:greater" class="">
+<h4 class="pattern-title">Maximus Distillation (vector, vector → bool)<a
+    href="#patterns/hextrapats_logic@hexcasting:greater"
+    class="permalink small"
+    title="Permalink"
+  ><i class="bi bi-link-45deg"></i></a></h4>
+  <details class="details-collapsible">
+    <summary class="collapse-details collapse-spell"></summary>
+    <div class="dropdown spell-settings-dropdown">
+      <span
+        href=""
+        class="dropdown-toggle spell-settings-toggle"
+        data-toggle="dropdown"
+        role="button"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <i class="bi bi-gear-fill"></i>
+      </span>
+      <ul class="dropdown-menu">
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Renders</a>
+          <ul class="dropdown-menu dropdown-menu-left render-dropdowns"></ul>
+        </li>
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Palettes</a>
+          <ul class="dropdown-menu dropdown-menu-left palette-dropdowns"></ul>
+        </li>
+      </ul>
+    </div>
+      <canvas
+        class="spell-viz"
+        width="216"
+        height="216"
+        data-string="e"
+        data-start="south_east"
+        data-per-world="False"
+      >Your browser does not support visualizing patterns. Pattern code: e</canvas>
+  </details>
+      <p>If the first vector is longer than the second, return True. Otherwise, return False.</p>
+  </div>
+<br />
+  <div id="patterns/hextrapats_logic@hexcasting:less" class="">
+<h4 class="pattern-title">Minimus Distillation (vector, vector → bool)<a
+    href="#patterns/hextrapats_logic@hexcasting:less"
+    class="permalink small"
+    title="Permalink"
+  ><i class="bi bi-link-45deg"></i></a></h4>
+  <details class="details-collapsible">
+    <summary class="collapse-details collapse-spell"></summary>
+    <div class="dropdown spell-settings-dropdown">
+      <span
+        href=""
+        class="dropdown-toggle spell-settings-toggle"
+        data-toggle="dropdown"
+        role="button"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <i class="bi bi-gear-fill"></i>
+      </span>
+      <ul class="dropdown-menu">
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Renders</a>
+          <ul class="dropdown-menu dropdown-menu-left render-dropdowns"></ul>
+        </li>
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Palettes</a>
+          <ul class="dropdown-menu dropdown-menu-left palette-dropdowns"></ul>
+        </li>
+      </ul>
+    </div>
+      <canvas
+        class="spell-viz"
+        width="216"
+        height="216"
+        data-string="q"
+        data-start="south_west"
+        data-per-world="False"
+      >Your browser does not support visualizing patterns. Pattern code: q</canvas>
+  </details>
+      <p>If the first vector is shorter than the second, return True. Otherwise, return False.</p>
+  </div>
+<br />
+  <div id="patterns/hextrapats_logic@hexcasting:greater_eq" class="">
+<h4 class="pattern-title">Maximus Distillation II (vector, vector → bool)<a
+    href="#patterns/hextrapats_logic@hexcasting:greater_eq"
+    class="permalink small"
+    title="Permalink"
+  ><i class="bi bi-link-45deg"></i></a></h4>
+  <details class="details-collapsible">
+    <summary class="collapse-details collapse-spell"></summary>
+    <div class="dropdown spell-settings-dropdown">
+      <span
+        href=""
+        class="dropdown-toggle spell-settings-toggle"
+        data-toggle="dropdown"
+        role="button"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <i class="bi bi-gear-fill"></i>
+      </span>
+      <ul class="dropdown-menu">
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Renders</a>
+          <ul class="dropdown-menu dropdown-menu-left render-dropdowns"></ul>
+        </li>
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Palettes</a>
+          <ul class="dropdown-menu dropdown-menu-left palette-dropdowns"></ul>
+        </li>
+      </ul>
+    </div>
+      <canvas
+        class="spell-viz"
+        width="216"
+        height="216"
+        data-string="ee"
+        data-start="south_east"
+        data-per-world="False"
+      >Your browser does not support visualizing patterns. Pattern code: ee</canvas>
+  </details>
+      <p>If the first vector is longer or the same length as the second, return True. Otherwise, return False.</p>
+  </div>
+<br />
+  <div id="patterns/hextrapats_logic@hexcasting:less_eq" class="">
+<h4 class="pattern-title">Minimus Distillation II (vector, vector → bool)<a
+    href="#patterns/hextrapats_logic@hexcasting:less_eq"
+    class="permalink small"
+    title="Permalink"
+  ><i class="bi bi-link-45deg"></i></a></h4>
+  <details class="details-collapsible">
+    <summary class="collapse-details collapse-spell"></summary>
+    <div class="dropdown spell-settings-dropdown">
+      <span
+        href=""
+        class="dropdown-toggle spell-settings-toggle"
+        data-toggle="dropdown"
+        role="button"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <i class="bi bi-gear-fill"></i>
+      </span>
+      <ul class="dropdown-menu">
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Renders</a>
+          <ul class="dropdown-menu dropdown-menu-left render-dropdowns"></ul>
+        </li>
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Palettes</a>
+          <ul class="dropdown-menu dropdown-menu-left palette-dropdowns"></ul>
+        </li>
+      </ul>
+    </div>
+      <canvas
+        class="spell-viz"
+        width="216"
+        height="216"
+        data-string="qq"
+        data-start="south_west"
+        data-per-world="False"
+      >Your browser does not support visualizing patterns. Pattern code: qq</canvas>
+  </details>
+      <p>If the first vector is shorter or the same length the second, return True. Otherwise, return False.</p>
+  </div>
+<br />
+  <div id="patterns/hextrapats_logic@hextrapats:len_eq" class="">
+<h4 class="pattern-title">Length Equality Dstl. (vector, vector → bool)<a
+    href="#patterns/hextrapats_logic@hextrapats:len_eq"
+    class="permalink small"
+    title="Permalink"
+  ><i class="bi bi-link-45deg"></i></a></h4>
+  <details class="details-collapsible">
+    <summary class="collapse-details collapse-spell"></summary>
+    <div class="dropdown spell-settings-dropdown">
+      <span
+        href=""
+        class="dropdown-toggle spell-settings-toggle"
+        data-toggle="dropdown"
+        role="button"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <i class="bi bi-gear-fill"></i>
+      </span>
+      <ul class="dropdown-menu">
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Renders</a>
+          <ul class="dropdown-menu dropdown-menu-left render-dropdowns"></ul>
+        </li>
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Palettes</a>
+          <ul class="dropdown-menu dropdown-menu-left palette-dropdowns"></ul>
+        </li>
+      </ul>
+    </div>
+      <canvas
+        class="spell-viz"
+        width="216"
+        height="216"
+        data-string="adqqaqw"
+        data-start="east"
+        data-per-world="False"
+      >Your browser does not support visualizing patterns. Pattern code: adqqaqw</canvas>
+  </details>
+      <p>If the two vectors are the same length (within small tolerance), return True. Otherwise, return False</p>
+  </div>
+<br />
+  <div id="patterns/hextrapats_logic@hextrapats:len_neq" class="">
+<h4 class="pattern-title">Length Inequality Dstl. (vector, vector → bool)<a
+    href="#patterns/hextrapats_logic@hextrapats:len_neq"
+    class="permalink small"
+    title="Permalink"
+  ><i class="bi bi-link-45deg"></i></a></h4>
+  <details class="details-collapsible">
+    <summary class="collapse-details collapse-spell"></summary>
+    <div class="dropdown spell-settings-dropdown">
+      <span
+        href=""
+        class="dropdown-toggle spell-settings-toggle"
+        data-toggle="dropdown"
+        role="button"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <i class="bi bi-gear-fill"></i>
+      </span>
+      <ul class="dropdown-menu">
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Renders</a>
+          <ul class="dropdown-menu dropdown-menu-left render-dropdowns"></ul>
+        </li>
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >Palettes</a>
+          <ul class="dropdown-menu dropdown-menu-left palette-dropdowns"></ul>
+        </li>
+      </ul>
+    </div>
+      <canvas
+        class="spell-viz"
+        width="216"
+        height="216"
+        data-string="daeedew"
+        data-start="east"
+        data-per-world="False"
+      >Your browser does not support visualizing patterns. Pattern code: daeedew</canvas>
+  </details>
+      <p>If the two vectors are not the same length (outside small tolerance), return True. Otherwise, return False</p>
   </div>
 <br />
 </div>
