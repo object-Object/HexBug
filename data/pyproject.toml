@@ -48,7 +48,7 @@ full = [
     "hexdoc-hextended==2.0.1.*",
     "hexdoc-hexthings==0.1.7.1.20.1.*",
     "hexdoc-hextrace==0.1.0.1.20.1.*",
-    "hexdoc-hextrapats==1.0.3.*",
+    "hexdoc-hextrapats==1.1.0.*", # remember to keep https://github.com/MEEPofFaith/hextra-patterns/blob/main/src/main/java/com/meepoffaith/hextrapats/casting/handlers/RetainedComparison.java in sync with special_handlers.py :/
     "hexdoc-hextrogen==1.1.0.*",
     "hexdoc-hextweaks==5.3.3.*",
     "hexdoc-hexways==1.0.1.*",

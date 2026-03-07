@@ -597,9 +597,11 @@ class HexBugRegistry(BaseModel):
                 case [op]:
                     pass
                 case None | []:
-                    raise ValueError(
-                        f"Failed to get book info for special handler: {special_handler.id}"
-                    )
+                    if special_handler.id not in UNDOCUMENTED_PATTERNS:
+                        logger.warning(
+                            f"No operator found for special handler: {special_handler.id}"
+                        )
+                    op = None
                 case _:
                     raise ValueError(
                         f"Too many book pages found for special handler {special_handler.id} (expected 1, got {len(ops)}):\n  "
@@ -611,7 +613,9 @@ class HexBugRegistry(BaseModel):
             for info in registry.patterns.values():
                 if info.is_per_world:
                     continue
-                if (value := special_handler.try_match(info.pattern)) is not None and (
+                if (
+                    value := special_handler.try_match(registry, info.pattern)
+                ) is not None and (
                     special_handler.id,
                     info.id,
                     value,
@@ -820,7 +824,7 @@ class HexBugRegistry(BaseModel):
 
         # special handlers (eg. Numerical Reflection)
         for special_handler in SPECIAL_HANDLERS.values():
-            if (value := special_handler.try_match(pattern)) is not None:
+            if (value := special_handler.try_match(self, pattern)) is not None:
                 return SpecialHandlerMatch[Any].from_parts(
                     info=self.special_handlers[special_handler.id],
                     handler=special_handler,

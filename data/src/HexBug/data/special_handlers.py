@@ -26,7 +26,7 @@ class SpecialHandlerInfo(BaseModel):
     """Raw special handler name, including the `: %s` at the end."""
     base_name: str
     """Pattern name, not including a specific value or any placeholders."""
-    operator: PatternOperator
+    operator: PatternOperator | None
 
     @property
     def mod_id(self):
@@ -76,7 +76,7 @@ class SpecialHandler[T](ABC):
         self.id = id
 
     @abstractmethod
-    def try_match(self, pattern: HexPattern) -> T | None:
+    def try_match(self, registry: HexBugRegistry, pattern: HexPattern) -> T | None:
         """Attempts to match the given pattern against this special handler."""
 
     @property
@@ -127,7 +127,7 @@ class PrefixSpecialHandler[T, P](SpecialHandler[T]):
     def try_match_suffix(self, prefix: P, /, suffix: str) -> T | None: ...
 
     @override
-    def try_match(self, pattern: HexPattern) -> T | None:
+    def try_match(self, registry: HexBugRegistry, pattern: HexPattern) -> T | None:
         for prefix, value in self.prefix_map.items():
             if pattern.signature.startswith(prefix):
                 return self.try_match_suffix(
@@ -200,7 +200,7 @@ class MaskSpecialHandler(SpecialHandler[str]):
         return True
 
     @override
-    def try_match(self, pattern: HexPattern) -> str | None:
+    def try_match(self, registry: HexBugRegistry, pattern: HexPattern) -> str | None:
         if pattern.signature.startswith(HexAngle.LEFT_BACK.letter):
             flat_dir = pattern.direction.rotated_by(HexAngle.LEFT)
         else:
@@ -556,3 +556,105 @@ class HextrapatsVectorSpecialHandler(PrefixSpecialHandler[float, int]):
             # FIXME: hack
             return super().get_name(raw_name, value) + f" +{self.axis}/-{self.axis} II"
         return raw_name % ((value,) * self.components)
+
+
+class HextrapatsScientificExponentSpecialHandler(PrefixSpecialHandler[int, int]):
+    positive_prefix = "waqe"
+    negative_prefix = "wdeq"
+    positive_tail_chars = "qe"
+    negative_tail_chars = "eq"
+
+    @property
+    @override
+    def prefix_map(self):
+        return {
+            self.positive_prefix: 1,
+            self.negative_prefix: -1,
+        }
+
+    @override
+    def try_match_suffix(self, sign: int, suffix: str):
+        exponent = sign
+        tail_chars = self.positive_tail_chars if sign > 0 else self.negative_tail_chars
+        for index, char in enumerate(suffix):
+            if char != tail_chars[index % 2]:
+                return None
+            exponent += sign
+        return exponent
+
+    @override
+    def generate_pattern(self, registry: HexBugRegistry, value: str):
+        value = value.strip()
+        try:
+            exponent = int(value)
+        except Exception:
+            raise ValueError(f"Invalid exponent (expected an integer): {value}")
+
+        if exponent == 0:
+            raise ValueError(
+                f"Invalid exponent (expected a non-zero integer): {exponent}"
+            )
+
+        # sanity check
+        length = abs(exponent)
+        if length > 128:
+            raise ValueError(f"Invalid exponent: {exponent}")
+
+        if exponent > 0:
+            direction = HexDir.SOUTH_EAST
+            prefix = self.positive_prefix
+            tail_chars = self.positive_tail_chars
+        else:
+            direction = HexDir.NORTH_EAST
+            prefix = self.negative_prefix
+            tail_chars = self.negative_tail_chars
+
+        signature = prefix + "".join(
+            tail_chars[index % 2] for index in range(length - 1)
+        )
+
+        return exponent, HexPattern(direction, signature)
+
+
+# i hate this
+# could I technically implement generate_pattern for this? yes
+# am I going to? no
+# we don't have autocomplete for the value argument
+# and i'm not adding it just for this
+class HextrapatsRetainedComparisonSpecialHandler(SpecialHandler[ResourceLocation]):
+    # localizations exist for most of these, but there's no good way to get at them
+    # i could implement a whole system for this, but hopefully i won't have to
+    ops = {
+        ResourceLocation("hexcasting", "greater"): "Maximus",
+        ResourceLocation("hexcasting", "less"): "Minimus",
+        ResourceLocation("hexcasting", "greater_eq"): "Maximus II",
+        ResourceLocation("hexcasting", "less_eq"): "Minimus II",
+        ResourceLocation("hexcasting", "equals"): "Equality",
+        ResourceLocation("hexcasting", "not_equals"): "Inequality",
+        ResourceLocation("hextrapats", "len_eq"): "Length Equality",
+        ResourceLocation("hextrapats", "len_neq"): "Length Inequality",
+    }
+
+    @override
+    def try_match(self, registry: HexBugRegistry, pattern: HexPattern):
+        if pattern.signature.startswith("dd"):
+            op = pattern.signature[2:]
+            for op_id in self.ops.keys():
+                pattern_info = registry.patterns[op_id]
+                op_start = pattern_info.pattern.direction.angle_from(HexDir.SOUTH_EAST)
+                if op == op_start.letter + pattern_info.pattern.signature:
+                    return op_id
+
+    @override
+    def localize(self, i18n: I18n):
+        result = i18n.localize(f"hexcasting.special.{self.id}.name")
+        if result.key == result.value:
+            raise ValueError(f"Special handler not localized: {self.id}")
+        return result
+
+    @override
+    def get_name(self, raw_name: str, value: ResourceLocation | None):
+        # i hate it here
+        if value:
+            value = self.ops[value]  # pyright: ignore[reportAssignmentType]
+        return super().get_name(raw_name, value)

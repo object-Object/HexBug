@@ -12,6 +12,8 @@ from .special_handlers import (
     HexFlowNumberSpecialHandler,
     HexThingsNoopSpecialHandler,
     HexTraceSpecialHandler,
+    HextrapatsRetainedComparisonSpecialHandler,
+    HextrapatsScientificExponentSpecialHandler,
     HextrapatsVectorSpecialHandler,
     MaskSpecialHandler,
     NumberSpecialHandler,
@@ -575,6 +577,12 @@ SPECIAL_HANDLERS: dict[ResourceLocation, SpecialHandler[Any]] = {
             components=3,
             axis="1",
         ),
+        HextrapatsScientificExponentSpecialHandler(
+            id=ResourceLocation("hextrapats", "scientific_exp"),
+        ),
+        HextrapatsRetainedComparisonSpecialHandler(
+            id=ResourceLocation("hextrapats", "retained_comparison"),
+        ),
     ]
 }
 
@@ -613,6 +621,7 @@ UNDOCUMENTED_PATTERNS = ResourceSet(
         ResourceLocation("hexical", "disguise_mage_block"),
         ResourceLocation("hexical", "tweak_mage_block"),
         ResourceLocation("hexpose", "entity_name"),
+        ResourceLocation("hextrapats", "retained_comparison"),
         ResourceLocation("hextweaks", "you_like_drinking_potions"),
         ResourceLocation("lapisworks", "empty_prfn"),
         ResourceLocation("lapisworks", "writable_offhand"),
@@ -674,7 +683,10 @@ PATTERN_NAME_OVERRIDES: dict[ResourceLocation, str] = {
 }
 
 # append the mod's name to the pattern's name
-DISAMBIGUATED_PATTERNS: set[ResourceLocation] = set()
+DISAMBIGUATED_PATTERNS: set[ResourceLocation] = {
+    # conflicts with Splitting Gambit from Hexal
+    ResourceLocation("hextrapats", "split_list"),
+}
 
 DISABLED_PAGES: set[str] = set()
 

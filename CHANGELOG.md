@@ -9,7 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 ### Mods Updated
 
 - HexThings: 0.1.7+1.20.1
-- Hextra Patterns: 1.0.3
+- Hextra Patterns: 1.1.0
 
 ## `2.8.1` - 2026-03-01
 

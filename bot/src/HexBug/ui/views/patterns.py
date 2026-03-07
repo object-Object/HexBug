@@ -208,7 +208,7 @@ class NamedPatternView(BasePatternView):
             case PatternInfo(operators=operators):
                 return operators
             case SpecialHandlerMatch(operator=operator):
-                return [operator]
+                return [operator] if operator else []
             case None:
                 return []
 

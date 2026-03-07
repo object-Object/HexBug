@@ -57,8 +57,9 @@ def describe_MaskSpecialHandler():
         signature: str,
         want_value: str | None,
     ):
+        registry = cast(HexBugRegistry, None)  # lie
         pattern = HexPattern(direction, signature)
-        assert special_handler.try_match(pattern) == want_value
+        assert special_handler.try_match(registry, pattern) == want_value
 
     @pytest.mark.parametrize(
         ["value", "want_signature"],
@@ -113,8 +114,9 @@ def describe_HexFlowCopyMaskSpecialHandler():
         signature: str,
         want_value: str | None,
     ):
+        registry = cast(HexBugRegistry, None)  # lie
         pattern = HexPattern(direction, signature)
-        assert special_handler.try_match(pattern) == want_value
+        assert special_handler.try_match(registry, pattern) == want_value
 
     @pytest.mark.parametrize(
         ["value", "want_signature"],
