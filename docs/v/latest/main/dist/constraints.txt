@@ -388,9 +388,9 @@ hexdoc-hextrace==0.1.0.1.20.1.1.0 \
     --hash=sha256:8487d6fec5eda717197d395a197c1adc644decb2194fc52579237ba204ce9a60 \
     --hash=sha256:fafbedb9104379ba6c2bce3c4802a143d46567c7bacf99c09e6d5682da603fde
     # via hexbug-data
-hexdoc-hextrapats==1.0.3.1.0.3 \
-    --hash=sha256:7d43c7970e7792e244b249d80926e2f5fd88275c81b83308459c17530ec51ae4 \
-    --hash=sha256:e6f483a1bd2fc9df7ebeedde5fba0acd46306b529042bb5a2b903efba086ca75
+hexdoc-hextrapats==1.1.0.1.1.0 \
+    --hash=sha256:53712d1edf9600480599b6c51e5330bb89aff44a573b91ae0a2777de62140b50 \
+    --hash=sha256:652868265e4bce8e927ea93030165f333d672e08c2507656108a5b57cbc2b255
     # via hexbug-data
 hexdoc-hextrogen==1.1.0.1.0.0 \
     --hash=sha256:282a17c0d0a5b1ac3765caeb20ed8b3e1f0d62c4fb4cf2cff91ffd4007f3e8d3 \
