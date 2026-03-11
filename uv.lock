@@ -1094,7 +1094,7 @@ requires-dist = [
     { name = "hexdoc-hexchanting", marker = "extra == 'full'", specifier = "==1.1.7.*" },
     { name = "hexdoc-hexdebug", marker = "extra == 'full'", specifier = "==0.8.0.1.20.1.*" },
     { name = "hexdoc-hexdim", marker = "extra == 'full'", specifier = "==1.2.1.1.20.*" },
-    { name = "hexdoc-hexflow", marker = "extra == 'full'", specifier = "==0.4.1.*" },
+    { name = "hexdoc-hexflow", marker = "extra == 'full'", specifier = "==0.4.*" },
     { name = "hexdoc-hexgender", marker = "extra == 'full'", specifier = "==1.0.4.*" },
     { name = "hexdoc-hexic", marker = "extra == 'full'", specifier = "==1.4.6.*" },
     { name = "hexdoc-hexical", marker = "extra == 'full'", url = "https://github.com/miyucomics/hexical/raw/9e065b5e7995efc9045ab8cecd1f8838106df171/docs/v/latest/main/dist/hexdoc_hexical-2.0.0.1.0.0-py3-none-any.whl" },
