@@ -349,7 +349,9 @@ hexdoc-hexic==1.4.6.1.1.post1 \
     # via hexbug-data
 hexdoc-hexical @ https://github.com/miyucomics/hexical/raw/9e065b5e7995efc9045ab8cecd1f8838106df171/docs/v/latest/main/dist/hexdoc_hexical-2.0.0.1.0.0-py3-none-any.whl \
     --hash=sha256:2089d91d74e18e057199ede29949ce682d337dc6346e68be9e4d692f015dc380
-    # via hexbug-data
+    # via
+    #   hexbug-data
+    #   hexdoc-lapisworks
 hexdoc-hexmapping==0.0.3.1.0.dev0 \
     --hash=sha256:4e7488a20d61fa47eb2eb97dbfbb0f6c1f55d36e8119e2bbb42faa361b5459ea \
     --hash=sha256:cc04fe16a13eca9b82326d8aba842e26f4c7c53c3534cf58c23ef2bee5cecc9a
@@ -388,9 +390,9 @@ hexdoc-hextrace==0.1.0.1.20.1.1.0 \
     --hash=sha256:8487d6fec5eda717197d395a197c1adc644decb2194fc52579237ba204ce9a60 \
     --hash=sha256:fafbedb9104379ba6c2bce3c4802a143d46567c7bacf99c09e6d5682da603fde
     # via hexbug-data
-hexdoc-hextrapats==1.1.0.1.1.0 \
-    --hash=sha256:53712d1edf9600480599b6c51e5330bb89aff44a573b91ae0a2777de62140b50 \
-    --hash=sha256:652868265e4bce8e927ea93030165f333d672e08c2507656108a5b57cbc2b255
+hexdoc-hextrapats==1.1.2.1.1.2 \
+    --hash=sha256:1e5451b520c35828a44ba5e70538873f60c9475eb5312d0459ca69b2d0f05a5f \
+    --hash=sha256:a2db37103650d22c5046931441b428793811718f7d0022df079f979ebb694f9b
     # via hexbug-data
 hexdoc-hextrogen==1.1.0.1.0.0 \
     --hash=sha256:282a17c0d0a5b1ac3765caeb20ed8b3e1f0d62c4fb4cf2cff91ffd4007f3e8d3 \
@@ -414,10 +416,12 @@ hexdoc-hexxyplanes @ https://github.com/Real-Septicake/HexxyPlanes/raw/b848a2d13
 hexdoc-hexxyskies @ https://github.com/TechTastic/HexxySkies/raw/8ff07da666f74a334264c449a42e4e237cc3da7a/docs/v/latest/master/dist/hexdoc_hexxyskies-2.0.2.2.0-py3-none-any.whl \
     --hash=sha256:d3a889f337c27d68a02d2517f420ff1bb6747ffd822a8e201fda4fc3d5c05d11
     # via hexbug-data
-hexdoc-hierophantics==1.3.6.1.0 \
-    --hash=sha256:1d9c0691171b11bc516dfeb9f44812d2072a38122989c31b2a4bb844a86e184c \
-    --hash=sha256:d1ef0e59179c5b37d274364494a6637a723f8c70343564e638cbc681d8180239
-    # via hexbug-data
+hexdoc-hierophantics==1.3.7.1.0 \
+    --hash=sha256:574b8d07a60873d2e15a629a5a6a5a4c040fc07b9c15052f1e93ac56d928edef \
+    --hash=sha256:cbb02f99bb2b29c89039313e49c94c609988369d6d3c735ed06dcf58a6a6655d
+    # via
+    #   hexbug-data
+    #   hexdoc-lapisworks
 hexdoc-hyperhexcast==0.1.1.1.0 \
     --hash=sha256:09147e03e80b74ebe5b498d783d7fd0a2522e674992e061ed14f3215b83d59b9 \
     --hash=sha256:24de45cd04a6eb5043ea6f3ab8e49a1dc417733d0555275d9f876bc6bdf5f299
@@ -428,9 +432,9 @@ hexdoc-ioticblocks==1.0.2.1.20.1.1.0 \
     # via
     #   hexbug-data
     #   hexdoc-hexdebug
-hexdoc-lapisworks==1.5.7.1.7.dev0 \
-    --hash=sha256:0457127f058c94ac21ee0c153aad0e4c2000e5e22d31cd672fb4f78aa3faa4e9 \
-    --hash=sha256:c2db850d67e136973e269c0f52780569d9b44763fa589369ff4b4060e6e6edf7
+hexdoc-lapisworks==1.5.8.1.7.dev0 \
+    --hash=sha256:92d5a4a23ffe6905dc87e04b5728c8ec094225c17dd39a7f83340709dfc62c78 \
+    --hash=sha256:93fa4c0a440579a989389039611ae90f66c96b1cbf3928d5afd536d08a26132b
     # via hexbug-data
 hexdoc-lessertp==1.2.4.1.2.dev0 \
     --hash=sha256:3248530e488231e36c1b4e2d64e98cbf5c5820a274457470834cfabab7469734 \
@@ -472,9 +476,9 @@ hexdoc-slate-work==1.2.2.1.0 \
     --hash=sha256:76c8240491c1d8bf40aa897a6988ac84b1cdd9c1cf1dbdb35923177244eb1d41 \
     --hash=sha256:df3897ed0c026619b8ba1f5f6132402eaf1e997288522002bf72638242ac7d98
     # via hexbug-data
-hexdoc-yaha==0.2.1.1.0 \
-    --hash=sha256:05c0f962e0a9294fedf1fb130f5991e8c4f7a5e2504e85ee2f9bb728312980a5 \
-    --hash=sha256:bae9e03e7f4d108b2a4d26cfe25e6ca8222f8514f1017762f2738975a7b1f66b
+hexdoc-yaha==0.3.0.1.0 \
+    --hash=sha256:c8dd74a6a934a8895b96ba9b4fa8f0e106aea6bc22479b2db23c3d9ba85693de \
+    --hash=sha256:d98b4897ad706ac38a61f8b25dac67bb8e201aa0ee2aede70eeb5d6cc3b14324
     # via hexbug-data
 httpcore==1.0.7 \
     --hash=sha256:8551cb62a169ec7162ac7be8d4817d561f60e08eaa485234898414bb5a8a0b4c \
