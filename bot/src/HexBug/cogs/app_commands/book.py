@@ -9,7 +9,7 @@ from yarl import URL
 from HexBug.core.cog import HexBugCog
 from HexBug.core.exceptions import InvalidInputError
 from HexBug.data.registry import BookIndexField
-from HexBug.ui.views.embed_switcher import EmbedSwitcherView
+from HexBug.ui.views.paginated import SelectPaginatedView
 from HexBug.utils.discord.embeds import set_embed_mod_author
 from HexBug.utils.discord.transformers import (
     CategoryInfoOption,
@@ -312,7 +312,7 @@ class BookCog(HexBugCog, GroupCog, group_name="book"):
                 )
             )
 
-        await EmbedSwitcherView(
+        await SelectPaginatedView(
             user=interaction.user,
             command=interaction.command,
             embeds=embeds,

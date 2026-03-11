@@ -5,7 +5,7 @@ from discord import Embed, Interaction, SelectOption, app_commands
 
 from HexBug.core.cog import HexBugCog
 from HexBug.resources import load_resource
-from HexBug.ui.views.embed_switcher import EmbedSwitcherView
+from HexBug.ui.views.paginated import SelectPaginatedView
 from HexBug.utils.discord.visibility import Visibility, VisibilityOption
 
 _VERSION_PATTERN = re.compile(
@@ -80,7 +80,7 @@ class ChangelogCog(HexBugCog):
         if not self._changelog:
             raise NotImplementedError
 
-        await EmbedSwitcherView(
+        await SelectPaginatedView(
             user=interaction.user,
             command=interaction.command,
             embeds=(entry.embed for entry in self._changelog),

@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [UNRELEASED]
 
+### Fixed
+
+- Fixed `/mods` going over Discord's message size limit by adding pagination buttons when more than 25 mods would be listed.
+
 ### Mods Updated
 
 - HexThings: 0.1.7+1.20.1
