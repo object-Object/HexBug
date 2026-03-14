@@ -325,6 +325,13 @@ version = "0.3.0.1.0.dev0"
 archive = { url = "https://github.com/beholderface/Ephemera/raw/74e80eddd991059785eede8435981716480b69ae/docs/v/latest/1.20.1/dist/hexdoc_ephemera-0.3.0.1.0.dev0-py3-none-any.whl", hashes = { sha256 = "cd6e2164448ac4f6dad92f17e56cfb524d87774f63c81492243776b4ea9570e1" } }
 
 [[packages]]
+name = "hexdoc-focalworks"
+version = "1.1.0.1.0"
+index = "https://pypi.org/simple"
+sdist = { url = "https://files.pythonhosted.org/packages/68/6d/3ee846d989c78b5db5a9812eb05386c0b298138821fb0c874e85727f9b7b/hexdoc_focalworks-1.1.0.1.0.tar.gz", upload-time = 2026-03-13T07:19:00Z, size = 8775, hashes = { sha256 = "1c5dcc17fd6202f52a417ec036be7a9517bc9fc28a7ad4f1c2d281823f4f079f" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/78/c4/a853639ba26750b9c42b7c4c7976a2b095c81af2988bb8d19c4ed4553b48/hexdoc_focalworks-1.1.0.1.0-py3-none-any.whl", upload-time = 2026-03-13T07:18:59Z, size = 11840, hashes = { sha256 = "5b1da316e6385c1ddfcbe1d7821ee42b976497937abeab3a013894b584deafc8" } }]
+
+[[packages]]
 name = "hexdoc-hex-ars-link"
 version = "0.9.2.4.1.0.1"
 index = "https://pypi.org/simple"

@@ -256,6 +256,10 @@ hexdoc-efhexs @ https://github.com/miyucomics/efhexs/raw/4c3503aac60e7c0ab4b21b1
 hexdoc-ephemera @ https://github.com/beholderface/Ephemera/raw/74e80eddd991059785eede8435981716480b69ae/docs/v/latest/1.20.1/dist/hexdoc_ephemera-0.3.0.1.0.dev0-py3-none-any.whl \
     --hash=sha256:cd6e2164448ac4f6dad92f17e56cfb524d87774f63c81492243776b4ea9570e1
     # via hexbug-data
+hexdoc-focalworks==1.1.0.1.0 \
+    --hash=sha256:1c5dcc17fd6202f52a417ec036be7a9517bc9fc28a7ad4f1c2d281823f4f079f \
+    --hash=sha256:5b1da316e6385c1ddfcbe1d7821ee42b976497937abeab3a013894b584deafc8
+    # via hexbug-data
 hexdoc-hex-ars-link==0.9.2.4.1.0.1 \
     --hash=sha256:69cd6ca6613b670c162b7b58ea9cf206ca69d587ae169c3290744e40cfd8127d \
     --hash=sha256:e8fbeef55e4ab9d992182c5a13b1cfe679543794bce119493a05049d950853b8
@@ -280,6 +284,7 @@ hexdoc-hexcasting==0.11.3.1.0 \
     #   hexdoc-dthexcasting
     #   hexdoc-efhexs
     #   hexdoc-ephemera
+    #   hexdoc-focalworks
     #   hexdoc-hex-ars-link
     #   hexdoc-hexal
     #   hexdoc-hexcassettes
@@ -431,6 +436,7 @@ hexdoc-ioticblocks==1.0.2.1.20.1.1.0 \
     --hash=sha256:9ffed77ca5343a3775850aa8b4c72c01ab6d5a7470ce0732f3b186c04cef658e
     # via
     #   hexbug-data
+    #   hexdoc-focalworks
     #   hexdoc-hexdebug
 hexdoc-lapisworks==1.5.8.1.7.dev0 \
     --hash=sha256:92d5a4a23ffe6905dc87e04b5728c8ec094225c17dd39a7f83340709dfc62c78 \
