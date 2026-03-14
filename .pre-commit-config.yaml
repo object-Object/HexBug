@@ -1,4 +1,12 @@
 repos:
+  - repo: local
+    hooks:
+      - id: check-changelog
+        name: check changelog
+        entry: uv run scripts/check_changelog.py
+        language: system
+        pass_filenames: false
+        files: (^|.+/)(CHANGELOG\.md|__version__\.py)$
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
     hooks:
@@ -11,8 +19,8 @@ repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.9.7
     hooks:
-      - name: ruff-fix
-        id: ruff
+      - id: ruff
+        name: ruff-fix
         args: [--fix, --select=RUF022, --select=I]
       - id: ruff
       - id: ruff-format
