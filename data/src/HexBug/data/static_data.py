@@ -87,6 +87,15 @@ MODS: list[StaticModInfo] = [
         modloaders=[Modloader.FABRIC, Modloader.FORGE, Modloader.QUILT],
     ),
     StaticModInfo(
+        id="focalworks",
+        name="Focalworks",
+        description="Adds various iota-holder-related features, such as the ability to trigger a hex when reading/writing a focus.",
+        icon_url=URL("src/main/resources/assets/focalworks/icon.png"),
+        curseforge_slug=None,
+        modrinth_slug=None,
+        modloaders=[Modloader.FABRIC],
+    ),
+    StaticModInfo(
         id="hex_ars_link",
         name="Hex-Ars Linker",
         description="Link Ars Nouveau mana to Hex Casting media & cast Ars Nouveau spells inside Hex Casting.",

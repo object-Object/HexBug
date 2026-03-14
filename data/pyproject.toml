@@ -27,6 +27,7 @@ full = [
     "hexdoc-dthexcasting==1.0.2.*",
     "hexdoc-efhexs==1.0.0.*",
     "hexdoc-ephemera==0.3.0.*",
+    "hexdoc-focalworks==1.1.0.*",
     "hexdoc-hex-ars-link==0.9.2.4.*",
     "hexdoc-hexal==0.3.1.*",
     "hexdoc-hexcassettes==1.1.4.*",
