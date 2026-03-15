@@ -48,11 +48,13 @@ body:
   - type: input
     attributes:
       label: CurseForge URL
+      description: Please include this (if applicable) even if the mod is still under review.
       placeholder: https://www.curseforge.com/minecraft/mc-mods/hexcasting
 
   - type: input
     attributes:
       label: Modrinth URL
+      description: Please include this (if applicable) even if the mod is still under review.
       placeholder: https://modrinth.com/mod/hex-casting
 
   - type: checkboxes
