@@ -395,9 +395,9 @@ hexdoc-hextrace==0.1.0.1.20.1.1.0 \
     --hash=sha256:8487d6fec5eda717197d395a197c1adc644decb2194fc52579237ba204ce9a60 \
     --hash=sha256:fafbedb9104379ba6c2bce3c4802a143d46567c7bacf99c09e6d5682da603fde
     # via hexbug-data
-hexdoc-hextrapats==1.1.2.1.1.2 \
-    --hash=sha256:1e5451b520c35828a44ba5e70538873f60c9475eb5312d0459ca69b2d0f05a5f \
-    --hash=sha256:a2db37103650d22c5046931441b428793811718f7d0022df079f979ebb694f9b
+hexdoc-hextrapats==1.2.0.1.0.0 \
+    --hash=sha256:3f169bbe6c9df2fd7fa8db54c584b5a02c41406267001a6d281acc36baaea1b7 \
+    --hash=sha256:84b9d5d6de664e6e8cc38561b83bec4332d40114b0f69e2ed8472cbec11ba6e0
     # via hexbug-data
 hexdoc-hextrogen==1.1.0.1.0.0 \
     --hash=sha256:282a17c0d0a5b1ac3765caeb20ed8b3e1f0d62c4fb4cf2cff91ffd4007f3e8d3 \

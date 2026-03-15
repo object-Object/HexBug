@@ -474,10 +474,10 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/ad/9a/440068e832ea30a
 
 [[packages]]
 name = "hexdoc-hextrapats"
-version = "1.1.2.1.1.2"
+version = "1.2.0.1.0.0"
 index = "https://pypi.org/simple"
-sdist = { url = "https://files.pythonhosted.org/packages/b3/3e/35fb9994e9a9d78e679a7edba44863dbe77d18f53180238b641bc4cedafb/hexdoc_hextrapats-1.1.2.1.1.2.tar.gz", upload-time = 2026-03-08T21:49:03Z, size = 14640, hashes = { sha256 = "1e5451b520c35828a44ba5e70538873f60c9475eb5312d0459ca69b2d0f05a5f" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/f0/21/97cbe461633610c41a803b8c7100560b0f70ceea507bd10b90d29bcfa7fe/hexdoc_hextrapats-1.1.2.1.1.2-py3-none-any.whl", upload-time = 2026-03-08T21:49:02Z, size = 19784, hashes = { sha256 = "a2db37103650d22c5046931441b428793811718f7d0022df079f979ebb694f9b" } }]
+sdist = { url = "https://files.pythonhosted.org/packages/be/be/ed8f061c14a56e3a894eebf8c5dd5d6e6cf85944856a6b5240982fd1bd97/hexdoc_hextrapats-1.2.0.1.0.0.tar.gz", upload-time = 2026-03-15T02:53:48Z, size = 16207, hashes = { sha256 = "3f169bbe6c9df2fd7fa8db54c584b5a02c41406267001a6d281acc36baaea1b7" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/a2/ac/9947dffb0d95dff07a68d29a775577ed1f79f9eff0c16a505b55dcdeb618/hexdoc_hextrapats-1.2.0.1.0.0-py3-none-any.whl", upload-time = 2026-03-15T02:53:46Z, size = 21979, hashes = { sha256 = "84b9d5d6de664e6e8cc38561b83bec4332d40114b0f69e2ed8472cbec11ba6e0" } }]
 
 [[packages]]
 name = "hexdoc-hextrogen"
