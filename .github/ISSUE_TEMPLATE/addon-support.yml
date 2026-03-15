@@ -11,6 +11,14 @@ body:
 
   - type: input
     attributes:
+      label: PyPI URL
+      description: The URL to the mod's hexdoc plugin on PyPI (strongly preferred), or a static URL pointing to a built wheel for the mod.
+      placeholder: https://pypi.org/project/hexdoc-hexcasting
+    validations:
+      required: true
+
+  - type: input
+    attributes:
       label: Mod ID
       placeholder: hexcasting
     validations:
