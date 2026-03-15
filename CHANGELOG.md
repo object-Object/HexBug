@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and [Pydantic's HISTORY.md](https://github.com/pydantic/pydantic/blob/main/HISTORY.md), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [UNRELEASED]
+
+### Mods Added
+
+- Focalworks: 1.1.0
+
+### Mods Updated
+
+- Hextra Patterns: 1.2.0
+
 ## `2.8.2` - 2026-03-11
 
 ### Fixed

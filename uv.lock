@@ -1109,7 +1109,7 @@ requires-dist = [
     { name = "hexdoc-hextended", marker = "extra == 'full'", url = "https://github.com/abilliontrillionstars/hextended-staves/raw/0e6e0a61b7f4d3e79761b216cfebc1141e19b30b/docs/v/latest/main/dist/hexdoc_hextended-2.0.1.1.0.dev0-py3-none-any.whl" },
     { name = "hexdoc-hexthings", marker = "extra == 'full'", specifier = "==0.1.7.1.20.1.*" },
     { name = "hexdoc-hextrace", marker = "extra == 'full'", specifier = "==0.1.0.1.20.1.*" },
-    { name = "hexdoc-hextrapats", marker = "extra == 'full'", specifier = "==1.1.2.*" },
+    { name = "hexdoc-hextrapats", marker = "extra == 'full'", specifier = "==1.2.0.*" },
     { name = "hexdoc-hextrogen", marker = "extra == 'full'", specifier = "==1.1.0.*" },
     { name = "hexdoc-hextweaks", marker = "extra == 'full'", specifier = "==5.3.3.*" },
     { name = "hexdoc-hexways", marker = "extra == 'full'", specifier = "==1.0.1.*" },
@@ -1567,14 +1567,14 @@ wheels = [
 
 [[package]]
 name = "hexdoc-hextrapats"
-version = "1.1.2.1.1.2"
+version = "1.2.0.1.0.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "hexdoc-hexcasting" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/b3/3e/35fb9994e9a9d78e679a7edba44863dbe77d18f53180238b641bc4cedafb/hexdoc_hextrapats-1.1.2.1.1.2.tar.gz", hash = "sha256:1e5451b520c35828a44ba5e70538873f60c9475eb5312d0459ca69b2d0f05a5f", size = 14640, upload-time = "2026-03-08T21:49:03.487Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/be/be/ed8f061c14a56e3a894eebf8c5dd5d6e6cf85944856a6b5240982fd1bd97/hexdoc_hextrapats-1.2.0.1.0.0.tar.gz", hash = "sha256:3f169bbe6c9df2fd7fa8db54c584b5a02c41406267001a6d281acc36baaea1b7", size = 16207, upload-time = "2026-03-15T02:53:48.264Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f0/21/97cbe461633610c41a803b8c7100560b0f70ceea507bd10b90d29bcfa7fe/hexdoc_hextrapats-1.1.2.1.1.2-py3-none-any.whl", hash = "sha256:a2db37103650d22c5046931441b428793811718f7d0022df079f979ebb694f9b", size = 19784, upload-time = "2026-03-08T21:49:02.219Z" },
+    { url = "https://files.pythonhosted.org/packages/a2/ac/9947dffb0d95dff07a68d29a775577ed1f79f9eff0c16a505b55dcdeb618/hexdoc_hextrapats-1.2.0.1.0.0-py3-none-any.whl", hash = "sha256:84b9d5d6de664e6e8cc38561b83bec4332d40114b0f69e2ed8472cbec11ba6e0", size = 21979, upload-time = "2026-03-15T02:53:46.887Z" },
 ]
 
 [[package]]
