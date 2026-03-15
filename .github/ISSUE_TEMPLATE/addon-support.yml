@@ -7,7 +7,16 @@ body:
   - type: markdown
     attributes:
       value: |
-        Please only fill out this form for your own addon - do not use it to request someone else's addon to be added.
+        Please only fill out this form for your own addon - do not use it to request someone else's addon to be added. Additionally, addons licensed under something like GPL will not be accepted, as I'd like to keep HexBug licensed under MIT; LGPL is acceptable.
+
+  - type: checkboxes
+    attributes:
+      label: Initial checks
+      options:
+        - label: I confirm that I am the author of this mod.
+          required: true
+        - label: I confirm that the license of this mod allows it to be used as a library in an MIT-licensed project (i.e. LGPL is fine, GPL is not).
+          required: true
 
   - type: input
     attributes:
