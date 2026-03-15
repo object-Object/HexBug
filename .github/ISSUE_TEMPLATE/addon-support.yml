@@ -5,8 +5,9 @@ assignees:
 
 body:
   - type: markdown
-    attributes: |
-      Please only fill out this form for your own addon - do not use it to request someone else's addon to be added.
+    attributes:
+      value: |
+        Please only fill out this form for your own addon - do not use it to request someone else's addon to be added.
 
   - type: input
     attributes:
