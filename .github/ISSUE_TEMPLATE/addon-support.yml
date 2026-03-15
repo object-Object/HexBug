@@ -1,0 +1,61 @@
+name: Addon support
+description: Request your Hex Casting addon to be added to HexBug
+assignees:
+  - object-Object
+
+body:
+  - type: markdown
+    attributes: |
+      Please only fill out this form for your own addon - do not use it to request someone else's addon to be added.
+
+  - type: input
+    attributes:
+      label: Mod ID
+      placeholder: hexcasting
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: Display name
+      placeholder: Hex Casting
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: Description
+      description: A short description of the mod to be displayed in `/mod`.
+      placeholder: A mod for Forge and Fabric adding stack-based programmable spellcasting, inspired by Psi.
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: Icon URL
+      description: The path to the mod's icon in its Git repo (preferred), or a static URL pointing to the mod's icon.
+      placeholder: Common/src/main/resources/logo.png
+
+  - type: input
+    attributes:
+      label: CurseForge URL
+      placeholder: https://www.curseforge.com/minecraft/mc-mods/hexcasting
+
+  - type: input
+    attributes:
+      label: Modrinth URL
+      placeholder: https://modrinth.com/mod/hex-casting
+
+  - type: checkboxes
+    attributes:
+      label: Supported modloaders
+      options:
+        - label: Fabric
+        - label: Forge
+        - label: NeoForge
+        - label: Quilt
+
+  - type: textarea
+    attributes:
+      label: Other information
+      description: Provide any additional context, comments, or requests here.
