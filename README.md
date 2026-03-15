@@ -2,6 +2,8 @@
 
 A Discord bot for Hex Casting.
 
+If you're here to get your mod added to HexBug, please start by [opening an issue](https://github.com/object-Object/HexBug/issues/new?template=addon-support.yml) using the "Addon support" template.
+
 ## Development
 
 ### Setup
