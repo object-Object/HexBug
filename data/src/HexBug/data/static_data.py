@@ -114,6 +114,15 @@ MODS: list[StaticModInfo] = [
         modloaders=[Modloader.FABRIC, Modloader.FORGE],
     ),
     StaticModInfo(
+        id="hexautomata",
+        name="HexAutomata",
+        description="Provides items with the ability to listen to various game events and trigger custom spells.",
+        icon_url=URL("common/src/main/resources/logo.png"),
+        curseforge_slug="hexautomata",
+        modrinth_slug="hexautomata",
+        modloaders=[Modloader.FABRIC, Modloader.FORGE],
+    ),
+    StaticModInfo(
         id="hexcassettes",
         name="Hexcassettes",
         description="Adds a method to delay hexes into the future, with a touch of playfulness and whimsy!",
@@ -195,6 +204,15 @@ MODS: list[StaticModInfo] = [
         curseforge_slug=None,
         modrinth_slug="hexical",
         modloaders=[Modloader.FABRIC, Modloader.QUILT],
+    ),
+    StaticModInfo(
+        id="hexkeys",
+        name="Hex Keys",
+        description="Adds features for storing items and iotas in your own mind.",
+        icon_url=URL("common/src/main/resources/hexkeys.png"),
+        curseforge_slug="hex-keys",
+        modrinth_slug="hexkeys",
+        modloaders=[Modloader.FABRIC, Modloader.FORGE],
     ),
     StaticModInfo(
         id="hexmapping",

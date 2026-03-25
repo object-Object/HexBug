@@ -9,10 +9,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 ### Mods Added
 
 - Focalworks: 1.1.0
+- HexAutomata: 0.2.0
+- Hex Keys: 0.1.4
 
 ### Mods Updated
 
-- Hextra Patterns: 1.2.0
+- Hextra Patterns: 1.4.0
+- Slate Works: 2.0.0
 
 ## `2.8.2` - 2026-03-11
 
