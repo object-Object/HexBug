@@ -1,4 +1,6 @@
+import logging
 from dataclasses import dataclass
+from pathlib import Path
 
 from discord import Interaction, SelectOption, app_commands
 
@@ -8,6 +10,8 @@ from HexBug.ui.views.paginated import SelectPaginatedView
 from HexBug.utils.changelog import parse_changelog
 from HexBug.utils.discord.visibility import Visibility, VisibilityOption
 
+logger = logging.getLogger(__name__)
+
 
 @dataclass(eq=False)
 class ChangelogCog(HexBugCog):
@@ -15,9 +19,11 @@ class ChangelogCog(HexBugCog):
         try:
             changelog = load_resource("CHANGELOG.md")
         except Exception:
-            pass
-        else:
-            self._changelog = parse_changelog(changelog)
+            logger.warning(
+                "Failed to load changelog from resources, attempting to load from working directory"
+            )
+            changelog = Path("CHANGELOG.md").read_text("utf-8")
+        self._changelog = list(parse_changelog(changelog))
 
     @app_commands.command()
     async def changelog(
