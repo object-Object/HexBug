@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and [Pydantic's HISTORY.md](https://github.com/pydantic/pydantic/blob/main/HISTORY.md), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [UNRELEASED]
+
+### Mods Updated
+
+- Hex-Ars Link: 0.9.5
+- HexAutomata: 0.3.3
+- Hexcellular: 1.1.1
+- HexFlow: 0.5.1.1
+- Hex Keys: 0.1.6
+- HexOverpowered: 0.11.6
+- HexParse: 1.10.2.2
+- Hextra Patterns: 1.5.0
+- HexxyPlanes: 0.2.3+1.20.1
+- Lapisworks: 1.5.8.2
+- Slate Works: 2.2.0
+- Yet Another Hex Addon: 0.3.1
+
 ## `2.8.4` - 2026-03-26
 
 ### Fixed

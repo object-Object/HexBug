@@ -705,7 +705,10 @@ PATTERN_NAME_OVERRIDES: dict[ResourceLocation, str] = {
 }
 
 # append the mod's name to the pattern's name
-DISAMBIGUATED_PATTERNS: set[ResourceLocation] = set()
+DISAMBIGUATED_PATTERNS: set[ResourceLocation] = {
+    ResourceLocation("hex_ars_link", "query_mana"),
+    ResourceLocation("hex_ars_link", "query_mana_max"),
+}
 
 DISABLED_PAGES: set[str] = set()
 
