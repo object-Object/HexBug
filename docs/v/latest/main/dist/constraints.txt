@@ -260,9 +260,9 @@ hexdoc-focalworks==1.1.0.1.0 \
     --hash=sha256:1c5dcc17fd6202f52a417ec036be7a9517bc9fc28a7ad4f1c2d281823f4f079f \
     --hash=sha256:5b1da316e6385c1ddfcbe1d7821ee42b976497937abeab3a013894b584deafc8
     # via hexbug-data
-hexdoc-hex-ars-link==0.9.5.0.1.1 \
-    --hash=sha256:9bee2adad35ba2b9aada56ef3ef46f7abbb0c20eb289f27733c346ebb8c2db5b \
-    --hash=sha256:a9071fc9d1d20001ee004e8102c3b62a2fc896dbc573821d1e3a06fa685bdb81
+hexdoc-hex-ars-link==0.9.5.1.1.1 \
+    --hash=sha256:7d5af3f8253462e815b5c714f260fd5eb1610b1f3c3656b7e8b01d547fe777fe \
+    --hash=sha256:f5cecd3f1f5f25080693f939e6f639277c62de5c764a6669f500b7227595b814
     # via hexbug-data
 hexdoc-hexal==0.3.1.1.0 \
     --hash=sha256:17f66f2101cff87399697546e0aaf78acaee5d90500f6e579e782429a07a0995 \
@@ -270,9 +270,9 @@ hexdoc-hexal==0.3.1.1.0 \
     # via
     #   hexbug-data
     #   hexdoc-hexic
-hexdoc-hexautomata==0.3.3.1.1 \
-    --hash=sha256:5862eb83733b1c6ef95a9ee1fc99dd06be039935d4b16fb4beb85fa87d92f699 \
-    --hash=sha256:8f9eb2fac54d0dd7bbbc3e725d8187bdba459ae07c1ac6272913b69c5fceb16d
+hexdoc-hexautomata==0.3.4.1.1 \
+    --hash=sha256:46fb1f5e9397b058c504a8b123f3a7bc4ae54b52f12cdd4f7b315d9112b9e597 \
+    --hash=sha256:be68dcd1ef9b36f3142184a945a574c837fe53d322514df3e4eb90d4f1cc756c
     # via hexbug-data
 hexdoc-hexcassettes==1.1.4.1.0.0 \
     --hash=sha256:1fbed8efc71d30620c1a52780f3cc7d6706274285d07a8340f872974f3fcddaf \
@@ -424,8 +424,9 @@ hexdoc-hexweb==1.0.4.1.1 \
     --hash=sha256:53ef341faa8ffc280fe80a0b1635e66f32c94b58c5f6f9ec15e3dc0677dd916e \
     --hash=sha256:b8ee8b908c14e72aaba2c2c7ec805cdc9c0c81ecc6f203e0f51c6ae31f72a4b1
     # via hexbug-data
-hexdoc-hexxyplanes @ https://github.com/Real-Septicake/HexxyPlanes/raw/b848a2d13fd5f3801664d879b0964659f350f0e6/docs/v/latest/main/dist/hexdoc_hexxyplanes-0.2.1.1.20.1.1.0-py3-none-any.whl \
-    --hash=sha256:101e4cfcad2b052c71dce3014b385f7cfe3faae21b6ff7b6a3792daf92f2e846
+hexdoc-hexxyplanes==0.2.3.1.20.1.1.0 \
+    --hash=sha256:1c2f994f68ffc4f3c0ed51ad482f17662e962e4cd94e74ca736993959b7ce62b \
+    --hash=sha256:84e3b2090eeeb8b53430d79ecc5c22767a4e793703674de591dac63b5b532b23
     # via hexbug-data
 hexdoc-hexxyskies @ https://github.com/TechTastic/HexxySkies/raw/8ff07da666f74a334264c449a42e4e237cc3da7a/docs/v/latest/master/dist/hexdoc_hexxyskies-2.0.2.2.0-py3-none-any.whl \
     --hash=sha256:d3a889f337c27d68a02d2517f420ff1bb6747ffd822a8e201fda4fc3d5c05d11
