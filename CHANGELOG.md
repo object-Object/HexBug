@@ -8,8 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ### Mods Updated
 
-- Hex-Ars Link: 0.9.5
-- HexAutomata: 0.3.3
+- Hex-Ars Linker: 0.9.5.1
+- HexAutomata: 0.3.4
 - Hexcellular: 1.1.1
 - HexFlow: 0.5.1.1
 - Hex Keys: 0.1.6
