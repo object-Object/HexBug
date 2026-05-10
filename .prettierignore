@@ -1,0 +1,7 @@
+**/*.webmanifest
+
+# Yarn
+.pnp.*
+.yarn/*
+
+numbers_2000.json

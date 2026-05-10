@@ -1,39 +1,55 @@
 {
-    "[python]": {
-        "editor.defaultFormatter": "charliermarsh.ruff",
-        "editor.formatOnSave": true,
-        "editor.codeActionsOnSave": {
-            "source.organizeImports.ruff": "explicit"
-        },
-        "editor.rulers": [88],
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports.ruff": "explicit"
     },
-    "[yaml][html][css][javascript][jinja-html][jinja-css][jinja-js]": {
-        "editor.tabSize": 2,
+    "editor.rulers": [88]
+  },
+  "[javascript][typescript][html][css][json][jsonc][javascriptreact][typescriptreact][mdx][postcss][snippets][yaml][github-actions-workflow]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.tabSize": 2
+  },
+  "[html][jinja-html]": {
+    "editor.rulers": [120]
+  },
+  "ruff.organizeImports": true,
+  "ruff.lint.ignore": ["I"], // format on save is enabled, so don't show the squiggles
+  "python.languageServer": "Pylance",
+  "python.analysis.diagnosticMode": "workspace",
+  "python.analysis.packageIndexDepths": [
+    { "name": "hexdoc", "depth": 3 },
+    {
+      "name": "pydantic",
+      "depth": 2
     },
-    "[html][jinja-html]": {
-        "editor.rulers": [120],
-    },
-    "ruff.organizeImports": true,
-    "ruff.lint.ignore": ["I"], // format on save is enabled, so don't show the squiggles
-    "python.languageServer": "Pylance",
-    "python.analysis.diagnosticMode": "workspace",
-    "python.analysis.packageIndexDepths": [
-        {"name": "hexdoc", "depth": 3},
-        {"name": "pydantic", "depth": 2},
-        {"name": "sqlalchemy", "depth": 2},
-    ],
-    "python.testing.unittestEnabled": false,
-    "python.testing.pytestEnabled": true,
-    "files.associations": {
-        "*.js.jinja": "javascript",
-        "*.css.jinja": "css",
-        "*.jcss.jinja": "jinja-css", // for files with a lot of jinja stuff, where the linting isn't useful
-        "*.json5.jinja": "json5",
-    },
-    "java.autobuild.enabled": false,
-    "java.server.launchMode": "LightWeight",
-    "files.eol": "\n",
-    "[fluent]": {
-        "editor.rulers": [40, 108],
-    },
+    {
+      "name": "sqlalchemy",
+      "depth": 2
+    }
+  ],
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestEnabled": true,
+  "files.associations": {
+    "*.js.jinja": "javascript",
+    "*.css.jinja": "css",
+    "*.jcss.jinja": "jinja-css", // for files with a lot of jinja stuff, where the linting isn't useful
+    "*.json5.jinja": "json5"
+  },
+  "java.autobuild.enabled": false,
+  "java.server.launchMode": "LightWeight",
+  "files.eol": "\n",
+  "[fluent]": {
+    "editor.rulers": [40, 108]
+  },
+  "search.exclude": {
+    "**/.yarn": true,
+    "**/.pnp.*": true
+  },
+  "eslint.nodePath": ".yarn/sdks",
+  "prettier.prettierPath": ".yarn/sdks/prettier/index.cjs",
+  "js/ts.tsdk.path": ".yarn/sdks/typescript/lib",
+  "js/ts.tsdk.promptToUseWorkspaceVersion": true
 }

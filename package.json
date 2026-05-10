@@ -1,0 +1,56 @@
+{
+  "name": "hexbug-activity",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -b && vite build activity",
+    "dev": "vite serve activity",
+    "lint": "eslint .",
+    "preview": "vite preview activity"
+  },
+  "dependencies": {
+    "@mantine/core": "^9.1.1",
+    "@mantine/hooks": "^9.1.1",
+    "@tabler/icons-react": "^3.44.0",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.29.0",
+    "@eslint/js": "^10.0.1",
+    "@rolldown/plugin-babel": "^0.2.3",
+    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
+    "@types/babel__core": "^7.20.5",
+    "@types/node": "^24.12.2",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "@yarnpkg/types": "^4.0.1",
+    "babel-plugin-react-compiler": "^1.0.0",
+    "eslint": "^10.2.1",
+    "eslint-plugin-react-dom": "^5.7.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "eslint-plugin-react-x": "^5.7.5",
+    "globals": "^17.5.0",
+    "postcss": "^8.5.14",
+    "postcss-preset-mantine": "^1.18.0",
+    "postcss-simple-vars": "^7.0.1",
+    "prettier": "^3.8.3",
+    "prettier-plugin-packagejson": "^3.0.0",
+    "rolldown": "^1.0.0",
+    "typescript": "~6.0.2",
+    "typescript-eslint": "^8.58.2",
+    "vite": "^8.0.10"
+  },
+  "dependenciesMeta": {
+    "@trivago/prettier-plugin-sort-imports@5.2.2": {
+      "unplugged": true
+    },
+    "prettier-plugin-packagejson@3.0.0": {
+      "unplugged": true
+    }
+  },
+  "packageManager": "yarn@4.14.1"
+}
