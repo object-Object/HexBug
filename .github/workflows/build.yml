@@ -27,7 +27,7 @@ jobs:
     outputs:
       tag: ${{ fromJson(steps.meta.outputs.json).tags[0] }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: docker/setup-buildx-action@v3
 
       - name: Login to GitHub Container Registry
@@ -97,7 +97,7 @@ jobs:
   build-aws-cdk:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: object-Object/ci/setup@v0
         with:
           python-version-file: .python-version
@@ -124,7 +124,7 @@ jobs:
     outputs:
       pages-url: ${{ steps.build.outputs.pages-url }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: object-Object/ci/setup@v0
         with:
           python-version-file: .python-version
@@ -167,10 +167,68 @@ jobs:
           name: hexdoc-toml
           path: hexdoc.toml
 
+  build-activity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      # https://github.com/actions/setup-node/issues/904#issuecomment-2670963061
+      - run: corepack enable
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Check Yarn constraints
+        run: yarn constraints
+
+      - name: Build
+        run: yarn build
+
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - run: corepack enable
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Run ESLint
+        run: yarn lint:eslint
+
+  prettier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - run: corepack enable
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Run Prettier
+        run: yarn lint:prettier
+
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: object-Object/ci/setup@v0
         with:
           python-version-file: .python-version
