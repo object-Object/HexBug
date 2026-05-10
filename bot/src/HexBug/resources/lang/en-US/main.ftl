@@ -302,6 +302,13 @@ command_decode-file =
     .parameter_visibility = {-parameter_visibility}
     .parameter_visibility_description = {-parameter_visibility_description}
 
+# entry point command
+
+command_entry-point =
+        Open Staff Grid
+    .description =
+        Launch an Activity to draw patterns on a staff grid.
+
 # /info
 
 command_info =

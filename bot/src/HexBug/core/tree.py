@@ -1,4 +1,5 @@
 from datetime import UTC, datetime
+from typing import override
 
 from discord import Color, Embed, Interaction
 from discord.app_commands import (
@@ -16,6 +17,15 @@ from HexBug.utils.discord.embeds import add_fields
 
 
 class HexBugCommandTree(CommandTree):
+    @override
+    async def _call(self, interaction: Interaction) -> None:
+        # map PRIMARY_ENTRY_POINT to CHAT_INPUT to make discord.py handle it
+        if interaction.data and interaction.data.get("type") == 4:
+            # lie
+            interaction.data["type"] = 1  # pyright: ignore[reportGeneralTypeIssues]
+        await super()._call(interaction)
+
+    @override
     async def on_error(self, interaction: Interaction, error: AppCommandError):
         if isinstance(error, SilentError):
             return
