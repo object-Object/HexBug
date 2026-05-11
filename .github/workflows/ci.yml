@@ -51,7 +51,6 @@ jobs:
     secrets: inherit
     with:
       hexdoc-release: ${{ needs.setup.outputs.hexdoc-release == 'true' }}
-      stage: ${{ needs.setup.outputs.stage }}
 
   check:
     needs:
