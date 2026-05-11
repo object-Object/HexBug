@@ -14,12 +14,12 @@
     "preview": "vite preview activity"
   },
   "resolutions": {
-    "@hextools/renderer": "git@github.com/object-Object/HexTools.git#workspace=@hextools/renderer"
+    "@hextools/renderer": "https://github.com/object-Object/HexTools.git#workspace=@hextools/renderer"
   },
   "dependencies": {
     "@discord/embedded-app-sdk": "^2.5.0",
-    "@hextools/react": "git@github.com/object-Object/HexTools.git#workspace=@hextools/react",
-    "@hextools/renderer": "git@github.com/object-Object/HexTools.git#workspace=@hextools/renderer",
+    "@hextools/react": "https://github.com/object-Object/HexTools.git#workspace=@hextools/react",
+    "@hextools/renderer": "https://github.com/object-Object/HexTools.git#workspace=@hextools/renderer",
     "@mantine/core": "^9.1.1",
     "@mantine/hooks": "^9.1.1",
     "@tabler/icons-react": "^3.44.0",
