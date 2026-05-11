@@ -200,7 +200,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: activity
-          path: _site/dst/docs/hexbug-activity
+          path: _site/dst/docs/hexbug-${{ needs.setup.outputs.stage }}-activity
 
       - name: Deploy to Pages
         uses: hexdoc-dev/actions/deploy-pages@v1
