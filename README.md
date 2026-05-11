@@ -21,20 +21,38 @@ uv run alembic upgrade head
 
 Note: If using Docker with WSL2 on Windows, [networkingMode=mirrored](https://learn.microsoft.com/en-us/windows/wsl/networking#mirrored-mode-networking) seems to make Postgres connections extremely slow.
 
+Bot setup (https://discord.com/developers/applications):
+
+- Overview:
+  - OAuth2:
+    - Redirect: `https://127.0.0.1`
+- Activities:
+  - Settings:
+    - Enable Activities
+    - Enable all supported platforms
+    - Set maximum participants to 1
+  - URL Mappings:
+    - Root Mapping: your [Tailscale Funnel](https://tailscale.com/docs/features/tailscale-funnel) URL
+
 ### Running
 
-Create a file called `.env`:
+Create a file called `.env`, and fill in your values for `TOKEN`, `CLIENT_SECRET`, and `VITE_CLIENT_ID`:
 
 ```sh
 # bot
 ENVIRONMENT="dev"
-TOKEN="put your discord bot token here"
+TOKEN="discord bot token"
+CLIENT_SECRET="discord bot oauth2 client secret"
 API_PORT="5000"
 API_ROOT_PATH=""
 
 # book
 GITHUB_REPOSITORY="object-Object/HexBug"
-GITHUB_SHA="v2"
+GITHUB_SHA="main"
+GITHUB_PAGES_URL="https://book.hexxy.media"
+
+# activity
+VITE_CLIENT_ID="discord bot oauth2 client id"
 ```
 
 Run the bot standalone (faster for development):

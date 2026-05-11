@@ -5,14 +5,25 @@
   "type": "module",
   "scripts": {
     "build": "tsc -b && vite build activity",
-    "dev": "vite serve activity",
-    "lint": "eslint .",
+    "dev": "run-p 'dev:*'",
+    "dev:funnel": "tailscale funnel 5173",
+    "dev:serve": "vite serve activity --host",
+    "lint": "run-p 'lint:*'",
+    "lint:eslint": "eslint .",
+    "lint:prettier": "prettier . --check",
     "preview": "vite preview activity"
   },
+  "resolutions": {
+    "@hextools/renderer": "git@github.com/object-Object/HexTools.git#workspace=@hextools/renderer"
+  },
   "dependencies": {
+    "@discord/embedded-app-sdk": "^2.5.0",
+    "@hextools/react": "git@github.com/object-Object/HexTools.git#workspace=@hextools/react",
+    "@hextools/renderer": "git@github.com/object-Object/HexTools.git#workspace=@hextools/renderer",
     "@mantine/core": "^9.1.1",
     "@mantine/hooks": "^9.1.1",
     "@tabler/icons-react": "^3.44.0",
+    "lodash": "^4.18.1",
     "react": "^19.2.5",
     "react-dom": "^19.2.5"
   },
@@ -22,6 +33,8 @@
     "@rolldown/plugin-babel": "^0.2.3",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@types/babel__core": "^7.20.5",
+    "@types/bytebuffer": "^5.0.49",
+    "@types/lodash": "^4.17.24",
     "@types/node": "^24.12.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
@@ -34,6 +47,7 @@
     "eslint-plugin-react-refresh": "^0.5.2",
     "eslint-plugin-react-x": "^5.7.5",
     "globals": "^17.5.0",
+    "npm-run-all": "^4.1.5",
     "postcss": "^8.5.14",
     "postcss-preset-mantine": "^1.18.0",
     "postcss-simple-vars": "^7.0.1",
@@ -43,14 +57,6 @@
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.58.2",
     "vite": "^8.0.10"
-  },
-  "dependenciesMeta": {
-    "@trivago/prettier-plugin-sort-imports@5.2.2": {
-      "unplugged": true
-    },
-    "prettier-plugin-packagejson@3.0.0": {
-      "unplugged": true
-    }
   },
   "packageManager": "yarn@4.14.1"
 }

@@ -7,7 +7,7 @@
     },
     "editor.rulers": [88]
   },
-  "[javascript][typescript][html][css][json][jsonc][javascriptreact][typescriptreact][mdx][postcss][snippets][yaml][github-actions-workflow]": {
+  "[javascript][typescript][html][css][json][jsonc][javascriptreact][typescriptreact][markdown][mdx][postcss][snippets][yaml][github-actions-workflow]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
     "editor.tabSize": 2
