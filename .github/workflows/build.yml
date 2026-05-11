@@ -10,6 +10,8 @@ on:
     inputs:
       hexdoc-release:
         type: boolean
+      stage:
+        type: string
     outputs:
       image-tag:
         value: ${{ jobs.build-image.outputs.tag }}
@@ -187,7 +189,7 @@ jobs:
         run: yarn constraints
 
       - name: Build
-        run: yarn build
+        run: yarn build --base=/hexbug-${{ inputs.stage || 'beta' }}-activity/
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
