@@ -88,7 +88,7 @@ jobs:
           DEPLOYMENT="{}"
           DEPLOYMENT__COMMIT_SHA="${{ github.sha }}"
           DEPLOYMENT__COMMIT_TIMESTAMP="$(git show --no-patch --format=%at ${{ github.sha }})"
-          DEPLOYMENT__COMMIT_MESSAGE="$(git log --oneline --format=%B -n 1 ${{ github.sha }} | head -n 1)"
+          DEPLOYMENT__COMMIT_MESSAGE="$(git log --oneline --format=%B -n 1 ${{ github.sha }} | head -n 1 | sed "s/\"/'/g")"
           END_OF_FILE
 
       - name: Deploy application
