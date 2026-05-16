@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and [Pydantic's HISTORY.md](https://github.com/pydantic/pydantic/blob/main/HISTORY.md), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## `2.9.0` - 2026-05-16
+
+### Added
+
+- Added a new "Staff Grid" activity based on [Hex Tools](https://hextools.hexxy.media/#/StaffGrid)!
+  - More features are planned, but currently this is an exclusively singleplayer activity that works pretty much the same as the Hex Tools staff grid (with a couple of features removed).
+
 ## `2.8.5` - 2026-05-02
 
 ### Mods Updated
