@@ -6,13 +6,21 @@ import {
   type GuiSpellcastingSettings,
   type ResolvedPattern,
 } from "@hextools/renderer/staffGrid";
-import { Box } from "@mantine/core";
+import { Box, Center, Image } from "@mantine/core";
 import { useHotkeys, useStateHistory } from "@mantine/hooks";
 import { useRef } from "react";
 
 import StaffGridControls from "./StaffGridControls";
+import iconUrl from "./assets/icon.png";
+import {
+  DiscordLayoutMode,
+  useDiscordLayoutMode,
+} from "./hooks/useDiscordLayoutMode";
 
 export default function App() {
+  const layoutMode = useDiscordLayoutMode();
+  const isUnfocused = layoutMode !== DiscordLayoutMode.FOCUSED;
+
   const isTouchscreen = useIsTouchscreen();
 
   const [patterns, patternsHandlers, patternsHistory] = useStateHistory<
@@ -39,22 +47,36 @@ export default function App() {
   ]);
 
   return (
-    <Box pos="relative" w="100%" h="100dvh">
-      <StaffGrid
-        patterns={patterns}
-        onPatternsChange={patternsHandlers.set}
-        settings={settings}
-        ref={staffGridRef}
-      />
+    <>
+      <Box
+        pos="relative"
+        w="100%"
+        h="100dvh"
+        // Hide if unfocused, but still render the component
+        display={isUnfocused ? "none" : undefined}
+      >
+        <StaffGrid
+          patterns={patterns}
+          onPatternsChange={patternsHandlers.set}
+          settings={settings}
+          ref={staffGridRef}
+        />
 
-      <StaffGridControls
-        patterns={patterns}
-        patternsHandlers={patternsHandlers}
-        patternsHistory={patternsHistory}
-        settings={settings}
-        onSettingsChange={setSettings}
-        onResetSettings={() => setSettings(defaultSettings)}
-      />
-    </Box>
+        <StaffGridControls
+          patterns={patterns}
+          patternsHandlers={patternsHandlers}
+          patternsHistory={patternsHistory}
+          settings={settings}
+          onSettingsChange={setSettings}
+          onResetSettings={() => setSettings(defaultSettings)}
+        />
+      </Box>
+
+      {isUnfocused && (
+        <Center h="100dvh">
+          <Image src={iconUrl} maw="50%" mah="50%" style={{ aspectRatio: 1 }} />
+        </Center>
+      )}
+    </>
   );
 }
