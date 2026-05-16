@@ -8,8 +8,12 @@ on:
   workflow_dispatch:
   workflow_call:
     inputs:
+      stage:
+        type: string
+        required: true
       hexdoc-release:
         type: boolean
+        required: true
     outputs:
       image-tag:
         value: ${{ jobs.build-image.outputs.tag }}
@@ -187,6 +191,8 @@ jobs:
         run: yarn constraints
 
       - name: Build
+        env:
+          VITE_CLIENT_ID: ${{ vars[format('{0}_DISCORD_CLIENT_ID', inputs.stage)] }}
         run: yarn build
 
       - name: Upload build artifact
