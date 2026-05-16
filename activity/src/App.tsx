@@ -3,6 +3,7 @@ import { useIsTouchscreen } from "@hextools/react";
 import { useLocalStorageObject } from "@hextools/react";
 import {
   GuiSpellcasting,
+  DEFAULT_PATTERN_TYPE,
   type GuiSpellcastingSettings,
   type ResolvedPattern,
 } from "@hextools/renderer/staffGrid";
@@ -58,6 +59,7 @@ export default function App() {
         <StaffGrid
           patterns={patterns}
           onPatternsChange={patternsHandlers.set}
+          patternType={DEFAULT_PATTERN_TYPE}
           settings={settings}
           ref={staffGridRef}
         />
