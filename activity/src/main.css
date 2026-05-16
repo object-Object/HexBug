@@ -24,6 +24,13 @@ body {
   margin-right: var(--safe-area-inset-right);
 }
 
+.mantine-Drawer-content {
+  margin-top: var(--safe-area-inset-top);
+  margin-bottom: var(--safe-area-inset-bottom);
+  margin-left: var(--safe-area-inset-left);
+  margin-right: var(--safe-area-inset-right);
+}
+
 .mantine-Modal-content {
   margin-top: var(--safe-area-inset-top);
   margin-bottom: var(--safe-area-inset-bottom);
