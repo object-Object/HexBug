@@ -1049,6 +1049,7 @@ full = [
     { name = "hexdoc-hexgender" },
     { name = "hexdoc-hexic" },
     { name = "hexdoc-hexical" },
+    { name = "hexdoc-hexintent" },
     { name = "hexdoc-hexkeys" },
     { name = "hexdoc-hexmapping" },
     { name = "hexdoc-hexodus" },
@@ -1103,6 +1104,7 @@ requires-dist = [
     { name = "hexdoc-hexgender", marker = "extra == 'full'", specifier = "==1.0.4.*" },
     { name = "hexdoc-hexic", marker = "extra == 'full'", specifier = "==1.4.6.*" },
     { name = "hexdoc-hexical", marker = "extra == 'full'", url = "https://github.com/miyucomics/hexical/raw/9e065b5e7995efc9045ab8cecd1f8838106df171/docs/v/latest/main/dist/hexdoc_hexical-2.0.0.1.0.0-py3-none-any.whl" },
+    { name = "hexdoc-hexintent", marker = "extra == 'full'", url = "https://github.com/withgallantry/HexIntent/raw/0fca11775d1533a279ea33c35dc0a234d2c0333a/docs/v/latest/main/dist/hexdoc_hexintent-2.1.5.1.0.0-py3-none-any.whl" },
     { name = "hexdoc-hexkeys", marker = "extra == 'full'", specifier = "==0.1.6.*" },
     { name = "hexdoc-hexmapping", marker = "extra == 'full'", specifier = "==0.0.3.*" },
     { name = "hexdoc-hexodus", marker = "extra == 'full'", specifier = "==1.0.0.*" },
@@ -1465,6 +1467,28 @@ requires-dist = [
     { name = "hexdoc-hexcasting", specifier = "~=0.11.2.1.0.dev20" },
     { name = "hexdoc-hexpose", specifier = "~=1.0.0.1.0.0" },
     { name = "ruff", marker = "extra == 'dev'", specifier = "~=0.1.4" },
+]
+provides-extras = ["dev"]
+
+[[package]]
+name = "hexdoc-hexintent"
+version = "2.1.5.1.0.0"
+source = { url = "https://github.com/withgallantry/HexIntent/raw/0fca11775d1533a279ea33c35dc0a234d2c0333a/docs/v/latest/main/dist/hexdoc_hexintent-2.1.5.1.0.0-py3-none-any.whl" }
+dependencies = [
+    { name = "hexdoc" },
+    { name = "hexdoc-hexcasting" },
+    { name = "hexdoc-minecraft" },
+]
+wheels = [
+    { url = "https://github.com/withgallantry/HexIntent/raw/0fca11775d1533a279ea33c35dc0a234d2c0333a/docs/v/latest/main/dist/hexdoc_hexintent-2.1.5.1.0.0-py3-none-any.whl", hash = "sha256:46b18d8196412ae58fa6766dab1c4bfd9b2861770f324595eece834f1ffca370" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "hexdoc", specifier = "~=1!0.1.0a24" },
+    { name = "hexdoc-hexcasting", specifier = "~=0.11.3.1.0" },
+    { name = "hexdoc-minecraft", specifier = "~=1.20.1.1.0.dev0" },
+    { name = "ruff", marker = "extra == 'dev'", specifier = "~=0.11.2" },
 ]
 provides-extras = ["dev"]
 

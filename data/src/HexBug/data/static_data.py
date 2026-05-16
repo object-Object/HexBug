@@ -410,6 +410,15 @@ MODS: list[StaticModInfo] = [
         modloaders=[Modloader.FABRIC],
     ),
     StaticModInfo(
+        id="manifestation",
+        name="HexIntent",
+        description="",
+        icon_url=URL("docs/assets/ExampleTeleportMenu.png"),
+        curseforge_slug=None,
+        modrinth_slug=None,
+        modloaders=[Modloader.FABRIC],
+    ),
+    StaticModInfo(
         id="mediatransport",
         name="mediatransport",
         description="Figura integration for Hex Casting.",
