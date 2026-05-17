@@ -5,9 +5,10 @@ import math
 import sys
 from asyncio import Task
 from dataclasses import dataclass, field
-from typing import Annotated
+from typing import Annotated, cast
 
 from fastapi import Depends, FastAPI, Response
+from httpx import AsyncClient
 from pydantic import BaseModel
 from starlette.status import HTTP_500_INTERNAL_SERVER_ERROR
 from uvicorn import Config, Server
@@ -17,21 +18,37 @@ from HexBug.core.cog import HexBugCog
 
 logger = logging.getLogger(__name__)
 
+DISCORD_API = "https://discord.com/api/v10"
+
 
 class HealthInfo(BaseModel):
     websocket_latency: float
 
 
-app = FastAPI()
+class ActivityTokenRequest(BaseModel):
+    code: str
 
 
-def get_bot():
-    bot = app.state.bot
-    assert isinstance(bot, HexBugBot), f"Invalid state.bot, expected HexBugBot: {bot}"
-    return bot
+class ActivityTokenResponse(BaseModel):
+    access_token: str
 
 
-BotDependency = Annotated[HexBugBot, Depends(get_bot)]
+app = FastAPI(root_path="/api")
+
+
+def get_dependency[T](value_type: type[T], name: str):
+    def getter() -> T:
+        value = getattr(app.state, name)
+        assert isinstance(value, value_type), (
+            f"Invalid state.{name}, expected {value_type.__name__}: {value}"
+        )
+        return value
+
+    return Depends(getter)
+
+
+BotDependency = Annotated[HexBugBot, get_dependency(HexBugBot, "bot")]
+ClientDependency = Annotated[AsyncClient, get_dependency(AsyncClient, "client")]
 
 
 @app.get("/health")
@@ -50,6 +67,25 @@ async def get_health(
     )
 
 
+@app.post("/activity/token")
+async def post_activity_token(
+    body: ActivityTokenRequest,
+    bot: BotDependency,
+    client: ClientDependency,
+) -> ActivityTokenResponse:
+    response = await client.post(
+        f"{DISCORD_API}/oauth2/token",
+        headers={"Content-Type": "application/x-www-form-urlencoded"},
+        data={
+            "client_id": bot.env.client_id,
+            "client_secret": bot.env.client_secret.get_secret_value(),
+            "grant_type": "authorization_code",
+            "code": body.code,
+        },
+    )
+    return ActivityTokenResponse.model_validate(response.raise_for_status().json())
+
+
 @dataclass(eq=False)
 class APICog(HexBugCog):
     server: Server | None = field(default=None, init=False)
@@ -61,6 +97,7 @@ class APICog(HexBugCog):
             logger.info("Skipping API start because should_run is False")
             return
         app.state.bot = self.bot
+        app.state.client = AsyncClient()
         self.server = Server(
             Config(
                 app,
@@ -79,3 +116,5 @@ class APICog(HexBugCog):
         if task := self.server_task:
             self.server_task = None
             await task
+        if client := cast(AsyncClient | None, app.state.client):
+            await client.aclose()

@@ -42,9 +42,11 @@ Create a file called `.env`, and fill in your values for `TOKEN`, `CLIENT_SECRET
 # bot
 ENVIRONMENT="dev"
 TOKEN="discord bot token"
+CLIENT_ID="discord bot oauth2 client id"
 CLIENT_SECRET="discord bot oauth2 client secret"
-API_PORT="5000"
+API_PORT="6502"
 API_ROOT_PATH=""
+METRICS_PORT="6500"
 
 # book
 GITHUB_REPOSITORY="object-Object/HexBug"

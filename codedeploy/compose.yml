@@ -9,13 +9,15 @@ services:
         target: /app/.env
     ports:
       - host_ip: 127.0.0.1
+        published: "${API_PORT:-6502}"
+        target: "${API_PORT:-6502}"
+      - host_ip: 127.0.0.1
         published: "${METRICS_PORT:-6500}"
         target: "${METRICS_PORT:-6500}"
     environment:
-      API_PORT: 5000
       API_ROOT_PATH: ""
       DB_URL: postgresql+psycopg://postgres:postgres@postgres/postgres
-      HEALTH_CHECK_URL: http://localhost:5000/health
+      HEALTH_CHECK_URL: "http://localhost:${API_PORT:-6502}/api/health"
 
   postgres:
     image: postgres:17
