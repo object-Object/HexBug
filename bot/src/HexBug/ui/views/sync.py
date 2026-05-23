@@ -75,6 +75,7 @@ class SyncButton(
                 custom_id=f"SyncButton:index:{index}",
             )
         )
+        self.index = index
         self.callback = MethodType(callback, self)
 
     @classmethod
@@ -89,6 +90,10 @@ class SyncButton(
     @classmethod
     def from_callback(cls, callback: SyncButtonCallback):
         return cls(cls.buttons_lookup[callback])
+
+    @override
+    def copy(self):
+        return SyncButton(self.index)
 
     async def global_sync_button(self, interaction: Interaction):
         await interaction.response.defer(ephemeral=False, thinking=True)
