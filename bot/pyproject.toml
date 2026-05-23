@@ -11,6 +11,7 @@ dependencies = [
     "alembic>=1.16.5",
     # 2.6.3: github.com/Rapptz/discord.py/issues/10291
     "discord-ext-prometheus>=0.2.1",
+    "discord-oauth2-py>=1.2.2",
     "discord-py>=2.7.1",
     "fastapi>=0.115.12",
     "fluent-runtime>=0.4.0",
@@ -22,6 +23,7 @@ dependencies = [
     "pfzy>=0.3.4",
     "psycopg[binary,pool]>=3.2.9",
     "pydantic-settings>=2.8.0",
+    "pyjwt[crypto]>=2.10.1",
     "regex>=2025.11.3",
     "sqlalchemy[asyncio]>=2.0.43",
     "typer>=0.15.1",

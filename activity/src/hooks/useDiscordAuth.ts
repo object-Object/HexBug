@@ -1,4 +1,5 @@
 import type { DiscordSDK } from "@discord/embedded-app-sdk";
+import * as jose from "jose";
 import { use } from "react";
 
 import { useDiscordSDK } from "./useDiscordSDK";
@@ -11,6 +12,11 @@ export function useDiscordAuth() {
 
 let authPromise: ReturnType<typeof authenticate> | undefined;
 
+const publicKeyPromise = jose.importSPKI(
+  import.meta.env.VITE_JWT_PUBLIC_KEY,
+  "Ed25519",
+);
+
 // Keep in sync with bot/src/HexBug/cogs/api.py
 interface TokenRequest {
   code: string;
@@ -19,6 +25,12 @@ interface TokenRequest {
 // Keep in sync with bot/src/HexBug/cogs/api.py
 interface TokenResponse {
   access_token: string;
+  api_token: string;
+}
+
+// Keep in sync with bot/src/HexBug/cogs/api.py
+interface APIToken {
+  user_id: string;
 }
 
 async function authenticate(discordSDK: DiscordSDK) {
@@ -34,7 +46,26 @@ async function authenticate(discordSDK: DiscordSDK) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(authOutput satisfies TokenRequest),
   });
-  const response = (await tokenResponse.json()) as TokenResponse;
+  const { access_token, api_token } =
+    (await tokenResponse.json()) as TokenResponse;
 
-  return await discordSDK.commands.authenticate(response);
+  const publicKey = await publicKeyPromise;
+  const decryptResult = await jose.jwtVerify<APIToken>(api_token, publicKey);
+  const api_token_value: APIToken = decryptResult.payload;
+
+  const authResponse = await discordSDK.commands.authenticate({
+    access_token,
+  });
+
+  if (api_token_value.user_id !== authResponse.user.id) {
+    throw new Error(
+      `Mismatched user id in API token: expected ${authResponse.user.id}, got ${api_token_value.user_id}`,
+    );
+  }
+
+  return {
+    api_token,
+    api_token_value,
+    ...authResponse,
+  };
 }

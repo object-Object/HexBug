@@ -80,13 +80,16 @@ jobs:
         run: |
           sed -i -e 's/\$APPLICATION_NAME/${{ steps.parse.outputs.ApplicationName }}/g' appspec.yml
 
-          cat <<END_OF_FILE > .env
+          cat << "END_OF_FILE" > .env
           IMAGE="${{ inputs.image-digest }}"
           ENVIRONMENT="${{ inputs.stage }}"
           TOKEN="${{ secrets.DISCORD_TOKEN }}"
           CLIENT_ID="${{ vars[format('{0}_DISCORD_CLIENT_ID', inputs.stage)] }}"
           CLIENT_SECRET="${{ secrets.DISCORD_CLIENT_SECRET }}"
+          JWT_PRIVATE_KEY="${{ secrets.JWT_PRIVATE_KEY }}"
+          JWT_PUBLIC_KEY="${{ vars[format('{0}_JWT_PUBLIC_KEY', inputs.stage)] }}"
           API_PORT="${{ vars.API_PORT }}"
+          API_ROOT_PATH="/api"
           METRICS_PORT="${{ vars.METRICS_PORT }}"
           DEPLOYMENT="{}"
           DEPLOYMENT__COMMIT_SHA="${{ github.sha }}"

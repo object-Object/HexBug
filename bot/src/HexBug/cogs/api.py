@@ -5,8 +5,10 @@ import math
 import sys
 from asyncio import Task
 from dataclasses import dataclass, field
-from typing import Annotated, cast
+from typing import Annotated, Any, cast
 
+import discordoauth2
+import jwt
 from fastapi import Depends, FastAPI, Response
 from httpx import AsyncClient
 from pydantic import BaseModel
@@ -17,8 +19,6 @@ from HexBug.core.bot import HexBugBot
 from HexBug.core.cog import HexBugCog
 
 logger = logging.getLogger(__name__)
-
-DISCORD_API = "https://discord.com/api/v10"
 
 
 class HealthInfo(BaseModel):
@@ -33,9 +33,15 @@ class ActivityTokenRequest(BaseModel):
 # Keep in sync with activity/src/hooks/useDiscordAuth.ts
 class ActivityTokenResponse(BaseModel):
     access_token: str
+    api_token: str
 
 
-app = FastAPI(root_path="/api")
+# Keep in sync with activity/src/hooks/useDiscordAuth.ts
+class APIToken(BaseModel):
+    user_id: str
+
+
+app = FastAPI()
 
 
 def get_dependency[T](value_type: type[T], name: str):
@@ -51,6 +57,9 @@ def get_dependency[T](value_type: type[T], name: str):
 
 BotDependency = Annotated[HexBugBot, get_dependency(HexBugBot, "bot")]
 ClientDependency = Annotated[AsyncClient, get_dependency(AsyncClient, "client")]
+OAuthClientDependency = Annotated[
+    discordoauth2.AsyncClient, get_dependency(discordoauth2.AsyncClient, "oauth_client")
+]
 
 
 @app.get("/health")
@@ -73,19 +82,26 @@ async def get_health(
 async def post_activity_token(
     body: ActivityTokenRequest,
     bot: BotDependency,
-    client: ClientDependency,
+    oauth_client: OAuthClientDependency,
 ) -> ActivityTokenResponse:
-    response = await client.post(
-        f"{DISCORD_API}/oauth2/token",
-        headers={"Content-Type": "application/x-www-form-urlencoded"},
-        data={
-            "client_id": bot.env.client_id,
-            "client_secret": bot.env.client_secret.get_secret_value(),
-            "grant_type": "authorization_code",
-            "code": body.code,
-        },
+    access = await oauth_client.exchange_code(body.code)
+    identify = cast(
+        dict[str, Any],
+        await access.fetch_identify(),  # pyright: ignore[reportUnknownMemberType]
     )
-    return ActivityTokenResponse.model_validate(response.raise_for_status().json())
+
+    api_token = jwt.encode(
+        payload=APIToken(
+            user_id=identify["id"],
+        ).model_dump(mode="json"),
+        key=bot.env.jwt_private_key.get_secret_value(),
+        algorithm="EdDSA",
+    )
+
+    return ActivityTokenResponse(
+        access_token=access.token,
+        api_token=api_token,
+    )
 
 
 @dataclass(eq=False)
@@ -98,14 +114,19 @@ class APICog(HexBugCog):
         if not self.bot.should_run:
             logger.info("Skipping API start because should_run is False")
             return
+        app.root_path = self.env.api_root_path
         app.state.bot = self.bot
         app.state.client = AsyncClient()
+        app.state.oauth_client = discordoauth2.AsyncClient(
+            id=self.env.client_id,
+            secret=self.env.client_secret.get_secret_value(),
+            redirect="",
+        )
         self.server = Server(
             Config(
                 app,
                 host="0.0.0.0",
                 port=self.env.api_port,
-                root_path=self.env.api_root_path,
             )
         )
         # use _serve to prevent the server from trying to capture signals

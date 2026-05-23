@@ -36,16 +36,29 @@ Bot setup (https://discord.com/developers/applications):
 
 ### Running
 
-Create a file called `.env`, and fill in your values for `TOKEN`, `CLIENT_SECRET`, and `VITE_CLIENT_ID`:
+Generate a keypair for signing JWTs:
+
+```sh
+openssl genpkey -algorithm Ed25519 -out jwt_private_key
+openssl pkey -in jwt_private_key -pubout -out jwt_public_key
+```
+
+Create a file called `.env`, and replace all values starting with `...` with your actual values:
 
 ```sh
 # bot
 ENVIRONMENT="dev"
-TOKEN="discord bot token"
-CLIENT_ID="discord bot oauth2 client id"
-CLIENT_SECRET="discord bot oauth2 client secret"
+TOKEN="...discord bot token"
+CLIENT_ID="...discord bot oauth2 client id"
+CLIENT_SECRET="...discord bot oauth2 client secret"
+JWT_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----
+...contents of jwt_private_key
+-----END PRIVATE KEY-----"
+JWT_PUBLIC_KEY="-----BEGIN PUBLIC KEY-----
+...contents of jwt_public_key
+-----END PUBLIC KEY-----"
 API_PORT="6502"
-API_ROOT_PATH=""
+API_ROOT_PATH="/api"
 METRICS_PORT="6500"
 
 # book
@@ -54,7 +67,8 @@ GITHUB_SHA="main"
 GITHUB_PAGES_URL="https://book.hexxy.media"
 
 # activity
-VITE_CLIENT_ID="discord bot oauth2 client id"
+VITE_CLIENT_ID="${CLIENT_ID}"
+VITE_JWT_PUBLIC_KEY="${JWT_PUBLIC_KEY}"
 ```
 
 Run the bot standalone (faster for development):

@@ -193,6 +193,7 @@ jobs:
       - name: Build
         env:
           VITE_CLIENT_ID: ${{ vars[format('{0}_DISCORD_CLIENT_ID', inputs.stage)] }}
+          VITE_JWT_PUBLIC_KEY: ${{ vars[format('{0}_JWT_PUBLIC_KEY', inputs.stage)] }}
         run: yarn build
 
       - name: Upload build artifact

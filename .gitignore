@@ -5,6 +5,7 @@ secrets/
 registry.json
 hexdoc.toml
 _site/
+jwt_*_key
 
 # Vite
 npm-debug.log*

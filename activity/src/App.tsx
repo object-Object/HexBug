@@ -13,6 +13,7 @@ import { useRef } from "react";
 
 import StaffGridControls from "./StaffGridControls";
 import iconUrl from "./assets/icon.png";
+import { useDiscordAuth } from "./hooks/useDiscordAuth";
 import {
   DiscordLayoutMode,
   useDiscordLayoutMode,
@@ -23,6 +24,8 @@ export default function App() {
   const isUnfocused = layoutMode !== DiscordLayoutMode.FOCUSED;
 
   const isTouchscreen = useIsTouchscreen();
+
+  useDiscordAuth();
 
   const [patterns, patternsHandlers, patternsHistory] = useStateHistory<
     ResolvedPattern[]

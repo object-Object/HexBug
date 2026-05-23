@@ -6,6 +6,7 @@ interface ViteTypeOptions {
 
 interface ImportMetaEnv {
   readonly VITE_CLIENT_ID: string;
+  readonly VITE_JWT_PUBLIC_KEY: string;
 }
 
 interface ImportMeta {
