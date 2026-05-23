@@ -2,6 +2,7 @@ import { DiscordSDK, Events } from "@discord/embedded-app-sdk";
 import { use } from "react";
 
 export function useDiscordSDK(): DiscordSDK {
+  discordSDKPromise ??= discordSDK.ready().then(() => discordSDK);
   return use(discordSDKPromise);
 }
 
@@ -12,4 +13,4 @@ export type DiscordSDKSubscribeParameters<T extends Events> = Parameters<
 
 const discordSDK = new DiscordSDK(import.meta.env.VITE_CLIENT_ID);
 
-export const discordSDKPromise = discordSDK.ready().then(() => discordSDK);
+let discordSDKPromise: Promise<DiscordSDK>;

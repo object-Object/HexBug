@@ -1,12 +1,15 @@
+import type { DiscordSDK } from "@discord/embedded-app-sdk";
 import { use } from "react";
 
-import { discordSDKPromise } from "./useDiscordSDK";
+import { useDiscordSDK } from "./useDiscordSDK";
 
 export function useDiscordAuth() {
+  const discordSDK = useDiscordSDK();
+  authPromise ??= authenticate(discordSDK);
   return use(authPromise);
 }
 
-const authPromise = authenticate();
+let authPromise: ReturnType<typeof authenticate> | undefined;
 
 // Keep in sync with bot/src/HexBug/cogs/api.py
 interface TokenRequest {
@@ -18,9 +21,7 @@ interface TokenResponse {
   access_token: string;
 }
 
-async function authenticate() {
-  const discordSDK = await discordSDKPromise;
-
+async function authenticate(discordSDK: DiscordSDK) {
   const authOutput = await discordSDK.commands.authorize({
     client_id: import.meta.env.VITE_CLIENT_ID,
     response_type: "code",
@@ -33,7 +34,7 @@ async function authenticate() {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(authOutput satisfies TokenRequest),
   });
-  const { access_token } = (await tokenResponse.json()) as TokenResponse;
+  const response = (await tokenResponse.json()) as TokenResponse;
 
-  return await discordSDK.commands.authenticate({ access_token });
+  return await discordSDK.commands.authenticate(response);
 }
