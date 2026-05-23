@@ -15,10 +15,7 @@ export enum AuthState {
 export type AuthResult = Awaited<AuthenticatePromise>;
 
 export function useDiscordAuth(): AuthResult {
-  const [authState] = useLocalStorage({
-    key: "use-discord-auth-state",
-    defaultValue: AuthState.none,
-  });
+  const [authState] = useAuthState();
 
   return authState !== AuthState.denied && authPromise
     ? use(authPromise)
@@ -33,10 +30,7 @@ export interface UseDiscordAuthStateResult {
 }
 
 export function useDiscordAuthState(): UseDiscordAuthStateResult {
-  const [authState, setAuthState] = useLocalStorage({
-    key: "use-discord-auth-state",
-    defaultValue: AuthState.none,
-  });
+  const [authState, setAuthState] = useAuthState();
 
   const [auth, dispatchAction, isPending] = useActionState<AuthResult | null>(
     async (prev) => {
@@ -71,6 +65,13 @@ export function useDiscordAuthState(): UseDiscordAuthStateResult {
     onAuthStateChange: setAuthState,
     isPending,
   };
+}
+
+function useAuthState() {
+  return useLocalStorage({
+    key: "use-discord-auth-state",
+    defaultValue: AuthState.none,
+  });
 }
 
 let authPromise: AuthenticatePromise | null = null;
