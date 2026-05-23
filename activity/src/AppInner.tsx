@@ -6,15 +6,20 @@ import {
   DEFAULT_PATTERN_TYPE,
   type GuiSpellcastingSettings,
   type ResolvedPattern,
+  HexDir,
 } from "@hextools/renderer/staffGrid";
 import { Box, Center, Image } from "@mantine/core";
-import { useHotkeys, useStateHistory } from "@mantine/hooks";
-import { useRef } from "react";
+import {
+  useHotkeys,
+  useStateHistory,
+  useDebouncedCallback,
+} from "@mantine/hooks";
+import { useEffect, useRef } from "react";
 
 import StaffGridControls from "./StaffGridControls";
 import type { StaffGridSettingsProps } from "./StaffGridSettings";
 import iconUrl from "./assets/icon.png";
-import { useDiscordAuth } from "./hooks/useDiscordAuth";
+import { useDiscordAuth, type AuthResult } from "./hooks/useDiscordAuth";
 import {
   DiscordLayoutMode,
   useDiscordLayoutMode,
@@ -31,11 +36,36 @@ export default function AppInner({ onSignInWithDiscord }: AppInnerProps) {
 
   const isTouchscreen = useIsTouchscreen();
 
-  useDiscordAuth();
+  const auth = useDiscordAuth();
 
   const [patterns, patternsHandlers, patternsHistory] = useStateHistory<
     ResolvedPattern[]
   >([]);
+
+  const throttledPostPatterns = useDebouncedCallback(
+    (auth: AuthResult, patterns: ResolvedPattern[]) => {
+      void fetch("/api/activity/patterns", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${auth.api_token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(
+          patterns.map(({ pattern }) => ({
+            direction: HexDir[pattern.startDir],
+            signature: pattern.anglesSignature(),
+          })),
+        ),
+      });
+    },
+    { delay: 500 },
+  );
+
+  useEffect(() => {
+    if (auth) {
+      throttledPostPatterns(auth, patterns);
+    }
+  }, [auth, patterns, throttledPostPatterns]);
 
   const staffGridRef = useRef<StaffGridRef>(null);
 

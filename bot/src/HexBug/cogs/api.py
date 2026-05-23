@@ -5,18 +5,23 @@ import math
 import sys
 from asyncio import Task
 from dataclasses import dataclass, field
+from datetime import datetime, timedelta, timezone
 from typing import Annotated, Any, cast
 
 import discordoauth2
-import jwt
-from fastapi import Depends, FastAPI, Response
+from fastapi import Depends, FastAPI, HTTPException, Response
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from httpx import AsyncClient
-from pydantic import BaseModel
-from starlette.status import HTTP_500_INTERNAL_SERVER_ERROR
+from jwt import InvalidTokenError
+from pydantic import BaseModel, ValidationError
+from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_500_INTERNAL_SERVER_ERROR
 from uvicorn import Config, Server
 
+from HexBug.cogs.app_commands.patterns import PatternsCog
 from HexBug.core.bot import HexBugBot
 from HexBug.core.cog import HexBugCog
+from HexBug.data.hex_math import HexPattern
+from HexBug.utils.jwt import JWTModel
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +42,7 @@ class ActivityTokenResponse(BaseModel):
 
 
 # Keep in sync with activity/src/hooks/useDiscordAuth.ts
-class ActivityAPIToken(BaseModel):
+class ActivityAPIToken(JWTModel):
     user_id: str
 
 
@@ -59,6 +64,29 @@ BotDependency = Annotated[HexBugBot, get_dependency(HexBugBot, "bot")]
 ClientDependency = Annotated[AsyncClient, get_dependency(AsyncClient, "client")]
 OAuthClientDependency = Annotated[
     discordoauth2.AsyncClient, get_dependency(discordoauth2.AsyncClient, "oauth_client")
+]
+
+
+def get_activity_api_token(
+    token: Annotated[HTTPAuthorizationCredentials, Depends(HTTPBearer())],
+    bot: BotDependency,
+) -> ActivityAPIToken:
+    try:
+        return ActivityAPIToken.decode_jwt(
+            token.credentials,
+            key=bot.env.jwt_public_key,
+            algorithms=["EdDSA"],
+        )
+    except (InvalidTokenError, ValidationError):
+        raise HTTPException(
+            status_code=HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+
+ActivityAPITokenDependency = Annotated[
+    ActivityAPIToken, Depends(get_activity_api_token)
 ]
 
 
@@ -90,18 +118,36 @@ async def post_activity_token(
         await access.fetch_identify(),  # pyright: ignore[reportUnknownMemberType]
     )
 
-    api_token = jwt.encode(
-        payload=ActivityAPIToken(
-            user_id=identify["id"],
-        ).model_dump(mode="json"),
+    api_token = ActivityAPIToken(
+        user_id=identify["id"],
+    ).encode_jwt(
         key=bot.env.jwt_private_key.get_secret_value(),
         algorithm="EdDSA",
+        expires=datetime.now(timezone.utc) + timedelta(minutes=30),
     )
 
     return ActivityTokenResponse(
         access_token=access.token,
         api_token=api_token,
     )
+
+
+@app.post("/activity/patterns")
+async def post_activity_patterns(
+    body: list[HexPattern],
+    bot: BotDependency,
+    api_token: ActivityAPITokenDependency,
+):
+    patterns_cog = cast(PatternsCog, bot.get_cog("Patterns"))
+
+    if value := patterns_cog.draw_messages.get(int(api_token.user_id)):
+        value.view.patterns = body
+        value.view.embed.description = None if body else value.empty_text
+        try:
+            await value.view.refresh(value.interaction, value.message)
+        except Exception:
+            logger.warning("Failed to refresh activity patterns view", exc_info=True)
+            value.view.on_stop_drawing()
 
 
 @dataclass(eq=False)

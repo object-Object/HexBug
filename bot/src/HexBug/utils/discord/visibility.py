@@ -3,7 +3,7 @@ from enum import Enum
 from re import Match
 from typing import Any, Awaitable, Callable, Literal, Sequence, overload
 
-from discord import Embed, Interaction
+from discord import Embed, Interaction, Message
 from discord.app_commands import Command, ContextMenu, Transform
 from discord.ui import ActionRow, Button, Container, DynamicItem, Item, View
 from discord.utils import MISSING
@@ -95,13 +95,17 @@ class MessageContents:
 @dataclass
 class SendAsPublicButton(Button[Any]):
     original_interaction: Interaction
+    message: Message | None
     send_as_public: Callable[[Interaction], Awaitable[Any]]
 
     def __post_init__(self):
         super().__init__(emoji="👁️")
 
     async def callback(self, interaction: Interaction):
-        await self.original_interaction.delete_original_response()
+        if self.message:
+            await self.message.delete()
+        else:
+            await self.original_interaction.delete_original_response()
         await self.send_as_public(interaction)
 
 
@@ -168,6 +172,7 @@ def add_visibility_buttons[T: ButtonParent](
     parent: T,
     interaction: Interaction,
     visibility: Literal[Visibility.PUBLIC],
+    message: Message | None = None,
     *,
     command: AnyInteractionCommand,
     show_usage: bool,
@@ -179,6 +184,7 @@ def add_visibility_buttons[T: ButtonParent](
     parent: T,
     interaction: Interaction,
     visibility: Literal[Visibility.PRIVATE],
+    message: Message | None = None,
     *,
     send_as_public: Callable[[Interaction], Awaitable[Any]],
 ) -> T: ...
@@ -189,6 +195,7 @@ def add_visibility_buttons[T: ButtonParent](
     parent: T,
     interaction: Interaction,
     visibility: Visibility,
+    message: Message | None = None,
     *,
     command: AnyInteractionCommand,
     show_usage: bool,
@@ -200,6 +207,7 @@ def add_visibility_buttons[T: ButtonParent](
     parent: T,
     interaction: Interaction,
     visibility: Visibility,
+    message: Message | None = None,
     *,
     command: AnyInteractionCommand = None,
     show_usage: bool | None = None,
@@ -208,7 +216,7 @@ def add_visibility_buttons[T: ButtonParent](
     match visibility:
         case Visibility.PRIVATE:
             assert send_as_public is not None
-            parent.add_item(SendAsPublicButton(interaction, send_as_public))
+            parent.add_item(SendAsPublicButton(interaction, message, send_as_public))
         case Visibility.PUBLIC:
             assert show_usage is not None
             parent.add_item(DeleteButton(user_id=interaction.user.id))

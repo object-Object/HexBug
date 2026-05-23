@@ -16,6 +16,11 @@
 -parameter_direction_description =
         The starting direction of the pattern (eg. SOUTH_EAST).
 
+-parameter_show-signatures =
+        show_signatures
+-parameter_show-signatures_description =
+        Show the patterns' angle signatures in the embed footer.
+
 -parameter_signature =
         signature
 -parameter_signature_description =
@@ -555,6 +560,21 @@ group_patterns =
     .description =
         Commands for generating and/or rendering many patterns at once.
 
+# /patterns draw
+
+command_patterns-draw =
+        draw
+    .description =
+        Launch an Activity to draw patterns on a staff grid and display them in a message.
+
+    .parameter_show-signatures = {-parameter_show-signatures}
+    .parameter_show-signatures_description = {-parameter_show-signatures_description}
+
+    .parameter_visibility = {-parameter_visibility}
+    .parameter_visibility_description = {-parameter_visibility_description}
+
+    .text_empty = Waiting for patterns...
+
 # /patterns hex
 
 command_patterns-hex =
@@ -567,10 +587,8 @@ command_patterns-hex =
     .parameter_hex_description =
         One or more comma-separated patterns to display. Shorthand is allowed.
 
-    .parameter_show-signatures =
-        show_signatures
-    .parameter_show-signatures_description =
-        Show the patterns' angle signatures in the embed footer.
+    .parameter_show-signatures = {-parameter_show-signatures}
+    .parameter_show-signatures_description = {-parameter_show-signatures_description}
 
     .parameter_visibility = {-parameter_visibility}
     .parameter_visibility_description = {-parameter_visibility_description}

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import InitVar, dataclass, field
-from typing import Any, Self, override
+from typing import Any, Callable, Self, override
 
 from discord import (
     ButtonStyle,
@@ -12,6 +12,7 @@ from discord import (
     File,
     Interaction,
     Member,
+    Message,
     SelectOption,
     User,
     ui,
@@ -77,12 +78,13 @@ class BasePatternView(ui.View, ABC):
         self,
         interaction: Interaction,
         visibility: Visibility,
+        message: Message | None = None,
         *,
         content: str | None = None,
         show_usage: bool = False,
     ):
         self.clear_items()
-        self.add_items(interaction, visibility, show_usage)
+        self.add_items(interaction, visibility, message, show_usage)
         await interaction.response.send_message(
             content=content,
             embeds=await self.get_embeds(interaction),
@@ -91,8 +93,17 @@ class BasePatternView(ui.View, ABC):
             ephemeral=visibility.ephemeral,
         )
 
-    async def refresh(self, interaction: Interaction, *, view: ui.View | None = None):
-        await interaction.response.edit_message(
+    async def send_as_public(self, interaction: Interaction):
+        await self.send(interaction, Visibility.PUBLIC, show_usage=True)
+
+    async def refresh(
+        self,
+        interaction: Interaction,
+        message: Message | None = None,
+        *,
+        view: ui.View | None = None,
+    ):
+        await (message.edit if message else interaction.response.edit_message)(
             embeds=await self.get_embeds(interaction),
             attachments=self.get_attachments(),
             view=view or self,
@@ -113,6 +124,7 @@ class BasePatternView(ui.View, ABC):
         self,
         interaction: Interaction,
         visibility: Visibility,
+        message: Message | None,
         show_usage: bool = False,
     ):
         self.add_item(self.options_button)
@@ -122,11 +134,10 @@ class BasePatternView(ui.View, ABC):
                 self,
                 interaction,
                 visibility,
+                message,
                 command=self.command,
                 show_usage=show_usage,
-                send_as_public=lambda i: self.send(
-                    i, Visibility.PUBLIC, show_usage=True
-                ),
+                send_as_public=self.send_as_public,
             )
 
     @override
@@ -171,6 +182,37 @@ class EmbedPatternView(BasePatternView):
                 else None,
             )
         ]
+
+
+@dataclass(kw_only=True)
+class DrawPatternsView(EmbedPatternView):
+    on_send_as_public: Callable[[Interaction], Any]
+    on_stop_drawing: Callable[[], Any]
+    has_stopped_drawing: bool = False
+
+    @override
+    async def send_as_public(self, interaction: Interaction):
+        await super().send_as_public(interaction)
+        self.on_send_as_public(interaction)
+
+    @override
+    def add_items(
+        self,
+        interaction: Interaction,
+        visibility: Visibility,
+        message: Message | None,
+        show_usage: bool = False,
+    ):
+        if not self.has_stopped_drawing:
+            self.add_item(self.stop_button)
+        super().add_items(interaction, visibility, message, show_usage)
+
+    @ui.button(emoji="🛑")
+    async def stop_button(self, interaction: Interaction, button: ui.Button[Self]):
+        self.on_stop_drawing()
+        self.has_stopped_drawing = True
+        self.remove_item(self.stop_button)
+        await self.refresh(interaction)
 
 
 @dataclass(kw_only=True)
@@ -277,9 +319,10 @@ class NamedPatternView(BasePatternView):
         self,
         interaction: Interaction,
         visibility: Visibility,
+        message: Message | None,
         show_usage: bool = False,
     ):
-        super().add_items(interaction, visibility, show_usage)
+        super().add_items(interaction, visibility, message, show_usage)
 
         if self.should_show_select_menu:
             self.add_item(self.operator_select)
@@ -398,9 +441,10 @@ class PatternBuilderView(NamedPatternView):
         self,
         interaction: Interaction,
         visibility: Visibility,
+        message: Message | None,
         show_usage: bool = False,
     ):
-        super().add_items(interaction, visibility, show_usage)
+        super().add_items(interaction, visibility, message, show_usage)
         if visibility is Visibility.PRIVATE:
             for button in [
                 self.north_west_button,
@@ -441,7 +485,13 @@ class PatternBuilderView(NamedPatternView):
             self.display_info = self.registry.display_pattern(info) if info else None
 
     @override
-    async def refresh(self, interaction: Interaction, *, view: ui.View | None = None):
+    async def refresh(
+        self,
+        interaction: Interaction,
+        message: Message | None = None,
+        *,
+        view: ui.View | None = None,
+    ):
         if not view:
             self.refresh_pattern()
 

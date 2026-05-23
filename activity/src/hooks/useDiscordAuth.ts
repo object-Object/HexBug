@@ -12,9 +12,9 @@ export enum AuthState {
   denied = "denied",
 }
 
-export type AuthResult = Awaited<AuthenticatePromise>;
+export type AuthResult = Exclude<Awaited<AuthenticatePromise>, null>;
 
-export function useDiscordAuth(): AuthResult {
+export function useDiscordAuth(): AuthResult | null {
   const [authState] = useAuthState();
 
   return authState !== AuthState.denied && authPromise
@@ -23,7 +23,7 @@ export function useDiscordAuth(): AuthResult {
 }
 
 export interface UseDiscordAuthStateResult {
-  auth: AuthResult;
+  auth: AuthResult | null;
   authState: AuthState;
   onAuthStateChange: (authState: AuthState) => unknown;
   isPending: boolean;

@@ -1,9 +1,10 @@
 import asyncio
+from dataclasses import dataclass
 from datetime import timedelta
 from enum import Enum
 from fractions import Fraction
 
-from discord import Embed, Interaction, app_commands
+from discord import Embed, Interaction, Message, app_commands
 from discord.app_commands import Transform
 from discord.ext.commands import GroupCog
 from hex_renderer_py import PatternVariant
@@ -17,9 +18,16 @@ from HexBug.data.utils.lehmer import swizzle
 from HexBug.data.utils.shorthand import PUNCTUATION
 from HexBug.data.utils.strings import format_number
 from HexBug.rendering.draw import to_pattern_variant
-from HexBug.ui.views.patterns import EmbedPatternView, NamedPatternView
+from HexBug.ui.views.patterns import (
+    DrawPatternsView,
+    EmbedPatternView,
+    NamedPatternView,
+)
 from HexBug.utils.discord.embeds import EmbedField
-from HexBug.utils.discord.translation import LocaleEnumTransformer
+from HexBug.utils.discord.translation import (
+    LocaleEnumTransformer,
+    translate_command_text,
+)
 from HexBug.utils.discord.visibility import Visibility, VisibilityOption
 from HexBug.utils.numbers import DecomposedNumber
 
@@ -37,7 +45,55 @@ StackOrderOption = Transform[
 ]
 
 
+@dataclass(eq=False)
 class PatternsCog(HexBugCog, GroupCog, group_name="patterns"):
+    def __post_init__(self):
+        self.draw_messages = dict[int, DrawMessage]()
+
+    @app_commands.command()
+    async def draw(
+        self,
+        interaction: Interaction,
+        show_signatures: bool = False,
+        visibility: VisibilityOption = Visibility.PRIVATE,
+    ):
+        empty_text = await translate_command_text(interaction, "empty")
+
+        def on_send_as_public(i: Interaction):
+            self.draw_messages[interaction.user.id].interaction = i
+            self.draw_messages[interaction.user.id].message = None
+
+        view = DrawPatternsView(
+            interaction=interaction,
+            patterns=[],
+            hide_stroke_order=False,
+            embed=Embed(description=empty_text),
+            add_footer=show_signatures,
+            on_send_as_public=on_send_as_public,
+            on_stop_drawing=lambda: self.draw_messages.pop(interaction.user.id, None),
+        )
+        view.clear_items()
+        view.add_items(interaction, visibility, None)
+
+        _, message = await asyncio.gather(
+            interaction.response.launch_activity(),
+            interaction.followup.send(
+                embeds=await view.get_embeds(interaction),
+                files=view.get_attachments(),
+                view=view,
+                ephemeral=visibility.ephemeral,
+                wait=True,
+            ),
+        )
+
+        view.clear_items()
+        view.add_items(interaction, visibility, message)
+        await view.refresh(interaction, message)
+
+        self.draw_messages[interaction.user.id] = DrawMessage(
+            view, interaction, message, empty_text
+        )
+
     @app_commands.command()
     async def hex(
         self,
@@ -186,3 +242,11 @@ class PatternsCog(HexBugCog, GroupCog, group_name="patterns"):
                 hide_stroke_order=False,
                 info=self.bot.registry.try_match_pattern(result.patterns[0]),
             ).send(interaction, visibility)
+
+
+@dataclass
+class DrawMessage:
+    view: DrawPatternsView
+    interaction: Interaction
+    message: Message | None
+    empty_text: str
