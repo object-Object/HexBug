@@ -80,7 +80,7 @@ jobs:
         run: |
           sed -i -e 's/\$APPLICATION_NAME/${{ steps.parse.outputs.ApplicationName }}/g' appspec.yml
 
-          cat << "END_OF_FILE" > .env
+          cat <<END_OF_FILE > .env
           IMAGE="${{ inputs.image-digest }}"
           ENVIRONMENT="${{ inputs.stage }}"
           TOKEN="${{ secrets.DISCORD_TOKEN }}"
