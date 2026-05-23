@@ -25,10 +25,12 @@ class HealthInfo(BaseModel):
     websocket_latency: float
 
 
+# Keep in sync with activity/src/hooks/useDiscordAuth.ts
 class ActivityTokenRequest(BaseModel):
     code: str
 
 
+# Keep in sync with activity/src/hooks/useDiscordAuth.ts
 class ActivityTokenResponse(BaseModel):
     access_token: str
 
