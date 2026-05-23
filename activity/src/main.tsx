@@ -1,6 +1,6 @@
-import { LoadingOverlay, MantineProvider } from "@mantine/core";
+import { MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
-import { StrictMode, Suspense } from "react";
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { ErrorBoundary } from "react-error-boundary";
 
@@ -11,15 +11,9 @@ import "./main.css";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <MantineProvider defaultColorScheme="dark">
-      <Suspense
-        fallback={
-          <LoadingOverlay visible overlayProps={{ bg: "transparent" }} />
-        }
-      >
-        <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <App />
-        </ErrorBoundary>
-      </Suspense>
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <App />
+      </ErrorBoundary>
     </MantineProvider>
   </StrictMode>,
 );

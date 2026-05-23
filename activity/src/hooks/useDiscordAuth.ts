@@ -1,16 +1,79 @@
 import type { DiscordSDK } from "@discord/embedded-app-sdk";
+import { useLocalStorage } from "@mantine/hooks";
 import * as jose from "jose";
-import { use } from "react";
+import { startTransition, use, useActionState, useEffect } from "react";
 
-import { useDiscordSDK } from "./useDiscordSDK";
+import { discordSDKPromise } from "./useDiscordSDK";
 
-export function useDiscordAuth() {
-  const discordSDK = useDiscordSDK();
-  authPromise ??= authenticate(discordSDK);
-  return use(authPromise);
+export enum AuthState {
+  none = "none",
+  authenticating = "authenticating",
+  accepted = "accepted",
+  denied = "denied",
 }
 
-let authPromise: ReturnType<typeof authenticate> | undefined;
+export type AuthResult = Awaited<AuthenticatePromise>;
+
+export function useDiscordAuth(): AuthResult {
+  const [authState] = useLocalStorage({
+    key: "use-discord-auth-state",
+    defaultValue: AuthState.none,
+  });
+
+  return authState !== AuthState.denied && authPromise
+    ? use(authPromise)
+    : null;
+}
+
+export interface UseDiscordAuthStateResult {
+  auth: AuthResult;
+  authState: AuthState;
+  onAuthStateChange: (authState: AuthState) => unknown;
+  isPending: boolean;
+}
+
+export function useDiscordAuthState(): UseDiscordAuthStateResult {
+  const [authState, setAuthState] = useLocalStorage({
+    key: "use-discord-auth-state",
+    defaultValue: AuthState.none,
+  });
+
+  const [auth, dispatchAction, isPending] = useActionState<AuthResult | null>(
+    async (prev) => {
+      if (prev) {
+        return prev;
+      }
+      authPromise ??= authenticate(await discordSDKPromise);
+      const auth = await authPromise;
+      if (auth) {
+        setAuthState(AuthState.accepted);
+      } else {
+        setAuthState(AuthState.denied);
+      }
+      return auth;
+    },
+    null,
+  );
+
+  useEffect(() => {
+    if (
+      (authState === AuthState.authenticating
+        || authState === AuthState.accepted)
+      && !auth
+    ) {
+      startTransition(dispatchAction);
+    }
+  }, [auth, authState, dispatchAction]);
+
+  return {
+    auth,
+    authState,
+    onAuthStateChange: setAuthState,
+    isPending,
+  };
+}
+
+let authPromise: AuthenticatePromise | null = null;
 
 const publicKeyPromise = jose.importSPKI(
   import.meta.env.VITE_JWT_PUBLIC_KEY,
@@ -33,19 +96,32 @@ interface ActivityAPIToken {
   user_id: string;
 }
 
+type AuthenticatePromise = ReturnType<typeof authenticate>;
+
 async function authenticate(discordSDK: DiscordSDK) {
-  const authOutput = await discordSDK.commands.authorize({
-    client_id: import.meta.env.VITE_CLIENT_ID,
-    response_type: "code",
-    prompt: "none",
-    scope: ["identify"],
-  });
+  let authOutput;
+  try {
+    authOutput = await discordSDK.commands.authorize({
+      client_id: import.meta.env.VITE_CLIENT_ID,
+      response_type: "code",
+      prompt: "none",
+      scope: ["identify"],
+    });
+  } catch (err) {
+    // Usually this means the user cancelled the authorization
+    console.warn("Authorization failed", err);
+    return null;
+  }
 
   const tokenResponse = await fetch("/api/activity/token", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(authOutput satisfies ActivityTokenRequest),
   });
+  if (!tokenResponse.ok) {
+    throw new Error(`Login request failed: ${tokenResponse.status}`);
+  }
+
   const { access_token, api_token } =
     (await tokenResponse.json()) as ActivityTokenResponse;
 

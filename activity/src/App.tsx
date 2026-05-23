@@ -1,87 +1,39 @@
-import { StaffGrid, type StaffGridRef } from "@hextools/react";
-import { useIsTouchscreen } from "@hextools/react";
-import { useLocalStorageObject } from "@hextools/react";
-import {
-  GuiSpellcasting,
-  DEFAULT_PATTERN_TYPE,
-  type GuiSpellcastingSettings,
-  type ResolvedPattern,
-} from "@hextools/renderer/staffGrid";
-import { Box, Center, Image } from "@mantine/core";
-import { useHotkeys, useStateHistory } from "@mantine/hooks";
-import { useRef } from "react";
+import { LoadingOverlay } from "@mantine/core";
+import { Suspense } from "react";
 
-import StaffGridControls from "./StaffGridControls";
-import iconUrl from "./assets/icon.png";
-import { useDiscordAuth } from "./hooks/useDiscordAuth";
-import {
-  DiscordLayoutMode,
-  useDiscordLayoutMode,
-} from "./hooks/useDiscordLayoutMode";
+import AppInner from "./AppInner";
+import AuthModal from "./AuthModal";
+import { AuthState, useDiscordAuthState } from "./hooks/useDiscordAuth";
 
 export default function App() {
-  const layoutMode = useDiscordLayoutMode();
-  const isUnfocused = layoutMode !== DiscordLayoutMode.FOCUSED;
+  const {
+    auth: _auth,
+    authState,
+    onAuthStateChange,
+    isPending,
+  } = useDiscordAuthState();
 
-  const isTouchscreen = useIsTouchscreen();
-
-  useDiscordAuth();
-
-  const [patterns, patternsHandlers, patternsHistory] = useStateHistory<
-    ResolvedPattern[]
-  >([]);
-
-  const staffGridRef = useRef<StaffGridRef>(null);
-
-  const defaultSettings = GuiSpellcasting.getDefaultSettings({
-    isTouchscreen,
-  });
-
-  const [settings, setSettings] =
-    useLocalStorageObject<GuiSpellcastingSettings>({
-      key: "staff-grid-settings",
-      defaultValue: defaultSettings,
-    });
-
-  useHotkeys([
-    ["Escape", () => staffGridRef.current?.cancelPattern()],
-    ["mod+Z", () => patternsHandlers.back()],
-    ["mod+Y", () => patternsHandlers.forward()],
-    ["mod+shift+Z", () => patternsHandlers.forward()],
-  ]);
+  const handleSignInWithDiscord = () => onAuthStateChange(AuthState.accepted);
 
   return (
     <>
-      <Box
-        pos="relative"
-        w="100%"
-        h="100dvh"
-        // Hide if unfocused, but still render the component
-        display={isUnfocused ? "none" : undefined}
+      <Suspense
+        fallback={
+          <LoadingOverlay visible overlayProps={{ bg: "transparent" }} />
+        }
       >
-        <StaffGrid
-          patterns={patterns}
-          onPatternsChange={patternsHandlers.set}
-          patternType={DEFAULT_PATTERN_TYPE}
-          settings={settings}
-          ref={staffGridRef}
+        <AppInner
+          onSignInWithDiscord={
+            authState !== AuthState.accepted ? handleSignInWithDiscord : null
+          }
         />
+      </Suspense>
 
-        <StaffGridControls
-          patterns={patterns}
-          patternsHandlers={patternsHandlers}
-          patternsHistory={patternsHistory}
-          settings={settings}
-          onSettingsChange={setSettings}
-          onResetSettings={() => setSettings(defaultSettings)}
-        />
-      </Box>
-
-      {isUnfocused && (
-        <Center h="100dvh">
-          <Image src={iconUrl} maw="50%" mah="50%" style={{ aspectRatio: 1 }} />
-        </Center>
-      )}
+      <AuthModal
+        authState={authState}
+        onAuthStateChange={onAuthStateChange}
+        isPending={isPending}
+      />
     </>
   );
 }

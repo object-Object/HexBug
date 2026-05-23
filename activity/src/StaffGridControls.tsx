@@ -1,8 +1,5 @@
 import { ColorSchemeButton, StaffGridSidebar } from "@hextools/react";
-import {
-  type GuiSpellcastingSettings,
-  type ResolvedPattern,
-} from "@hextools/renderer/staffGrid";
+import { type ResolvedPattern } from "@hextools/renderer/staffGrid";
 import { ActionIcon, Stack } from "@mantine/core";
 import {
   useDisclosure,
@@ -17,15 +14,14 @@ import {
 } from "@tabler/icons-react";
 
 import { staffGridButtonProps } from "./StaffGridControls.lib";
-import StaffGridSettings from "./StaffGridSettings";
+import StaffGridSettings, {
+  type StaffGridSettingsProps,
+} from "./StaffGridSettings";
 
-export interface StaffGridControlsProps {
+export interface StaffGridControlsProps extends StaffGridSettingsProps {
   patterns: ResolvedPattern[];
   patternsHandlers: UseStateHistoryHandlers<ResolvedPattern[]>;
   patternsHistory: UseStateHistoryValue<ResolvedPattern[]>;
-  settings: GuiSpellcastingSettings;
-  onSettingsChange: (settings: GuiSpellcastingSettings) => unknown;
-  onResetSettings: () => unknown;
 }
 
 export default function StaffGridControls({
@@ -35,6 +31,7 @@ export default function StaffGridControls({
   settings,
   onSettingsChange,
   onResetSettings,
+  onSignInWithDiscord,
 }: StaffGridControlsProps) {
   const [sidebarOpen, { toggle: toggleSidebar, close: closeSidebar }] =
     useDisclosure(false);
@@ -48,6 +45,7 @@ export default function StaffGridControls({
           settings={settings}
           onSettingsChange={onSettingsChange}
           onResetSettings={onResetSettings}
+          onSignInWithDiscord={onSignInWithDiscord}
         />
 
         <ActionIcon {...staffGridButtonProps} onClick={toggleSidebar}>

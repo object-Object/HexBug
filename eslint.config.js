@@ -21,7 +21,7 @@ export default defineConfig([
       reactX.configs["recommended-typescript"],
     ],
     rules: {
-      "no-console": "warn",
+      "no-console": ["warn", { allow: ["warn", "error"] }],
       "no-unused-vars": "off",
       "@typescript-eslint/no-empty-object-type": [
         "error",

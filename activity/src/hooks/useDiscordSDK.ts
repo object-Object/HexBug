@@ -13,4 +13,4 @@ export type DiscordSDKSubscribeParameters<T extends Events> = Parameters<
 
 const discordSDK = new DiscordSDK(import.meta.env.VITE_CLIENT_ID);
 
-let discordSDKPromise: Promise<DiscordSDK>;
+export let discordSDKPromise: Promise<DiscordSDK>;

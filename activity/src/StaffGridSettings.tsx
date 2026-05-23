@@ -22,12 +22,14 @@ export interface StaffGridSettingsProps {
   settings: GuiSpellcastingSettings;
   onSettingsChange: (value: GuiSpellcastingSettings) => unknown;
   onResetSettings: () => unknown;
+  onSignInWithDiscord: (() => unknown) | null;
 }
 
 export default function StaffGridSettings({
   settings,
   onSettingsChange,
   onResetSettings,
+  onSignInWithDiscord,
 }: StaffGridSettingsProps) {
   const {
     guiScale,
@@ -129,35 +131,38 @@ export default function StaffGridSettings({
             <Accordion.Item value="value">
               <Accordion.Control>Advanced Settings</Accordion.Control>
               <Accordion.Panel>
-                {enableZappyPoints && (
-                  <ControlledNumberInput
-                    label="Pattern Wobbliness"
-                    value={zappyVariance}
-                    onChange={getSetter("zappyVariance")}
-                    allowNegative={false}
-                    step={0.1}
-                  />
-                )}
+                <Stack>
+                  {enableZappyPoints && (
+                    <ControlledNumberInput
+                      label="Pattern Wobbliness"
+                      value={zappyVariance}
+                      onChange={getSetter("zappyVariance")}
+                      allowNegative={false}
+                      step={0.1}
+                    />
+                  )}
 
-                {dotsMode === "mouse" && (
-                  <ControlledNumberInput
-                    label="Mouse Dots Radius"
-                    value={mouseDotsRadius}
-                    onChange={getSetter("mouseDotsRadius")}
-                    allowNegative={false}
-                    allowDecimal={false}
-                    min={1}
-                  />
-                )}
+                  {dotsMode === "mouse" && (
+                    <ControlledNumberInput
+                      label="Mouse Dots Radius"
+                      value={mouseDotsRadius}
+                      onChange={getSetter("mouseDotsRadius")}
+                      allowNegative={false}
+                      allowDecimal={false}
+                      min={1}
+                    />
+                  )}
 
-                <Button
-                  mt="md"
-                  variant="light"
-                  color="red"
-                  onClick={onResetSettings}
-                >
-                  Reset All Settings
-                </Button>
+                  {onSignInWithDiscord && (
+                    <Button onClick={onSignInWithDiscord}>
+                      Sign in with Discord
+                    </Button>
+                  )}
+
+                  <Button variant="light" color="red" onClick={onResetSettings}>
+                    Reset All Settings
+                  </Button>
+                </Stack>
               </Accordion.Panel>
             </Accordion.Item>
           </Accordion>
