@@ -18,18 +18,18 @@ const publicKeyPromise = jose.importSPKI(
 );
 
 // Keep in sync with bot/src/HexBug/cogs/api.py
-interface TokenRequest {
+interface ActivityTokenRequest {
   code: string;
 }
 
 // Keep in sync with bot/src/HexBug/cogs/api.py
-interface TokenResponse {
+interface ActivityTokenResponse {
   access_token: string;
   api_token: string;
 }
 
 // Keep in sync with bot/src/HexBug/cogs/api.py
-interface APIToken {
+interface ActivityAPIToken {
   user_id: string;
 }
 
@@ -44,14 +44,17 @@ async function authenticate(discordSDK: DiscordSDK) {
   const tokenResponse = await fetch("/api/activity/token", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(authOutput satisfies TokenRequest),
+    body: JSON.stringify(authOutput satisfies ActivityTokenRequest),
   });
   const { access_token, api_token } =
-    (await tokenResponse.json()) as TokenResponse;
+    (await tokenResponse.json()) as ActivityTokenResponse;
 
   const publicKey = await publicKeyPromise;
-  const decryptResult = await jose.jwtVerify<APIToken>(api_token, publicKey);
-  const api_token_value: APIToken = decryptResult.payload;
+  const decryptResult = await jose.jwtVerify<ActivityAPIToken>(
+    api_token,
+    publicKey,
+  );
+  const api_token_value: ActivityAPIToken = decryptResult.payload;
 
   const authResponse = await discordSDK.commands.authenticate({
     access_token,

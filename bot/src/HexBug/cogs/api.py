@@ -37,7 +37,7 @@ class ActivityTokenResponse(BaseModel):
 
 
 # Keep in sync with activity/src/hooks/useDiscordAuth.ts
-class APIToken(BaseModel):
+class ActivityAPIToken(BaseModel):
     user_id: str
 
 
@@ -91,7 +91,7 @@ async def post_activity_token(
     )
 
     api_token = jwt.encode(
-        payload=APIToken(
+        payload=ActivityAPIToken(
             user_id=identify["id"],
         ).model_dump(mode="json"),
         key=bot.env.jwt_private_key.get_secret_value(),
