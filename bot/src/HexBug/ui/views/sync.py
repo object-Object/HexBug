@@ -115,6 +115,7 @@ class SyncButton(
 
         bot = HexBugBot.of(interaction)
         bot.tree.copy_global_to(guild=interaction.guild)
+        bot.tree.remove_command("entry-point", guild=interaction.guild)
         await bot.tree.sync(guild=interaction.guild)
 
         await interaction.followup.send("Synced guild slash commands to this guild.")
