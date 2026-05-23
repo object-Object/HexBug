@@ -15,7 +15,6 @@ logger = logging.getLogger(__name__)
 SETTINGS_CONFIG = SettingsConfigDict(
     hide_input_in_errors=True,
     env_file=".env",
-    secrets_dir="secrets",
     extra="ignore",
 )
 
