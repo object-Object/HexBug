@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and [Pydantic's HISTORY.md](https://github.com/pydantic/pydantic/blob/main/HISTORY.md), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [UNRELEASED]
+
+### Added
+
+- Added a new command `/patterns draw` that opens the Staff Grid activity and syncs all drawn patterns to a Discord embed.
+
+### Changed
+
+- The Staff Grid activity now prompts you to log in with Discord (necessary for `/patterns draw` to work).
+- Improved command runtime monitoring.
+
+### Fixed
+
+- Fixed a bug where running `/patterns number` with a very large negative number could lock up or crash the bot.
+
 ## `2.9.0` - 2026-05-16
 
 ### Added
