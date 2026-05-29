@@ -15,9 +15,9 @@ from discord.utils import MISSING
 from pydantic import ValidationError
 from sqlalchemy.exc import SQLAlchemyError
 
-from HexBug.cogs.prometheus import COMMAND_RUNTIME_HISTOGRAM
 from HexBug.core.exceptions import InvalidInputError, SilentError
 from HexBug.utils.discord.embeds import add_fields
+from HexBug.utils.metrics import COMMAND_RUNTIME_HISTOGRAM
 
 
 class HexBugCommandTree(CommandTree):
