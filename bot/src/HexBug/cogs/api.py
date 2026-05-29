@@ -95,7 +95,7 @@ async def get_health(
     bot: BotDependency,
     response: Response,
 ) -> HealthInfo:
-    if bot.latency > 180:  # seconds
+    if bot.latency > 30:  # seconds
         logger.error(f"WebSocket latency too high: {bot.latency:.2f}")
         response.status_code = HTTP_500_INTERNAL_SERVER_ERROR
 
