@@ -15,6 +15,7 @@ from discord.utils import MISSING
 from pydantic import ValidationError
 from sqlalchemy.exc import SQLAlchemyError
 
+from HexBug.cogs.prometheus import COMMAND_RUNTIME_HISTOGRAM
 from HexBug.core.exceptions import InvalidInputError, SilentError
 from HexBug.utils.discord.embeds import add_fields
 
@@ -40,6 +41,10 @@ class HexBugCommandTree(CommandTree):
         self._command_start_times = {}
         self._next_command_key = 0
 
+    @property
+    def num_active_commands(self):
+        return len(self._command_start_times)
+
     def get_longest_active_command_runtime(self):
         now = datetime.now()
         return max(
@@ -57,13 +62,15 @@ class HexBugCommandTree(CommandTree):
             # lie
             interaction.data["type"] = 1  # pyright: ignore[reportGeneralTypeIssues]
 
+        start = datetime.now()
         key = self._next_command_key
         self._next_command_key += 1
         try:
-            self._command_start_times[key] = datetime.now()
+            self._command_start_times[key] = start
             await super()._call(interaction)
         finally:
             del self._command_start_times[key]
+            COMMAND_RUNTIME_HISTOGRAM.observe((datetime.now() - start).total_seconds())
 
     @override
     async def on_error(self, interaction: Interaction, error: AppCommandError):

@@ -116,6 +116,11 @@ class HexBugBot(Bot):
     def failed_translations(self):
         return self._failed_translations
 
+    @property
+    def num_active_commands(self):
+        assert isinstance(self.tree, HexBugCommandTree)
+        return self.tree.num_active_commands
+
     def get_longest_active_command_runtime(self):
         assert isinstance(self.tree, HexBugCommandTree)
         return self.tree.get_longest_active_command_runtime()
