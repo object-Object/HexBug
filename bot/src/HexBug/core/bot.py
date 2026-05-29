@@ -116,6 +116,10 @@ class HexBugBot(Bot):
     def failed_translations(self):
         return self._failed_translations
 
+    def get_longest_active_command_runtime(self):
+        assert isinstance(self.tree, HexBugCommandTree)
+        return self.tree.get_longest_active_command_runtime()
+
     def db_session(self):
         return AsyncSession(self.db_engine)
 

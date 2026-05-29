@@ -6,7 +6,7 @@ import sys
 from asyncio import Task
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
-from typing import Annotated, Any, cast
+from typing import Annotated, Any, cast, overload
 
 import discordoauth2
 from fastapi import Depends, FastAPI, HTTPException, Response
@@ -28,6 +28,7 @@ logger = logging.getLogger(__name__)
 
 class HealthInfo(BaseModel):
     websocket_latency: float
+    longest_active_command_runtime: float | None
 
 
 # Keep in sync with activity/src/hooks/useDiscordAuth.ts
@@ -96,13 +97,22 @@ async def get_health(
     response: Response,
 ) -> HealthInfo:
     if bot.latency > 30:  # seconds
-        logger.error(f"WebSocket latency too high: {bot.latency:.2f}")
+        logger.error(f"WebSocket latency too high: {bot.latency:.2f} s")
+        response.status_code = HTTP_500_INTERNAL_SERVER_ERROR
+
+    longest_active_command_runtime = bot.get_longest_active_command_runtime()
+    if (
+        longest_active_command_runtime is not None
+        and longest_active_command_runtime > 10
+    ):
+        logger.error(
+            f"A command has been running for too long: {longest_active_command_runtime:.2f} s"
+        )
         response.status_code = HTTP_500_INTERNAL_SERVER_ERROR
 
     return HealthInfo(
-        websocket_latency=bot.latency
-        if math.isfinite(bot.latency)
-        else sys.float_info.max,
+        websocket_latency=to_finite(bot.latency),
+        longest_active_command_runtime=to_finite(longest_active_command_runtime),
     )
 
 
@@ -187,3 +197,15 @@ class APICog(HexBugCog):
             await task
         if client := cast(AsyncClient | None, app.state.client):
             await client.aclose()
+
+
+@overload
+def to_finite(value: float) -> float: ...
+@overload
+def to_finite(value: float | None) -> float | None: ...
+def to_finite(value: float | None) -> float | None:
+    if value is None:
+        return None
+    if math.isfinite(value):
+        return value
+    return sys.float_info.max

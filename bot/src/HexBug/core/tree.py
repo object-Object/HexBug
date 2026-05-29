@@ -9,6 +9,9 @@ from discord.app_commands import (
     Transformer,
     TransformerError,
 )
+from discord.app_commands.installs import AppCommandContext, AppInstallationType
+from discord.client import Client
+from discord.utils import MISSING
 from pydantic import ValidationError
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -17,13 +20,50 @@ from HexBug.utils.discord.embeds import add_fields
 
 
 class HexBugCommandTree(CommandTree):
+    _command_start_times: dict[int, datetime]
+    _next_command_key: int
+
+    def __init__(
+        self,
+        client: Client,
+        *,
+        fallback_to_global: bool = True,
+        allowed_contexts: AppCommandContext = MISSING,
+        allowed_installs: AppInstallationType = MISSING,
+    ):
+        super().__init__(
+            client,
+            fallback_to_global=fallback_to_global,
+            allowed_contexts=allowed_contexts,
+            allowed_installs=allowed_installs,
+        )
+        self._command_start_times = {}
+        self._next_command_key = 0
+
+    def get_longest_active_command_runtime(self):
+        now = datetime.now()
+        return max(
+            (
+                (now - start).total_seconds()
+                for start in self._command_start_times.values()
+            ),
+            default=None,
+        )
+
     @override
     async def _call(self, interaction: Interaction) -> None:
         # map PRIMARY_ENTRY_POINT to CHAT_INPUT to make discord.py handle it
         if interaction.data and interaction.data.get("type") == 4:
             # lie
             interaction.data["type"] = 1  # pyright: ignore[reportGeneralTypeIssues]
-        await super()._call(interaction)
+
+        key = self._next_command_key
+        self._next_command_key += 1
+        try:
+            self._command_start_times[key] = datetime.now()
+            await super()._call(interaction)
+        finally:
+            del self._command_start_times[key]
 
     @override
     async def on_error(self, interaction: Interaction, error: AppCommandError):
