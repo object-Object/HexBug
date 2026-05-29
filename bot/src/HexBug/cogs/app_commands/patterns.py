@@ -144,7 +144,7 @@ class PatternsCog(HexBugCog, GroupCog, group_name="patterns"):
         except Exception as e:
             raise InvalidInputError("Invalid number.", value=number) from e
 
-        if target.numerator > MAX_NUMBER or target.denominator > MAX_NUMBER:
+        if abs(target.numerator) > MAX_NUMBER or abs(target.denominator) > MAX_NUMBER:
             raise InvalidInputError("Number is too large.", value=number)
 
         await self._generate_and_display(
@@ -199,7 +199,7 @@ class PatternsCog(HexBugCog, GroupCog, group_name="patterns"):
 
         code = swizzle(before=stack_before, after=stack_after)
 
-        if code > MAX_NUMBER:
+        if abs(code) > MAX_NUMBER:
             raise InvalidInputError(
                 "Generated Lehmer code is too large to render.", value=code
             )
