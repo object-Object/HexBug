@@ -6,21 +6,34 @@ import sys
 from asyncio import Task
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
-from typing import Annotated, Any, cast, overload
+from typing import Annotated, Any, Literal, cast, overload
 
 import discordoauth2
-from fastapi import Depends, FastAPI, HTTPException, Response
+from fastapi import (
+    Depends,
+    FastAPI,
+    HTTPException,
+    Response,
+    WebSocket,
+    WebSocketDisconnect,
+    WebSocketException,
+)
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from httpx import AsyncClient
 from jwt import InvalidTokenError
-from pydantic import BaseModel, ValidationError
-from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_500_INTERNAL_SERVER_ERROR
+from pydantic import BaseModel, Field, TypeAdapter, ValidationError
+from starlette.status import (
+    HTTP_401_UNAUTHORIZED,
+    HTTP_500_INTERNAL_SERVER_ERROR,
+    WS_1008_POLICY_VIOLATION,
+)
 from uvicorn import Config, Server
 
 from HexBug.cogs.app_commands.patterns import PatternsCog
 from HexBug.core.bot import HexBugBot
 from HexBug.core.cog import HexBugCog
 from HexBug.data.hex_math import HexPattern
+from HexBug.data.registry import PatternMatchResult
 from HexBug.utils.jwt import JWTModel
 
 logger = logging.getLogger(__name__)
@@ -47,6 +60,31 @@ class ActivityAPIToken(JWTModel):
     user_id: str
 
 
+class PatternsC2SMessage(BaseModel):
+    type: Literal["patterns"]
+    patterns: list[HexPattern]
+
+
+class PatternInfoC2SMessage(BaseModel):
+    type: Literal["pattern_info"]
+    pattern: HexPattern
+
+
+type C2SMessage = Annotated[
+    PatternsC2SMessage | PatternInfoC2SMessage,
+    Field(discriminator="type"),
+]
+
+
+class PatternInfoS2CMessage(BaseModel):
+    type: Literal["pattern_info"] = "pattern_info"
+    pattern: HexPattern
+    info: PatternMatchResult | None
+
+
+type S2CMessage = PatternInfoS2CMessage
+
+
 app = FastAPI()
 
 
@@ -68,10 +106,10 @@ OAuthClientDependency = Annotated[
 ]
 
 
-def get_activity_api_token(
+def get_activity_api_token_base(
     token: Annotated[HTTPAuthorizationCredentials, Depends(HTTPBearer())],
     bot: BotDependency,
-) -> ActivityAPIToken:
+) -> ActivityAPIToken | None:
     try:
         return ActivityAPIToken.decode_jwt(
             token.credentials,
@@ -79,15 +117,41 @@ def get_activity_api_token(
             algorithms=["EdDSA"],
         )
     except (InvalidTokenError, ValidationError):
+        return None
+
+
+ActivityAPITokenBaseDependency = Annotated[
+    ActivityAPIToken | None, Depends(get_activity_api_token_base)
+]
+
+
+def get_activity_api_token_http(
+    api_token: ActivityAPITokenBaseDependency,
+) -> ActivityAPIToken:
+    if not api_token:
         raise HTTPException(
             status_code=HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials",
             headers={"WWW-Authenticate": "Bearer"},
         )
+    return api_token
 
 
-ActivityAPITokenDependency = Annotated[
-    ActivityAPIToken, Depends(get_activity_api_token)
+ActivityAPITokenHTTPDependency = Annotated[
+    ActivityAPIToken, Depends(get_activity_api_token_http)
+]
+
+
+def get_activity_api_token_ws(
+    api_token: ActivityAPITokenBaseDependency,
+) -> ActivityAPIToken:
+    if not api_token:
+        raise WebSocketException(code=WS_1008_POLICY_VIOLATION)
+    return api_token
+
+
+ActivityAPITokenWSDependency = Annotated[
+    ActivityAPIToken, Depends(get_activity_api_token_ws)
 ]
 
 
@@ -146,7 +210,7 @@ async def post_activity_token(
 async def post_activity_patterns(
     body: list[HexPattern],
     bot: BotDependency,
-    api_token: ActivityAPITokenDependency,
+    api_token: ActivityAPITokenHTTPDependency,
 ):
     patterns_cog = cast(PatternsCog, bot.get_cog("Patterns"))
 
@@ -158,6 +222,42 @@ async def post_activity_patterns(
         except Exception:
             logger.warning("Failed to refresh activity patterns view", exc_info=True)
             value.view.on_stop_drawing()
+
+
+@app.websocket("/activity/ws")
+async def websocket_activity_ws(
+    websocket: WebSocket,
+    bot: BotDependency,
+    api_token: ActivityAPITokenWSDependency,
+):
+    ta = TypeAdapter[C2SMessage](C2SMessage)
+    await websocket.accept()
+    while True:
+        try:
+            message = ta.validate_json(await websocket.receive_bytes())
+            if response := await handle_activity_c2s_message(message, bot, api_token):
+                await websocket.send_text(response.model_dump_json())
+        except WebSocketDisconnect:
+            return
+        except Exception:
+            logger.warning(
+                "Unhandled exception in WebSocket handler loop", exc_info=True
+            )
+
+
+async def handle_activity_c2s_message(
+    message: C2SMessage,
+    bot: HexBugBot,
+    api_token: ActivityAPIToken,
+) -> S2CMessage | None:
+    match message:
+        case PatternsC2SMessage(patterns=patterns):
+            await post_activity_patterns(patterns, bot, api_token)
+        case PatternInfoC2SMessage(pattern=pattern):
+            return PatternInfoS2CMessage(
+                pattern=pattern,
+                info=bot.registry.try_match_pattern(pattern),
+            )
 
 
 @dataclass(eq=False)

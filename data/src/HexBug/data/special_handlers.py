@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Any, Literal, override
 
 from hexdoc.core import ResourceLocation
 from hexdoc.minecraft import I18n, LocalizedStr
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from .hex_math import HexAngle, HexDir, HexPattern
 from .patterns import PatternOperator
@@ -36,7 +36,7 @@ class SpecialHandlerInfo(BaseModel):
 class SpecialHandlerMatch[T](SpecialHandlerInfo):
     model_config = {"arbitrary_types_allowed": True}
 
-    handler: SpecialHandler[T]
+    handler: SpecialHandler[T] = Field(exclude=True)
     value: T
 
     @staticmethod
