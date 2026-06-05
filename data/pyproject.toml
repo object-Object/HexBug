@@ -34,7 +34,7 @@ full = [
     "hexdoc-hexcassettes==1.1.4.*",
     "hexdoc-hexcasting==0.11.3.*", # remember to also update override-dependencies
     "hexdoc-hexcellular==1.1.1.*",
-    "hexdoc-hexchanting==1.1.7.*",
+    "hexdoc-hexchanting==1.2.0.*",
     "hexdoc-hexdebug==0.8.0.1.20.1.*",
     "hexdoc-hexdim==1.2.1.1.20.*",
     "hexdoc-hexflow==0.5.1.1.*",
@@ -44,7 +44,7 @@ full = [
     "hexdoc-hexkeys==0.1.6.*",
     "hexdoc-hexmapping==0.0.3.*",
     "hexdoc-hexodus==1.0.0.*",
-    "hexdoc-hexoverpowered==0.11.6.*",
+    "hexdoc-hexoverpowered==0.11.7.*",
     "hexdoc-hexparse==1.10.2.2.*",
     "hexdoc-hexpose==1.0.0.1.0.0+hexbug", # workaround for https://github.com/miyucomics/hexpose/commit/26709051b306e70982cb904ac2776eb7f9da9f4d until the next release
     "hexdoc-hexstruction==1.3.1.1.20.1.*",
@@ -61,7 +61,7 @@ full = [
     "hexdoc-hierophantics==1.3.7.*",
     "hexdoc-hyperhexcast==0.1.1.*",
     "hexdoc-ioticblocks==1.0.2.1.20.1.*",
-    "hexdoc-lapisworks==1.5.8.2.*",
+    "hexdoc-lapisworks==1.5.8.4.*",
     "hexdoc-lessertp==1.2.4.*",
     "hexdoc-mediatransport==1.1.1.1.20.1.*",
     "hexdoc-moreiotas==0.1.1.*",
