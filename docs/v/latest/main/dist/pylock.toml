@@ -290,10 +290,10 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/d3/8a/44032265776062a
 
 [[packages]]
 name = "hexdoc"
-version = "1!0.1.0a39"
+version = "1!0.1.0a40"
 index = "https://pypi.org/simple"
-sdist = { url = "https://files.pythonhosted.org/packages/ac/e9/65d37482949287989c6ee9b3509b4a0b41b9334cb4559bdf85977ae41f9b/hexdoc-1!0.1.0a39.tar.gz", upload-time = 2026-03-22T17:46:50Z, size = 154780, hashes = { sha256 = "3172e7846d0fe159199bd0f4e6c19341a18512c1dc838faa67d5250077fdf43b" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/e4/7f/6cb647f6df1ac64bf4aa26d56e8bec39feb0b631062ec3faf51c321c0fa3/hexdoc-1!0.1.0a39-py3-none-any.whl", upload-time = 2026-03-22T17:46:48Z, size = 224092, hashes = { sha256 = "4cecfc7b45a36abb3698a3cdda395851d8c5eaf4f90648dae575174de864a5e6" } }]
+sdist = { url = "https://files.pythonhosted.org/packages/5a/2c/e7dcc914cda4a515e3d952b56ce503b697eae51a55f10e2dc9e95f6920a8/hexdoc-1!0.1.0a40.tar.gz", upload-time = 2026-06-14T00:11:46Z, size = 155571, hashes = { sha256 = "aaaf169a949cf03b11607c94fc239ffc9c45673364d80bdcd56413ce1d471309" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/b4/12/a26fac83f51d2d97ff36c917b1e0380adfb3217ed5083ed4689e1188fad7/hexdoc-1!0.1.0a40-py3-none-any.whl", upload-time = 2026-06-14T00:11:44Z, size = 225594, hashes = { sha256 = "995dac6587475bc267ccedbb1b0d323fab2fd1d40968bcd847517a2d8490674f" } }]
 
 [[packages]]
 name = "hexdoc-caduceus"
@@ -347,10 +347,10 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/50/7d/232823a2613fc96
 
 [[packages]]
 name = "hexdoc-hexautomata"
-version = "0.3.4.1.1"
+version = "0.3.5.1.1"
 index = "https://pypi.org/simple"
-sdist = { url = "https://files.pythonhosted.org/packages/8d/45/0dce46cd5520ff688fad356f018dbaa4cd7b224eb80491f888ebdd9d9695/hexdoc_hexautomata-0.3.4.1.1.tar.gz", upload-time = 2026-04-30T12:03:31Z, size = 539583, hashes = { sha256 = "46fb1f5e9397b058c504a8b123f3a7bc4ae54b52f12cdd4f7b315d9112b9e597" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/e9/16/9666caca44c915f3b2603963656863f6c39091f4017ec86ccdbeffa88411/hexdoc_hexautomata-0.3.4.1.1-py3-none-any.whl", upload-time = 2026-04-30T12:03:30Z, size = 582060, hashes = { sha256 = "be68dcd1ef9b36f3142184a945a574c837fe53d322514df3e4eb90d4f1cc756c" } }]
+sdist = { url = "https://files.pythonhosted.org/packages/c7/c8/b8fe4b2b29d553137c939249ad630c93ffdfbb8474d5278651e80a5da2b3/hexdoc_hexautomata-0.3.5.1.1.tar.gz", upload-time = 2026-06-10T15:31:41Z, size = 539590, hashes = { sha256 = "d09c90fe8b2e1f2e490ba03a3c70df330db0e29cc39d2caad6fb361cdaa14bc4" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/92/ff/1918e169c47c9bee8fc02ca5239a6793b57b1a1b5adb2989b682fd6806f7/hexdoc_hexautomata-0.3.5.1.1-py3-none-any.whl", upload-time = 2026-06-10T15:31:39Z, size = 582062, hashes = { sha256 = "5d54f086f0fcb0ef32a145fcb80c92f586028ff5c03f7447deb7b6671851f0bb" } }]
 
 [[packages]]
 name = "hexdoc-hexcassettes"
@@ -449,10 +449,10 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/c5/2d/f6e1c4b111fb940
 
 [[packages]]
 name = "hexdoc-hexparse"
-version = "1.10.2.2.1.1"
+version = "1.11.1.1.1"
 index = "https://pypi.org/simple"
-sdist = { url = "https://files.pythonhosted.org/packages/31/fc/c645c47a9e2e7c91bd39a8c2012ab7b1253746f292ca739f71a25faaa7da/hexdoc_hexparse-1.10.2.2.1.1.tar.gz", upload-time = 2026-04-22T14:19:10Z, size = 12758, hashes = { sha256 = "6e242da72769a5a2e011b19fe0be08049c3c9e327649fcfe8c30899e9f7e56f1" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/3d/95/0ea44c84dc1eb9b87d4239c20e99f74d7e93806f7d91a59ac50ceddff093/hexdoc_hexparse-1.10.2.2.1.1-py3-none-any.whl", upload-time = 2026-04-22T14:19:08Z, size = 17660, hashes = { sha256 = "0a29df10c667733787b9e6861512a542d3595abbe4234d072b84efc90802f89d" } }]
+sdist = { url = "https://files.pythonhosted.org/packages/b8/8c/cc2afff53bded251b85387e0203772f0dd6f41db104fe811a780774bae82/hexdoc_hexparse-1.11.1.1.1.tar.gz", upload-time = 2026-06-13T04:52:42Z, size = 12717, hashes = { sha256 = "b816e2b47d64f9a4dc9ad0d70ead6179662313277d8fcc90e03e0cb6285f039e" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/d7/18/21d1f8e371d67a041d6599572602ca7acf75cb08462f64c7438712073d6d/hexdoc_hexparse-1.11.1.1.1-py3-none-any.whl", upload-time = 2026-06-13T04:52:41Z, size = 17631, hashes = { sha256 = "7775b8715c728d8f17b6750345cd5c318cc36dc7680e3f568f3cbf8dac1435ee" } }]
 
 [[packages]]
 name = "hexdoc-hexpose"
@@ -584,10 +584,10 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/9e/92/ddbc0a7ad0248d4
 
 [[packages]]
 name = "hexdoc-moreiotas"
-version = "0.1.1.1.0"
+version = "0.1.2.1.0"
 index = "https://pypi.org/simple"
-sdist = { url = "https://files.pythonhosted.org/packages/79/6d/741307c0f82d2dcd2cf69e1881f352a510ab80c7a7fb8ee42279ff9763f1/hexdoc_moreiotas-0.1.1.1.0.tar.gz", upload-time = 2025-10-10T17:49:20Z, size = 16337, hashes = { sha256 = "830d0fde94a0ea4a773605c67fd943ad977b438a1a4bb44d62751333b9a9662a" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/14/65/dbdfc25f2bbfd1b0bff5f7a12e7a7ec595deb69176028dfd6cc00479c79d/hexdoc_moreiotas-0.1.1.1.0-py3-none-any.whl", upload-time = 2025-10-10T17:49:18Z, size = 20660, hashes = { sha256 = "2e9dfdbc2d969ce2c13e806237723188e35c6f029b99a1143fbb077786116211" } }]
+sdist = { url = "https://files.pythonhosted.org/packages/9a/93/9fe83133d77d9a8f2e0c346a091b411d52e4d8d117999bd3da21aa8b6785/hexdoc_moreiotas-0.1.2.1.0.tar.gz", upload-time = 2026-06-16T05:27:01Z, size = 17032, hashes = { sha256 = "eb59dd2e0f8d1393cda196b40c7414c1da3867d2b8967be146dd79256753e102" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/72/04/20ed4d7b5ec962049207199821661582b880a00cf563f797d6ba06a4167d/hexdoc_moreiotas-0.1.2.1.0-py3-none-any.whl", upload-time = 2026-06-16T05:27:00Z, size = 21315, hashes = { sha256 = "e590a39547c9dd62ea45eb087b268dba9daee627d60117c191d3929fbdd2fdb0" } }]
 
 [[packages]]
 name = "hexdoc-movesthemind"
@@ -1271,6 +1271,32 @@ marker = "sys_platform == 'win32'"
 index = "https://pypi.org/simple"
 sdist = { url = "https://files.pythonhosted.org/packages/85/9f/01a1a99704853cb63f253eea009390c88e7131c67e66a0a02099a8c917cb/pywin32-ctypes-0.2.3.tar.gz", upload-time = 2024-08-14T10:15:34Z, size = 29471, hashes = { sha256 = "d162dc04946d704503b2edc4d55f3dba5c1d539ead017afa00142c38b9885755" } }
 wheels = [{ url = "https://files.pythonhosted.org/packages/de/3d/8161f7711c017e01ac9f008dfddd9410dff3674334c233bde66e7ba65bbf/pywin32_ctypes-0.2.3-py3-none-any.whl", upload-time = 2024-08-14T10:15:33Z, size = 30756, hashes = { sha256 = "8a1513379d709975552d202d942d9837758905c8d01eb82b8bcc30918929e7b8" } }]
+
+[[packages]]
+name = "pyyaml"
+version = "6.0.2"
+index = "https://pypi.org/simple"
+sdist = { url = "https://files.pythonhosted.org/packages/54/ed/79a089b6be93607fa5cdaedf301d7dfb23af5f25c398d5ead2525b063e17/pyyaml-6.0.2.tar.gz", upload-time = 2024-08-06T20:33:50Z, size = 130631, hashes = { sha256 = "d584d9ec91ad65861cc08d42e834324ef890a082e591037abe114850ff7bbc3e" } }
+wheels = [
+    { name = "pyyaml-6.0.2-cp312-cp312-macosx_10_9_x86_64.whl", url = "https://files.pythonhosted.org/packages/86/0c/c581167fc46d6d6d7ddcfb8c843a4de25bdd27e4466938109ca68492292c/PyYAML-6.0.2-cp312-cp312-macosx_10_9_x86_64.whl", upload-time = 2024-08-06T20:32:25Z, size = 183873, hashes = { sha256 = "c70c95198c015b85feafc136515252a261a84561b7b1d51e3384e0655ddf25ab" } },
+    { name = "pyyaml-6.0.2-cp312-cp312-macosx_11_0_arm64.whl", url = "https://files.pythonhosted.org/packages/a8/0c/38374f5bb272c051e2a69281d71cba6fdb983413e6758b84482905e29a5d/PyYAML-6.0.2-cp312-cp312-macosx_11_0_arm64.whl", upload-time = 2024-08-06T20:32:26Z, size = 173302, hashes = { sha256 = "ce826d6ef20b1bc864f0a68340c8b3287705cae2f8b4b1d932177dcc76721725" } },
+    { name = "pyyaml-6.0.2-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", url = "https://files.pythonhosted.org/packages/c3/93/9916574aa8c00aa06bbac729972eb1071d002b8e158bd0e83a3b9a20a1f7/PyYAML-6.0.2-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", upload-time = 2024-08-06T20:32:28Z, size = 739154, hashes = { sha256 = "1f71ea527786de97d1a0cc0eacd1defc0985dcf6b3f17bb77dcfc8c34bec4dc5" } },
+    { name = "pyyaml-6.0.2-cp312-cp312-manylinux_2_17_s390x.manylinux2014_s390x.whl", url = "https://files.pythonhosted.org/packages/95/0f/b8938f1cbd09739c6da569d172531567dbcc9789e0029aa070856f123984/PyYAML-6.0.2-cp312-cp312-manylinux_2_17_s390x.manylinux2014_s390x.whl", upload-time = 2024-08-06T20:32:30Z, size = 766223, hashes = { sha256 = "9b22676e8097e9e22e36d6b7bda33190d0d400f345f23d4065d48f4ca7ae0425" } },
+    { name = "pyyaml-6.0.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", url = "https://files.pythonhosted.org/packages/b9/2b/614b4752f2e127db5cc206abc23a8c19678e92b23c3db30fc86ab731d3bd/PyYAML-6.0.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", upload-time = 2024-08-06T20:32:31Z, size = 767542, hashes = { sha256 = "80bab7bfc629882493af4aa31a4cfa43a4c57c83813253626916b8c7ada83476" } },
+    { name = "pyyaml-6.0.2-cp312-cp312-musllinux_1_1_aarch64.whl", url = "https://files.pythonhosted.org/packages/d4/00/dd137d5bcc7efea1836d6264f049359861cf548469d18da90cd8216cf05f/PyYAML-6.0.2-cp312-cp312-musllinux_1_1_aarch64.whl", upload-time = 2024-08-06T20:32:37Z, size = 731164, hashes = { sha256 = "0833f8694549e586547b576dcfaba4a6b55b9e96098b36cdc7ebefe667dfed48" } },
+    { name = "pyyaml-6.0.2-cp312-cp312-musllinux_1_1_x86_64.whl", url = "https://files.pythonhosted.org/packages/c9/1f/4f998c900485e5c0ef43838363ba4a9723ac0ad73a9dc42068b12aaba4e4/PyYAML-6.0.2-cp312-cp312-musllinux_1_1_x86_64.whl", upload-time = 2024-08-06T20:32:38Z, size = 756611, hashes = { sha256 = "8b9c7197f7cb2738065c481a0461e50ad02f18c78cd75775628afb4d7137fb3b" } },
+    { name = "pyyaml-6.0.2-cp312-cp312-win32.whl", url = "https://files.pythonhosted.org/packages/df/d1/f5a275fdb252768b7a11ec63585bc38d0e87c9e05668a139fea92b80634c/PyYAML-6.0.2-cp312-cp312-win32.whl", upload-time = 2024-08-06T20:32:40Z, size = 140591, hashes = { sha256 = "ef6107725bd54b262d6dedcc2af448a266975032bc85ef0172c5f059da6325b4" } },
+    { name = "pyyaml-6.0.2-cp312-cp312-win_amd64.whl", url = "https://files.pythonhosted.org/packages/0c/e8/4f648c598b17c3d06e8753d7d13d57542b30d56e6c2dedf9c331ae56312e/PyYAML-6.0.2-cp312-cp312-win_amd64.whl", upload-time = 2024-08-06T20:32:41Z, size = 156338, hashes = { sha256 = "7e7401d0de89a9a855c839bc697c079a4af81cf878373abd7dc625847d25cbd8" } },
+    { name = "pyyaml-6.0.2-cp313-cp313-macosx_10_13_x86_64.whl", url = "https://files.pythonhosted.org/packages/ef/e3/3af305b830494fa85d95f6d95ef7fa73f2ee1cc8ef5b495c7c3269fb835f/PyYAML-6.0.2-cp313-cp313-macosx_10_13_x86_64.whl", upload-time = 2024-08-06T20:32:43Z, size = 181309, hashes = { sha256 = "efdca5630322a10774e8e98e1af481aad470dd62c3170801852d752aa7a783ba" } },
+    { name = "pyyaml-6.0.2-cp313-cp313-macosx_11_0_arm64.whl", url = "https://files.pythonhosted.org/packages/45/9f/3b1c20a0b7a3200524eb0076cc027a970d320bd3a6592873c85c92a08731/PyYAML-6.0.2-cp313-cp313-macosx_11_0_arm64.whl", upload-time = 2024-08-06T20:32:44Z, size = 171679, hashes = { sha256 = "50187695423ffe49e2deacb8cd10510bc361faac997de9efef88badc3bb9e2d1" } },
+    { name = "pyyaml-6.0.2-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", url = "https://files.pythonhosted.org/packages/7c/9a/337322f27005c33bcb656c655fa78325b730324c78620e8328ae28b64d0c/PyYAML-6.0.2-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", upload-time = 2024-08-06T20:32:46Z, size = 733428, hashes = { sha256 = "0ffe8360bab4910ef1b9e87fb812d8bc0a308b0d0eef8c8f44e0254ab3b07133" } },
+    { name = "pyyaml-6.0.2-cp313-cp313-manylinux_2_17_s390x.manylinux2014_s390x.whl", url = "https://files.pythonhosted.org/packages/a3/69/864fbe19e6c18ea3cc196cbe5d392175b4cf3d5d0ac1403ec3f2d237ebb5/PyYAML-6.0.2-cp313-cp313-manylinux_2_17_s390x.manylinux2014_s390x.whl", upload-time = 2024-08-06T20:32:51Z, size = 763361, hashes = { sha256 = "17e311b6c678207928d649faa7cb0d7b4c26a0ba73d41e99c4fff6b6c3276484" } },
+    { name = "pyyaml-6.0.2-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", url = "https://files.pythonhosted.org/packages/04/24/b7721e4845c2f162d26f50521b825fb061bc0a5afcf9a386840f23ea19fa/PyYAML-6.0.2-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", upload-time = 2024-08-06T20:32:53Z, size = 759523, hashes = { sha256 = "70b189594dbe54f75ab3a1acec5f1e3faa7e8cf2f1e08d9b561cb41b845f69d5" } },
+    { name = "pyyaml-6.0.2-cp313-cp313-musllinux_1_1_aarch64.whl", url = "https://files.pythonhosted.org/packages/2b/b2/e3234f59ba06559c6ff63c4e10baea10e5e7df868092bf9ab40e5b9c56b6/PyYAML-6.0.2-cp313-cp313-musllinux_1_1_aarch64.whl", upload-time = 2024-08-06T20:32:54Z, size = 726660, hashes = { sha256 = "41e4e3953a79407c794916fa277a82531dd93aad34e29c2a514c2c0c5fe971cc" } },
+    { name = "pyyaml-6.0.2-cp313-cp313-musllinux_1_1_x86_64.whl", url = "https://files.pythonhosted.org/packages/fe/0f/25911a9f080464c59fab9027482f822b86bf0608957a5fcc6eaac85aa515/PyYAML-6.0.2-cp313-cp313-musllinux_1_1_x86_64.whl", upload-time = 2024-08-06T20:32:56Z, size = 751597, hashes = { sha256 = "68ccc6023a3400877818152ad9a1033e3db8625d899c72eacb5a668902e4d652" } },
+    { name = "pyyaml-6.0.2-cp313-cp313-win32.whl", url = "https://files.pythonhosted.org/packages/14/0d/e2c3b43bbce3cf6bd97c840b46088a3031085179e596d4929729d8d68270/PyYAML-6.0.2-cp313-cp313-win32.whl", upload-time = 2024-08-06T20:33:03Z, size = 140527, hashes = { sha256 = "bc2fa7c6b47d6bc618dd7fb02ef6fdedb1090ec036abab80d4681424b84c1183" } },
+    { name = "pyyaml-6.0.2-cp313-cp313-win_amd64.whl", url = "https://files.pythonhosted.org/packages/fa/de/02b54f42487e3d3c6efb3f89428677074ca7bf43aae402517bc7cca949f3/PyYAML-6.0.2-cp313-cp313-win_amd64.whl", upload-time = 2024-08-06T20:33:04Z, size = 156446, hashes = { sha256 = "8388ee1976c416731879ac16da0aff3f63b286ffdd57cdeb95f3f2e085687563" } },
+]
 
 [[packages]]
 name = "reportlab"

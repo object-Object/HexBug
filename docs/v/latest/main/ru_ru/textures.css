@@ -1,7 +1,7 @@
   .texture-hexautomata-textures-item-reactive_focus-inner_active-blue-png {
     animation: texture-hexautomata-textures-item-reactive_focus-inner_active-blue-png 1.0s steps(1, start) infinite;
     background-size: 100%;
-    background-image: url("https://raw.githubusercontent.com/YukkuriC/HexAutomata/ad977b3ac3995708833441c897c83926b6fe2a01/common/src/main/resources/assets/hexautomata/textures/item/reactive_focus/inner_active/blue.png");
+    background-image: url("https://raw.githubusercontent.com/YukkuriC/HexAutomata/eae57dca494e92734a3bf366ca560709a642a9eb/common/src/main/resources/assets/hexautomata/textures/item/reactive_focus/inner_active/blue.png");
   }
   @keyframes texture-hexautomata-textures-item-reactive_focus-inner_active-blue-png {
       0%, 24.99% { background-position-y: 0% }
@@ -12,7 +12,7 @@
   .texture-hexautomata-textures-item-reactive_focus-inner_active-cyan-png {
     animation: texture-hexautomata-textures-item-reactive_focus-inner_active-cyan-png 1.0s steps(1, start) infinite;
     background-size: 100%;
-    background-image: url("https://raw.githubusercontent.com/YukkuriC/HexAutomata/ad977b3ac3995708833441c897c83926b6fe2a01/common/src/main/resources/assets/hexautomata/textures/item/reactive_focus/inner_active/cyan.png");
+    background-image: url("https://raw.githubusercontent.com/YukkuriC/HexAutomata/eae57dca494e92734a3bf366ca560709a642a9eb/common/src/main/resources/assets/hexautomata/textures/item/reactive_focus/inner_active/cyan.png");
   }
   @keyframes texture-hexautomata-textures-item-reactive_focus-inner_active-cyan-png {
       0%, 24.99% { background-position-y: 0% }
@@ -23,7 +23,7 @@
   .texture-hexautomata-textures-item-reactive_focus-inner_active-green-png {
     animation: texture-hexautomata-textures-item-reactive_focus-inner_active-green-png 1.0s steps(1, start) infinite;
     background-size: 100%;
-    background-image: url("https://raw.githubusercontent.com/YukkuriC/HexAutomata/ad977b3ac3995708833441c897c83926b6fe2a01/common/src/main/resources/assets/hexautomata/textures/item/reactive_focus/inner_active/green.png");
+    background-image: url("https://raw.githubusercontent.com/YukkuriC/HexAutomata/eae57dca494e92734a3bf366ca560709a642a9eb/common/src/main/resources/assets/hexautomata/textures/item/reactive_focus/inner_active/green.png");
   }
   @keyframes texture-hexautomata-textures-item-reactive_focus-inner_active-green-png {
       0%, 24.99% { background-position-y: 0% }
@@ -34,7 +34,7 @@
   .texture-hexautomata-textures-item-reactive_focus-inner_active-orange-png {
     animation: texture-hexautomata-textures-item-reactive_focus-inner_active-orange-png 1.0s steps(1, start) infinite;
     background-size: 100%;
-    background-image: url("https://raw.githubusercontent.com/YukkuriC/HexAutomata/ad977b3ac3995708833441c897c83926b6fe2a01/common/src/main/resources/assets/hexautomata/textures/item/reactive_focus/inner_active/orange.png");
+    background-image: url("https://raw.githubusercontent.com/YukkuriC/HexAutomata/eae57dca494e92734a3bf366ca560709a642a9eb/common/src/main/resources/assets/hexautomata/textures/item/reactive_focus/inner_active/orange.png");
   }
   @keyframes texture-hexautomata-textures-item-reactive_focus-inner_active-orange-png {
       0%, 24.99% { background-position-y: 0% }
@@ -45,7 +45,7 @@
   .texture-hexautomata-textures-item-reactive_focus-inner_active-purple-png {
     animation: texture-hexautomata-textures-item-reactive_focus-inner_active-purple-png 1.0s steps(1, start) infinite;
     background-size: 100%;
-    background-image: url("https://raw.githubusercontent.com/YukkuriC/HexAutomata/ad977b3ac3995708833441c897c83926b6fe2a01/common/src/main/resources/assets/hexautomata/textures/item/reactive_focus/inner_active/purple.png");
+    background-image: url("https://raw.githubusercontent.com/YukkuriC/HexAutomata/eae57dca494e92734a3bf366ca560709a642a9eb/common/src/main/resources/assets/hexautomata/textures/item/reactive_focus/inner_active/purple.png");
   }
   @keyframes texture-hexautomata-textures-item-reactive_focus-inner_active-purple-png {
       0%, 24.99% { background-position-y: 0% }
@@ -56,7 +56,7 @@
   .texture-hexautomata-textures-item-reactive_focus-inner_active-red-png {
     animation: texture-hexautomata-textures-item-reactive_focus-inner_active-red-png 1.0s steps(1, start) infinite;
     background-size: 100%;
-    background-image: url("https://raw.githubusercontent.com/YukkuriC/HexAutomata/ad977b3ac3995708833441c897c83926b6fe2a01/common/src/main/resources/assets/hexautomata/textures/item/reactive_focus/inner_active/red.png");
+    background-image: url("https://raw.githubusercontent.com/YukkuriC/HexAutomata/eae57dca494e92734a3bf366ca560709a642a9eb/common/src/main/resources/assets/hexautomata/textures/item/reactive_focus/inner_active/red.png");
   }
   @keyframes texture-hexautomata-textures-item-reactive_focus-inner_active-red-png {
       0%, 24.99% { background-position-y: 0% }
@@ -67,7 +67,7 @@
   .texture-hexautomata-textures-item-reactive_focus-inner_active-yellow-png {
     animation: texture-hexautomata-textures-item-reactive_focus-inner_active-yellow-png 1.0s steps(1, start) infinite;
     background-size: 100%;
-    background-image: url("https://raw.githubusercontent.com/YukkuriC/HexAutomata/ad977b3ac3995708833441c897c83926b6fe2a01/common/src/main/resources/assets/hexautomata/textures/item/reactive_focus/inner_active/yellow.png");
+    background-image: url("https://raw.githubusercontent.com/YukkuriC/HexAutomata/eae57dca494e92734a3bf366ca560709a642a9eb/common/src/main/resources/assets/hexautomata/textures/item/reactive_focus/inner_active/yellow.png");
   }
   @keyframes texture-hexautomata-textures-item-reactive_focus-inner_active-yellow-png {
       0%, 24.99% { background-position-y: 0% }

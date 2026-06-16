@@ -226,9 +226,9 @@ hatchling==1.29.0 \
     --hash=sha256:50af9343281f34785fab12da82e445ed987a6efb34fd8c2fc0f6e6630dbcc1b0 \
     --hash=sha256:793c31816d952cee405b83488ce001c719f325d9cda69f1fc4cd750527640ea6
     # via hatch
-hexdoc==1!0.1.0a39 \
-    --hash=sha256:3172e7846d0fe159199bd0f4e6c19341a18512c1dc838faa67d5250077fdf43b \
-    --hash=sha256:4cecfc7b45a36abb3698a3cdda395851d8c5eaf4f90648dae575174de864a5e6
+hexdoc==1!0.1.0a40 \
+    --hash=sha256:995dac6587475bc267ccedbb1b0d323fab2fd1d40968bcd847517a2d8490674f \
+    --hash=sha256:aaaf169a949cf03b11607c94fc239ffc9c45673364d80bdcd56413ce1d471309
     # via
     #   hexbug-data
     #   hexdoc-hexcasting
@@ -270,9 +270,9 @@ hexdoc-hexal==0.3.1.1.0 \
     # via
     #   hexbug-data
     #   hexdoc-hexic
-hexdoc-hexautomata==0.3.4.1.1 \
-    --hash=sha256:46fb1f5e9397b058c504a8b123f3a7bc4ae54b52f12cdd4f7b315d9112b9e597 \
-    --hash=sha256:be68dcd1ef9b36f3142184a945a574c837fe53d322514df3e4eb90d4f1cc756c
+hexdoc-hexautomata==0.3.5.1.1 \
+    --hash=sha256:5d54f086f0fcb0ef32a145fcb80c92f586028ff5c03f7447deb7b6671851f0bb \
+    --hash=sha256:d09c90fe8b2e1f2e490ba03a3c70df330db0e29cc39d2caad6fb361cdaa14bc4
     # via hexbug-data
 hexdoc-hexcassettes==1.1.4.1.0.0 \
     --hash=sha256:1fbed8efc71d30620c1a52780f3cc7d6706274285d07a8340f872974f3fcddaf \
@@ -381,9 +381,9 @@ hexdoc-hexoverpowered==0.11.7.1.1 \
     --hash=sha256:9b3637d91deca1216ef3e0c6b6a344ffd09876d816067bcae1efff875d8ccc60 \
     --hash=sha256:c9e8fc676990478d02c973101f48c576a94faaab7076ebaaf8796bc3724be229
     # via hexbug-data
-hexdoc-hexparse==1.10.2.2.1.1 \
-    --hash=sha256:0a29df10c667733787b9e6861512a542d3595abbe4234d072b84efc90802f89d \
-    --hash=sha256:6e242da72769a5a2e011b19fe0be08049c3c9e327649fcfe8c30899e9f7e56f1
+hexdoc-hexparse==1.11.1.1.1 \
+    --hash=sha256:7775b8715c728d8f17b6750345cd5c318cc36dc7680e3f568f3cbf8dac1435ee \
+    --hash=sha256:b816e2b47d64f9a4dc9ad0d70ead6179662313277d8fcc90e03e0cb6285f039e
     # via hexbug-data
 hexdoc-hexpose==1.0.0.1.0.0+hexbug
     # via
@@ -467,9 +467,9 @@ hexdoc-minecraft==1.20.1.1.0.dev1 \
     #   hexdoc-hexcasting
     #   hexdoc-hexic
     #   hexdoc-hexxyskies
-hexdoc-moreiotas==0.1.1.1.0 \
-    --hash=sha256:2e9dfdbc2d969ce2c13e806237723188e35c6f029b99a1143fbb077786116211 \
-    --hash=sha256:830d0fde94a0ea4a773605c67fd943ad977b438a1a4bb44d62751333b9a9662a
+hexdoc-moreiotas==0.1.2.1.0 \
+    --hash=sha256:e590a39547c9dd62ea45eb087b268dba9daee627d60117c191d3929fbdd2fdb0 \
+    --hash=sha256:eb59dd2e0f8d1393cda196b40c7414c1da3867d2b8967be146dd79256753e102
     # via
     #   hexbug-data
     #   hexdoc-hexal
@@ -1003,6 +1003,27 @@ pywin32-ctypes==0.2.3 ; sys_platform == 'win32' \
     --hash=sha256:8a1513379d709975552d202d942d9837758905c8d01eb82b8bcc30918929e7b8 \
     --hash=sha256:d162dc04946d704503b2edc4d55f3dba5c1d539ead017afa00142c38b9885755
     # via keyring
+pyyaml==6.0.2 \
+    --hash=sha256:0833f8694549e586547b576dcfaba4a6b55b9e96098b36cdc7ebefe667dfed48 \
+    --hash=sha256:0ffe8360bab4910ef1b9e87fb812d8bc0a308b0d0eef8c8f44e0254ab3b07133 \
+    --hash=sha256:17e311b6c678207928d649faa7cb0d7b4c26a0ba73d41e99c4fff6b6c3276484 \
+    --hash=sha256:1f71ea527786de97d1a0cc0eacd1defc0985dcf6b3f17bb77dcfc8c34bec4dc5 \
+    --hash=sha256:41e4e3953a79407c794916fa277a82531dd93aad34e29c2a514c2c0c5fe971cc \
+    --hash=sha256:50187695423ffe49e2deacb8cd10510bc361faac997de9efef88badc3bb9e2d1 \
+    --hash=sha256:68ccc6023a3400877818152ad9a1033e3db8625d899c72eacb5a668902e4d652 \
+    --hash=sha256:70b189594dbe54f75ab3a1acec5f1e3faa7e8cf2f1e08d9b561cb41b845f69d5 \
+    --hash=sha256:7e7401d0de89a9a855c839bc697c079a4af81cf878373abd7dc625847d25cbd8 \
+    --hash=sha256:80bab7bfc629882493af4aa31a4cfa43a4c57c83813253626916b8c7ada83476 \
+    --hash=sha256:8388ee1976c416731879ac16da0aff3f63b286ffdd57cdeb95f3f2e085687563 \
+    --hash=sha256:8b9c7197f7cb2738065c481a0461e50ad02f18c78cd75775628afb4d7137fb3b \
+    --hash=sha256:9b22676e8097e9e22e36d6b7bda33190d0d400f345f23d4065d48f4ca7ae0425 \
+    --hash=sha256:bc2fa7c6b47d6bc618dd7fb02ef6fdedb1090ec036abab80d4681424b84c1183 \
+    --hash=sha256:c70c95198c015b85feafc136515252a261a84561b7b1d51e3384e0655ddf25ab \
+    --hash=sha256:ce826d6ef20b1bc864f0a68340c8b3287705cae2f8b4b1d932177dcc76721725 \
+    --hash=sha256:d584d9ec91ad65861cc08d42e834324ef890a082e591037abe114850ff7bbc3e \
+    --hash=sha256:ef6107725bd54b262d6dedcc2af448a266975032bc85ef0172c5f059da6325b4 \
+    --hash=sha256:efdca5630322a10774e8e98e1af481aad470dd62c3170801852d752aa7a783ba
+    # via hexdoc
 reportlab==4.3.1 \
     --hash=sha256:0f37dd16652db3ef84363cf744632a28c38bd480d5bf94683466852d7bb678dd \
     --hash=sha256:230f78b21667194d8490ac9d12958d5c14686352db7fbe03b95140fafdf5aa97
