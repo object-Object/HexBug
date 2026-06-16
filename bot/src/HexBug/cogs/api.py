@@ -18,6 +18,7 @@ from fastapi import (
     WebSocketDisconnect,
     WebSocketException,
 )
+from fastapi.routing import APIRouter
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from httpx import AsyncClient
 from jwt import InvalidTokenError
@@ -207,11 +208,10 @@ async def get_version(bot: BotDependency) -> VersionInfo:
     )
 
 
-activity_app = FastAPI()
-app.mount("/activity", activity_app)
+activity_router = APIRouter(prefix="/activity", include_in_schema=False)
 
 
-@activity_app.post("/token")
+@activity_router.post("/token")
 async def post_activity_token(
     body: ActivityTokenRequest,
     bot: BotDependency,
@@ -237,7 +237,7 @@ async def post_activity_token(
     )
 
 
-@activity_app.post("/patterns")
+@activity_router.post("/patterns")
 async def post_activity_patterns(
     body: list[HexPattern],
     bot: BotDependency,
@@ -255,7 +255,7 @@ async def post_activity_patterns(
             value.view.on_stop_drawing()
 
 
-@activity_app.websocket("/ws")
+@activity_router.websocket("/ws")
 async def websocket_activity_ws(
     websocket: WebSocket,
     bot: BotDependency,
@@ -289,6 +289,9 @@ async def handle_activity_c2s_message(
                 pattern=pattern,
                 info=bot.registry.try_match_pattern(pattern),
             )
+
+
+app.include_router(activity_router)
 
 
 @dataclass(eq=False)
