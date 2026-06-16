@@ -335,9 +335,9 @@ hexdoc-hexcellular==1.1.1.1.0.0 \
     # via
     #   hexbug-data
     #   hexdoc-hexic
-hexdoc-hexchanting==1.1.7.1.0 \
-    --hash=sha256:60cb4e390cb59c7420cf97958938429e495dd8aaeeb8aa59007a4493351e52bc \
-    --hash=sha256:83021fce6d220ecfda276735355dc3fad0e405f21d0d8c4f243161ec3490668b
+hexdoc-hexchanting==1.2.0.1.0 \
+    --hash=sha256:2f484978c1c7c3df6321995fd0623fa248ff574f892ab9497f9f0f12d9b1bbb2 \
+    --hash=sha256:c88ea03b6abb6909f0e13eda645a40658f82d8e2a2165f68e29d747d0369610e
     # via hexbug-data
 hexdoc-hexdebug==0.8.0.1.20.1.1.1 \
     --hash=sha256:281c2ded5e5f21ae42a16978befe9448d8e61267cc99e6b8d6145c9963f7c6a1 \
@@ -377,9 +377,9 @@ hexdoc-hexodus==1.0.0.1.0.0 \
     # via
     #   hexbug-data
     #   hexdoc-hexxyskies
-hexdoc-hexoverpowered==0.11.6.1.1 \
-    --hash=sha256:04f6e3527346df57c8e3748088b03cc7f1555e6025e4522b376efec5fbe89aa7 \
-    --hash=sha256:e91d12337bf7581d230039346e7bfba3de30f471d2533704b12e581ffa862731
+hexdoc-hexoverpowered==0.11.7.1.1 \
+    --hash=sha256:9b3637d91deca1216ef3e0c6b6a344ffd09876d816067bcae1efff875d8ccc60 \
+    --hash=sha256:c9e8fc676990478d02c973101f48c576a94faaab7076ebaaf8796bc3724be229
     # via hexbug-data
 hexdoc-hexparse==1.10.2.2.1.1 \
     --hash=sha256:0a29df10c667733787b9e6861512a542d3595abbe4234d072b84efc90802f89d \
@@ -448,9 +448,9 @@ hexdoc-ioticblocks==1.0.2.1.20.1.1.0 \
     #   hexbug-data
     #   hexdoc-focalworks
     #   hexdoc-hexdebug
-hexdoc-lapisworks==1.5.8.2.1.7.dev0 \
-    --hash=sha256:92c7586c2581ab5df0153588b02e519dca931443b17c35c39f754f3d75a06fe0 \
-    --hash=sha256:dc995d84375991737e74759b6c049f9c420ab423109d0843235af2db907dcdd5
+hexdoc-lapisworks==1.5.8.4.1.8.dev0 \
+    --hash=sha256:0d81ad86efdf5e21e9478c8f2020808529c5c095559a4c530dbf1561ecc2d6c3 \
+    --hash=sha256:bd950dc870caf05fc5680068200a6a3eef55723f4c5dd5b5b5929ece4419fd89
     # via hexbug-data
 hexdoc-lessertp==1.2.4.1.2.dev0 \
     --hash=sha256:3248530e488231e36c1b4e2d64e98cbf5c5820a274457470834cfabab7469734 \
