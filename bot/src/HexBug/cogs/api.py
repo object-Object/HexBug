@@ -29,9 +29,11 @@ from starlette.status import (
 )
 from uvicorn import Config, Server
 
+from HexBug.__version__ import VERSION
 from HexBug.cogs.app_commands.patterns import PatternsCog
 from HexBug.core.bot import HexBugBot
 from HexBug.core.cog import HexBugCog
+from HexBug.core.env import BotEnvironment
 from HexBug.data.hex_math import HexPattern
 from HexBug.data.registry import PatternMatchResult
 from HexBug.utils.jwt import JWTModel
@@ -42,6 +44,17 @@ logger = logging.getLogger(__name__)
 class HealthInfo(BaseModel):
     websocket_latency: float
     longest_active_command_runtime: float | None
+
+
+class VersionInfo(BaseModel):
+    version: str
+    environment: BotEnvironment
+    deployment: VersionInfoDeployment | None
+
+
+class VersionInfoDeployment(BaseModel):
+    timestamp: datetime
+    commit_sha: str
 
 
 # Keep in sync with activity/src/hooks/useDiscordAuth.ts
@@ -180,7 +193,25 @@ async def get_health(
     )
 
 
-@app.post("/activity/token")
+@app.get("/version")
+async def get_version(bot: BotDependency) -> VersionInfo:
+    return VersionInfo(
+        version=VERSION,
+        environment=bot.env.environment,
+        deployment=VersionInfoDeployment(
+            timestamp=bot.env.deployment.timestamp,
+            commit_sha=bot.env.deployment.commit_sha,
+        )
+        if bot.env.deployment
+        else None,
+    )
+
+
+activity_app = FastAPI()
+app.mount("/activity", activity_app)
+
+
+@activity_app.post("/token")
 async def post_activity_token(
     body: ActivityTokenRequest,
     bot: BotDependency,
@@ -206,7 +237,7 @@ async def post_activity_token(
     )
 
 
-@app.post("/activity/patterns")
+@activity_app.post("/patterns")
 async def post_activity_patterns(
     body: list[HexPattern],
     bot: BotDependency,
@@ -224,7 +255,7 @@ async def post_activity_patterns(
             value.view.on_stop_drawing()
 
 
-@app.websocket("/activity/ws")
+@activity_app.websocket("/ws")
 async def websocket_activity_ws(
     websocket: WebSocket,
     bot: BotDependency,

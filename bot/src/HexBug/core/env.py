@@ -19,12 +19,15 @@ SETTINGS_CONFIG = SettingsConfigDict(
 )
 
 
+type BotEnvironment = Literal["dev", "beta", "prod"]
+
+
 class BaseSettings(PydanticBaseSettings):
     model_config = SETTINGS_CONFIG
 
 
 class HexBugEnv(BaseSettings):
-    environment: Literal["dev", "beta", "prod"]
+    environment: BotEnvironment
     token: SecretStr
     client_id: int
     client_secret: SecretStr
