@@ -963,20 +963,20 @@ wheels = [
 
 [[package]]
 name = "hex-renderer-py"
-version = "0.1.5"
+version = "0.1.9"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/8b/0f/d8554fb4442c506158949572a91a6d5303593b3b1a111dba02d1665ad657/hex_renderer_py-0.1.5.tar.gz", hash = "sha256:c0747b1820aad78568a99d0879ed8095b6a29465e4e1836a209407c11bd7fd5f", size = 1042982, upload-time = "2025-09-12T02:56:09.748Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/06/55/a6b6fcb2bfc4872f555a73b7f1f2770bc0468d05073fa91100659f847339/hex_renderer_py-0.1.9.tar.gz", hash = "sha256:6c7dc59a0ba493efb9b1e73ba4950204d39f2f1f19a69eb874c650377a8809ad", size = 1036214, upload-time = "2026-06-17T03:33:13.197Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/65/9b/6a1d1a1438b061e281ee299de05aa9061b646eaf5e873124c2afec57a5f9/hex_renderer_py-0.1.5-cp312-cp312-macosx_10_12_x86_64.whl", hash = "sha256:ce5d54b71608efad0c4317dfa8a013b9b39ec4b186ccfb4b5034a41689cc959d", size = 819301, upload-time = "2025-09-12T02:55:57.779Z" },
-    { url = "https://files.pythonhosted.org/packages/a4/1e/6b7fd2b42af9ac20dccfdf845008735bb90dd307b85bb703948635f4102b/hex_renderer_py-0.1.5-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:08642fb0500f1c3552cd77c1173351efb6b1f675c830160e6d6656823dcb31de", size = 773008, upload-time = "2025-09-12T02:55:58.886Z" },
-    { url = "https://files.pythonhosted.org/packages/58/35/fcbf5fa60af283d37d272adad335165d12abea9c261b8ebba7e09079c0bc/hex_renderer_py-0.1.5-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:8e567b0086bfce19641ae5b485e16d60537e4d4bf4675c8f49152af14b9fb8d6", size = 845085, upload-time = "2025-09-12T02:56:00.015Z" },
-    { url = "https://files.pythonhosted.org/packages/b7/1b/04a77e14a9cd61f1217979dcd4e0ffebcac5ad03a01649814b95570b1758/hex_renderer_py-0.1.5-cp312-cp312-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:443ce9b0e88b5f8af37c6bcee9001e215f00c59ec327085e44a00d8e3691b044", size = 925916, upload-time = "2025-09-12T02:56:01.405Z" },
-    { url = "https://files.pythonhosted.org/packages/61/44/10893e7e67716c025960e3595e0f8bd023c268922299ad84215791cb8a0f/hex_renderer_py-0.1.5-cp312-cp312-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:13fc2adeb2adedae2439f7eeeb3c68bc177b42c142fa05b54ff3e0f18bb496e1", size = 1078701, upload-time = "2025-09-12T02:56:02.651Z" },
-    { url = "https://files.pythonhosted.org/packages/68/6b/21ad27b208ed1155828a81ba5f296a1f910623003dab527bd22b12b3be53/hex_renderer_py-0.1.5-cp312-cp312-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:4d8512720b4113bf8701d31e4d83ea586f9f7901c7f9c5616cc2a677068474a6", size = 1014536, upload-time = "2025-09-12T02:56:03.824Z" },
-    { url = "https://files.pythonhosted.org/packages/73/61/8a3f39403d15fa6b549d7e28e21d3979a0ee3793ecac37c661133b77ab71/hex_renderer_py-0.1.5-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:7a77333e338fb89a44c8881e9be90880de9b31343bc68c0507ce3b9813c22714", size = 879163, upload-time = "2025-09-12T02:56:04.949Z" },
-    { url = "https://files.pythonhosted.org/packages/38/50/ea47cc172cf2926d9d86003eeb6a7f9944e212c87361c32d8e3e25ea1967/hex_renderer_py-0.1.5-cp312-cp312-manylinux_2_5_i686.manylinux1_i686.whl", hash = "sha256:4474fbd3cd7edeed2e67bd8c48915c05dd5f222ff87ea253ca65cc96ab97b2eb", size = 929299, upload-time = "2025-09-12T02:56:06.125Z" },
-    { url = "https://files.pythonhosted.org/packages/4d/28/64d8a7fd8644cddddebc3ec7e639a91819f937a7671a3da4e61cb4f2a9f2/hex_renderer_py-0.1.5-cp312-cp312-win32.whl", hash = "sha256:a2309f5228b19aa829c84ca834c4d4a5a4eeed3a6f2d082e87ca83b5ab3c4222", size = 633917, upload-time = "2025-09-12T02:56:07.533Z" },
-    { url = "https://files.pythonhosted.org/packages/67/1e/4c83188615abe57bbfd1b4e075add11d7d2fbf60164396dfa4714d80ceea/hex_renderer_py-0.1.5-cp312-cp312-win_amd64.whl", hash = "sha256:c6a0930d4a46c31c5271b2508039adcdc3e43a4b0555e73b1a01a483401b518c", size = 671706, upload-time = "2025-09-12T02:56:08.628Z" },
+    { url = "https://files.pythonhosted.org/packages/ab/9d/7897a7a0bcd53604a0f53bcf8e3ff977a175bb13f234d1b15cc6b696ea28/hex_renderer_py-0.1.9-cp312-cp312-macosx_10_12_x86_64.whl", hash = "sha256:edea913f1abc17b052040065e1858f5b6f0e732eb666c133050f6a16f00ac798", size = 807596, upload-time = "2026-06-17T03:33:00.274Z" },
+    { url = "https://files.pythonhosted.org/packages/3b/37/1ed7457cfbdd3aef7e7d1d7d91d81d5bf62c84530554e905ffc3bedb3874/hex_renderer_py-0.1.9-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:61fe0853d99de999ab734814eb823b8d760bb9674f75816e843d26b754b9881d", size = 771557, upload-time = "2026-06-17T03:33:01.459Z" },
+    { url = "https://files.pythonhosted.org/packages/73/c0/89c44d53f6f03b79dea8bd6b4c1d93b9fbef986996e791dce67fa54f32c7/hex_renderer_py-0.1.9-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:014f8451febf4f7dc393687c623962fe5382e37f7b5bd2043e2c81b2a874c347", size = 854826, upload-time = "2026-06-17T03:33:02.654Z" },
+    { url = "https://files.pythonhosted.org/packages/cf/fa/77ac3fa9413b524b93f4ba886a4800dbebe4a24c17144042f23d2ddcdd49/hex_renderer_py-0.1.9-cp312-cp312-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:bc48470bea15782ce0892a91554877657e93142e54ecc005e98064c858b0f8e1", size = 939681, upload-time = "2026-06-17T03:33:03.9Z" },
+    { url = "https://files.pythonhosted.org/packages/d2/17/30228d28b4e7136d05b0cf2afe945d8b985abbddd0ea4930f66c2cf4efe5/hex_renderer_py-0.1.9-cp312-cp312-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:bba45600633f393e1d39b9f61134253dd644694083b47fc022f0ab4e011b78ff", size = 1070670, upload-time = "2026-06-17T03:33:05.027Z" },
+    { url = "https://files.pythonhosted.org/packages/44/e1/1fee0bf23a26c9cbd6fb2900b4ddd858f8e65251fc50484964c9fbe40d69/hex_renderer_py-0.1.9-cp312-cp312-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:e85751bedd0d13154edd18227061527b749b454ac338d5fe7bbc59e88740a4aa", size = 1032394, upload-time = "2026-06-17T03:33:06.539Z" },
+    { url = "https://files.pythonhosted.org/packages/95/1c/8e98216cd2de88259c67b465a209a3da97a02250c71fe548298743a3d88e/hex_renderer_py-0.1.9-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:c6ca703bee19db8409eec6cf41ae6c3ccfd048f9375f7a1c8b58d0a46563ea45", size = 869541, upload-time = "2026-06-17T03:33:07.764Z" },
+    { url = "https://files.pythonhosted.org/packages/77/c6/fbe783b41a0a8d0cb0562cd68e1b02f9bb49a7caed121069269df90e0e32/hex_renderer_py-0.1.9-cp312-cp312-manylinux_2_5_i686.manylinux1_i686.whl", hash = "sha256:eab88cd7917ea69901c8a908b9010e21dbd3a5684a028679e541184b66ede9ac", size = 931450, upload-time = "2026-06-17T03:33:09.019Z" },
+    { url = "https://files.pythonhosted.org/packages/33/73/797d6769904440ae5638ea88e69a783f103d4e7ab83c1259c44fb2d3a287/hex_renderer_py-0.1.9-cp312-cp312-win32.whl", hash = "sha256:69de518d24b298c80e3cbb4c60626391213c650b6b0a52fa7a5cf50764f7808f", size = 639586, upload-time = "2026-06-17T03:33:10.737Z" },
+    { url = "https://files.pythonhosted.org/packages/78/d9/be5abe75e3fd0e1867186e45ded064557f4472417596c19bde5a97f11d1c/hex_renderer_py-0.1.9-cp312-cp312-win_amd64.whl", hash = "sha256:87f6577306546bed8c133414ec4216e77c1a52d0959a62a618f1a2cd399da104", size = 682451, upload-time = "2026-06-17T03:33:11.858Z" },
 ]
 
 [[package]]
@@ -1019,7 +1019,7 @@ requires-dist = [
     { name = "discord-py", specifier = ">=2.7.1" },
     { name = "fastapi", specifier = ">=0.115.12" },
     { name = "fluent-runtime", specifier = ">=0.4.0" },
-    { name = "hex-renderer-py", specifier = ">=0.1.5" },
+    { name = "hex-renderer-py", specifier = ">=0.1.9" },
     { name = "hexbug-data", editable = "data" },
     { name = "hexbug-data", extras = ["full"], marker = "extra == 'data'", editable = "data" },
     { name = "hexnumgen", specifier = ">=0.4.0" },

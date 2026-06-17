@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [UNRELEASED]
 
+### Fixed
+
+- Updated `hex-renderer-py` to fix an edge case where `/patterns` commands could sometimes produce overlapping patterns.
+
 ### Mods Updated
 
 - HexAutomata: 0.3.5
