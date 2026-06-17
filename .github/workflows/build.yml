@@ -117,8 +117,8 @@ jobs:
       - name: Upload synth artifact
         uses: actions/upload-artifact@v7
         with:
+          name: aws-cdk-synth
           path: cdk.out
-          archive: false
 
   build-hexdoc:
     runs-on: ubuntu-latest
