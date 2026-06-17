@@ -355,8 +355,8 @@ hexdoc-hexgender==1.0.4.1.0 \
     --hash=sha256:36e381778817532dfd2e737baea385f41608cdbcf6f8412b95e8ccced5a59572 \
     --hash=sha256:bc32f632b55e61fc08dcad004f5880f446e6a279475a2134c79bf07589098283
     # via hexbug-data
-hexdoc-hexic==1.4.6.1.1.post1 \
-    --hash=sha256:7932301b3fb6522abac8591289875827fd86da6e3878483cfd98c0b40f9b933f
+hexdoc-hexic==2.0.0.1.0 \
+    --hash=sha256:e598363b1c3c3a51dd02d4dd8233871a7cd06d56d9f3aa2d79a694f363b8b87d
     # via hexbug-data
 hexdoc-hexical @ https://github.com/miyucomics/hexical/raw/9e065b5e7995efc9045ab8cecd1f8838106df171/docs/v/latest/main/dist/hexdoc_hexical-2.0.0.1.0.0-py3-none-any.whl \
     --hash=sha256:2089d91d74e18e057199ede29949ce682d337dc6346e68be9e4d692f015dc380
