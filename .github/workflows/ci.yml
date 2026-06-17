@@ -120,9 +120,9 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Download image artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
-          name: docker-image
+          name: image.tar
           path: ${{ runner.temp }}
 
       - name: Load image
@@ -187,9 +187,9 @@ jobs:
           uv sync --locked --no-dev --package HexBug-web
 
       - name: Download hexdoc.toml artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
-          name: hexdoc-toml
+          name: hexdoc.toml
 
       - name: Merge hexdoc
         uses: hexdoc-dev/actions/merge@v1
@@ -198,7 +198,7 @@ jobs:
           site-url: ${{ needs.build.outputs.pages-url }}
 
       - name: Download activity artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: activity
           path: _site/dst/docs/hexbug-${{ needs.setup.outputs.stage }}-activity
@@ -222,7 +222,7 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: hexdoc-build
           path: dist

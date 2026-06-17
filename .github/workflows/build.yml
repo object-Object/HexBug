@@ -86,17 +86,17 @@ jobs:
           outputs: type=docker,dest=${{ runner.temp }}/image.tar
 
       - name: Upload image artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
-          name: docker-image
           path: ${{ runner.temp }}/image.tar
+          archive: false
           retention-days: 7
 
       - name: Upload registry artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
-          name: registry
           path: registry.json
+          archive: false
 
   build-aws-cdk:
     runs-on: ubuntu-latest
@@ -115,10 +115,10 @@ jobs:
         run: cdk synth --ci --no-lookups --strict
 
       - name: Upload synth artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
-          name: aws-cdk-synth
           path: cdk.out
+          archive: false
 
   build-hexdoc:
     runs-on: ubuntu-latest
@@ -166,10 +166,10 @@ jobs:
           release: ${{ inputs.hexdoc-release || 'false' }}
 
       - name: Upload hexdoc.toml artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
-          name: hexdoc-toml
           path: hexdoc.toml
+          archive: false
 
   build-activity:
     runs-on: ubuntu-latest
@@ -197,7 +197,7 @@ jobs:
         run: yarn build
 
       - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: activity
           path: activity/dist

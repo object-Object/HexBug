@@ -10,6 +10,9 @@ on:
         type: string
         required: true
 
+env:
+  OUTPUTS_FILE: ${{ inputs.stage }}-aws-cdk-outputs.json
+
 jobs:
   deploy-aws-cdk:
     runs-on: ubuntu-latest
@@ -31,19 +34,21 @@ jobs:
           role-to-assume: repo
 
       - name: Download synth artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: aws-cdk-synth
           path: cdk.out
 
       - name: Deploy stack
-        run: cdk deploy --ci --no-lookups --require-approval=never --app=cdk.out --outputs-file=outputs.json ${{ inputs.stage }}
+        run: |
+          cdk deploy --ci --no-lookups --require-approval=never --app=cdk.out \
+            --outputs-file=${{ env.OUTPUTS_FILE }} ${{ inputs.stage }}
 
       - name: Upload outputs artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
-          name: ${{ inputs.stage }}-aws-cdk-outputs
-          path: outputs.json
+          path: ${{ env.OUTPUTS_FILE }}
+          archive: false
 
   deploy-codedeploy:
     needs: deploy-aws-cdk
@@ -61,15 +66,15 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Download outputs artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
-          name: ${{ inputs.stage }}-aws-cdk-outputs
+          name: ${{ env.OUTPUTS_FILE }}
 
       - name: Parse outputs
         id: parse
         uses: object-Object/ci/parse-cdk-outputs@v0
         with:
-          file: outputs.json
+          file: ${{ env.OUTPUTS_FILE }}
 
       - uses: object-Object/ci/setup@v0
         with:
