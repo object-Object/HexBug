@@ -637,10 +637,18 @@ UNDOCUMENTED_PATTERNS = ResourceSet(
         ResourceLocation("complexhex", "chloe/make"),
         ResourceLocation("complexhex", "cnarg"),
         ResourceLocation("ephemera", "hashbits"),
+        ResourceLocation("hexic", "blind"),
         ResourceLocation("hexic", "dye_offhand"),
+        ResourceLocation("hexic", "findview"),
+        ResourceLocation("hexic", "fox"),
+        ResourceLocation("hexic", "make_cme"),
+        ResourceLocation("hexic", "moveconcept"),
+        ResourceLocation("hexic", "moveentity"),
+        ResourceLocation("hexic", "omni_close"),
+        ResourceLocation("hexic", "omni_open"),
         ResourceLocation("hexic", "spellmind/restore"),
         ResourceLocation("hexic", "spellmind/save"),
-        ResourceLocation("hexic", "tripwire"),
+        ResourceLocation("hexic", "unfox"),
         ResourceLocation("hexical", "disguise_mage_block"),
         ResourceLocation("hexical", "tweak_mage_block"),
         ResourceLocation("hexpose", "entity_name"),
@@ -654,8 +662,6 @@ UNDOCUMENTED_PATTERNS = ResourceSet(
         ResourceLocation("oneironaut", "signitem"),
         # lmao what
         ResourceLocation("ephemera", "no"),
-        ResourceLocation("hexic", "free"),
-        ResourceLocation("hexic", "malloc"),
         ResourceLocation("hextweaks", "suicide"),
         ResourceLocation("oneironaut", "circle"),
     ],
@@ -700,8 +706,10 @@ UNTITLED_PAGES: set[tuple[ResourceLocation, str]] = {
 
 # replace the pattern's name entirely
 PATTERN_NAME_OVERRIDES: dict[ResourceLocation, str] = {
-    ResourceLocation("hexpose", "read_book"): "Reading Purification (book)",
+    ResourceLocation("hexic", "findview"): "Reflection Purification (Hexic)",
+    # ↑ undocumented; renamed before next release
     ResourceLocation("hexpose", "create_text"): "Reading Purification (text)",
+    ResourceLocation("hexpose", "read_book"): "Reading Purification (book)",
 }
 
 # append the mod's name to the pattern's name
