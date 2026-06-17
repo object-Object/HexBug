@@ -16,7 +16,6 @@ services:
         target: "${METRICS_PORT:-6500}"
     environment:
       DB_URL: postgresql+psycopg://postgres:postgres@postgres/postgres
-      HEALTH_CHECK_URL: "http://localhost:${API_PORT:-6502}${API_ROOT_PATH:-}/health"
 
   postgres:
     image: postgres:17

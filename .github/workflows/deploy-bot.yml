@@ -90,6 +90,7 @@ jobs:
           JWT_PUBLIC_KEY="${{ vars[format('{0}_JWT_PUBLIC_KEY', inputs.stage)] }}"
           API_PORT="${{ vars.API_PORT }}"
           API_ROOT_PATH="/api"
+          API_BASE_URL="${{ vars.API_BASE_URL }}"
           METRICS_PORT="${{ vars.METRICS_PORT }}"
           DEPLOYMENT="{}"
           DEPLOYMENT__COMMIT_SHA="${{ github.sha }}"

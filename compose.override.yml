@@ -4,6 +4,7 @@ services:
     build: .
     environment:
       ENVIRONMENT: dev
+      HEALTH_CHECK_URL: "http://localhost:${API_PORT:-6502}${API_ROOT_PATH:-}/health"
 
   postgres:
     ports:

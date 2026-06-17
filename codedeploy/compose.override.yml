@@ -3,6 +3,8 @@ services:
   bot:
     restart: unless-stopped
     image: "${IMAGE}"
+    environment:
+      HEALTH_CHECK_URL: "${API_BASE_URL}${API_ROOT_PATH}/health"
 
   postgres:
     restart: unless-stopped
