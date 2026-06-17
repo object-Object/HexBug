@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and [Pydantic's HISTORY.md](https://github.com/pydantic/pydantic/blob/main/HISTORY.md), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [UNRELEASED]
+## `2.10.1` - 2026-06-17
 
 ### Fixed
 
@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 - HexAutomata: 0.3.5
 - Hexchanting: 1.2.0
+- Hexic: 2.0.0
 - HexOverpowered: 0.11.7
 - HexParse: 1.11.1
 - Lapisworks: 1.5.8.4
