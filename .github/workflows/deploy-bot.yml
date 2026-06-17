@@ -25,7 +25,7 @@ jobs:
       group: deploy-aws-cdk
       cancel-in-progress: false
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: object-Object/ci/setup@v0
         with:
@@ -63,7 +63,7 @@ jobs:
       group: deploy-codedeploy
       cancel-in-progress: false
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Download outputs artifact
         uses: actions/download-artifact@v8
