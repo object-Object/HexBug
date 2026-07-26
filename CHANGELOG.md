@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and [Pydantic's HISTORY.md](https://github.com/pydantic/pydantic/blob/main/HISTORY.md), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [UNRELEASED]
+
+### Mods Updated
+
+- Caduceus: 0.3.0+1.20.1
+- HexDebug: 0.8.1+1.20.1
+- HexParse: 1.11.2
+- Hextra Patterns: 1.8.0
+- Yet Another Hex Addon: 0.4.0
+
 ## `2.10.1` - 2026-06-17
 
 ### Fixed

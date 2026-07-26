@@ -576,28 +576,28 @@ SPECIAL_HANDLERS: dict[ResourceLocation, SpecialHandler[Any]] = {
             id=ResourceLocation("hexthings", "noop"),
         ),
         HextrapatsVectorSpecialHandler(
-            id=ResourceLocation("hextrapats", "scaled_vec_x"),
+            id=ResourceLocation("hextrapats", "vec_x"),
             positive_prefix="aeqqqqqaw",
             negative_prefix="aqeeeeedw",
             components=1,
             axis="X",
         ),
         HextrapatsVectorSpecialHandler(
-            id=ResourceLocation("hextrapats", "scaled_vec_y"),
+            id=ResourceLocation("hextrapats", "vec_y"),
             positive_prefix="weqqqqqaw",
             negative_prefix="wqeeeeedw",
             components=1,
             axis="Y",
         ),
         HextrapatsVectorSpecialHandler(
-            id=ResourceLocation("hextrapats", "scaled_vec_z"),
+            id=ResourceLocation("hextrapats", "vec_z"),
             positive_prefix="deqqqqqaw",
             negative_prefix="dqeeeeedw",
             components=1,
             axis="Z",
         ),
         HextrapatsVectorSpecialHandler(
-            id=ResourceLocation("hextrapats", "scaled_vec_all"),
+            id=ResourceLocation("hextrapats", "vec_1"),
             positive_prefix="qeqqqqqaw",
             negative_prefix="qqeeeeedw",
             components=3,
@@ -625,6 +625,9 @@ DISABLED_PATTERNS: set[ResourceLocation] = {
     ResourceLocation("hexcasting", "const/vec/x"),
     ResourceLocation("hexcasting", "const/vec/y"),
     ResourceLocation("hexcasting", "const/vec/z"),
+    ResourceLocation("yaha", "stand_rotate_upper"),
+    ResourceLocation("yaha", "stand_rotate_middle"),
+    ResourceLocation("yaha", "stand_rotate_lower"),
 }
 
 # load these, but suppress the warning if we can't find any operators
@@ -688,7 +691,7 @@ SPECIAL_HANDLER_CONFLICTS: set[tuple[ResourceLocation, ResourceLocation, Any]] =
         "w",
     ),
     (
-        ResourceLocation("hextrapats", "scaled_vec_x"),
+        ResourceLocation("hextrapats", "vec_x"),
         ResourceLocation("hexal", "link/get_index"),
         0.5,
     ),
