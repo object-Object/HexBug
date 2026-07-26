@@ -1069,12 +1069,14 @@ full = [
     { name = "hexdoc-hexgender" },
     { name = "hexdoc-hexic" },
     { name = "hexdoc-hexical" },
+    { name = "hexdoc-hexintent" },
     { name = "hexdoc-hexkeys" },
     { name = "hexdoc-hexmapping" },
     { name = "hexdoc-hexodus" },
     { name = "hexdoc-hexoverpowered" },
     { name = "hexdoc-hexparse" },
     { name = "hexdoc-hexpose" },
+    { name = "hexdoc-hexssence" },
     { name = "hexdoc-hexstruction" },
     { name = "hexdoc-hextended" },
     { name = "hexdoc-hexthings" },
@@ -1123,12 +1125,14 @@ requires-dist = [
     { name = "hexdoc-hexgender", marker = "extra == 'full'", specifier = "==1.0.4.*" },
     { name = "hexdoc-hexic", marker = "extra == 'full'", specifier = "==2.0.0.*" },
     { name = "hexdoc-hexical", marker = "extra == 'full'", url = "https://github.com/miyucomics/hexical/raw/9e065b5e7995efc9045ab8cecd1f8838106df171/docs/v/latest/main/dist/hexdoc_hexical-2.0.0.1.0.0-py3-none-any.whl" },
+    { name = "hexdoc-hexintent", marker = "extra == 'full'", specifier = "==2.1.7.*" },
     { name = "hexdoc-hexkeys", marker = "extra == 'full'", specifier = "==0.1.6.*" },
     { name = "hexdoc-hexmapping", marker = "extra == 'full'", specifier = "==0.0.3.*" },
     { name = "hexdoc-hexodus", marker = "extra == 'full'", specifier = "==1.0.0.*" },
     { name = "hexdoc-hexoverpowered", marker = "extra == 'full'", specifier = "==0.11.7.*" },
     { name = "hexdoc-hexparse", marker = "extra == 'full'", specifier = "==1.11.2.*" },
     { name = "hexdoc-hexpose", marker = "extra == 'full'", specifier = "==1.0.0.1.0.0+hexbug" },
+    { name = "hexdoc-hexssence", marker = "extra == 'full'", specifier = "==0.1.1.1.20.1.*" },
     { name = "hexdoc-hexstruction", marker = "extra == 'full'", specifier = "==1.3.1.1.20.1.*" },
     { name = "hexdoc-hextended", marker = "extra == 'full'", url = "https://github.com/abilliontrillionstars/hextended-staves/raw/0e6e0a61b7f4d3e79761b216cfebc1141e19b30b/docs/v/latest/main/dist/hexdoc_hextended-2.0.1.1.0.dev0-py3-none-any.whl" },
     { name = "hexdoc-hexthings", marker = "extra == 'full'", specifier = "==0.1.7.1.20.1.*" },
@@ -1490,6 +1494,20 @@ requires-dist = [
 provides-extras = ["dev"]
 
 [[package]]
+name = "hexdoc-hexintent"
+version = "2.1.7.1.0.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "hexdoc" },
+    { name = "hexdoc-hexcasting" },
+    { name = "hexdoc-minecraft" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/42/a7/0671d1745bff4d7ff177649ce2b6fe21f6e388add6665bf587171af4ec71/hexdoc_hexintent-2.1.7.1.0.0.tar.gz", hash = "sha256:e5f7e175ccedab029a8cd29fe1c73e4f4a0b30c1f5c0d26d7db383124c25977a", size = 7245309, upload-time = "2026-06-07T11:04:07.291Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/43/ce/fbb4cb91d528576edd4907777573d98f8854b669f2b9844868641e3ec5ae/hexdoc_hexintent-2.1.7.1.0.0-py3-none-any.whl", hash = "sha256:18631482f237c4dc5130f8bfad9cbf77eae849d324afc47f7613ca4169bb03ab", size = 7638027, upload-time = "2026-06-07T11:04:05.073Z" },
+]
+
+[[package]]
 name = "hexdoc-hexkeys"
 version = "0.1.6.1.0.dev0"
 source = { registry = "https://pypi.org/simple" }
@@ -1558,6 +1576,18 @@ dependencies = [
 ]
 wheels = [
     { path = "hexdoc_hexpose-1.0.0.1.0.0+hexbug-py3-none-any.whl" },
+]
+
+[[package]]
+name = "hexdoc-hexssence"
+version = "0.1.1.1.20.1.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "hexdoc-hexcasting" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/75/09/ff65f879fbcc041aa5fb25b6a4c152f8338a0b00d8ece147d01d08b1a626/hexdoc_hexssence-0.1.1.1.20.1.1.0.tar.gz", hash = "sha256:9d079381e9c1e15ab35395f6fbe444b13c6cda5e708450489473dfc5bc9e17c6", size = 13025, upload-time = "2026-05-31T15:34:22.646Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/2f/87/f358e217fdecea7b15a14af284a1403f9ccfd42857b8adb1c89ec7b35971/hexdoc_hexssence-0.1.1.1.20.1.1.0-py3-none-any.whl", hash = "sha256:8eff288774769502f7a73f79b24f8e317e398f48ac368626d1378d3c1ef8a8a7", size = 22123, upload-time = "2026-05-31T15:34:21.589Z" },
 ]
 
 [[package]]

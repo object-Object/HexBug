@@ -206,6 +206,15 @@ MODS: list[StaticModInfo] = [
         modloaders=[Modloader.FABRIC, Modloader.QUILT],
     ),
     StaticModInfo(
+        id="manifestation",
+        name="HexIntent",
+        description="Adds interactive menus, intent-based utility blocks, and portal-style threshold spells.",
+        icon_url=URL("src/main/resources/assets/manifestation/icon.png"),
+        curseforge_slug=None,
+        modrinth_slug="hexintent",
+        modloaders=[Modloader.FABRIC],
+    ),
+    StaticModInfo(
         id="hexkeys",
         name="Hex Keys",
         description="Adds features for storing items and iotas in your own mind.",
@@ -260,6 +269,17 @@ MODS: list[StaticModInfo] = [
         curseforge_slug=None,
         modrinth_slug="hexpose",
         modloaders=[Modloader.FABRIC],
+    ),
+    StaticModInfo(
+        id="hexssence",
+        name="Hexssence",
+        description="An addon based around resource generation and transmutation.",
+        icon_url=URL(
+            "https://cdn.modrinth.com/data/msQM9OZX/1196852f272fa5b3e17c48766aea45832821df3e.png"
+        ),
+        curseforge_slug="hexssence",
+        modrinth_slug="hexssence",
+        modloaders=[Modloader.FABRIC, Modloader.FORGE],
     ),
     StaticModInfo(
         id="hexstruction",
@@ -718,7 +738,10 @@ PATTERN_NAME_OVERRIDES: dict[ResourceLocation, str] = {
 # append the mod's name to the pattern's name
 DISAMBIGUATED_PATTERNS: set[ResourceLocation] = set()
 
-DISABLED_PAGES: set[str] = set()
+DISABLED_PAGES: set[str] = {
+    # duplicate as of 2.1.7
+    "manifestation/manifest_relay@manifestation:destroy_manifestation",
+}
 
 HEXDOC_PROPS: dict[str, Any] = {
     "modid": "hexbug",
