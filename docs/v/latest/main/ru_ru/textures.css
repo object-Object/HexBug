@@ -1387,6 +1387,83 @@
       95.12%, 97.55% { background-position-y: -1800% }
       97.56%, 100% { background-position-y: -1900% }
   }
+  .texture-manifestation-textures-block-spell_circle-png {
+    animation: texture-manifestation-textures-block-spell_circle-png 0.0s steps(1, start) infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/withgallantry/HexIntent/10fa8fc98661bb72cd18c9f0556e009241ce9f1c/src/main/resources/assets/manifestation/textures/block/spell_circle.png");
+  }
+  @keyframes texture-manifestation-textures-block-spell_circle-png {
+  }
+  .texture-manifestation-textures-item-eclipse_staff_effects-png {
+    animation: texture-manifestation-textures-item-eclipse_staff_effects-png 0.0s steps(1, start) infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/withgallantry/HexIntent/10fa8fc98661bb72cd18c9f0556e009241ce9f1c/src/main/resources/assets/manifestation/textures/item/eclipse_staff_effects.png");
+  }
+  @keyframes texture-manifestation-textures-item-eclipse_staff_effects-png {
+  }
+  .texture-manifestation-textures-item-eclipse_staff_part-png {
+    animation: texture-manifestation-textures-item-eclipse_staff_part-png 0.0s steps(1, start) infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/withgallantry/HexIntent/10fa8fc98661bb72cd18c9f0556e009241ce9f1c/src/main/resources/assets/manifestation/textures/item/eclipse_staff_part.png");
+  }
+  @keyframes texture-manifestation-textures-item-eclipse_staff_part-png {
+  }
+  .texture-manifestation-textures-item-ender_staff_eye-png {
+    animation: texture-manifestation-textures-item-ender_staff_eye-png 0.0s steps(1, start) infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/withgallantry/HexIntent/10fa8fc98661bb72cd18c9f0556e009241ce9f1c/src/main/resources/assets/manifestation/textures/item/ender_staff_eye.png");
+  }
+  @keyframes texture-manifestation-textures-item-ender_staff_eye-png {
+  }
+  .texture-manifestation-textures-item-light_staff_ring-png {
+    animation: texture-manifestation-textures-item-light_staff_ring-png 0.0s steps(1, start) infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/withgallantry/HexIntent/10fa8fc98661bb72cd18c9f0556e009241ce9f1c/src/main/resources/assets/manifestation/textures/item/light_staff_ring.png");
+  }
+  @keyframes texture-manifestation-textures-item-light_staff_ring-png {
+  }
+  .texture-manifestation-textures-item-nether_staff_fire-png {
+    animation: texture-manifestation-textures-item-nether_staff_fire-png 0.0s steps(1, start) infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/withgallantry/HexIntent/10fa8fc98661bb72cd18c9f0556e009241ce9f1c/src/main/resources/assets/manifestation/textures/item/nether_staff_fire.png");
+  }
+  @keyframes texture-manifestation-textures-item-nether_staff_fire-png {
+  }
+  .texture-manifestation-textures-item-redstone_staff_gears-png {
+    animation: texture-manifestation-textures-item-redstone_staff_gears-png 0.0s steps(1, start) infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/withgallantry/HexIntent/10fa8fc98661bb72cd18c9f0556e009241ce9f1c/src/main/resources/assets/manifestation/textures/item/redstone_staff_gears.png");
+  }
+  @keyframes texture-manifestation-textures-item-redstone_staff_gears-png {
+  }
+  .texture-manifestation-textures-item-shadow_staff_shadow-png {
+    animation: texture-manifestation-textures-item-shadow_staff_shadow-png 0.0s steps(1, start) infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/withgallantry/HexIntent/10fa8fc98661bb72cd18c9f0556e009241ce9f1c/src/main/resources/assets/manifestation/textures/item/shadow_staff_shadow.png");
+  }
+  @keyframes texture-manifestation-textures-item-shadow_staff_shadow-png {
+  }
+  .texture-manifestation-textures-item-totem_staff_spin_1-png {
+    animation: texture-manifestation-textures-item-totem_staff_spin_1-png 0.0s steps(1, start) infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/withgallantry/HexIntent/10fa8fc98661bb72cd18c9f0556e009241ce9f1c/src/main/resources/assets/manifestation/textures/item/totem_staff_spin_1.png");
+  }
+  @keyframes texture-manifestation-textures-item-totem_staff_spin_1-png {
+  }
+  .texture-manifestation-textures-item-totem_staff_spin_2-png {
+    animation: texture-manifestation-textures-item-totem_staff_spin_2-png 0.0s steps(1, start) infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/withgallantry/HexIntent/10fa8fc98661bb72cd18c9f0556e009241ce9f1c/src/main/resources/assets/manifestation/textures/item/totem_staff_spin_2.png");
+  }
+  @keyframes texture-manifestation-textures-item-totem_staff_spin_2-png {
+  }
+  .texture-manifestation-textures-item-wind_effect-png {
+    animation: texture-manifestation-textures-item-wind_effect-png 0.0s steps(1, start) infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/withgallantry/HexIntent/10fa8fc98661bb72cd18c9f0556e009241ce9f1c/src/main/resources/assets/manifestation/textures/item/wind_effect.png");
+  }
+  @keyframes texture-manifestation-textures-item-wind_effect-png {
+  }
   .texture-oneironaut-textures-block-slipwaysuppressor_side_on-png {
     animation: texture-oneironaut-textures-block-slipwaysuppressor_side_on-png 0.0s steps(1, start) infinite;
     background-size: 100%;
