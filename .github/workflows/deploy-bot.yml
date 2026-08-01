@@ -27,6 +27,8 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - uses: steve-todorov/oidc-debugger-action@v1
+
       - uses: object-Object/ci/setup@v0
         with:
           node-version: "lts/*"
