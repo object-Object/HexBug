@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [UNRELEASED]
 
+## Changes
+
+- Updated Hex Tools:
+  - Added support for panning the grid with middle-click and multi-touch.
+  - Introspection, Retrospection, and Consideration will now change drawn pattern colors appropriately.
+
 ### Mods Updated
 
 - HexFlow: 0.6.0
