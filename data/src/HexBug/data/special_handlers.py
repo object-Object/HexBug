@@ -659,60 +659,58 @@ def parse_tail_depth(value: str):
         return len(value)
     raise ValueError(f"Invalid tail depth (expected an integer or dashes): {value}")
 
-class HextrapatsSwizzlingSpecialHandler(PrefixSpecialHandler[int, Any]):
+
+class HextrapatsSwizzlingSpecialHandler(SpecialHandler[str]):
     prefix = "eeeeqaawddea"
 
-    @property
-    @override
-    def prefix_map(self):
-        return {self.prefix: None}
-    
     @override
     def try_match(self, registry: HexBugRegistry, pattern: HexPattern) -> str | None:
-        for prefix, value in self.prefix_map.items():
-            if pattern.signature.startswith(prefix):
-                flat_dir = pattern.direction.rotated_by(HexAngle.BACK)
+        if pattern.signature.startswith(self.prefix):
+            flat_dir = pattern.direction.rotated_by(HexAngle.BACK)
 
-                dirs = pattern.iter_directions()
-                result = ""
-                side = 0
+            dirs = pattern.iter_directions()
+            result = ""
+            side = 0
 
-                # Skip the first 13 directions in the worst way possible :hexxy:
-                dirs.next() for _ in range(13)
+            dirs = itertools.islice(dirs, 13, None)
 
-                for direction in dirs:
-                    match direction.angle_from(flat_dir):
-                        case HexAngle.FORWARD if side == 0:
-                            result += "Y"
-                        case HexAngle.RIGHT if side == 0:
-                                side = 1
-                            elif side == -1:
-                                side = 0
-                                result += "X"
-                        case HexAngle.LEFT if side == 0:
-                                side = -1
-                            elif side == 1:
-                                side = 0
-                                result += "Z"
-                        case _:
-                            return None
-                
-                if side != 0 or result.length != 3:
-                    return None
-                
-                return result
-    
+            for direction in dirs:
+                match direction.angle_from(flat_dir):
+                    case HexAngle.FORWARD if side == 0:
+                        result += "Y"
+                    case HexAngle.RIGHT:
+                        if side == 0:
+                            side = 1
+                        elif side == -1:
+                            side = 0
+                            result += "X"
+                    case HexAngle.LEFT:
+                        if side == 0:
+                            side = -1
+                        elif side == 1:
+                            side = 0
+                            result += "Z"
+                    case _:
+                        return None
+
+            if side != 0 or len(result) != 3:
+                return None
+
+            return result
+
     def generate_pattern(
         self,
         registry: HexBugRegistry,
         value: str,
-    ) -> tuple[int, HexPattern]:
+    ) -> tuple[str, HexPattern]:
         value = value.lower().strip()
         if not VALID_SWIZZLE_PATTERN.fullmatch(value):
-            raise ValueError(f"Invalid swizzle (expected exactly 3 of x, y, or z): {value}")
-        
+            raise ValueError(
+                f"Invalid swizzle (expected exactly 3 of x, y, or z): {value}"
+            )
+
         signature = self.prefix
-        current = HexDir.SOUTH_EAST
+        current = HexDir.NORTH_EAST
 
         # Surely there's a better way to do this
         for c in value:
