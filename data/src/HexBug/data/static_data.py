@@ -12,6 +12,7 @@ from .special_handlers import (
     HexFlowNumberSpecialHandler,
     HexThingsNoopSpecialHandler,
     HexTraceSpecialHandler,
+    HextrapatsDuplicateAtSpecialHandler,
     HextrapatsScientificExponentSpecialHandler,
     HextrapatsVectorSpecialHandler,
     MaskSpecialHandler,
@@ -596,28 +597,28 @@ SPECIAL_HANDLERS: dict[ResourceLocation, SpecialHandler[Any]] = {
             id=ResourceLocation("hexthings", "noop"),
         ),
         HextrapatsVectorSpecialHandler(
-            id=ResourceLocation("hextrapats", "vec_x"),
+            id=ResourceLocation("hextrapats", "vec/x"),
             positive_prefix="aeqqqqqaw",
             negative_prefix="aqeeeeedw",
             components=1,
             axis="X",
         ),
         HextrapatsVectorSpecialHandler(
-            id=ResourceLocation("hextrapats", "vec_y"),
+            id=ResourceLocation("hextrapats", "vec/y"),
             positive_prefix="weqqqqqaw",
             negative_prefix="wqeeeeedw",
             components=1,
             axis="Y",
         ),
         HextrapatsVectorSpecialHandler(
-            id=ResourceLocation("hextrapats", "vec_z"),
+            id=ResourceLocation("hextrapats", "vec/z"),
             positive_prefix="deqqqqqaw",
             negative_prefix="dqeeeeedw",
             components=1,
             axis="Z",
         ),
         HextrapatsVectorSpecialHandler(
-            id=ResourceLocation("hextrapats", "vec_1"),
+            id=ResourceLocation("hextrapats", "vec/1"),
             positive_prefix="qeqqqqqaw",
             negative_prefix="qqeeeeedw",
             components=3,
@@ -625,6 +626,9 @@ SPECIAL_HANDLERS: dict[ResourceLocation, SpecialHandler[Any]] = {
         ),
         HextrapatsScientificExponentSpecialHandler(
             id=ResourceLocation("hextrapats", "scientific_exp"),
+        ),
+        HextrapatsDuplicateAtSpecialHandler(
+            id=ResourceLocation("hextrapats", "duplicate_at"),
         ),
     ]
 }
@@ -711,7 +715,7 @@ SPECIAL_HANDLER_CONFLICTS: set[tuple[ResourceLocation, ResourceLocation, Any]] =
         "w",
     ),
     (
-        ResourceLocation("hextrapats", "vec_x"),
+        ResourceLocation("hextrapats", "vec/x"),
         ResourceLocation("hexal", "link/get_index"),
         0.5,
     ),
@@ -725,12 +729,13 @@ UNTITLED_PAGES: set[tuple[ResourceLocation, str]] = {
         ResourceLocation("hexcasting", "basics/navimancy"),
         "hexxyskies:page/space/model_body",
     ),
+    (ResourceLocation("hexcasting", "hex_ars_link/linkers"), "lv1"),
+    (ResourceLocation("hexcasting", "hex_ars_link/linkers"), "lv2"),
+    (ResourceLocation("hexcasting", "hex_ars_link/linkers"), "lv3"),
 }
 
 # replace the pattern's name entirely
 PATTERN_NAME_OVERRIDES: dict[ResourceLocation, str] = {
-    ResourceLocation("hexic", "findview"): "Reflection Purification (Hexic)",
-    # ↑ undocumented; renamed before next release
     ResourceLocation("hexpose", "create_text"): "Reading Purification (text)",
     ResourceLocation("hexpose", "read_book"): "Reading Purification (book)",
 }
@@ -738,10 +743,7 @@ PATTERN_NAME_OVERRIDES: dict[ResourceLocation, str] = {
 # append the mod's name to the pattern's name
 DISAMBIGUATED_PATTERNS: set[ResourceLocation] = set()
 
-DISABLED_PAGES: set[str] = {
-    # duplicate as of 2.1.7
-    "manifestation/manifest_relay@manifestation:destroy_manifestation",
-}
+DISABLED_PAGES: set[str] = set()
 
 HEXDOC_PROPS: dict[str, Any] = {
     "modid": "hexbug",

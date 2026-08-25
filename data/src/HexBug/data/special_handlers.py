@@ -136,6 +136,24 @@ class PrefixSpecialHandler[T, P](SpecialHandler[T]):
                 )
 
 
+class SuffixSpecialHandler[T, P](SpecialHandler[T]):
+    @property
+    @abstractmethod
+    def suffix_map(self) -> dict[str, P]: ...
+
+    @abstractmethod
+    def try_match_prefix(self, suffix: P, /, prefix: str) -> T | None: ...
+
+    @override
+    def try_match(self, registry: HexBugRegistry, pattern: HexPattern) -> T | None:
+        for suffix, value in self.suffix_map.items():
+            if pattern.signature.endswith(suffix):
+                return self.try_match_prefix(
+                    value,
+                    prefix=pattern.signature.removesuffix(suffix),
+                )
+
+
 class NumberSpecialHandler(PrefixSpecialHandler[float, int]):
     @classmethod
     def match(cls, sign: int, suffix: str) -> float:
@@ -288,15 +306,7 @@ class OverevaluateTailDepthSpecialHandler(PrefixSpecialHandler[int, Any]):
 
     @override
     def generate_pattern(self, registry: HexBugRegistry, value: str):
-        value = value.strip()
-        if value.isnumeric():
-            depth = int(value)
-        elif all(c == "-" for c in value):
-            depth = len(value)
-        else:
-            raise ValueError(
-                f"Invalid tail depth (expected an integer or dashes): {value}"
-            )
+        depth = parse_tail_depth(value)
 
         if depth < self.initial_depth:
             raise ValueError(
@@ -614,3 +624,36 @@ class HextrapatsScientificExponentSpecialHandler(PrefixSpecialHandler[int, int])
         )
 
         return exponent, HexPattern(direction, signature)
+
+
+class HextrapatsDuplicateAtSpecialHandler(SuffixSpecialHandler[int, Any]):
+    suffix = "wddad"
+
+    @property
+    @override
+    def suffix_map(self):
+        return {self.suffix: None}
+
+    @override
+    def try_match_prefix(self, _: Any, prefix: str):
+        depth = len(prefix)
+        if prefix == depth * "w":
+            return depth
+
+    @override
+    def generate_pattern(
+        self,
+        registry: HexBugRegistry,
+        value: str,
+    ) -> tuple[int, HexPattern]:
+        depth = parse_tail_depth(value)
+        return depth, HexPattern(HexDir.WEST, depth * "w" + self.suffix)
+
+
+def parse_tail_depth(value: str):
+    value = value.strip()
+    if value.isnumeric():
+        return int(value)
+    if all(c == "-" for c in value):
+        return len(value)
+    raise ValueError(f"Invalid tail depth (expected an integer or dashes): {value}")
