@@ -451,7 +451,7 @@ __metadata:
 
 "@hextools/react@https://github.com/object-Object/HexTools.git#workspace=@hextools/react":
   version: 0.0.0
-  resolution: "@hextools/react@https://github.com/object-Object/HexTools.git#workspace=%40hextools%2Freact&commit=7bb6b0c576840ecfd92548db60e078859644f0d0"
+  resolution: "@hextools/react@https://github.com/object-Object/HexTools.git#workspace=%40hextools%2Freact&commit=14b2422874cd29187e049b7e25b59a9b1acb6c40"
   dependencies:
     "@hextools/renderer": "npm:^0.0.0"
     "@mantine/core": "npm:^9.1.0"
@@ -461,18 +461,18 @@ __metadata:
     lodash: "npm:^4.18.1"
     react: "npm:^19.2.0"
     react-dom: "npm:^19.2.0"
-  checksum: 10c0/07917b3810f939db7026536b1e2391bd8a40e1bfd1296e6ed491ebae172d2e1e68847c5d6aae972970a96c37a53fbdeb8814f013f31b02687480adb8671df3ef
+  checksum: 10c0/7b844858ea4d17fc55211005d2c2ee7471147f7c72cb151ef11fa8bc0e0f044b8ed45f6de40f9f9c84cc83569f750c42acf85961c9372c4cb3c8ba95fc67abbd
   languageName: node
   linkType: hard
 
 "@hextools/renderer@https://github.com/object-Object/HexTools.git#workspace=@hextools/renderer":
   version: 0.0.0
-  resolution: "@hextools/renderer@https://github.com/object-Object/HexTools.git#workspace=%40hextools%2Frenderer&commit=7bb6b0c576840ecfd92548db60e078859644f0d0"
+  resolution: "@hextools/renderer@https://github.com/object-Object/HexTools.git#workspace=%40hextools%2Frenderer&commit=14b2422874cd29187e049b7e25b59a9b1acb6c40"
   dependencies:
     bytebuffer: "npm:^5.0.1"
     gl-matrix: "npm:^4.0.0-beta.2"
     simplex-noise: "npm:^4.0.3"
-  checksum: 10c0/0007f30e56d8cf7db67db1235081efd44cd50b1bf244337d6b6beef38b3264b33303951060ba1c7db91c1aa69e4ce9c84221ef67199ba86810a521ad6b8606d5
+  checksum: 10c0/765a589f01f6f661a54afb60f36073b789a4915a9f4fe7ad1cd6cf87e8d50b98c79f61f93652e71aa369fe3d4567e467d25dd346657c0af02bf1f2c53e8317da
   languageName: node
   linkType: hard
 

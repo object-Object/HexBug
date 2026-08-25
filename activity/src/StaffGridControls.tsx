@@ -19,9 +19,9 @@ import StaffGridSettings, {
 } from "./StaffGridSettings";
 
 export interface StaffGridControlsProps extends StaffGridSettingsProps {
-  patterns: ResolvedPattern[];
-  patternsHandlers: UseStateHistoryHandlers<ResolvedPattern[]>;
-  patternsHistory: UseStateHistoryValue<ResolvedPattern[]>;
+  patterns: readonly ResolvedPattern[];
+  patternsHandlers: UseStateHistoryHandlers<readonly ResolvedPattern[]>;
+  patternsHistory: UseStateHistoryValue<readonly ResolvedPattern[]>;
 }
 
 export default function StaffGridControls({

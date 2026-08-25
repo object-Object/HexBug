@@ -14,7 +14,7 @@ import {
   useStateHistory,
   useDebouncedCallback,
 } from "@mantine/hooks";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import StaffGridControls from "./StaffGridControls";
 import type { StaffGridSettingsProps } from "./StaffGridSettings";
@@ -39,11 +39,13 @@ export default function AppInner({ onSignInWithDiscord }: AppInnerProps) {
   const auth = useDiscordAuth();
 
   const [patterns, patternsHandlers, patternsHistory] = useStateHistory<
-    ResolvedPattern[]
+    readonly ResolvedPattern[]
   >([]);
 
+  const [patternType, setPatternType] = useState(DEFAULT_PATTERN_TYPE);
+
   const throttledPostPatterns = useDebouncedCallback(
-    (auth: AuthResult, patterns: ResolvedPattern[]) => {
+    (auth: AuthResult, patterns: readonly ResolvedPattern[]) => {
       void fetch("/api/activity/patterns", {
         method: "POST",
         headers: {
@@ -53,7 +55,7 @@ export default function AppInner({ onSignInWithDiscord }: AppInnerProps) {
         body: JSON.stringify(
           patterns.map(({ pattern }) => ({
             direction: HexDir[pattern.startDir],
-            signature: pattern.anglesSignature(),
+            signature: pattern.signature,
           })),
         ),
       });
@@ -98,7 +100,8 @@ export default function AppInner({ onSignInWithDiscord }: AppInnerProps) {
         <StaffGrid
           patterns={patterns}
           onPatternsChange={patternsHandlers.set}
-          patternType={DEFAULT_PATTERN_TYPE}
+          patternType={patternType}
+          onPatternTypeChange={setPatternType}
           settings={settings}
           ref={staffGridRef}
         />

@@ -16,6 +16,9 @@ Install [uv](https://docs.astral.sh/uv/) and clone this repository, then run the
 # set up environment
 uv run poe setup
 
+# set up Yarn (optional, for running the activity)
+yarn
+
 # generate database
 docker compose up --detach postgres
 uv run alembic upgrade head
@@ -79,6 +82,8 @@ Run the bot standalone (faster for development):
 docker compose up --detach postgres
 uv run hexbug build --indent 2
 uv run hexbug bot
+# run the activity (optional)
+yarn dev
 ```
 
 Run the bot in Docker:
