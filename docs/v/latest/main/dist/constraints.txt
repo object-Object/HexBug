@@ -350,25 +350,25 @@ hexdoc-hexdim==1.2.1.1.20.0 \
     --hash=sha256:68795a8aec5e22aa2b2d1f32c2b2e0d08484432e378e552aa80a69656360344d \
     --hash=sha256:c6fdf8e335b573e75b6598d20536efe771be7d4c75e2ab44f3656184de7c6a5e
     # via hexbug-data
-hexdoc-hexflow==0.5.1.1.1.0.1 \
-    --hash=sha256:3b396bfe063d43aae77bfd56f14b0d2fb17317ad38026691557c3fc5a23c1e37 \
-    --hash=sha256:fdd38d51bcc1910fad78e29ea40d91094fa0fe26353855f8535d58950b551788
+hexdoc-hexflow==0.6.0.1.0.1 \
+    --hash=sha256:4936b4ac7feb64775057b6a31964b3e04d2b5c1c389e624afdb4c8fed4f7880f \
+    --hash=sha256:72883a61fbb717433cceb2afe929818c8a6ec53562d7e505b8d122d6d7e34815
     # via hexbug-data
 hexdoc-hexgender==1.0.4.1.0 \
     --hash=sha256:36e381778817532dfd2e737baea385f41608cdbcf6f8412b95e8ccced5a59572 \
     --hash=sha256:bc32f632b55e61fc08dcad004f5880f446e6a279475a2134c79bf07589098283
     # via hexbug-data
-hexdoc-hexic==2.0.0.1.0 \
-    --hash=sha256:e598363b1c3c3a51dd02d4dd8233871a7cd06d56d9f3aa2d79a694f363b8b87d
+hexdoc-hexic==2.1.1.1.0 \
+    --hash=sha256:a0f4afcec936cd964978f3c87704248cbb33c86e72bb4e9f5ea903cb14ede534
     # via hexbug-data
 hexdoc-hexical @ https://github.com/miyucomics/hexical/raw/9e065b5e7995efc9045ab8cecd1f8838106df171/docs/v/latest/main/dist/hexdoc_hexical-2.0.0.1.0.0-py3-none-any.whl \
     --hash=sha256:2089d91d74e18e057199ede29949ce682d337dc6346e68be9e4d692f015dc380
     # via
     #   hexbug-data
     #   hexdoc-lapisworks
-hexdoc-hexintent==2.1.7.1.0.0 \
-    --hash=sha256:18631482f237c4dc5130f8bfad9cbf77eae849d324afc47f7613ca4169bb03ab \
-    --hash=sha256:e5f7e175ccedab029a8cd29fe1c73e4f4a0b30c1f5c0d26d7db383124c25977a
+hexdoc-hexintent==2.2.2.1.0.0 \
+    --hash=sha256:482f5dee62f484edf191d1f793cd2d3ada509f738d929793b1e0b803261a81ec \
+    --hash=sha256:4836982024ede0d8c599f6ddc656601205f15189e24890518aaa5ae574b807a5
     # via hexbug-data
 hexdoc-hexkeys==0.1.6.1.0.dev0 \
     --hash=sha256:07ac2c69d24bc4ca3b28016d43d7a19caf3d83565b5849ffd42ef6ed1678c2e7 \
@@ -384,9 +384,9 @@ hexdoc-hexodus==1.0.0.1.0.0 \
     # via
     #   hexbug-data
     #   hexdoc-hexxyskies
-hexdoc-hexoverpowered==0.11.7.1.1 \
-    --hash=sha256:9b3637d91deca1216ef3e0c6b6a344ffd09876d816067bcae1efff875d8ccc60 \
-    --hash=sha256:c9e8fc676990478d02c973101f48c576a94faaab7076ebaaf8796bc3724be229
+hexdoc-hexoverpowered==0.12.0.1.1 \
+    --hash=sha256:cda56e69c61937043c7f49668198b9124c8b3359cbc7bb98e3d6a36361bdbcff \
+    --hash=sha256:d595671608b637fa2309dcee12fb19e13dee4b5220b3fdbc13960002fb53a528
     # via hexbug-data
 hexdoc-hexparse==1.11.2.1.1 \
     --hash=sha256:3bc8b0f352ecad1ea42f82546f019a67759e7bbc87fb5b64e2ff79ae5948493b \
@@ -396,9 +396,9 @@ hexdoc-hexpose==1.0.0.1.0.0+hexbug
     # via
     #   hexbug-data
     #   hexdoc-hexical
-hexdoc-hexssence==0.1.1.1.20.1.1.0 \
-    --hash=sha256:8eff288774769502f7a73f79b24f8e317e398f48ac368626d1378d3c1ef8a8a7 \
-    --hash=sha256:9d079381e9c1e15ab35395f6fbe444b13c6cda5e708450489473dfc5bc9e17c6
+hexdoc-hexssence==0.1.3.1.20.1.1.0 \
+    --hash=sha256:93caa2f1b532ad4fad442a0a348a0dfb3106d16a3a5005d26bcd9df9742c6a9a \
+    --hash=sha256:f752708686e74a1a6a343f6ef71c3d53c9243a1dad9858388617506b66876444
     # via hexbug-data
 hexdoc-hexstruction==1.3.1.1.20.1.1.1 \
     --hash=sha256:c64d5bdce8585fbcad02071ebea616f62ee192ea9eb963b9a678eb5500f64c66 \
@@ -415,9 +415,9 @@ hexdoc-hextrace==0.1.0.1.20.1.1.0 \
     --hash=sha256:8487d6fec5eda717197d395a197c1adc644decb2194fc52579237ba204ce9a60 \
     --hash=sha256:fafbedb9104379ba6c2bce3c4802a143d46567c7bacf99c09e6d5682da603fde
     # via hexbug-data
-hexdoc-hextrapats==1.8.0.1.0 \
-    --hash=sha256:311202272b7940015be9efedeb08b4e31f7dfd6c3e2136d27f97984ca6fd0e3d \
-    --hash=sha256:4697dd7ab0a81a1717c41aa002af93c1007915fa881856b0c8c6a9e179f15854
+hexdoc-hextrapats==1.9.1.1.20.1.1.0 \
+    --hash=sha256:28f52ddcaee1c95f68c6fd8a113524daaafad8202f3e01f9e47b169a49d8b26f \
+    --hash=sha256:c864a09996615ad997de0ed074c878ed744aa232a4ef38e504d75defbbba04cf
     # via hexbug-data
 hexdoc-hextrogen==1.1.0.1.0.0 \
     --hash=sha256:282a17c0d0a5b1ac3765caeb20ed8b3e1f0d62c4fb4cf2cff91ffd4007f3e8d3 \
