@@ -668,13 +668,10 @@ class HextrapatsSwizzlingSpecialHandler(SpecialHandler[str]):
         if pattern.signature.startswith(self.prefix):
             flat_dir = pattern.direction.rotated_by(HexAngle.BACK)
 
-            dirs = pattern.iter_directions()
             result = ""
             side = 0
 
-            dirs = itertools.islice(dirs, 13, None)
-
-            for direction in dirs:
+            for direction in itertools.islice(pattern.iter_directions(), 13, None):
                 match direction.angle_from(flat_dir):
                     case HexAngle.FORWARD if side == 0:
                         result += "Y"
