@@ -56,6 +56,7 @@ from .special_handlers import (
     SpecialHandlerPattern,
 )
 from .static_data import (
+    BOOK_LINK_ALIASES,
     DISABLED_PAGES,
     DISABLED_PATTERNS,
     DISAMBIGUATED_PATTERNS,
@@ -217,6 +218,13 @@ class HexBugRegistry(BaseModel):
             book = book_plugin.validate_book(book_data, context=context)
             assert isinstance(book, Book)
 
+            for from_path, to_path in BOOK_LINK_ALIASES.items():
+                if existing := book_context.book_links.get(from_path):
+                    raise ValueError(
+                        f"Attempted to override existing link: {from_path} = {existing}"
+                    )
+                book_context.book_links[from_path] = book_context.book_links[to_path]
+
         # Jinja stuff
 
         jinja_env = create_jinja_env_with_loader(PackageLoader("hexdoc", "_templates"))
@@ -231,12 +239,16 @@ class HexBugRegistry(BaseModel):
             },
         )
 
-        def _style_text(text: FormatTree, mod: ModInfo, plain: bool = False):
-            return styled_template.render(
-                text=text,
-                page_url=str(mod.book_url),
-                extension="txt" if plain else "md",
-            ).strip()
+        def _style_text(text: FormatTree, mod: ModInfo, note: str, plain: bool = False):
+            try:
+                return styled_template.render(
+                    text=text,
+                    page_url=str(mod.book_url),
+                    extension="txt" if plain else "md",
+                ).strip()
+            except ValueError:
+                logger.fatal(note)
+                raise
 
         # load mods
 
@@ -300,7 +312,9 @@ class HexBugRegistry(BaseModel):
             assert category.resource_dir.modid is not None
             category_mod = registry.mods[category.resource_dir.modid]
 
-            category_description = _style_text(category.description, category_mod)
+            category_description = _style_text(
+                category.description, category_mod, f"Category: {category.id}"
+            )
 
             registry._register_category(
                 CategoryInfo(
@@ -319,7 +333,10 @@ class HexBugRegistry(BaseModel):
                         book_index,
                         title=category.name.value,
                         text=_style_text(
-                            category.description, category_mod, plain=True
+                            category.description,
+                            category_mod,
+                            f"Category: {category.id}",
+                            plain=True,
                         ),
                         text_markdown=category_description,
                         category=category.name.value,
@@ -374,8 +391,17 @@ class HexBugRegistry(BaseModel):
                     # text
                     match page:
                         case Page(text=FormatTree() as text):
-                            text_plain = _style_text(text, entry_mod, plain=True)
-                            text = _style_text(text, entry_mod)
+                            text_plain = _style_text(
+                                text,
+                                entry_mod,
+                                f"Category: {category.id}\nEntry: {entry.id}\nPage: {page_index}\nAnchor: {page.anchor}",
+                                plain=True,
+                            )
+                            text = _style_text(
+                                text,
+                                entry_mod,
+                                f"Category: {category.id}\nEntry: {entry.id}\nPage: {page_index}\nAnchor: {page.anchor}",
+                            )
                         case _:
                             text_plain = None
                             text = None
@@ -453,7 +479,11 @@ class HexBugRegistry(BaseModel):
 
                     text = page.text or (next_page and next_page.text)
                     if text:
-                        description = _style_text(text, entry_mod)
+                        description = _style_text(
+                            text,
+                            entry_mod,
+                            f"Category: {category.id}\nEntry: {entry.id}\nPage: {page_index}\nAnchor: {page.anchor}",
+                        )
                     else:
                         description = None
 

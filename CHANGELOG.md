@@ -9,11 +9,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 ## Changes
 
 - Updated Hex Tools:
-  - Added support for panning the grid with middle-click and multi-touch.
+  - Added support for panning and zooming the grid with middle-click/scroll and multi-touch.
   - Introspection, Retrospection, and Consideration will now change drawn pattern colors appropriately.
 
 ### Mods Updated
 
+- Hex Casting: 0.11.4
 - HexFlow: 0.6.0
 - Hexic: 2.1.1
 - HexIntent: 2.2.2
@@ -21,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - Hexssence: 0.1.3+1.20.1
 - Hextra Patterns: 1.9.1+1.20.1
   - TODO: vec/swizzle
+- Hierophantics: 1.4.0
 
 ## `2.10.2` - 2026-07-25
 

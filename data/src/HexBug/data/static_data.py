@@ -511,32 +511,10 @@ alphabetically by name.
 MODS[1:] = sorted(MODS[1:], key=lambda m: m.name)
 assert MODS[0].id == "hexcasting"
 
-CONSIDERATION = ResourceLocation("hexcasting", "escape")
 INTROSPECTION = ResourceLocation("hexcasting", "open_paren")
 RETROSPECTION = ResourceLocation("hexcasting", "close_paren")
-EVANITION = ResourceLocation("hexcasting", "undo")
 
 EXTRA_PATTERNS: list[StaticPatternInfo] = [
-    StaticPatternInfo(
-        id=CONSIDERATION,
-        startdir=HexDir.WEST,
-        signature="qqqaw",
-    ),
-    StaticPatternInfo(
-        id=INTROSPECTION,
-        startdir=HexDir.WEST,
-        signature="qqq",
-    ),
-    StaticPatternInfo(
-        id=RETROSPECTION,
-        startdir=HexDir.EAST,
-        signature="eee",
-    ),
-    StaticPatternInfo(
-        id=EVANITION,
-        startdir=HexDir.EAST,
-        signature="eeedw",
-    ),
     StaticPatternInfo(
         id=ResourceLocation("hexthings", "unquote"),
         startdir=HexDir.NORTH_EAST,
@@ -637,12 +615,18 @@ SPECIAL_HANDLERS: dict[ResourceLocation, SpecialHandler[Any]] = {
 DISABLED_PATTERNS: set[ResourceLocation] = {
     # conflicts
     ResourceLocation("hexstruction", "bounding_box"),  # shape: hexical:greater_blink
+    # moved into Hex Casting
+    ResourceLocation("hexpose", "env_media"),  # hexcasting:get_media
+    ResourceLocation("lapisworks", "equal_block"),  # hexcasting:compare_block/strict
+    ResourceLocation("lapisworks", "equiv_block"),  # hexcasting:compare_block/lenient
     # commented out
     ResourceLocation("hexxyskies", "ship/structure"),  # as of 2.0.2
     # unreasonably long angle signature
     ResourceLocation("hexic", "whatthefuck"),
     # "hexic is being digested from the inside"
     ResourceLocation("hexic", "drop"),
+    ResourceLocation("hexic", "omni_close"),
+    ResourceLocation("hexic", "omni_open"),
     ResourceLocation("hexic", "rotate"),
     ResourceLocation("hexic", "take"),
     # not real patterns
@@ -746,9 +730,16 @@ PATTERN_NAME_OVERRIDES: dict[ResourceLocation, str] = {
 }
 
 # append the mod's name to the pattern's name
-DISAMBIGUATED_PATTERNS: set[ResourceLocation] = set()
+DISAMBIGUATED_PATTERNS: set[ResourceLocation] = {
+    ResourceLocation("hexflow", "weak_escape"),  # hexcasting:runtime_escape
+    ResourceLocation("hexical", "similar"),  # hexcasting:type_equals
+}
 
 DISABLED_PAGES: set[str] = set()
+
+BOOK_LINK_ALIASES: dict[str, str] = {
+    "hexcasting:casting/influences": "hexcasting:casting/101",
+}
 
 HEXDOC_PROPS: dict[str, Any] = {
     "modid": "hexbug",
