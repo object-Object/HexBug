@@ -1,4 +1,8 @@
-import { ColorSchemeButton, StaffGridSidebar } from "@hextools/react";
+import {
+  ColorSchemeButton,
+  StaffGridSidebar,
+  type StaffGridSidebarProps,
+} from "@hextools/react";
 import { type ResolvedPattern } from "@hextools/renderer/staffGrid";
 import { ActionIcon, Stack } from "@mantine/core";
 import {
@@ -9,6 +13,7 @@ import {
 import {
   IconArrowBackUp,
   IconArrowForwardUp,
+  IconFocusCentered,
   IconMenu2,
   IconTrash,
 } from "@tabler/icons-react";
@@ -18,10 +23,14 @@ import StaffGridSettings, {
   type StaffGridSettingsProps,
 } from "./StaffGridSettings";
 
-export interface StaffGridControlsProps extends StaffGridSettingsProps {
+export interface StaffGridControlsProps
+  extends
+    StaffGridSettingsProps,
+    Pick<StaffGridSidebarProps, "onPanToPattern"> {
   patterns: readonly ResolvedPattern[];
   patternsHandlers: UseStateHistoryHandlers<readonly ResolvedPattern[]>;
   patternsHistory: UseStateHistoryValue<readonly ResolvedPattern[]>;
+  onResetPanAndZoom: () => unknown;
 }
 
 export default function StaffGridControls({
@@ -32,6 +41,8 @@ export default function StaffGridControls({
   onSettingsChange,
   onResetSettings,
   onSignInWithDiscord,
+  onPanToPattern,
+  onResetPanAndZoom,
 }: StaffGridControlsProps) {
   const [sidebarOpen, { toggle: toggleSidebar, close: closeSidebar }] =
     useDisclosure(false);
@@ -77,6 +88,10 @@ export default function StaffGridControls({
         >
           <IconTrash />
         </ActionIcon>
+
+        <ActionIcon {...staffGridButtonProps} onClick={onResetPanAndZoom}>
+          <IconFocusCentered />
+        </ActionIcon>
       </Stack>
 
       <StaffGridSidebar
@@ -84,6 +99,7 @@ export default function StaffGridControls({
         onPatternsChange={patternsHandlers.set}
         opened={sidebarOpen}
         onClose={closeSidebar}
+        onPanToPattern={onPanToPattern}
       />
     </>
   );

@@ -88,6 +88,14 @@ export default function AppInner({ onSignInWithDiscord }: AppInnerProps) {
     ["mod+shift+Z", () => patternsHandlers.forward()],
   ]);
 
+  const onPanToPattern = (pattern: ResolvedPattern) => {
+    staffGridRef.current?.panToPattern(pattern);
+  };
+
+  const onResetPanAndZoom = () => {
+    staffGridRef.current?.resetPanAndZoom();
+  };
+
   return (
     <>
       <Box
@@ -114,6 +122,8 @@ export default function AppInner({ onSignInWithDiscord }: AppInnerProps) {
           onSettingsChange={setSettings}
           onResetSettings={() => setSettings(defaultSettings)}
           onSignInWithDiscord={onSignInWithDiscord}
+          onPanToPattern={onPanToPattern}
+          onResetPanAndZoom={onResetPanAndZoom}
         />
       </Box>
 
