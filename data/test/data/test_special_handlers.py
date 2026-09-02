@@ -7,6 +7,7 @@ from HexBug.data.hex_math import HexDir, HexPattern
 from HexBug.data.registry import HexBugRegistry
 from HexBug.data.special_handlers import (
     HexFlowCopyMaskSpecialHandler,
+    HextrapatsSwizzlingSpecialHandler,
     MaskSpecialHandler,
 )
 
@@ -124,6 +125,52 @@ def describe_HexFlowCopyMaskSpecialHandler():
     )
     def generate_pattern(
         special_handler: HexFlowCopyMaskSpecialHandler,
+        value: str,
+        want_signature: str,
+    ):
+        registry = cast(HexBugRegistry, None)  # lie
+        _, pattern = special_handler.generate_pattern(registry, value)
+        assert pattern.signature == want_signature
+
+
+def describe_HextrapatsSwizzlingSpecialHandler():
+    @pytest.fixture()
+    def special_handler() -> HextrapatsSwizzlingSpecialHandler:
+        return HextrapatsSwizzlingSpecialHandler(
+            id=ResourceLocation("hextrapats", "vec/swizzle"),
+        )
+
+    patterns = [
+        ("eeeeqaawddeawdadad", "XXX"),
+        ("eeeeqaawddeaeww", "YYY"),
+        ("eeeeqaawddeadadada", "ZZZ"),
+        ("eeeeqaawddeawdqea", "XYZ"),
+        ("eeeeqaawddeaeeae", "YZY"),
+        ("eeeeqaawddeawdadwa", "XXZ"),
+    ]
+
+    @pytest.mark.parametrize("direction", HexDir)
+    @pytest.mark.parametrize(
+        ["signature", "want_value"],
+        [*patterns, ("eeeeqaawddeadaww", None), ("eeeeqaawddeaeweawd", None)],
+        ids=lambda v: f"'{v}'",
+    )
+    def try_match(
+        special_handler: HextrapatsSwizzlingSpecialHandler,
+        direction: HexDir,
+        signature: str,
+        want_value: str | None,
+    ):
+        registry = cast(HexBugRegistry, None)  # lie
+        pattern = HexPattern(direction, signature)
+        assert special_handler.try_match(registry, pattern) == want_value
+
+    @pytest.mark.parametrize(
+        ["value", "want_signature"],
+        [(value, signature) for (signature, value) in patterns],
+    )
+    def generate_pattern(
+        special_handler: HextrapatsSwizzlingSpecialHandler,
         value: str,
         want_signature: str,
     ):

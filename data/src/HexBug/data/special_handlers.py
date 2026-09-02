@@ -18,6 +18,7 @@ if TYPE_CHECKING:
 
 VALID_MASK_PATTERN = re.compile(r"[-v]+")
 VALID_HEXFLOW_COPY_MASK_PATTERN = re.compile(r"[-n]+")
+VALID_SWIZZLE_PATTERN = re.compile(r"[xyz]{3}")
 
 
 class SpecialHandlerInfo(BaseModel):
@@ -657,3 +658,88 @@ def parse_tail_depth(value: str):
     if all(c == "-" for c in value):
         return len(value)
     raise ValueError(f"Invalid tail depth (expected an integer or dashes): {value}")
+
+
+class HextrapatsSwizzlingSpecialHandler(SpecialHandler[str]):
+    prefix = "eeeeqaawddea"
+
+    @override
+    def try_match(self, registry: HexBugRegistry, pattern: HexPattern) -> str | None:
+        if pattern.signature.startswith(self.prefix):
+            flat_dir = pattern.direction.rotated_by(HexAngle.BACK)
+
+            result = ""
+            side = 0
+
+            for direction in itertools.islice(pattern.iter_directions(), 13, None):
+                match direction.angle_from(flat_dir):
+                    case HexAngle.FORWARD if side == 0:
+                        result += "Y"
+                    case HexAngle.RIGHT:
+                        if side == 0:
+                            side = 1
+                        elif side == -1:
+                            side = 0
+                            result += "X"
+                    case HexAngle.LEFT:
+                        if side == 0:
+                            side = -1
+                        elif side == 1:
+                            side = 0
+                            result += "Z"
+                    case _:
+                        return None
+
+            if side != 0 or len(result) != 3:
+                return None
+
+            return result
+
+    def generate_pattern(
+        self,
+        registry: HexBugRegistry,
+        value: str,
+    ) -> tuple[str, HexPattern]:
+        value = value.lower().strip()
+        if not VALID_SWIZZLE_PATTERN.fullmatch(value):
+            raise ValueError(
+                f"Invalid swizzle (expected exactly 3 of x, y, or z): {value}"
+            )
+
+        signature = self.prefix
+        current = HexDir.NORTH_EAST
+
+        # Surely there's a better way to do this
+        for c in value:
+            match c:
+                case "x":
+                    match current:
+                        case HexDir.NORTH_EAST:
+                            signature += "wd"
+                        case HexDir.EAST:
+                            signature += "qd"
+                        case HexDir.SOUTH_EAST:
+                            signature += "ad"
+                    current = HexDir.SOUTH_EAST
+                case "y":
+                    match current:
+                        case HexDir.NORTH_EAST:
+                            signature += "e"
+                        case HexDir.EAST:
+                            signature += "w"
+                        case HexDir.SOUTH_EAST:
+                            signature += "q"
+                    current = HexDir.EAST
+                case "z":
+                    match current:
+                        case HexDir.NORTH_EAST:
+                            signature += "da"
+                        case HexDir.EAST:
+                            signature += "ea"
+                        case HexDir.SOUTH_EAST:
+                            signature += "wa"
+                    current = HexDir.NORTH_EAST
+                case _:
+                    raise RuntimeError("unreachable")
+
+        return value, HexPattern(HexDir.WEST, signature)
