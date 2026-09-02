@@ -14,6 +14,7 @@ from .special_handlers import (
     HexTraceSpecialHandler,
     HextrapatsDuplicateAtSpecialHandler,
     HextrapatsScientificExponentSpecialHandler,
+    HextrapatsSwizzlingSpecialHandler,
     HextrapatsVectorSpecialHandler,
     MaskSpecialHandler,
     NumberSpecialHandler,
@@ -601,6 +602,9 @@ SPECIAL_HANDLERS: dict[ResourceLocation, SpecialHandler[Any]] = {
             negative_prefix="qqeeeeedw",
             components=3,
             axis="1",
+        ),
+        HextrapatsSwizzlingSpecialHandler(
+            id=ResourceLocation("hextrapats", "vec/swizzle")
         ),
         HextrapatsScientificExponentSpecialHandler(
             id=ResourceLocation("hextrapats", "scientific_exp"),

@@ -21,7 +21,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - HexOverpowered: 0.12.0
 - Hexssence: 0.1.3+1.20.1
 - Hextra Patterns: 1.9.1+1.20.1
-  - TODO: vec/swizzle
 - Hierophantics: 1.4.0
 
 ## `2.10.2` - 2026-07-25
