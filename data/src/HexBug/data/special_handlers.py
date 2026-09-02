@@ -695,6 +695,7 @@ class HextrapatsSwizzlingSpecialHandler(SpecialHandler[str]):
 
             return result
 
+    @override
     def generate_pattern(
         self,
         registry: HexBugRegistry,
@@ -743,3 +744,9 @@ class HextrapatsSwizzlingSpecialHandler(SpecialHandler[str]):
                     raise RuntimeError("unreachable")
 
         return value, HexPattern(HexDir.WEST, signature)
+
+    @override
+    def get_name(self, raw_name: str, value: str | None) -> str:
+        if value is None:
+            return super().get_name(raw_name, value)
+        return raw_name % tuple(value.upper())
