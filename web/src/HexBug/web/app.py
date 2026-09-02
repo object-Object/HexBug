@@ -77,7 +77,10 @@ def build_props(
             "bookofhexxy": {
                 "registry_path": registry_path,
             },
-            "hexcasting": {"pattern_stubs": []},
+            "hexcasting": {
+                "allow_duplicates": True,
+                "pattern_stubs": [],
+            },
         },
     }
 

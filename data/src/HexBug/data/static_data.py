@@ -749,7 +749,12 @@ HEXDOC_PROPS: dict[str, Any] = {
         {"modid": "minecraft"},
         {"modid": "hexdoc"},
     ],
-    "extra": {"hexcasting": {"pattern_stubs": []}},
+    "extra": {
+        "hexcasting": {
+            "allow_duplicates": True,
+            "pattern_stubs": [],
+        }
+    },
     "textures": {
         "missing": [
             "minecraft:chest",
