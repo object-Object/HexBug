@@ -10,6 +10,7 @@ from hexdoc.core.resource_dir import PathResourceDir
 from hexdoc.minecraft.i18n import I18n, LocalizedStr
 from hexdoc.patchouli import BookContext
 from hexdoc.patchouli.entry import Entry
+from hexdoc.patchouli.text import BookLinks
 from hexdoc.utils import JSONDict, classproperty
 from yarl import URL
 
@@ -95,3 +96,12 @@ def monkeypatch_hexdoc():
 
     Entry.load = classmethod(load_patched)  # pyright: ignore[reportAttributeAccessIssue]
     I18n.localize = localize_patched
+
+
+def apply_book_link_aliases(book_links: BookLinks, aliases: dict[str, str]):
+    for from_path, to_path in aliases.items():
+        if existing := book_links.get(from_path):
+            raise ValueError(
+                f"Attempted to override existing link: {from_path} = {existing}"
+            )
+        book_links[from_path] = book_links[to_path]

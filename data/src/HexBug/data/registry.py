@@ -72,6 +72,7 @@ from .static_data import (
 from .utils.hexdoc import (
     HexBugBookContext,
     HexBugProperties,
+    apply_book_link_aliases,
     monkeypatch_hexdoc,
 )
 
@@ -216,12 +217,7 @@ class HexBugRegistry(BaseModel):
             book = book_plugin.validate_book(book_data, context=context)
             assert isinstance(book, Book)
 
-            for from_path, to_path in BOOK_LINK_ALIASES.items():
-                if existing := book_context.book_links.get(from_path):
-                    raise ValueError(
-                        f"Attempted to override existing link: {from_path} = {existing}"
-                    )
-                book_context.book_links[from_path] = book_context.book_links[to_path]
+            apply_book_link_aliases(book_context.book_links, BOOK_LINK_ALIASES)
 
         # Jinja stuff
 

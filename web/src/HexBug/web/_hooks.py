@@ -4,6 +4,7 @@ from pathlib import Path
 
 from hexdoc.cli.app import LoadedBookInfo
 from hexdoc.core import Properties
+from hexdoc.patchouli import BookContext
 from hexdoc.plugin import (
     HookReturn,
     ModPlugin,
@@ -13,12 +14,13 @@ from hexdoc.plugin import (
     hookimpl,
 )
 from jinja2.sandbox import SandboxedEnvironment
-from typing_extensions import override
+from typing_extensions import Any, override
 
 import HexBug.web
 from HexBug.__version__ import VERSION
 from HexBug.data.registry import HexBugRegistry
-from HexBug.data.utils.hexdoc import monkeypatch_hexdoc
+from HexBug.data.static_data import BOOK_LINK_ALIASES
+from HexBug.data.utils.hexdoc import apply_book_link_aliases, monkeypatch_hexdoc
 
 
 class BookOfHexxyPlugin(ModPluginImpl, UpdateTemplateArgsImpl):
@@ -80,3 +82,8 @@ class BookOfHexxyModPlugin(ModPluginWithBook):
         registry = HexBugRegistry.load(registry_path)
         for book in books:
             book.context["bookofhexxy_mods"] = registry.mods
+
+    @override
+    def pre_render_book(self, template_args: dict[str, Any], output_dir: Path) -> None:
+        book_context = BookContext.of(template_args)
+        apply_book_link_aliases(book_context.book_links, BOOK_LINK_ALIASES)
