@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## `2.11.0` - 2026-09-02
 
-## Changes
+### Changes
 
 - Updated Hex Tools:
   - Added support for panning and zooming the grid with middle-click/scroll and multi-touch.

@@ -23,7 +23,7 @@ class ChangelogCog(HexBugCog):
                 "Failed to load changelog from resources, attempting to load from working directory"
             )
             changelog = Path("CHANGELOG.md").read_text("utf-8")
-        self._changelog = list(parse_changelog(changelog))
+        self._changelog = list(parse_changelog(changelog))[:25]  # hack
 
     @app_commands.command()
     async def changelog(
