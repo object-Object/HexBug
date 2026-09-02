@@ -18,7 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - HexFlow: 0.6.0
 - Hexic: 2.1.1
 - HexIntent: 2.2.2
-- HexOverpowered: 0.12.0
+- HexOverpowered: 0.12.1
 - Hexssence: 0.1.3+1.20.1
 - Hextra Patterns: 1.9.1+1.20.1
 - Hierophantics: 1.4.0

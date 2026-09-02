@@ -1129,7 +1129,7 @@ requires-dist = [
     { name = "hexdoc-hexkeys", marker = "extra == 'full'", specifier = "==0.1.6.*" },
     { name = "hexdoc-hexmapping", marker = "extra == 'full'", specifier = "==0.0.3.*" },
     { name = "hexdoc-hexodus", marker = "extra == 'full'", specifier = "==1.0.0.*" },
-    { name = "hexdoc-hexoverpowered", marker = "extra == 'full'", specifier = "==0.12.0.*" },
+    { name = "hexdoc-hexoverpowered", marker = "extra == 'full'", specifier = "==0.12.1.*" },
     { name = "hexdoc-hexparse", marker = "extra == 'full'", specifier = "==1.11.2.*" },
     { name = "hexdoc-hexpose", marker = "extra == 'full'", specifier = "==1.0.0.1.0.0+hexbug" },
     { name = "hexdoc-hexssence", marker = "extra == 'full'", specifier = "==0.1.3.1.20.1.*" },
@@ -1545,14 +1545,14 @@ wheels = [
 
 [[package]]
 name = "hexdoc-hexoverpowered"
-version = "0.12.0.1.1"
+version = "0.12.1.1.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "hexdoc-hexcasting" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/1f/97/e1340707924046a1687b493d7d698580a229467848c7701476d34f23fa52/hexdoc_hexoverpowered-0.12.0.1.1.tar.gz", hash = "sha256:d595671608b637fa2309dcee12fb19e13dee4b5220b3fdbc13960002fb53a528", size = 10186, upload-time = "2026-08-22T09:01:04.809Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/2a/9b/15726a426014da36c0d234f8596b130df51153ead108d0153db34c3306db/hexdoc_hexoverpowered-0.12.1.1.1.tar.gz", hash = "sha256:8b1123a6ab5f4bd62c9010e74a3bc7adba27478cf96458273240f663514467bd", size = 10223, upload-time = "2026-08-30T09:49:29.74Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/64/d2/f2ec848d2af97bb4c8caa02cd8a6b32bb521458cd0aee457f15918621d05/hexdoc_hexoverpowered-0.12.0.1.1-py3-none-any.whl", hash = "sha256:cda56e69c61937043c7f49668198b9124c8b3359cbc7bb98e3d6a36361bdbcff", size = 13095, upload-time = "2026-08-22T09:01:03.563Z" },
+    { url = "https://files.pythonhosted.org/packages/7f/9c/ef0cf47e924538ee3e96a6d3d4d0d7204f43609d0becbd479b0b80daafea/hexdoc_hexoverpowered-0.12.1.1.1-py3-none-any.whl", hash = "sha256:78a7421eddd51058d6528dc057ce6e822eec32f15a8b96afe0178750545bf459", size = 13126, upload-time = "2026-08-30T09:49:28.64Z" },
 ]
 
 [[package]]
