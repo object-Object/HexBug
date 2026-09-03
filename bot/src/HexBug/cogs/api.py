@@ -6,7 +6,7 @@ import sys
 from asyncio import Task
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
-from typing import Annotated, Any, Literal, cast, overload
+from typing import Annotated, Any, cast, overload
 
 import discordoauth2
 from fastapi import (
@@ -14,15 +14,14 @@ from fastapi import (
     FastAPI,
     HTTPException,
     Response,
-    WebSocket,
-    WebSocketDisconnect,
     WebSocketException,
 )
 from fastapi.routing import APIRouter
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from httpx import AsyncClient
 from jwt import InvalidTokenError
-from pydantic import BaseModel, Field, TypeAdapter, ValidationError
+from pydantic import BaseModel, ValidationError
+from pydantic.dataclasses import dataclass as pydantic_dataclass
 from starlette.status import (
     HTTP_401_UNAUTHORIZED,
     HTTP_500_INTERNAL_SERVER_ERROR,
@@ -36,7 +35,6 @@ from HexBug.core.bot import HexBugBot
 from HexBug.core.cog import HexBugCog
 from HexBug.core.env import BotEnvironment
 from HexBug.data.hex_math import HexPattern
-from HexBug.data.registry import PatternMatchResult
 from HexBug.utils.jwt import JWTModel
 
 logger = logging.getLogger(__name__)
@@ -74,29 +72,14 @@ class ActivityAPIToken(JWTModel):
     user_id: str
 
 
-class PatternsC2SMessage(BaseModel):
-    type: Literal["patterns"]
-    patterns: list[HexPattern]
+@pydantic_dataclass(frozen=True)
+class ActivityHexPattern(HexPattern):
+    lookup: bool = False
 
 
-class PatternInfoC2SMessage(BaseModel):
-    type: Literal["pattern_info"]
-    pattern: HexPattern
-
-
-type C2SMessage = Annotated[
-    PatternsC2SMessage | PatternInfoC2SMessage,
-    Field(discriminator="type"),
-]
-
-
-class PatternInfoS2CMessage(BaseModel):
-    type: Literal["pattern_info"] = "pattern_info"
-    pattern: HexPattern
-    info: PatternMatchResult | None
-
-
-type S2CMessage = PatternInfoS2CMessage
+@pydantic_dataclass(frozen=True)
+class ActivityHexPatternResponse(HexPattern):
+    name: str | None
 
 
 app = FastAPI()
@@ -239,11 +222,11 @@ async def post_activity_token(
 
 @activity_router.post("/patterns")
 async def post_activity_patterns(
-    body: list[HexPattern],
+    body: list[ActivityHexPattern],
     bot: BotDependency,
     api_token: ActivityAPITokenHTTPDependency,
-):
-    patterns_cog = cast(PatternsCog, bot.get_cog("Patterns"))
+) -> list[ActivityHexPatternResponse]:
+    patterns_cog: PatternsCog = cast(PatternsCog, bot.get_cog("Patterns"))
 
     if value := patterns_cog.draw_messages.get(int(api_token.user_id)):
         value.view.patterns = body
@@ -254,41 +237,17 @@ async def post_activity_patterns(
             logger.warning("Failed to refresh activity patterns view", exc_info=True)
             value.view.on_stop_drawing()
 
-
-@activity_router.websocket("/ws")
-async def websocket_activity_ws(
-    websocket: WebSocket,
-    bot: BotDependency,
-    api_token: ActivityAPITokenWSDependency,
-):
-    ta = TypeAdapter[C2SMessage](C2SMessage)
-    await websocket.accept()
-    while True:
-        try:
-            message = ta.validate_json(await websocket.receive_bytes())
-            if response := await handle_activity_c2s_message(message, bot, api_token):
-                await websocket.send_text(response.model_dump_json())
-        except WebSocketDisconnect:
-            return
-        except Exception:
-            logger.warning(
-                "Unhandled exception in WebSocket handler loop", exc_info=True
+    result = list[ActivityHexPatternResponse]()
+    for pattern in body:
+        if pattern.lookup:
+            match_result = bot.registry.try_match_pattern(pattern)
+            name = match_result.name if match_result else None
+            result.append(
+                ActivityHexPatternResponse(
+                    direction=pattern.direction, signature=pattern.signature, name=name
+                )
             )
-
-
-async def handle_activity_c2s_message(
-    message: C2SMessage,
-    bot: HexBugBot,
-    api_token: ActivityAPIToken,
-) -> S2CMessage | None:
-    match message:
-        case PatternsC2SMessage(patterns=patterns):
-            await post_activity_patterns(patterns, bot, api_token)
-        case PatternInfoC2SMessage(pattern=pattern):
-            return PatternInfoS2CMessage(
-                pattern=pattern,
-                info=bot.registry.try_match_pattern(pattern),
-            )
+    return result
 
 
 app.include_router(activity_router)

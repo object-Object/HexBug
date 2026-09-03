@@ -7,6 +7,7 @@ import {
   type GuiSpellcastingSettings,
   type ResolvedPattern,
   HexDir,
+  PATTERN_TYPES,
 } from "@hextools/renderer/staffGrid";
 import { Box, Center, Image } from "@mantine/core";
 import {
@@ -14,10 +15,11 @@ import {
   useStateHistory,
   useDebouncedCallback,
 } from "@mantine/hooks";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import StaffGridControls from "./StaffGridControls";
 import type { StaffGridSettingsProps } from "./StaffGridSettings";
+import { postActivityPatterns, type ActivityHexPattern } from "./api";
 import iconUrl from "./assets/icon.png";
 import { useDiscordAuth, type AuthResult } from "./hooks/useDiscordAuth";
 import {
@@ -42,25 +44,61 @@ export default function AppInner({ onSignInWithDiscord }: AppInnerProps) {
     readonly ResolvedPattern[]
   >([]);
 
+  const [resolvedPatternsCache, setResolvedPatternsCache] = useState<
+    Partial<Record<string, string | null>>
+  >({});
+
   const [patternType, setPatternType] = useState(DEFAULT_PATTERN_TYPE);
 
+  const resolvedPatterns = useMemo(
+    () =>
+      patterns.map((pattern): ResolvedPattern => {
+        if (pattern.type === PATTERN_TYPES.Escaped) {
+          return pattern;
+        }
+        const name =
+          resolvedPatternsCache[
+            `${HexDir[pattern.pattern.startDir]} ${pattern.pattern.signature}`
+          ];
+        switch (name) {
+          case undefined:
+            return { ...pattern, type: PATTERN_TYPES.Unresolved };
+          case null:
+            return { ...pattern, type: PATTERN_TYPES.Invalid };
+          default:
+            return { ...pattern, type: PATTERN_TYPES.Evaluated, name };
+        }
+      }),
+    [patterns, resolvedPatternsCache],
+  );
+
   const throttledPostPatterns = useDebouncedCallback(
-    (auth: AuthResult, patterns: readonly ResolvedPattern[]) => {
-      void fetch("/api/activity/patterns", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${auth.api_token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(
-          patterns.map(({ pattern }) => ({
-            direction: HexDir[pattern.startDir],
-            signature: pattern.signature,
-          })),
-        ),
+    async (auth: AuthResult, patterns: readonly ResolvedPattern[]) => {
+      const result = await postActivityPatterns({
+        patterns: patterns.map(({ pattern }) => ({
+          direction: HexDir[
+            pattern.startDir
+          ] as ActivityHexPattern["direction"],
+          signature: pattern.signature,
+          lookup: !(
+            `${HexDir[pattern.startDir]} ${pattern.signature}`
+            in resolvedPatternsCache
+          ),
+        })),
+        api_token: auth.api_token,
       });
+
+      setResolvedPatternsCache((prev) => ({
+        ...prev,
+        ...Object.fromEntries(
+          result.map(({ direction, signature, name }) => [
+            `${direction} ${signature}`,
+            name,
+          ]),
+        ),
+      }));
     },
-    { delay: 500 },
+    { delay: 250 },
   );
 
   useEffect(() => {
@@ -104,9 +142,12 @@ export default function AppInner({ onSignInWithDiscord }: AppInnerProps) {
         h="100dvh"
         // Hide if unfocused, but still render the component
         display={isUnfocused ? "none" : undefined}
+        style={{
+          overflow: "hidden",
+        }}
       >
         <StaffGrid
-          patterns={patterns}
+          patterns={resolvedPatterns}
           onPatternsChange={patternsHandlers.set}
           patternType={patternType}
           onPatternTypeChange={setPatternType}
@@ -115,7 +156,7 @@ export default function AppInner({ onSignInWithDiscord }: AppInnerProps) {
         />
 
         <StaffGridControls
-          patterns={patterns}
+          patterns={resolvedPatterns}
           patternsHandlers={patternsHandlers}
           patternsHistory={patternsHistory}
           settings={settings}

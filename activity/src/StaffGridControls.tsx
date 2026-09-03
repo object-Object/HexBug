@@ -49,7 +49,14 @@ export default function StaffGridControls({
 
   return (
     <>
-      <Stack gap="xs" pos="absolute" top={16} right={16}>
+      <Stack
+        gap="xs"
+        pos="absolute"
+        top={16}
+        right={16}
+        h="100%"
+        style={{ overflow: "scroll" }}
+      >
         <ColorSchemeButton {...staffGridButtonProps} />
 
         <StaffGridSettings
