@@ -55,7 +55,7 @@ export default function StaffGridControls({
         top={16}
         right={16}
         h="100%"
-        style={{ overflow: "scroll" }}
+        style={{ overflow: "auto" }}
       >
         <ColorSchemeButton {...staffGridButtonProps} />
 
