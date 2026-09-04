@@ -1135,7 +1135,7 @@ requires-dist = [
     { name = "hexdoc-hexssence", marker = "extra == 'full'", specifier = "==0.1.3.1.20.1.*" },
     { name = "hexdoc-hexstruction", marker = "extra == 'full'", specifier = "==1.3.1.1.20.1.*" },
     { name = "hexdoc-hextended", marker = "extra == 'full'", url = "https://github.com/abilliontrillionstars/hextended-staves/raw/0e6e0a61b7f4d3e79761b216cfebc1141e19b30b/docs/v/latest/main/dist/hexdoc_hextended-2.0.1.1.0.dev0-py3-none-any.whl" },
-    { name = "hexdoc-hexthings", marker = "extra == 'full'", specifier = "==0.1.7.1.20.1.*" },
+    { name = "hexdoc-hexthings", marker = "extra == 'full'", specifier = "==0.1.8.1.20.1.*" },
     { name = "hexdoc-hextrace", marker = "extra == 'full'", specifier = "==0.1.0.1.20.1.*" },
     { name = "hexdoc-hextrapats", marker = "extra == 'full'", specifier = "==1.9.1.1.20.1.*" },
     { name = "hexdoc-hextrogen", marker = "extra == 'full'", specifier = "==1.1.0.*" },
@@ -1622,14 +1622,14 @@ provides-extras = ["dev"]
 
 [[package]]
 name = "hexdoc-hexthings"
-version = "0.1.7.1.20.1.1.2"
+version = "0.1.8.1.20.1.1.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "hexdoc-hexcasting" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/26/db/11e9136df446af928a1650a993b6ad4c70d6ef373b6b9fba65f89eacae53/hexdoc_hexthings-0.1.7.1.20.1.1.2.tar.gz", hash = "sha256:c7e6108e705b71cf45117e858ed0a7c417f735e1bcbf9a3d856737a1d5be4e58", size = 11387, upload-time = "2026-03-05T00:44:12.555Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/4a/10/1bbb56226b3d4e92a344e332765d031139de390f2a9f6fe4033ea25e7811/hexdoc_hexthings-0.1.8.1.20.1.1.2.tar.gz", hash = "sha256:64f405d6115749a0e88be91819eed55787e51eb206693e341127ca389e09eed2", size = 11389, upload-time = "2026-09-03T03:59:48.05Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ac/9d/8726dd5e72509279fec5c0aef9d251fe4592230cd3f221adee120644d514/hexdoc_hexthings-0.1.7.1.20.1.1.2-py3-none-any.whl", hash = "sha256:5f3fdf0e198650ba62e977fd59221d4ce8df0f71f87a55bf101f8cd88050d382", size = 14783, upload-time = "2026-03-05T00:44:11.481Z" },
+    { url = "https://files.pythonhosted.org/packages/37/20/1df0a28ea1d94afd4e636c370b9eb99943dfdb64db398c28c4bf3c2b0beb/hexdoc_hexthings-0.1.8.1.20.1.1.2-py3-none-any.whl", hash = "sha256:847ed14a38da8c7081d896afbd8a06a459e5d85515e9a14f6aa6935da6f7bb2b", size = 14783, upload-time = "2026-09-03T03:59:46.811Z" },
 ]
 
 [[package]]

@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and [Pydantic's HISTORY.md](https://github.com/pydantic/pydantic/blob/main/HISTORY.md), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## `2.11.1` - 2026-09-04
+
+### Changes
+
+- The staff grid activity now looks up patterns in HexBug's registry when drawn, updates the pattern colour to either evaluated or invalid, and shows the pattern name in the sidebar.
+
+### Mods Updated
+
+- HexThings: 0.1.8+1.20.1
+
 ## `2.11.0` - 2026-09-02
 
 ### Changes
