@@ -1,1 +1,13 @@
--parameter_visibility = visibilité
+-parameter_visibility = visibility
+-parameter_visibility_description = Détermine si la réponse devrait être visible par tout le monde ou par vous uniquement.
+-parameter_direction = direction
+-parameter_direction_description = La direction de départ de la Rune (par ex. SOUTH_EAST).
+-parameter_show-signatures = show_signatures
+-parameter_show-signatures_description = Montre la signature angulaire de la Rune dans le pied de page de l'intégration.
+-parameter_signature = signature
+-parameter_signature_description = La signature angulaire de la Rune (par ex. deaqq).
+-parameter_hide-stroke-order = hide_stroke_order
+-parameter_hide-stroke-order_description = Cache l'ordre des traits lors du rendu de la Rune (comme pour les Grands Sorts).
+choice_HexBug-utils-discord-visibility-Visibility =
+    .PUBLIC = Public
+    .PRIVATE = Private
