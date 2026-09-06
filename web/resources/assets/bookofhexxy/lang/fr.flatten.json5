@@ -1,1 +1,5 @@
-{}
+{
+  bookofhexxy: {
+    mod_attribution: "Source : {mod_name}",
+  },
+}
