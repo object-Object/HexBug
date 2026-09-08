@@ -1,0 +1,17 @@
+{
+  bookofhexxy: {
+    mod_attribution: "Source : {mod_name}",
+    welcome: {
+      header: "Voici le Livre d'Hexxy.",
+      content: "Le $(l:{hex_book_url})Carnet de Sortilèges/$ peut être lu ici, avec le contenu pour plusieurs addons compatibles avec $(l:https://pypi.org/project/hexdoc/)hexdoc/$.$(br2)Cette page a été générée par $(l:https://github.com/object-Object/HexBug)HexBug/$, un bot Discord pour Hex Casting. Si votre addon est manquant, veuillez $(l:https://github.com/object-Object/HexBug/issues)ouvrir un ticket/$ s'il vous plaît.",
+      bleeding_edge: "Certains addons de cette page sont construits depuis le code le plus récent sur GitHub. Il se pourrait qu'elle décrive des fonctionalités $(bold)plus récentes/$ auxquelles vous n'avez pas nécessairement accès, même sur la toute dernière version Modrinth/CurseForge !",
+      mods: "Livres Sources",
+    },
+  },
+  hexdoc: {
+    bookofhexxy: {
+      title: "Livre d'Hexxy",
+      description: "Des dizaines d'addon pour Hex Casting, dans un seul lieu.",
+    },
+  },
+}

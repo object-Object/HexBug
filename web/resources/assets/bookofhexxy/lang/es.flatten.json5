@@ -1,0 +1,17 @@
+{
+  hexdoc: {
+    bookofhexxy: {
+      title: "Libro de Hexxy",
+      description: "Docenas de addons de Hex Casting, todos en un lugar.",
+    },
+  },
+  bookofhexxy: {
+    welcome: {
+      header: "Este es el Libro de Hexxy.",
+      content: "El $(l:{hex_book_url})libro de Hex Casting/$ se puede consultar aquí, incluyendo contenido de varios (l:https://pypi.org/project/hexdoc/)hexdoc/$-addons compatibles.$(br2)Esta página ha sido generada por $(l:https://github.com/object-Object/HexBug)HexBug/$, un bot de Discord para Hex Casting. Si falta tu addon, no dudes en $(l:https://github.com/object-Object/HexBug/issues)abrir un issue/$.",
+      bleeding_edge: "Algunos de los addons de esta página están creados a partir del código más reciente de GitHub. Es posible que describan funciones más $(bold)nuevas/$ que no necesariamente tengas, ¡ni siquiera en la versión más reciente de Modrinth o CurseForge!",
+      mods: "Libros de origen",
+    },
+    mod_attribution: "Origen: {mod_name}",
+  },
+}
