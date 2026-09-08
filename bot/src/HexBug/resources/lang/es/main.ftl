@@ -1,0 +1,11 @@
+-parameter_visibility = visibility
+-parameter_visibility_description = Si la respuesta debe ser visible para todos o solo para ti.
+-parameter_direction = dirección
+-parameter_direction_description = La dirección inicial del patrón (p. ej., SOUTH_EAST para sureste).
+-parameter_show-signatures = show_signatures
+-parameter_show-signatures_description = Muestra las signatura de ángulo de los patrones en el pie de página del elemento incrustado.
+-parameter_signature = signature
+-parameter_signature_description = La signatura de los angulos del patrón (p. ej., deaqq).
+-parameter_hide-stroke-order = hide_stroke_order
+-parameter_hide-stroke-order_description = Oculta el orden de los trazos al renderizar el patrón (como en los hechizos mayores).
+-decode_contents_description = El resultado de usar Revelar en un iota, copiado de latest.log.
